@@ -1,0 +1,6 @@
+@BackendEstadistica_HostAddress = http://localhost:5223
+
+GET {{BackendEstadistica_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
