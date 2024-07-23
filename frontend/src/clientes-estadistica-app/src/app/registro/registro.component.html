@@ -1,16 +1,29 @@
-<h2>Registro</h2>
-<form>
-  <div>
-    <label for="nombre">Nombre</label>
-    <input id="nombre" class="ml-2 border rounded-xl" formControlName="nombre">
-  </div>
-  <div>
-    <label for="email">Email</label>
-    <input id="email" class="border rounded-xl" formControlName="email">
-  </div>
-  <div>
-    <label for="password">Password</label>
-    <input id="password" type="password" class="border rounded-xl" formControlName="password">
-  </div>
-  <button type="submit">Registrar</button>
-</form>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Aplicación de Intercambio de Divisas</title>
+    
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center text-3xl font-bold mb-4">Registro</h2>
+        <form class="form">
+            <div class="flex flex-col">
+                <label for="nombre" class="mb-2 text-lg font-semibold">Nombre</label>
+                <input id="nombre" class="input" type="text" formControlName="nombre">
+            </div>
+            <div class="flex flex-col">
+                <label for="email" class="mb-2 text-lg font-semibold">Email</label>
+                <input id="email" class="input" type="email" formControlName="email">
+            </div>
+            <div class="flex flex-col">
+                <label for="password" class="mb-2 text-lg font-semibold">Password</label>
+                <input id="password" class="input" type="password" formControlName="password">
+            </div>
+            <button type="submit" class="button">Registrar</button>
+        </form>
+    </div>
+</body>
+</html>
