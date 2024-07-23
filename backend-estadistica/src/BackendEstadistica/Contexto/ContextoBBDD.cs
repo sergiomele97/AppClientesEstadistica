@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BackendEstadistica.Repositorios;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackendEstadistica.Contexto
 {

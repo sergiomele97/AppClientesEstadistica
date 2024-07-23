@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Internal;
+﻿using BackendEstadistica.Repositorios;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace BackendEstadistica.Controllers;
 
