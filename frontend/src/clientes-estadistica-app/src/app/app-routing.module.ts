@@ -3,8 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { RegistroComponent } from './registro/registro.component';
 
 const routes: Routes = [
-  {path: "registro", component: RegistroComponent
-  }
+  { path: "registro", component: RegistroComponent },
+  { path: "", redirectTo: "/registro", pathMatch: "full" },
+  { path: "**", redirectTo: "/registro", pathMatch: "full" }
 ];
 
 @NgModule({
