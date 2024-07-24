@@ -55,32 +55,32 @@ public class UsuariosController : ControllerBase
     // Post en el repositorio de la version modificada de clientes (PROVISIONAL, ESTE POST SE BORRARÁ)
 
 
-    //[HttpPost("remoto")]
-    //public async Task<IActionResult> Post([FromBody] UsuarioDto nuevoUsuario, int numero)
-    //{
-    //    if (nuevoUsuario == null)
-    //    {
-    //        return BadRequest("El usuario no puede ser nulo");
-    //    }
+    [HttpPost("remoto")]
+    public async Task<IActionResult> Post2([FromBody] UsuarioDto nuevoUsuario)
+    {
+        if (nuevoUsuario == null)
+        {
+            return BadRequest("El usuario no puede ser nulo");
+        }
 
-    //    if (string.IsNullOrEmpty(nuevoUsuario.Nombre) ||
-    //        string.IsNullOrEmpty(nuevoUsuario.Correo) ||
-    //        string.IsNullOrEmpty(nuevoUsuario.Contraseña))
-    //    {
-    //        return BadRequest("Todos los campos del usuario (Nombre, Correo, Contraseña) son obligatorios.");
-    //    }
+        if (string.IsNullOrEmpty(nuevoUsuario.Nombre) ||
+            string.IsNullOrEmpty(nuevoUsuario.Correo) ||
+            string.IsNullOrEmpty(nuevoUsuario.Contraseña))
+        {
+            return BadRequest("Todos los campos del usuario (Nombre, Correo, Contraseña) son obligatorios.");
+        }
 
-    //    var jsonContent = new StringContent(JsonSerializer.Serialize(nuevoUsuario), Encoding.UTF8, "application/json");
-    //    var response = await UsuariosRepositorioMemoria.Instancia._httpClient.PostAsync("http://otraapi.com/api/usuarios", jsonContent);
+        var jsonContent = new StringContent(JsonSerializer.Serialize(nuevoUsuario), Encoding.UTF8, "application/json");
+        var response = await UsuariosRepositorioMemoria.Instancia.GetHClient().PostAsync("https://localhost:7145/api/usuarios/remoto", jsonContent);
 
-    //    if (response.IsSuccessStatusCode)
-    //    {
-    //        var responseData = await response.Content.ReadAsStringAsync();
-    //        var createdUser = JsonSerializer.Deserialize<UsuarioDto>(responseData);
-    //        return CreatedAtAction(nameof(Get), new { id = createdUser.Id }, createdUser);
-    //    }
+        if (response.IsSuccessStatusCode)
+        {
+            var responseData = await response.Content.ReadAsStringAsync();
+            var createdUser = JsonSerializer.Deserialize<UsuarioDto>(responseData);
+            return CreatedAtAction(nameof(Get), new { id = createdUser.Id }, createdUser);
+        }
 
-    //    return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
-    //}
+        return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
+    }
 }
 

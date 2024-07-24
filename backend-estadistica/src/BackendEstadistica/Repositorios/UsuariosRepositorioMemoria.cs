@@ -29,6 +29,11 @@ public class UsuariosRepositorioMemoria
 
     }
 
+    public HttpClient GetHClient()
+    {
+        return _httpClient;
+    }
+
     public void AgregarUsuario(UsuarioDto nuevoUsuario)
     {
         var nuevoId = Usuarios.Max(u => u.Id) + 1;
