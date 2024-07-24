@@ -21,4 +21,11 @@ public class UsuariosRepositorioMemoria
         };
 
     }
+
+    public void AgregarUsuario(UsuarioDto nuevoUsuario)
+    {
+        var nuevoId = Usuarios.Max(u => u.Id) + 1;
+        nuevoUsuario.Id = nuevoId;
+        Usuarios.Add(nuevoUsuario);
+    }
 }

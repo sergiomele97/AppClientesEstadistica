@@ -13,6 +13,7 @@ public class UsuariosController : ControllerBase
         return Ok(UsuariosRepositorioMemoria.Instancia.Usuarios);
 
     }
+
     [HttpGet("{id}")]
     public IActionResult Get(int id)
     {
@@ -26,5 +27,20 @@ public class UsuariosController : ControllerBase
         // El método FirstOrDefault() devuelve el primer elemento de una secuencia o uno predeterminado
         return Ok(usuario);
     }
+
+    [HttpPost]
+    public IActionResult Post([FromBody] UsuarioDto nuevoUsuario)
+    {
+        if (string.IsNullOrEmpty(nuevoUsuario.Nombre) ||
+            string.IsNullOrEmpty(nuevoUsuario.Correo) ||
+            string.IsNullOrEmpty(nuevoUsuario.Contraseña))
+        {
+            return BadRequest("Todos los campos del usuario (Nombre, Correo, Contraseña) son obligatorios.");
+        }
+
+        UsuariosRepositorioMemoria.Instancia.AgregarUsuario(nuevoUsuario);
+        return CreatedAtAction(nameof(Get), new { id = nuevoUsuario.Id }, nuevoUsuario);
+    }
+
 }
 
