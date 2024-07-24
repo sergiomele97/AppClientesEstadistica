@@ -1,4 +1,6 @@
-﻿namespace BackendEstadistica.Repositorios;
+﻿using System.Net.Http;
+
+namespace BackendEstadistica.Repositorios;
 
 public class UsuariosRepositorioMemoria
 {
@@ -9,8 +11,13 @@ public class UsuariosRepositorioMemoria
     // PATRON SINGLETON
     public static UsuariosRepositorioMemoria Instancia { get; } = new UsuariosRepositorioMemoria();
 
+    public static HttpClient _httpClient;
+
     public UsuariosRepositorioMemoria()
     {
+        _httpClient = new HttpClient();
+        _httpClient.BaseAddress = new Uri("https://localhost:7138");
+
         Usuarios = new List<UsuarioDto>
         {
             new UsuarioDto { Id = 1, Nombre = "Juan Pérez", Correo = "juan.perez@example.com", Contraseña = "password123" },
@@ -28,4 +35,6 @@ public class UsuariosRepositorioMemoria
         nuevoUsuario.Id = nuevoId;
         Usuarios.Add(nuevoUsuario);
     }
+
+
 }

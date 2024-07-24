@@ -16,6 +16,7 @@ public class ClientesRepositorioMemoria
         _httpClient = new HttpClient();
         _httpClient.BaseAddress = new Uri("https://localhost:7138");
     }
+
     private static HttpClient _httpClient;
     public async Task<List<ClienteDto>> ObtenerClientes()
     {

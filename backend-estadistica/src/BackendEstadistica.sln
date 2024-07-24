@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackendEstadistica", "BackendEstadistica\BackendEstadistica.csproj", "{248EAA50-4548-4511-AB05-68F9F7C8867E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibraryEjemplo", "ClassLibraryEjemplo\ClassLibraryEjemplo.csproj", "{D64BF1C3-196E-4D1C-99D9-136702F8A403}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassLibraryEjemplo", "ClassLibraryEjemplo\ClassLibraryEjemplo.csproj", "{D64BF1C3-196E-4D1C-99D9-136702F8A403}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
