@@ -11,8 +11,12 @@ namespace BackendEstadistica
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 
             builder.Services.AddControllers();
+
+            // Servicio para el mapeado
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             builder.Services.AddDbContext<ContextoBBDD>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

@@ -14,5 +14,6 @@ namespace BackendEstadistica.Contexto
         // DbSet = entiedad = tabla     Atributos = columnas
         public DbSet<Usuario> Usuario { get; set; }
 
+
     }
 }

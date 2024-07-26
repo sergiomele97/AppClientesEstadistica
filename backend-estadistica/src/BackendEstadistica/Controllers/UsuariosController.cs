@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text;
+using AutoMapper;
 
 namespace BackendEstadistica.Controllers;
 
@@ -10,10 +11,22 @@ namespace BackendEstadistica.Controllers;
 [ApiController]
 public class UsuariosController : ControllerBase
 {
-    [HttpGet]
-    public IActionResult Get()
+    private readonly IUsuarioRepositorio usuarioRepositorio;
+    private readonly IMapper mapper;
+
+    public UsuariosController( IUsuarioRepositorio usuarioRepositorio, IMapper mapper)
     {
-        return Ok(UsuariosRepositorioMemoria.Instancia.Usuarios);
+        this.usuarioRepositorio = usuarioRepositorio;
+        this.mapper = mapper;
+    }
+
+    [HttpGet]
+    public IActionResult GetUsuario()
+    {
+
+        List<Usuario> lista = usuarioRepositorio.GetUsuarios();
+
+        return Ok(mapper.Map<List<Usuario>>(lista));  
 
     }
 
@@ -48,7 +61,7 @@ public class UsuariosController : ControllerBase
             return BadRequest("Todos los campos del usuario (Nombre, Correo, Contraseña) son obligatorios.");
         }
         // Si todo OK: Llamamos al método Agregar usuario y devolvemos OK.
-        UsuariosRepositorioMemoria.Instancia.AgregarUsuario(nuevoUsuario);
+        
         return CreatedAtAction(nameof(Get), new { id = nuevoUsuario.Id }, nuevoUsuario);
     }
 
