@@ -8,6 +8,7 @@ public interface IUsuarioRepositorio
     List<Usuario> GetUsuariosFiltrando(string nombre, int numeroPagina, int tamañoPagina);
     Usuario GetUsuarioById(int id);
     bool GuardarCambios();
+    bool EmailExist(Usuario usuario);
     void AddUsuario(Usuario usuario);
     void DeleteUsuario(Usuario usuario);
     void UpdateUsuario(Usuario usuario);

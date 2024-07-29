@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MiServicioService } from '../mi-servicio.service';
 
 @Component({
   selector: 'app-registro',
@@ -7,9 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RegistroComponent implements OnInit {
 
-  constructor() { }
+  datos: any;
 
-  ngOnInit() {
+  constructor(private miServicio: MiServicioService) { }
+
+  ngOnInit(): void {
+    this.miServicio.getUsuarios().subscribe(
+      data => {
+        this.datos = data;
+        console.log(this.datos);
+      },
+      error => {
+        console.error('Error al obtener datos', error);
+      }
+    );
   }
+
 
 }

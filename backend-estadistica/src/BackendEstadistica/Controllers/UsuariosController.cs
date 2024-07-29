@@ -6,6 +6,7 @@ using System.Text;
 using AutoMapper;
 using BackendEstadistica.Utilidades;
 using BackendEstadistica.Entidades;
+using Microsoft.AspNetCore.Cors;
 
 namespace BackendEstadistica.Controllers;
 
@@ -23,7 +24,8 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetUsuario()
+    [EnableCors("AnotherPolicy")]
+    public IActionResult GetUsuarios()
     {
 
         List<Usuario> lista = usuarioRepositorio.GetUsuarios();
@@ -40,19 +42,6 @@ public class UsuariosController : ControllerBase
 
         return Ok(mapper.Map<Usuario>(usarioId));
 
-
-        /*
-        var usuario = UsuariosRepositorioMemoria.Instancia.Usuarios.FirstOrDefault(u => u.Id == id);
-        if (usuario == null)
-        {
-            // NotFound() -> Devuelve un objeto NotFoundResult que produce una respuesta HTTP 404.
-            return NotFound();
-        }
-
-        // El método FirstOrDefault() devuelve el primer elemento de una secuencia o uno predeterminado
-        return Ok(usuario);
-
-        */
     }
 
     // Post en nuestro Repositorio
@@ -79,6 +68,11 @@ public class UsuariosController : ControllerBase
 
             return BadRequest("El formato del correo no es válido");
 
+        }
+
+        if (usuarioRepositorio.EmailExist(nuevoUsuario))
+        {
+            return BadRequest("El correo ya existe");
         }
 
         try

@@ -1,6 +1,7 @@
 ﻿
 using BackendEstadistica.Contexto;
 using BackendEstadistica.Entidades;
+using BackendEstadistica.Migrations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -15,19 +16,33 @@ namespace BackendEstadistica.Servicios
         {
             this.contextoBBDD = contexto;
         }
+
+        public bool EmailExist(Usuario usuario)
+        {
+            bool correoExiste = contextoBBDD.Usuario.Any(u => u.Correo == usuario.Correo);
+
+            if (correoExiste)
+            {
+                // Lanza una excepción o maneja el caso donde el correo ya está registrado
+                return true;
+            }
+            return false;
+        }
+
         public void AddUsuario(Usuario usuario)
         {
+            
 
             // Añadir el usuario al DbSet
             contextoBBDD.Add(usuario);
             contextoBBDD.SaveChanges();
-
 
         }
 
         public void DeleteUsuario(Usuario usuario)
         {
             contextoBBDD.Usuario.Remove(usuario);
+            contextoBBDD.SaveChanges();
 
         }
 
