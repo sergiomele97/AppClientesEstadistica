@@ -7,6 +7,7 @@ using AutoMapper;
 using BackendEstadistica.Utilidades;
 using BackendEstadistica.Entidades;
 using Microsoft.AspNetCore.Cors;
+using BackendEstadistica.Contexto;
 
 namespace BackendEstadistica.Controllers;
 
@@ -91,18 +92,17 @@ public class UsuariosController : ControllerBase
 
     }
 
-    //[HttpDelete ("borrarUsuario")]
-    //public IActionResult DeleteUsuario()
-    //{
+    [HttpDelete("borrarUsuario/{id}")]
+    public IActionResult DeleteUsuario(int id)
+    {
 
-    //}
+        usuarioRepositorio.DeleteUsuario(id);
 
+        return Ok("El usuario se borró correctamente");
 
-
-
+    }
 
     // Post en el repositorio de la version modificada de clientes (PROVISIONAL, ESTE POST SE BORRARÁ)
-
 
     [HttpPost("remoto")]
     public async Task<IActionResult> Post2([FromBody] UsuarioDto nuevoUsuario)

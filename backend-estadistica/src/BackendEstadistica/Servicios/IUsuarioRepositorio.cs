@@ -10,6 +10,6 @@ public interface IUsuarioRepositorio
     bool GuardarCambios();
     bool EmailExist(string email);
     void AddUsuario(Usuario usuario);
-    void DeleteUsuario(Usuario usuario);
+    void DeleteUsuario(int id);
     void UpdateUsuario(Usuario usuario);
 }
