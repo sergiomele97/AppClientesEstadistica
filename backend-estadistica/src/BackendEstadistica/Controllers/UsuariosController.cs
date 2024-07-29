@@ -4,6 +4,8 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Text;
 using AutoMapper;
+using BackendEstadistica.Utilidades;
+using BackendEstadistica.Entidades;
 
 namespace BackendEstadistica.Controllers;
 
@@ -31,8 +33,15 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public IActionResult Get(int id)
+    public IActionResult GetUsuarioById(int id)
     {
+
+        Usuario usarioId = usuarioRepositorio.GetUsuarioById(id);
+
+        return Ok(mapper.Map<Usuario>(usarioId));
+
+
+        /*
         var usuario = UsuariosRepositorioMemoria.Instancia.Usuarios.FirstOrDefault(u => u.Id == id);
         if (usuario == null)
         {
@@ -42,12 +51,16 @@ public class UsuariosController : ControllerBase
 
         // El método FirstOrDefault() devuelve el primer elemento de una secuencia o uno predeterminado
         return Ok(usuario);
+
+        */
     }
 
     // Post en nuestro Repositorio
-    [HttpPost("local")]
-    public IActionResult Post([FromBody] UsuarioDto nuevoUsuario)
+    [HttpPost("crearUsuario")]
+    public IActionResult AddUsuario([FromBody] Usuario nuevoUsuario)
     {
+
+
         // NotFound() -> El POST está vacio
         if (nuevoUsuario == null)
         {
@@ -61,9 +74,31 @@ public class UsuariosController : ControllerBase
             return BadRequest("Todos los campos del usuario (Nombre, Correo, Contraseña) son obligatorios.");
         }
         // Si todo OK: Llamamos al método Agregar usuario y devolvemos OK.
-        
-        return CreatedAtAction(nameof(Get), new { id = nuevoUsuario.Id }, nuevoUsuario);
+        if (!nuevoUsuario.Correo.IsValidEmail())
+        {
+
+            return BadRequest("El formato del correo no es válido");
+
+        }
+
+        try
+        {
+            // Agregar el usuario usando el repositorio
+            usuarioRepositorio.AddUsuario(nuevoUsuario);
+
+            // Devolver un código de estado 201 (Creado) y la ubicación del nuevo recurso
+            return CreatedAtAction(nameof(AddUsuario), new { id = nuevoUsuario.Id }, nuevoUsuario);
+        }
+        catch (Exception ex)
+        {
+            // Manejar errores, por ejemplo, problemas con la base de datos
+            return StatusCode(500, $"Error al agregar el usuario: {ex.Message}");
+        }
+
+
+        //return CreatedAtAction(nameof(GetUsuarioById), new { id = nuevoUsuario.Id }, nuevoUsuario);
     }
+
 
     // Post en el repositorio de la version modificada de clientes (PROVISIONAL, ESTE POST SE BORRARÁ)
 
@@ -90,7 +125,7 @@ public class UsuariosController : ControllerBase
         {
             var responseData = await response.Content.ReadAsStringAsync();
             var createdUser = JsonSerializer.Deserialize<UsuarioDto>(responseData);
-            return CreatedAtAction(nameof(Get), new { id = createdUser.Id }, createdUser);
+            return CreatedAtAction(nameof(GetUsuarioById), new { id = createdUser.Id }, createdUser);
         }
 
         return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
