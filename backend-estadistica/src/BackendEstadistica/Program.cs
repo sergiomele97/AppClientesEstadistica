@@ -21,6 +21,16 @@ namespace BackendEstadistica
             builder.Services.AddDbContext<ContextoBBDD>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            // Configuración de CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowLocalhost",
+                    builder => builder
+                        .WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -36,12 +46,15 @@ namespace BackendEstadistica
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            // Habilita CORS
+            app.UseCors("AllowLocalhost");
 
+            app.UseAuthorization();
 
             app.MapControllers();
 
             app.Run();
         }
+
     }
 }

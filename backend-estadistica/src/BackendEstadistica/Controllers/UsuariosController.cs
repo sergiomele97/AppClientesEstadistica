@@ -24,7 +24,6 @@ public class UsuariosController : ControllerBase
     }
 
     [HttpGet]
-    [EnableCors("AnotherPolicy")]
     public IActionResult GetUsuarios()
     {
 
