@@ -17,16 +17,9 @@ namespace BackendEstadistica.Servicios
             this.contextoBBDD = contexto;
         }
 
-        public bool EmailExist(Usuario usuario)
+        public bool EmailExist(string email)
         {
-            bool correoExiste = contextoBBDD.Usuario.Any(u => u.Correo == usuario.Correo);
-
-            if (correoExiste)
-            {
-                // Lanza una excepción o maneja el caso donde el correo ya está registrado
-                return true;
-            }
-            return false;
+            return contextoBBDD.Usuario.Any(u => u.Correo == email);
         }
 
         public void AddUsuario(Usuario usuario)

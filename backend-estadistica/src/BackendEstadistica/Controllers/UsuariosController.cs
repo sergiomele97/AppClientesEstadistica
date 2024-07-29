@@ -69,9 +69,10 @@ public class UsuariosController : ControllerBase
 
         }
 
-        if (usuarioRepositorio.EmailExist(nuevoUsuario))
-        {
-            return BadRequest("El correo ya existe");
+        if(usuarioRepositorio.EmailExist(nuevoUsuario.Correo)) {
+
+            return BadRequest("El email ya está en uso.");
+            
         }
 
         try
@@ -88,9 +89,16 @@ public class UsuariosController : ControllerBase
             return StatusCode(500, $"Error al agregar el usuario: {ex.Message}");
         }
 
-
-        //return CreatedAtAction(nameof(GetUsuarioById), new { id = nuevoUsuario.Id }, nuevoUsuario);
     }
+
+    //[HttpDelete ("borrarUsuario")]
+    //public IActionResult DeleteUsuario()
+    //{
+
+    //}
+
+
+
 
 
     // Post en el repositorio de la version modificada de clientes (PROVISIONAL, ESTE POST SE BORRARÁ)
