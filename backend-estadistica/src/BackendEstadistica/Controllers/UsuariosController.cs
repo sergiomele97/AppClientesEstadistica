@@ -11,6 +11,14 @@ using BackendEstadistica.Contexto;
 
 namespace BackendEstadistica.Controllers;
 
+/* Los controllers en ASP.NET Core MVC son responsables de manejar las solicitudes 
+ * HTTP entrantes y coordinar la respuesta adecuada. 
+ * Reciben los datos de la solicitud, procesan la lógica de negocio utilizando
+ * modelos y servicios, y finalmente devuelven una vista o una respuesta JSON/XML al cliente. 
+ * Cada método en un controller, conocido como una acción, corresponde a una ruta
+ * específica en la aplicación
+ */
+
 [Route("api/usuarios")]
 [ApiController]
 public class UsuariosController : ControllerBase
@@ -18,12 +26,19 @@ public class UsuariosController : ControllerBase
     private readonly IUsuarioRepositorio usuarioRepositorio;
     private readonly IMapper mapper;
 
+
+    //  Constructor de la clase:
     public UsuariosController( IUsuarioRepositorio usuarioRepositorio, IMapper mapper)
     {
         this.usuarioRepositorio = usuarioRepositorio;
         this.mapper = mapper;
     }
 
+
+    //  Métodos:
+
+
+    //      Get Usuarios
     [HttpGet]
     public IActionResult GetUsuarios()
     {
@@ -34,6 +49,8 @@ public class UsuariosController : ControllerBase
 
     }
 
+
+    //      Get Usuarios By Id
     [HttpGet("{id}")]
     public IActionResult GetUsuarioById(int id)
     {
@@ -44,7 +61,8 @@ public class UsuariosController : ControllerBase
 
     }
 
-    // Post en nuestro Repositorio
+
+    //      Post en nuestro Repositorio
     [HttpPost("crearUsuario")]
     public IActionResult AddUsuario([FromBody] Usuario nuevoUsuario)
     {
@@ -92,6 +110,8 @@ public class UsuariosController : ControllerBase
 
     }
 
+
+    //      Delete Usuario
     [HttpDelete("borrarUsuario/{id}")]
     public IActionResult DeleteUsuario(int id)
     {
@@ -102,34 +122,34 @@ public class UsuariosController : ControllerBase
 
     }
 
-    // Post en el repositorio de la version modificada de clientes (PROVISIONAL, ESTE POST SE BORRARÁ)
 
-    [HttpPost("remoto")]
-    public async Task<IActionResult> Post2([FromBody] UsuarioDto nuevoUsuario)
-    {
-        if (nuevoUsuario == null)
-        {
-            return BadRequest("El usuario no puede ser nulo");
-        }
+    //      Post en el repositorio de la version modificada de clientes (PROVISIONAL, ESTE POST SE BORRARÁ)
+    //[HttpPost("remoto")]
+    //public async Task<IActionResult> Post2([FromBody] UsuarioDto nuevoUsuario)
+    //{
+    //    if (nuevoUsuario == null)
+    //    {
+    //        return BadRequest("El usuario no puede ser nulo");
+    //    }
 
-        if (string.IsNullOrEmpty(nuevoUsuario.Nombre) ||
-            string.IsNullOrEmpty(nuevoUsuario.Correo) ||
-            string.IsNullOrEmpty(nuevoUsuario.Contraseña))
-        {
-            return BadRequest("Todos los campos del usuario (Nombre, Correo, Contraseña) son obligatorios.");
-        }
+    //    if (string.IsNullOrEmpty(nuevoUsuario.Nombre) ||
+    //        string.IsNullOrEmpty(nuevoUsuario.Correo) ||
+    //        string.IsNullOrEmpty(nuevoUsuario.Contraseña))
+    //    {
+    //        return BadRequest("Todos los campos del usuario (Nombre, Correo, Contraseña) son obligatorios.");
+    //    }
 
-        var jsonContent = new StringContent(JsonSerializer.Serialize(nuevoUsuario), Encoding.UTF8, "application/json");
-        var response = await UsuariosRepositorioMemoria.Instancia.GetHClient().PostAsync("https://localhost:7145/api/usuarios/remoto", jsonContent);
+    //    var jsonContent = new StringContent(JsonSerializer.Serialize(nuevoUsuario), Encoding.UTF8, "application/json");
+    //    var response = await UsuariosRepositorioMemoria.Instancia.GetHClient().PostAsync("https://localhost:7145/api/usuarios/remoto", jsonContent);
 
-        if (response.IsSuccessStatusCode)
-        {
-            var responseData = await response.Content.ReadAsStringAsync();
-            var createdUser = JsonSerializer.Deserialize<UsuarioDto>(responseData);
-            return CreatedAtAction(nameof(GetUsuarioById), new { id = createdUser.Id }, createdUser);
-        }
+    //    if (response.IsSuccessStatusCode)
+    //    {
+    //        var responseData = await response.Content.ReadAsStringAsync();
+    //        var createdUser = JsonSerializer.Deserialize<UsuarioDto>(responseData);
+    //        return CreatedAtAction(nameof(GetUsuarioById), new { id = createdUser.Id }, createdUser);
+    //    }
 
-        return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
-    }
+    //    return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
+    //}
 }
 
