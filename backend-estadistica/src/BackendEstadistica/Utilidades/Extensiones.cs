@@ -8,7 +8,6 @@ namespace BackendEstadistica.Utilidades
         public static bool IsValidEmail(this string email)
         {
            
-
             try
             {
                 // Define the regular expression pattern for validating email

@@ -8,10 +8,14 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BackendEstadistica.Servicios
 {
+
+    // Esta clase gestiona la comunicacón con la base de datos
     public class UsuarioRepositorio : IUsuarioRepositorio
     {
+        // Propiedad de tipo contexto de base de datos (puerta de entrada a la BBDD)
         private readonly ContextoBBDD contextoBBDD;
         
+        // Constructor al que le pasamos el contexto como parámetro
         public UsuarioRepositorio(ContextoBBDD contexto)
         {
             this.contextoBBDD = contexto;
@@ -25,7 +29,6 @@ namespace BackendEstadistica.Servicios
         public void AddUsuario(Usuario usuario)
         {
             
-
             // Añadir el usuario al DbSet
             contextoBBDD.Add(usuario);
             contextoBBDD.SaveChanges();
