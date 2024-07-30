@@ -1,46 +1,32 @@
 # AppClientesEstadistica
 
 ## Descripción
-Trabajo final del curso SUMMER CAMP de Tracasa en desarrollo .NET/Angular/Scrum/Azure de los grupos encargados del desarrollo de área cliente y estadística.
+Este repositorio contiene una aplicación para la gestión de clientes y la generación de estadísticas. Está dividido en varios componentes para facilitar su desarrollo y mantenimiento.
 
-## Estructura del Proyecto
+## Estructura del Repositorio
+El repositorio contiene 3 proyectos independientes:
+- `backend-clientes/`: Código del servidor que gestiona la información de los clientes.
+- `backend-estadistica/`: Código del servidor que genera y maneja las estadísticas.
+- `frontend/`: Código de la interfaz de usuario de la aplicación, lo que ve y usa el usuario final.
 
-- `backend-group1/`: Código fuente del backend del grupo 1.
-- `backend-group2/`: Código fuente del backend del grupo 2.
-- `frontend/`: Código fuente del frontend en Angular.
-- `docs/`: Documentación del proyecto.
+Otros directorio/archivos de apoyo:
+- `.github/`: Contiene archivos de configuración para GitHub, como acciones automatizadas y plantillas para issues y pull requests.
+- `docs/`: Documentación del repositorio, incluyendo guías de uso y manuales técnicos.
+- `postman/`: Colecciones de Postman para probar las APIs del backend.
+- `.gitignore`: Archivo que especifica qué archivos o directorios deben ser ignorados por Git.
+- `README.md`: Este archivo, proporciona una visión general del proyecto.
 
-currency-exchange-app/
-│
-├── backend-group1/
-│   └── src/
-│       └── ... (código del backend del grupo 1)
-│
-├── backend-group2/
-│   └── src/
-│       └── ... (código del backend del grupo 2)
-│
-├── frontend/
-│   └── src/
-│       └── ... (código del frontend en Angular)
-│
-├── docs/
-│   └── ... (documentación compartida del proyecto)
-│
-└── README.md
+## Instalación
+Para instalar y ejecutar cualquiera de estos proyectos, sigue las instrucciones de la "documentación del proyecto.md" ubicada en el directorio de cada proyecto.
 
-## Configuración
+## Uso
+1. Clona el repositorio.
+2. Configura las dependencias necesarias (detalles en "documentación del proyecto.md").
+3. Ejecuta los servidores del backend (`backend-clientes` y `backend-estadistica`).
+4. Inicia la aplicación frontend.
 
-### Backend Grupo 1
-Instrucciones para configurar y ejecutar el backend del grupo 1.
+## Contribuciones
+Las contribuciones son bienvenidas. Por favor, abre un issue o un pull request para sugerencias y mejoras.
 
-### Backend Grupo 2
-Instrucciones para configurar y ejecutar el backend del grupo 2.
-
-### Frontend
-Instrucciones para configurar y ejecutar el frontend.
-
-## Contribución
-- Asegúrate de seguir las directrices de contribución del proyecto.
-- Utiliza ramas descriptivas para tus cambios (`feature/nombre-feature`, `fix/nombre-fix`, etc.).
-- Realiza pull requests claras y detalladas.
+## Licencia
+Este proyecto está licenciado bajo la [MIT License](LICENSE).
