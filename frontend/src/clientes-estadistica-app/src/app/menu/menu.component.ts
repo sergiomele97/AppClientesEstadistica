@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MiServicioService } from '../mi-servicio.service';
 
 @Component({
   selector: 'app-menu',
@@ -8,21 +7,9 @@ import { MiServicioService } from '../mi-servicio.service';
 })
 export class MenuComponent implements OnInit {
 
-  datos: any;
+  constructor() { }
 
-  constructor(private miServicio: MiServicioService) { }
-
-  ngOnInit(): void {
-    this.miServicio.getUsuarios().subscribe(
-      data => {
-        this.datos = data;
-        console.log(this.datos);
-      },
-      error => {
-        console.error('Error al obtener datos', error);
-      }
-    );
+  ngOnInit() {
   }
-
 
 }
