@@ -7,14 +7,24 @@ import { RegistroComponent } from './registro/registro.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
+<<<<<<< HEAD
 import { UserService } from './servicios/user.service';
 import { FormsModule } from '@angular/forms';
+=======
+import { ClientesComponent } from './clientes/clientes.component';
+import { UsuariosComponent } from './usuarios/usuarios.component';
+import { MenuComponent } from './menu/menu.component';
+>>>>>>> frontend-menu
 
 @NgModule({
-  declarations: [		
+  declarations: [				
     AppComponent,
       RegistroComponent,
-      LoginComponent
+      LoginComponent,
+      RegistroComponent,
+      ClientesComponent,
+      UsuariosComponent,
+      MenuComponent
    ],
   imports: [
     BrowserModule,
