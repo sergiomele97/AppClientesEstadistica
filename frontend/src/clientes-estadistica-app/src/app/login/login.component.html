@@ -1,27 +1,37 @@
-<div>
+<div class='container mx-auto w-1/4 mt-40'>
+  <form (ngSubmit)="authentication()" #loginForm="ngForm" class='bg-black text-white rounded-3xl p-10'>
+    <h1 class='text-5xl font-semibold text-center'>Iniciar Sesión</h1>
 
-  <div class='container mx-auto w-1/4 mt-40'>
+    <div class='mt-10'>
+      <label for='email' class='block mb-2 text-sm font-medium'>Correo electrónico</label>
+      <input 
+        type='text' 
+        id='email' 
+        name='email' 
+        [(ngModel)]="email"
+        class='bg-gray-700 border border-gray-600 text-sm rounded-lg block w-full p-2.5' 
+        placeholder='pedro@gmail.com'
+        required
+      >
+    </div>
 
-    <form class='bg-black text-white rounded-3xl p-10'>
+    <div class='mt-10'>
+      <label for='password' class='block mb-2 text-sm font-medium'>Contraseña</label>
+      <input 
+        type='password' 
+        id='password' 
+        name='password' 
+        [(ngModel)]="contrase"
+        class='bg-gray-700 border border-gray-600 text-sm rounded-lg block w-full p-2.5' 
+        placeholder='Introduzca su contraseña'
+        required
+      >
+    </div>
 
-      <h1 class='text-5xl font-semibold text-center'>Añadir Actividad</h1>
-
-      <div class='mt-10'>
-          <label for='email' class='block mb-2 text-sm font-medium'>Correo electrónico</label>
-          <input type='text' id='email' name='email' class='bg-gray-700 border border-gray-600 text-sm rounded-lg block w-full p-2.5' placeholder='pedro@gmail.com'>
-      </div>
-
-      <div class='mt-10'>
-        <label for='password' class='block mb-2 text-sm font-medium'>Contraseña</label>
-        <input type='password' id='password' name='password' class='bg-gray-700 border border-gray-600 text-sm rounded-lg block w-full p-2.5' placeholder='Introduzca su contraseña'>
-      </div>
-
-      <div class='flex justify-center mt-14'>
-        <button type='submit' class='text-xl font-medium bg-blue-700 hover:bg-blue-800 rounded-xl px-10 py-2'>Enviar</button>
-      </div>
-
-    </form>
-
-  </div>
-
+    <div class='flex justify-center mt-14'>
+      <button type='submit' class='text-xl font-medium bg-blue-700 hover:bg-blue-800 rounded-xl px-10 py-2'>
+        Enviar
+      </button>
+    </div>
+  </form>
 </div>
