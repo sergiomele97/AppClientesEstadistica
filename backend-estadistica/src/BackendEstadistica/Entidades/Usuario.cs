@@ -2,6 +2,12 @@
 
 namespace BackendEstadistica.Entidades
 {
+    /* Las entidades en ASP.NET Core representan los objetos que se almacenan en la base de datos.
+     * Son clases que definen las propiedades y relaciones de los datos que la aplicación manejará 
+     * como tablas en una base de datos relacional. Cada entidad se mapea a una tabla en la base de datos a través 
+     * de Entity Framework Core, y sus propiedades corresponden a las columnas de esa tabla.
+     */
+
     public class Usuario
     {
         [Key]

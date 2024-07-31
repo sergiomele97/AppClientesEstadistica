@@ -6,13 +6,17 @@ import { AppComponent } from './app.component';
 import { RegistroComponent } from './registro/registro.component';
 
 import { HttpClientModule } from '@angular/common/http';
+import { LoginComponent } from './login/login.component';
 import { ClientesComponent } from './clientes/clientes.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { MenuComponent } from './menu/menu.component';
 
 @NgModule({
+  declarations: [		
   declarations: [				
     AppComponent,
+      RegistroComponent,
+      LoginComponent
       RegistroComponent,
       ClientesComponent,
       UsuariosComponent,
