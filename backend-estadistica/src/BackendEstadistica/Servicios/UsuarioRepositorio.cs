@@ -35,14 +35,17 @@ namespace BackendEstadistica.Servicios
 
         }
 
-        public void DeleteUsuario(int id)
+        public bool DeleteUsuario(int id)
         {
             var usuario = contextoBBDD.Usuario.Find(id);
-            if (usuario != null)
+            if (usuario == null)
             {
-                contextoBBDD.Usuario.Remove(usuario);
-                contextoBBDD.SaveChanges();
+                return false;
             }
+
+            contextoBBDD.Usuario.Remove(usuario);
+            contextoBBDD.SaveChanges();
+            return true;
         }
 
         public Usuario GetUsuarioById(int id)
