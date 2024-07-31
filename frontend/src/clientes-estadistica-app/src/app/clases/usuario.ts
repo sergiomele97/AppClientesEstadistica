@@ -1,8 +1,8 @@
 export class Usuario {
 
-    id: number;
-    nombre: string;
-    correo: string;
-    contraseña: string;
+    Id?: number;    // Puedes tener un ID opcional si el backend lo devuelve
+    Nombre: string;
+    Correo: string;
+    Contraseña: string;
 
 }

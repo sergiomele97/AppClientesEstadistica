@@ -21,10 +21,10 @@ export class RegistroComponent implements OnInit {
 
     // Inicializa el formulario con FormBuilder
     this.registroForm = this.fb.group({
-      nombre: ['', Validators.required],           // Campo 'nombre', requerido
-      email: ['', [Validators.required, Validators.email]],  // Campo 'email', requerido y debe ser un email válido
-      password: ['', Validators.required]           // Campo 'password', requerido
-      
+      Nombre: ['', Validators.required],           // Campo 'nombre', requerido
+      Correo: ['', [Validators.required, Validators.email]],  // Campo 'email', requerido y debe ser un email válido
+      Contraseña: ['', Validators.required]           // Campo 'contraseña', requerido
+
     });
   }
 
@@ -35,7 +35,7 @@ export class RegistroComponent implements OnInit {
       // Llama al método registrarUsuario del servicio con los datos del formulario
       this.miServicio.registrarUsuario(this.registroForm.value).subscribe(
         response => {
-          console.log('Usuario registrado exitosamente', response);
+          console.log('Usuario registrado exitosamente', response); // response es la respuesta http
           // Manejar la respuesta exitosa aquí 
         },
         error => {
