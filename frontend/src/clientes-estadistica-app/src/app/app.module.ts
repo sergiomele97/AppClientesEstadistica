@@ -12,11 +12,10 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
 import { MenuComponent } from './menu/menu.component';
 
 @NgModule({
-  declarations: [		
   declarations: [				
     AppComponent,
       RegistroComponent,
-      LoginComponent
+      LoginComponent,
       RegistroComponent,
       ClientesComponent,
       UsuariosComponent,
