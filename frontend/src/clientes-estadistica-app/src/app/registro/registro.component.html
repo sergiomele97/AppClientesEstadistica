@@ -1,20 +1,30 @@
-<body>
-    <div class="container">
-        <h2 class="text-center text-3xl font-bold mb-4">Registro</h2>
-        <form class="form">
-            <div class="flex flex-col">
-                <label for="nombre" class="mb-2 text-lg font-semibold">Nombre</label>
-                <input id="nombre" class="input" type="text">
-            </div>
-            <div class="flex flex-col">
-                <label for="email" class="mb-2 text-lg font-semibold">Email</label>
-                <input id="email" class="input" type="email">
-            </div>
-            <div class="flex flex-col">
-                <label for="password" class="mb-2 text-lg font-semibold">Password</label>
-                <input id="password" class="input" type="password">
-            </div>
-            <button type="submit" class="button">Registrar</button>
-        </form>
-    </div>
-</body>
+<div class="container mx-auto mt-40">
+    <h2 class="text-center text-3xl font-bold mb-4">Registro</h2>
+
+    <!-- 
+    Este formulario está configurado para usar Formularios Reactivos en Angular.
+    [formGroup]="registroForm": Vincula el formulario HTML a un FormGroup en el componente TypeScript.
+    (ngSubmit)="onSubmit()": Maneja el evento de envío del formulario, ejecutando el método onSubmit() del componente cuando el formulario se envía.
+    -->
+    <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" class="form">
+
+        <div class="flex flex-col">
+            <label for="nombre" class="mb-2 text-lg font-semibold">Nombre</label>
+            <input id="nombre" class="input" type="text" formControlName="nombre">
+        </div>
+
+        <div class="flex flex-col">
+            <label for="email" class="mb-2 text-lg font-semibold">Email</label>
+            <input id="email" class="input" type="email" formControlName="email">
+        </div>
+
+        <div class="flex flex-col">
+            <label for="password" class="mb-2 text-lg font-semibold">Password</label>
+            <input id="password" class="input" type="password" formControlName="password">
+        </div>
+
+        <button type="submit" class="button">Registrar</button>
+
+    </form>
+</div>
+  

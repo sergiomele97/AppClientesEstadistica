@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { ClientesComponent } from './menu/clientes/clientes.component';
 import { UsuariosComponent } from './menu/usuarios/usuarios.component';
 import { MenuComponent } from './menu/menu.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [					
@@ -24,7 +25,8 @@ import { MenuComponent } from './menu/menu.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     UserService
