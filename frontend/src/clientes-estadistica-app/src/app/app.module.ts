@@ -10,8 +10,8 @@ import { LoginComponent } from './login/login.component';
 
 import { UserService } from './servicios/user.service';
 import { FormsModule } from '@angular/forms';
-import { ClientesComponent } from './clientes/clientes.component';
-import { UsuariosComponent } from './usuarios/usuarios.component';
+import { ClientesComponent } from './menu/clientes/clientes.component';
+import { UsuariosComponent } from './menu/usuarios/usuarios.component';
 import { MenuComponent } from './menu/menu.component';
 
 @NgModule({
