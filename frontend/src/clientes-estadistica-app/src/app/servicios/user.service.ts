@@ -21,7 +21,7 @@ autenticarUsuario(email: string, password: string): Observable<Usuario[]> {     
 
 // Método con parámetro tipo usuario
 registrarUsuario(usuario: Usuario): Observable<Usuario> {
-    console.log(usuario); // Asegúrate de que los campos estén presentes y correctos DEBUG
+    // console.log(usuario); // DEBUG
     return this.http.post<Usuario>(`${this.url}/crearUsuario`, usuario);
   }
 
