@@ -24,7 +24,7 @@ import { SpaghettiComponent } from './menu/usuarios/spaghetti/spaghetti.componen
 import { TableComponent } from './menu/usuarios/table/table.component';
 import { BalanceComponent } from './menu/clientes/balance/balance.component';
 import { DivisePredictionComponent } from './menu/clientes/divise-prediction/divise-prediction.component';
-import { OutliersBarComponent } from './menu/usuarios/outliers/outliers-bar/outliers-bar.component';
+import { OutliersDetailComponent } from './menu/usuarios/outliers-detail/outliers-detail.component';
 
 @NgModule({
   declarations: [				
@@ -44,7 +44,8 @@ import { OutliersBarComponent } from './menu/usuarios/outliers/outliers-bar/outl
       TableComponent,
       DivisePredictionComponent,
       BalanceComponent,
-      OutliersBarComponent
+      OutliersComponent,
+      OutliersDetailComponent
    ],
   imports: [
     BrowserModule,
