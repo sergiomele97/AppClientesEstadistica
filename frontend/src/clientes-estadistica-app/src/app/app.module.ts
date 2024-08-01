@@ -22,6 +22,8 @@ import { MapComponent } from './menu/usuarios/map/map.component';
 import { OutliersComponent } from './menu/usuarios/outliers/outliers.component';
 import { SpaghettiComponent } from './menu/usuarios/spaghetti/spaghetti.component';
 import { TableComponent } from './menu/usuarios/table/table.component';
+import { BalanceComponent } from './menu/clientes/balance/balance.component';
+import { DivisePredictionComponent } from './menu/clientes/divise-prediction/divise-prediction.component';
 
 @NgModule({
   declarations: [				
@@ -38,7 +40,9 @@ import { TableComponent } from './menu/usuarios/table/table.component';
       MapComponent,
       OutliersComponent,
       SpaghettiComponent,
-      TableComponent
+      TableComponent,
+      DivisePredictionComponent,
+      BalanceComponent
    ],
   imports: [
     BrowserModule,
