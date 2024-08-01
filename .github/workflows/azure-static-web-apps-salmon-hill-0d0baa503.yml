@@ -19,7 +19,31 @@ jobs:
         with:
           submodules: true
           lfs: false
-      - name: Build And Deploy
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Ajusta según la versión de Node.js que necesitas
+
+      - name: Install Dependencies
+        run: |
+          npm install
+
+      - name: Build Angular App
+        run: |
+          npm run build -- --prod
+
+      - name: Copy `routes.json` to dist
+        run: |
+          cp routes.json dist/clientes-estadistica-app/
+
+      - name: Verify `routes.json` in dist
+        run: |
+          ls -la dist/clientes-estadistica-app
+          # Puedes usar `cat` para ver el contenido del archivo si es necesario
+          cat dist/clientes-estadistica-app/routes.json
+
+      - name: Deploy to Azure Static Web Apps
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
