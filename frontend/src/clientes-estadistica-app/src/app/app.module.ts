@@ -14,6 +14,15 @@ import { ClientesComponent } from './menu/clientes/clientes.component';
 import { UsuariosComponent } from './menu/usuarios/usuarios.component';
 import { MenuComponent } from './menu/menu.component';
 
+import { NgApexchartsModule } from 'ng-apexcharts'
+import { VolumetryComponent } from './menu/usuarios/volumetry/volumetry.component';
+import { ClustersComponent } from './menu/usuarios/clusters/clusters.component';
+import { GraphComponent } from './menu/usuarios/graph/graph.component';
+import { MapComponent } from './menu/usuarios/map/map.component';
+import { OutliersComponent } from './menu/usuarios/outliers/outliers.component';
+import { SpaghettiComponent } from './menu/usuarios/spaghetti/spaghetti.component';
+import { TableComponent } from './menu/usuarios/table/table.component';
+
 @NgModule({
   declarations: [				
     AppComponent,
@@ -22,13 +31,21 @@ import { MenuComponent } from './menu/menu.component';
       RegistroComponent,
       ClientesComponent,
       UsuariosComponent,
-      MenuComponent
+      MenuComponent,
+      VolumetryComponent,
+      ClustersComponent,
+      GraphComponent,
+      MapComponent,
+      OutliersComponent,
+      SpaghettiComponent,
+      TableComponent
    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    NgApexchartsModule
   ],
   providers: [
     UserService
