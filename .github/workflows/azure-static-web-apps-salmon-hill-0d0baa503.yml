@@ -40,8 +40,6 @@ jobs:
       - name: Verify `routes.json` in dist
         run: |
           ls -la dist/clientes-estadistica-app
-          # Puedes usar `cat` para ver el contenido del archivo si es necesario
-          cat dist/clientes-estadistica-app/routes.json
 
       - name: Deploy to Azure Static Web Apps
         id: builddeploy
