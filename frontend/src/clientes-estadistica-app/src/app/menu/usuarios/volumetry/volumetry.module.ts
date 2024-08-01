@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
   imports: [
-    CommonModule,
-    NgApexchartsModule
+    CommonModule
   ],
 })
 export class VolumetryModule { }
