@@ -24,7 +24,7 @@ import { SpaghettiComponent } from './menu/usuarios/spaghetti/spaghetti.componen
 import { TableComponent } from './menu/usuarios/table/table.component';
 import { BalanceComponent } from './menu/clientes/balance/balance.component';
 import { DivisePredictionComponent } from './menu/clientes/divise-prediction/divise-prediction.component';
-import { OutliersDetailComponent } from './menu/usuarios/outliers-detail/outliers-detail.component';
+import { OutliersDetailComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail.component';
 
 @NgModule({
   declarations: [				
