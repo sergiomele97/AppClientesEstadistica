@@ -53,4 +53,4 @@ jobs:
           app-name: 'backend-estadistica'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_548DF644ACA14FB288637FA27821D8C0 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BFD2FF0BA57E42CB929981546022F07E }}
