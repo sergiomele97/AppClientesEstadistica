@@ -21,6 +21,8 @@ namespace BackendEstadistica.Contexto
         // DEFINIR LAS TABLAS AQUÍ:
         public DbSet<Usuario> Usuario { get; set; }     // 1º Tabla
 
+        public DbSet<EnvioEjemplo> EnvioEjemplo { get; set; } // 2ª Tabla
+
 
     }
 }
