@@ -7,6 +7,7 @@
         public string Apellido { get; set; }
         public DateTime FechaNacimiento { get; set; }
 
+        public string Empleo { get; set; }
         public string NombrePais { get; set; }
 
         public int PaisId { get; set; }

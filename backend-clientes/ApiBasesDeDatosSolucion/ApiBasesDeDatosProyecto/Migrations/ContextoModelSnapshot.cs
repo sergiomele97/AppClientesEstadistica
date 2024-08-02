@@ -35,6 +35,10 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
+                    b.Property<string>("Empleo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("FechaNacimiento")
                         .HasColumnType("datetime2");
 
@@ -57,6 +61,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         {
                             Id = 1,
                             Apellido = "Perez",
+                            Empleo = "Delincuente",
                             FechaNacimiento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nombre = "Juan",
                             PaisId = 1
@@ -65,6 +70,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         {
                             Id = 2,
                             Apellido = "Lopez",
+                            Empleo = "Profesor",
                             FechaNacimiento = new DateTime(1985, 5, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nombre = "Maria",
                             PaisId = 2
@@ -73,6 +79,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         {
                             Id = 3,
                             Apellido = "Gomez",
+                            Empleo = "Abogado",
                             FechaNacimiento = new DateTime(1978, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nombre = "Carlos",
                             PaisId = 3
@@ -92,6 +99,11 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("Iso3")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -106,18 +118,21 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         {
                             Id = 1,
                             Divisa = "USD",
+                            Iso3 = "ESP",
                             Nombre = "España"
                         },
                         new
                         {
                             Id = 2,
                             Divisa = "EUR",
+                            Iso3 = "FRA",
                             Nombre = "Francia"
                         },
                         new
                         {
                             Id = 3,
                             Divisa = "USD",
+                            Iso3 = "ITA",
                             Nombre = "Italia"
                         });
                 });

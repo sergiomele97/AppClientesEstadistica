@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiBasesDeDatosProyecto.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240731075204_valoresOpcionales")]
-    partial class valoresOpcionales
+    [Migration("20240802110356_MigracionEmpleoClientes")]
+    partial class MigracionEmpleoClientes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,10 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
+                    b.Property<string>("Empleo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("FechaNacimiento")
                         .HasColumnType("datetime2");
 
@@ -51,6 +55,8 @@ namespace ApiBasesDeDatosProyecto.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PaisId");
+
                     b.ToTable("Clientes");
 
                     b.HasData(
@@ -58,6 +64,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         {
                             Id = 1,
                             Apellido = "Perez",
+                            Empleo = "Delincuente",
                             FechaNacimiento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nombre = "Juan",
                             PaisId = 1
@@ -66,6 +73,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         {
                             Id = 2,
                             Apellido = "Lopez",
+                            Empleo = "Profesor",
                             FechaNacimiento = new DateTime(1985, 5, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nombre = "Maria",
                             PaisId = 2
@@ -74,6 +82,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         {
                             Id = 3,
                             Apellido = "Gomez",
+                            Empleo = "Abogado",
                             FechaNacimiento = new DateTime(1978, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nombre = "Carlos",
                             PaisId = 3
@@ -93,6 +102,11 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("Iso3")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -107,18 +121,21 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         {
                             Id = 1,
                             Divisa = "USD",
+                            Iso3 = "ESP",
                             Nombre = "España"
                         },
                         new
                         {
                             Id = 2,
                             Divisa = "EUR",
+                            Iso3 = "FRA",
                             Nombre = "Francia"
                         },
                         new
                         {
                             Id = 3,
                             Divisa = "USD",
+                            Iso3 = "ITA",
                             Nombre = "Italia"
                         });
                 });
@@ -216,6 +233,10 @@ namespace ApiBasesDeDatosProyecto.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Rol")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -373,6 +394,17 @@ namespace ApiBasesDeDatosProyecto.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ApiBasesDeDatosProyecto.Entities.Cliente", b =>
+                {
+                    b.HasOne("ApiBasesDeDatosProyecto.Entities.Pais", "Pais")
+                        .WithMany("Clientes")
+                        .HasForeignKey("PaisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pais");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -422,6 +454,11 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ApiBasesDeDatosProyecto.Entities.Pais", b =>
+                {
+                    b.Navigation("Clientes");
                 });
 #pragma warning restore 612, 618
         }

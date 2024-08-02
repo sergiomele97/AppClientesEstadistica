@@ -16,6 +16,11 @@ namespace ApiBasesDeDatosProyecto.Entities
         [StringLength(50)] // Limita la longitud de la cadena para la divisa
         public string Divisa { get; set; }
 
+
+        [Required]
+        [StringLength(3)] // Limita la longitud de la cadena para la divisa
+        public string Iso3 { get; set; }
+
         public ICollection<Cliente> Clientes { get; set; } // Navegación a la colección de Clientes
 
 
