@@ -24,9 +24,12 @@ import { DivisePredictionComponent } from './menu/clientes/divise-prediction/div
 import { OutliersDetailComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail.component';
 import { ClustersGraphComponent } from './menu/usuarios/clusters-graph/clusters-graph.component';
 import { ClustersTableComponent } from './menu/usuarios/clusters/clusters-table/clusters-table.component';
+import { OutliersDetailTableComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail-table/outliers-detail-table.component';
+import { OutliersDetailGraphComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail-graph/outliers-detail-graph.component';
 
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
+
 
 @NgModule({
   declarations: [					
@@ -48,7 +51,9 @@ import { HighchartsChartModule } from 'highcharts-angular';
       OutliersComponent,
       OutliersDetailComponent,
       ClustersGraphComponent,
-      ClustersTableComponent
+      ClustersTableComponent,
+      OutliersDetailTableComponent,
+      OutliersDetailGraphComponent
    ],
   imports: [
     BrowserModule,
