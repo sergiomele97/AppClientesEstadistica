@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiBasesDeDatosProyecto.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240731075204_valoresOpcionales")]
-    partial class valoresOpcionales
+    [Migration("20240802105636_MigracionISO3")]
+    partial class MigracionISO3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,8 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PaisId");
 
                     b.ToTable("Clientes");
 
@@ -93,6 +95,11 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("Iso3")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -107,18 +114,21 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         {
                             Id = 1,
                             Divisa = "USD",
+                            Iso3 = "ESP",
                             Nombre = "España"
                         },
                         new
                         {
                             Id = 2,
                             Divisa = "EUR",
+                            Iso3 = "FRA",
                             Nombre = "Francia"
                         },
                         new
                         {
                             Id = 3,
                             Divisa = "USD",
+                            Iso3 = "ITA",
                             Nombre = "Italia"
                         });
                 });
@@ -216,6 +226,10 @@ namespace ApiBasesDeDatosProyecto.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Rol")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -373,6 +387,17 @@ namespace ApiBasesDeDatosProyecto.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ApiBasesDeDatosProyecto.Entities.Cliente", b =>
+                {
+                    b.HasOne("ApiBasesDeDatosProyecto.Entities.Pais", "Pais")
+                        .WithMany("Clientes")
+                        .HasForeignKey("PaisId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pais");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -422,6 +447,11 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ApiBasesDeDatosProyecto.Entities.Pais", b =>
+                {
+                    b.Navigation("Clientes");
                 });
 #pragma warning restore 612, 618
         }

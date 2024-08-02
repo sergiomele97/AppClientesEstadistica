@@ -10,5 +10,9 @@
 
         [StringLength(50)]
         public string Divisa { get; set; }
+
+        [Required]
+        [StringLength(3)]
+        public string Iso3 { get; set; }
     }
 }

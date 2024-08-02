@@ -92,6 +92,11 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("Iso3")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -106,18 +111,21 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         {
                             Id = 1,
                             Divisa = "USD",
+                            Iso3 = "ESP",
                             Nombre = "España"
                         },
                         new
                         {
                             Id = 2,
                             Divisa = "EUR",
+                            Iso3 = "FRA",
                             Nombre = "Francia"
                         },
                         new
                         {
                             Id = 3,
                             Divisa = "USD",
+                            Iso3 = "ITA",
                             Nombre = "Italia"
                         });
                 });
