@@ -14,7 +14,7 @@ export class MapComponent {
   Highcharts: typeof Highcharts = Highcharts;
   chartConstructor = "mapChart";
   bubbleData = [
-    { code3: "ABW", z: 105 },
+    { code3: "ARG", z: 70500 },
     { code3: "AFG", z: 35530 },
     { code3: "BRA", z: 27353 },
     { code3: "ESP", z: 74145 },
