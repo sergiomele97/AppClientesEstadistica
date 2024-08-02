@@ -14,10 +14,8 @@ import { VolumetryComponent } from './menu/usuarios/volumetry/volumetry.componen
 import { TableComponent } from './menu/usuarios/table/table.component';
 import { OutliersDetailComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail.component';
 
-
 const routes: Routes = [
   { path: "login", component: LoginComponent},
-  
   { path: "registro", component: RegistroComponent },
   { path: "menu", component: MenuComponent,
     children: [
@@ -35,7 +33,9 @@ const routes: Routes = [
         ]
       }
     ]
-  }, 
+  },
+  { path:"", redirectTo:"/login", pathMatch:"full" },
+  { path:"**", redirectTo:"/login", pathMatch:"full" },
 
 ];
 
