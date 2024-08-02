@@ -31,12 +31,14 @@ export class VolumetryComponent {
 
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
+
   constructor() {
+    
     this.chartOptions = {
       series: [
         {
-          name: "Desktops",
-          data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+          name: "Transactions",
+          data: [10, 41, 49, 62, 69, 91, 148]
         }
       ],
       chart: {
@@ -47,14 +49,14 @@ export class VolumetryComponent {
         }
       },
       dataLabels: {
-        enabled: false
+        enabled: true
       },
       stroke: {
         curve: "straight"
       },
       title: {
-        text: "Product Trends by Month",
-        align: "left"
+        text: "Number of Transactions Last Week",
+        align: "center"
       },
       grid: {
         row: {
@@ -63,16 +65,15 @@ export class VolumetryComponent {
         }
       },
       xaxis: {
+        // Aquí habrá que hacer un select datetime
         categories: [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "Jun",
-          "Jul",
-          "Aug",
-          "Sep"
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
         ]
       }
     };
