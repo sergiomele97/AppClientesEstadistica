@@ -45,7 +45,8 @@ namespace ApiBasesDeDatosProyecto.Context
                     Nombre = "Juan",
                     Apellido = "Perez",
                     FechaNacimiento = new DateTime(1990, 1, 1),
-                    PaisId = 1
+                    PaisId = 1,
+                    Empleo = "Delincuente"
                 },
                 new Cliente
                 {
@@ -53,7 +54,8 @@ namespace ApiBasesDeDatosProyecto.Context
                     Nombre = "Maria",
                     Apellido = "Lopez",
                     FechaNacimiento = new DateTime(1985, 5, 23),
-                    PaisId = 2
+                    PaisId = 2,
+                    Empleo = "Profesor"
                 },
                 new Cliente
                 {
@@ -61,7 +63,8 @@ namespace ApiBasesDeDatosProyecto.Context
                     Nombre = "Carlos",
                     Apellido = "Gomez",
                     FechaNacimiento = new DateTime(1978, 11, 12),
-                    PaisId = 3
+                    PaisId = 3,
+                    Empleo = "Abogado"
                 }
             );
 

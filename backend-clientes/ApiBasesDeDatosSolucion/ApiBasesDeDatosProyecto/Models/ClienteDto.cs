@@ -19,6 +19,7 @@ namespace ApiBasesDeDatosProyecto.Models
         [Required]
         public DateTime FechaNacimiento { get; set; }
 
+        public string Empleo { get; set; }
 
         public string NombrePais { get; set; }
 
