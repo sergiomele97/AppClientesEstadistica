@@ -1,10 +1,5 @@
 ﻿
 using BackendEstadistica.Contexto;
-using BackendEstadistica.Entidades;
-using BackendEstadistica.Migrations;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BackendEstadistica.Servicios
 {
