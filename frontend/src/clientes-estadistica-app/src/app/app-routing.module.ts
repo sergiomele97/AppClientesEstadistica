@@ -17,7 +17,6 @@ import { OutliersDetailComponent } from './menu/usuarios/outliers/outliers-detai
 
 const routes: Routes = [
   { path: "login", component: LoginComponent},
-  
   { path: "registro", component: RegistroComponent },
   { path: "menu", component: MenuComponent,
     children: [
@@ -36,6 +35,8 @@ const routes: Routes = [
       }
     ]
   },
+  { path:"", redirectTo:"/login", pathMatch:"full" },
+  { path:"**", redirectTo:"/login", pathMatch:"full" },
 
 ];
 
