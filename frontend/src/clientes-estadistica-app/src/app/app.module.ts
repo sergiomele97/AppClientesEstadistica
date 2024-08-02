@@ -49,16 +49,11 @@ import { HighchartsChartModule } from 'highcharts-angular';
       DivisePredictionComponent,
       BalanceComponent,
       OutliersComponent,
-<<<<<<< HEAD
-      OutliersDetailComponent
-      
-=======
       OutliersDetailComponent,
       ClustersGraphComponent,
       ClustersTableComponent,
       OutliersDetailTableComponent,
       OutliersDetailGraphComponent
->>>>>>> frontend-menu
    ],
   imports: [
     BrowserModule,
