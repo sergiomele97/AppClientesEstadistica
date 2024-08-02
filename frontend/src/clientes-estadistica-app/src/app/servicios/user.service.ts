@@ -8,7 +8,7 @@ import { Usuario } from '../clases/usuario';
 })
 export class UserService {
 
-  private url = 'https://localhost:44339/api/Account'; // Cambia esta URL por la de tu backend
+  private url = 'https://localhost:7107/api/'; 
 
   constructor(private http: HttpClient) { }
 
@@ -18,11 +18,18 @@ export class UserService {
 
   autenticarUsuario(email: string, password: string, remember: boolean): Observable<any> {
     remember = false;
-    return this.http.post<any>(`${this.url}/login`, { email, password, remember });
+    return this.http.post<any>(`${this.url}Account/login`, { email, password, remember });
   }
 
-  registrarUsuario(usuario: Usuario): Observable<Usuario> {
+  registrarUsuario(usuario: any): Observable<any> {
     console.log(usuario); // Asegúrate de que los campos estén presentes y correctos DEBUG
-    return this.http.post<Usuario>(`${this.url}/register`, usuario);
+    return this.http.post<any>(`${this.url}Account/register`, usuario);
   }
+
+  obtenerPaisIdPorNombre(nombre: string): Observable<{ Id: number }> {
+    return this.http.get<{ Id: number }>(`${this.url}Paises/`, {
+      params: { nombre }
+    });
+  }
+  
 }
