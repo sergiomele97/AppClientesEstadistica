@@ -20,7 +20,7 @@ Otros directorio/archivos de apoyo:
 Para instalar y ejecutar cualquiera de estos proyectos, sigue las instrucciones de la "documentación del proyecto.md" ubicada en el directorio de cada proyecto.
 
 ## Uso
-1. Clona el repositorio.
+1. Clona el repositorio. 
 2. Configura las dependencias necesarias (detalles en "documentación del proyecto.md").
 3. Ejecuta los servidores del backend (`backend-clientes` y `backend-estadistica`).
 4. Inicia la aplicación frontend.

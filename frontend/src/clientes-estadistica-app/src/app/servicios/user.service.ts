@@ -3,25 +3,33 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Usuario } from '../clases/usuario';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class UserService {
 
-    private url = 'https://localhost:7144/api/usuarios';    // Cambia esta URL por la de tu backend
+  private url = 'https://localhost:7107/api/'; 
 
-constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-getUsuarios(): Observable<Usuario[]> {
+  getUsuarios(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(this.url);
-}
-
-autenticarUsuario(email: string, password: string): Observable<Usuario[]> {     // pendiente (enviaremos solo 1 usuario y se comprobara en back)
-    return this.http.get<Usuario[]>(`${this.url}?email=${email}&password=${password}`);
-}
-
-registrarUsuario(usuario: Usuario): Observable<Usuario> {
-    return this.http.post<Usuario>(`${this.url}/crearUsuario`, usuario);
   }
 
-}
+  autenticarUsuario(email: string, password: string, remember: boolean): Observable<any> {
+    remember = false;
+    return this.http.post<any>(`${this.url}Account/login`, { email, password, remember });
+  }
 
+  registrarUsuario(usuario: any): Observable<any> {
+    console.log(usuario); // Asegúrate de que los campos estén presentes y correctos DEBUG
+    return this.http.post<any>(`${this.url}Account/register`, usuario);
+  }
+
+  obtenerPaisIdPorNombre(nombre: string): Observable<{ Id: number }> {
+    return this.http.get<{ Id: number }>(`${this.url}Paises/`, {
+      params: { nombre }
+    });
+  }
   
+}

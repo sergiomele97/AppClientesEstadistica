@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
 
   email: string = '';
 
-  contraseña: string = '';
+  contrase: string = '';
 
   constructor(private usuarioService: UserService, private route: Router) { }
 
@@ -33,17 +33,15 @@ export class LoginComponent implements OnInit {
   }
 
   authentication() {
-
-    this.usuarioService.autenticarUsuario(this.email, this.contraseña).subscribe( datos => {
-
-      if (datos.length > 0) { 
+    this.usuarioService.autenticarUsuario(this.email, this.contrase, true).subscribe(response => {
+      if (response && response.token) {
+        // Guarda el token en almacenamiento local o en algún servicio de autenticación
+        localStorage.setItem('token', response.token);
         this.route.navigate(['/registro']);
       } else {
         alert('Credenciales incorrectas');
       }
-
     });
-
   }
-
+  
 }

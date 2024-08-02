@@ -1,0 +1,34 @@
+ Uno de los métodos más comunes para modelar series temporales es el enfoque ETS (Error, Trend, Seasonal), que descompone una serie temporal en componentes de error, tendencia y estacionalidad.
+
+Error (E): Representa las variaciones aleatorias en la serie temporal, también conocido como el término de ruido. Puede ser aditivo (A) o multiplicativo (M).
+
+Tendencia (T): Captura la dirección general de los datos a lo largo del tiempo, ya sea creciente, decreciente o constante. La tendencia también puede ser aditiva (A) o multiplicativa (M).
+
+Estacionalidad (S): Refleja patrones repetitivos en la serie temporal que ocurren en intervalos regulares, como estaciones del año, días de la semana, etc. La estacionalidad también puede ser aditiva (A) o multiplicativa (M).
+
+
+En nuestro caso: No vemos estacionalidad ni una tendencia visible en las series remporales.
+
+Habrá que hacer un estudio más exhaustivo para poder predecir de la forma más exacta posible
+
+
+Los modelos ETS se ajustan típicamente utilizando técnicas de máxima verosimilitud y se seleccionan basándose en criterios de información, como el AIC (Akaike Information Criterion) o el BIC (Bayesian Information Criterion).
+
+
+
+ARIMA: Utiliza una combinación de autoregresión (AR), integración (I) y promedios móviles (MA) para modelar la serie temporal. ARIMA no descompone explícitamente la serie temporal en componentes, sino que la diferencia para hacerla estacionaria y luego aplica componentes AR y MA.
+
+
+Es flexible y puede modelar una amplia variedad de series temporales, especialmente aquellas que no tienen una estructura estacional o de tendencia clara. Es útil cuando se espera que los datos sean estacionarios o pueden hacerse estacionarios a través de la diferenciación.
+
+ARIMA: Puede ser más adecuado para datos sin patrones claros o cuando los datos son muy ruidosos
+
+
+
+USAREMOS: ARIMA con aproximada mente 2 retrocesos para captar lo mejor posible la tendencia.
+
+Usamos este modelo y no otro porque se trata de series temporales y no un modelo de comportamiento entre dos variables o más.
+
+El comportamiento entre monedas es bastante impredecible. Otros modelos nos aproximan la predicción con la media, lo cual no es lo más exacto ya que nos gustaría saber el tipo de tendencia para el día siguente.
+Para conseguir esto vemos los instantes anteriores con el AutoRegresivo(2).
+
