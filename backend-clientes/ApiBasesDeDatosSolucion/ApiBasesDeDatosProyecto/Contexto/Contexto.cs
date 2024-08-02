@@ -27,9 +27,9 @@ namespace ApiBasesDeDatosProyecto.Context
 
             // Agregar tres paises por defecto a la base de datos
             modelBuilder.Entity<Pais>().HasData(
-                new Pais { Id = 1, Nombre = "España", Divisa = "USD" },
-                new Pais { Id = 2, Nombre = "Francia", Divisa = "EUR" },
-                new Pais { Id = 3, Nombre = "Italia", Divisa = "USD" }
+                new Pais { Id = 1, Nombre = "España", Divisa = "USD", Iso3 = "ESP" },
+                new Pais { Id = 2, Nombre = "Francia", Divisa = "EUR", Iso3 = "FRA" },
+                new Pais { Id = 3, Nombre = "Italia", Divisa = "USD", Iso3 = "ITA" }
             );
 
             modelBuilder.Entity<Usuario>().HasData(
