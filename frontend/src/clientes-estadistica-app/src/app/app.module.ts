@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,7 +29,6 @@ import { HighchartsChartModule } from 'highcharts-angular';
 @NgModule({
   declarations: [					
     AppComponent,
-      RegistroComponent,
       LoginComponent,
       RegistroComponent,
       ClientesComponent,
@@ -46,6 +45,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
       BalanceComponent,
       OutliersComponent,
       OutliersDetailComponent
+      
    ],
   imports: [
     BrowserModule,
@@ -53,7 +53,8 @@ import { HighchartsChartModule } from 'highcharts-angular';
     HttpClientModule,
     FormsModule,
     NgApexchartsModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+    ReactiveFormsModule
   ],
   providers: [
     UserService
