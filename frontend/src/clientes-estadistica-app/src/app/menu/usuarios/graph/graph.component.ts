@@ -7,7 +7,8 @@ import {
   ApexXAxis,
   ApexDataLabels,
   ApexTooltip,
-  ApexStroke
+  ApexStroke,
+  ApexTitleSubtitle
 } from "ng-apexcharts";
 
 export type ChartOptions = {
@@ -17,6 +18,7 @@ export type ChartOptions = {
   stroke: ApexStroke;
   tooltip: ApexTooltip;
   dataLabels: ApexDataLabels;
+  title: ApexTitleSubtitle;
 };
 
 @Component({
@@ -33,11 +35,11 @@ export class GraphComponent {
   constructor() {    this.chartOptions = {
       series: [
         {
-          name: "series1",
+          name: "male",
           data: [31, 40, 28, 51, 42, 109, 100]
         },
         {
-          name: "series2",
+          name: "female",
           data: [11, 32, 45, 32, 34, 52, 41]
         }
       ],
@@ -47,6 +49,10 @@ export class GraphComponent {
       },
       dataLabels: {
         enabled: false
+      },
+      title: {
+        text: "Accesses by Sex",
+        align: "center"
       },
       stroke: {
         curve: "smooth"
