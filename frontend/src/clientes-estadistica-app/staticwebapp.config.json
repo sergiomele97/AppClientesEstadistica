@@ -1,0 +1,37 @@
+{
+    "navigationFallback": {
+      "rewrite": "/index.html",
+      "exclude": ["/images/*", "/css/*", "/assets/*"]
+    },
+    "routes": [
+      {
+        "route": "/login",
+        "serve": "/index.html"
+      },
+      {
+        "route": "/registro",
+        "serve": "/index.html"
+      },
+      {
+        "route": "/menu",
+        "serve": "/index.html"
+      },
+      {
+        "route": "/clientes",
+        "serve": "/index.html"
+      },
+      {
+        "route": "/usuarios",
+        "serve": "/index.html"
+      },
+      {
+        "route": "/",
+        "serve": "/index.html"
+      },
+      {
+        "route": "/*",
+        "serve": "/index.html"
+      }
+    ]
+  }
+  
