@@ -27,7 +27,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 
 @NgModule({
-  declarations: [				
+  declarations: [					
     AppComponent,
       RegistroComponent,
       LoginComponent,

@@ -1,20 +1,39 @@
-<body>
-    <div class="container">
-        <h2 class="text-center text-3xl font-bold mb-4">Registro</h2>
-        <form class="form">
-            <div class="flex flex-col">
-                <label for="nombre" class="mb-2 text-lg font-semibold">Nombre</label>
-                <input id="nombre" class="input" type="text" formControlName="nombre">
-            </div>
-            <div class="flex flex-col">
-                <label for="email" class="mb-2 text-lg font-semibold">Email</label>
-                <input id="email" class="input" type="email" formControlName="email">
-            </div>
-            <div class="flex flex-col">
-                <label for="password" class="mb-2 text-lg font-semibold">Password</label>
-                <input id="password" class="input" type="password" formControlName="password">
-            </div>
-            <button type="submit" class="button">Registrar</button>
-        </form>
+<div class="container mx-auto mt-40">
+    <h2 class="text-center text-3xl font-bold mb-4">Registro</h2>
+  
+    <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" class="form">
+      <div class="flex flex-col">
+        <label for="nombre" class="mb-2 text-lg font-semibold">Nombre</label>
+        <input id="nombre" class="input" type="text" formControlName="Nombre">
+      </div>
+  
+      <div class="flex flex-col">
+        <label for="apellido" class="mb-2 text-lg font-semibold">Apellido</label>
+        <input id="apellido" class="input" type="text" formControlName="Apellido">
+      </div>
+  
+      <div class="flex flex-col">
+        <label for="email" class="mb-2 text-lg font-semibold">Email</label>
+        <input id="email" class="input" type="email" formControlName="Correo">
+      </div>
+  
+      <div class="flex flex-col">
+        <label for="password" class="mb-2 text-lg font-semibold">Contraseña</label>
+        <input id="password" class="input" type="password" formControlName="Contraseña">
+      </div>
+  
+      <div class="flex flex-col">
+        <label for="password2" class="mb-2 text-lg font-semibold">Confirmar Contraseña</label>
+        <input id="password2" class="input" type="password" formControlName="Contraseña2">
+      </div>
+      <div class="flex flex-col">
+        <label for="pais" class="mb-2 text-lg font-semibold">Pais</label>
+        <input id="pais" class="input" type="integer" formControlName="PaisId">
     </div>
-</body>
+    
+      <input type="hidden" formControlName="Rol" value="Client">
+  
+      <button type="submit" class="button">Registrar</button>
+    </form>
+  </div>
+  

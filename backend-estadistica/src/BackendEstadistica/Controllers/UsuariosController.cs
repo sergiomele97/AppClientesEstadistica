@@ -62,7 +62,7 @@ public class UsuariosController : ControllerBase
     }
 
 
-    //      Post en nuestro Repositorio
+    //     Post en nuestro Repositorio
     [HttpPost("crearUsuario")]
     public IActionResult AddUsuario([FromBody] Usuario nuevoUsuario)
     {
@@ -116,7 +116,12 @@ public class UsuariosController : ControllerBase
     public IActionResult DeleteUsuario(int id)
     {
 
-        usuarioRepositorio.DeleteUsuario(id);
+        bool usuarioEliminado = usuarioRepositorio.DeleteUsuario(id);
+
+        if (!usuarioEliminado)
+        {
+            return NotFound("El usuario que intenta borrar no existe");
+        }
 
         return Ok("El usuario se borró correctamente");
 
