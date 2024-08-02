@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ApiBasesDeDatosProyecto.Migrations
 {
     /// <inheritdoc />
-    public partial class MigracionISO3 : Migration
+    public partial class MigracionEmpleoClientes : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -200,6 +200,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                     Nombre = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Apellido = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
                     FechaNacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Empleo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PaisId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -235,12 +236,12 @@ namespace ApiBasesDeDatosProyecto.Migrations
 
             migrationBuilder.InsertData(
                 table: "Clientes",
-                columns: new[] { "Id", "Apellido", "FechaNacimiento", "Nombre", "PaisId" },
+                columns: new[] { "Id", "Apellido", "Empleo", "FechaNacimiento", "Nombre", "PaisId" },
                 values: new object[,]
                 {
-                    { 1, "Perez", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Juan", 1 },
-                    { 2, "Lopez", new DateTime(1985, 5, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), "Maria", 2 },
-                    { 3, "Gomez", new DateTime(1978, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "Carlos", 3 }
+                    { 1, "Perez", "Delincuente", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Juan", 1 },
+                    { 2, "Lopez", "Profesor", new DateTime(1985, 5, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), "Maria", 2 },
+                    { 3, "Gomez", "Abogado", new DateTime(1978, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "Carlos", 3 }
                 });
 
             migrationBuilder.CreateIndex(

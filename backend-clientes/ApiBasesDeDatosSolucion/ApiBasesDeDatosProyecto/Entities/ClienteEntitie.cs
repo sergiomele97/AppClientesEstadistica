@@ -23,6 +23,8 @@
         [Required]
         public DateTime FechaNacimiento { get; set; }
 
+        public string Empleo { get; set; }
+
         [Required]
         public int PaisId { get; set; }
 
