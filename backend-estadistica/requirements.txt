@@ -1,23 +1,24 @@
-IDE: Visual Studio
+1. Instalar Visual Studio:
+	Desde el instalador de VS seleccionar:
+	- Desarrollo de escritorio .NET
+	- Almacenamiento y procesamiento de datos (SQL)
 
-Hay que instalar:
+2. Instalar entity framework core
 
-1. Entity framework core
+3. Para swagger => Es posible que sea necesario generar un certificado SSL para swagger en tu ordenador.
 
-2. Swagger => Es posible que sea necesario generar un certificado SSL para swagger en tu ordenador.
+4. Para la base de datos:
 
-3. Base de datos => En la consola del administrador de paquetes nugget de VS: 
+	=> En la consola del administrador de paquetes nugget de VS: 
 
 Install-Package Microsoft.EntityFrameworkCore
 Install-Package Microsoft.EntityFrameworkCore.SqlServer
 Install-Package Microsoft.EntityFrameworkCore.Tools
-	
-	=> Instalar SQL server Express en tu maquina
-	=> En la consola del administrador de paquetes nugget
 
-Add-Migration InitialCreate
+Add-Migration InitialCreate (Si no hubiera ninguna migracion ya)
 Update-Database
 
+5. Ya deberia funcionar todo
 
 
 
