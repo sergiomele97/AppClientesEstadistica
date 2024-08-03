@@ -5,9 +5,9 @@
 
 2. Instalar entity framework core
 
-3. Para swagger => Es posible que sea necesario generar un certificado SSL para swagger en tu ordenador.
+3. Para swagger (testeo de la API) => Es posible que sea necesario generar un certificado SSL para swagger en tu ordenador.
 
-4. Para la base de datos:
+4. Para la base de datos local:
 
 	=> En la consola del administrador de paquetes nugget de VS: 
 

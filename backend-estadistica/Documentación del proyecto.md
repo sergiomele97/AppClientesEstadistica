@@ -26,9 +26,8 @@ Este proyecto es una aplicación backend para gestionar estadísticas. Está org
 
 ## Instalación
 1. Clona el repositorio.
-2. Configura las dependencias necesarias.
-3. Ejecuta las migraciones para configurar la base de datos.
-4. Inicia la aplicación con `dotnet run`.
+2. Configura las dependencias locales necesarias siguiendo la guia "requerimientos.txt".
+3. Compila la aplicación.
 
 ## Contribuciones
 Las contribuciones son bienvenidas. Por favor, abre un issue o un pull request para sugerencias y mejoras.
