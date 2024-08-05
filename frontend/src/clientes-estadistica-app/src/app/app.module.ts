@@ -25,6 +25,7 @@ import { OutliersDetailComponent } from './menu/usuarios/outliers/outliers-detai
 
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 
 @NgModule({
   declarations: [					
@@ -44,7 +45,8 @@ import { HighchartsChartModule } from 'highcharts-angular';
       DivisePredictionComponent,
       BalanceComponent,
       OutliersComponent,
-      OutliersDetailComponent
+      OutliersDetailComponent,
+      UsersInfoComponent
       
    ],
   imports: [
