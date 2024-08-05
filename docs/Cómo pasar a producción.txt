@@ -1,0 +1,11 @@
+Protocolo para pasar a producción:
+
+1. Comprobaciones locales.
+
+2. Actualizar archivo staticwebapp.config.json	(Tema routing azure static web)
+
+3. Hacer merge de main a produccion:
+	
+	$ git checkout producción	(cambiar a la rama producción)
+	$ git pull			
+	$ git merge main

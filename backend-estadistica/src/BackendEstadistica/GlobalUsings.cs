@@ -6,3 +6,6 @@ global using BackendEstadistica.Servicios;
 global using System.ComponentModel.DataAnnotations;
 global using BackendEstadistica.Entidades;
 global using ApiBasesDeDatosProyecto.Perfiles;
+global using BackendEstadistica.Faker;
+global using AutoMapper;
+global using BackendEstadistica.Utilidades;
