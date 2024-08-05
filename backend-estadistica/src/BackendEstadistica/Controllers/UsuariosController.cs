@@ -128,6 +128,12 @@ public class UsuariosController : ControllerBase
     }
 
 
+    //public IActionResult GetEnvioEjemplo()
+    //{
+    //    List<EnvioEjemplo> envios =
+    //}
+
+
     //      Post en el repositorio de la version modificada de clientes (PROVISIONAL, ESTE POST SE BORRARÁ)
     //[HttpPost("remoto")]
     //public async Task<IActionResult> Post2([FromBody] UsuarioDto nuevoUsuario)
