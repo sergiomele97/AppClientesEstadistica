@@ -12,6 +12,7 @@ namespace BackendEstadistica
 
             // Add services to the container.
             builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
+            builder.Services.AddScoped<IEnvioEjemploRepositorio, EnvioEjemploRepositorio>();
 
             builder.Services.AddControllers();
 
