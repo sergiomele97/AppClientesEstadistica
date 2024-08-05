@@ -13,9 +13,12 @@ import { ClustersComponent } from './menu/usuarios/clusters/clusters.component';
 import { VolumetryComponent } from './menu/usuarios/volumetry/volumetry.component';
 import { TableComponent } from './menu/usuarios/table/table.component';
 import { OutliersDetailComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail.component';
+import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 
 const routes: Routes = [
   { path: "login", component: LoginComponent},
+  { path: 'users-info', component: UsersInfoComponent },
+
   { path: "registro", component: RegistroComponent },
   { path: "menu", component: MenuComponent,
     children: [

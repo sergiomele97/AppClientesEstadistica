@@ -22,7 +22,6 @@ namespace ApiBasesDeDatosProyecto.Repository
             {
                 _contexto.Usuarios.Add(usuario);
             }
-
         }
 
         public void Eliminar(Usuario usuario)
