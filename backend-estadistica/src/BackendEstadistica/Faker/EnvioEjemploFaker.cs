@@ -20,4 +20,9 @@ public class EnvioEjemploFaker
 
     }
 
+    public EnvioEjemplo Generate()
+    {
+        return envioFake.Generate();
+    }
+
 }
