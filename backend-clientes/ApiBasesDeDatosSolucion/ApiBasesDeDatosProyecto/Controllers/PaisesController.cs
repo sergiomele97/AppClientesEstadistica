@@ -50,7 +50,7 @@ namespace ApiBasesDeDatosProyecto.Controllers
             {
                 return NotFound();
             }
-            return Ok(new { Id = pais.Id });
+            return Ok(pais.Id);
         }
 
 
