@@ -32,13 +32,23 @@ export class VolumetryComponent {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
+  public dataType: string = 'usuarios';
+  public data = {
+    usuarios: [7, 10, 1, 13, 8, 45, 39],
+    transacciones: [10, 41, 49, 62, 69, 91, 148]
+  };
+
   constructor() {
+    this.updateChart();
+  }
+
+  updateChart() {
     
     this.chartOptions = {
       series: [
         {
-          name: "Transactions",
-          data: [10, 41, 49, 62, 69, 91, 148]
+          name: this.dataType,
+          data: this.data[this.dataType]
         }
       ],
       chart: {
@@ -77,5 +87,11 @@ export class VolumetryComponent {
         ]
       }
     };
+  }
+
+  onSelectionChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    this.dataType = selectElement.value;
+    this.updateChart();
   }
 }
