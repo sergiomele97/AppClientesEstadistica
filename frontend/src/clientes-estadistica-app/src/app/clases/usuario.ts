@@ -4,5 +4,6 @@ export class Usuario {
     Nombre: string;
     Correo: string;
     Contraseña: string;
-
+    userName: any;
+    rol: string;
 }

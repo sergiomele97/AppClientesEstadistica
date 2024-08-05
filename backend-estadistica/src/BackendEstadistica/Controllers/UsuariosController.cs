@@ -119,13 +119,13 @@ public class UsuariosController : ControllerBase
     }
 
 
-    public IActionResult GetEnvioEjemplo()
-    {
-        List<EnvioEjemplo> envios = envioEjemploRepositorio.GetEnvio();
+    //public IActionResult GetEnvioEjemplo()
+    //{
+    //    List<EnvioEjemplo> envios = envioEjemploRepositorio.GetEnvio();
 
-        return Ok(mapper.Map<List<EnvioEjemplo>>(envios));
+    //    return Ok(mapper.Map<List<EnvioEjemplo>>(envios));
 
-    }
+    //}
 
 
     //      Post en el repositorio de la version modificada de clientes (PROVISIONAL, ESTE POST SE BORRARÁ)
