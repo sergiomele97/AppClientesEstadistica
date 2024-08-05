@@ -5,11 +5,18 @@ on:
     branches:
       - produccion
       # Puedes añadir otras ramas si es necesario
+name: Azure Static Web Apps CI/CD
+
+on:
+  push:
+    branches:
+      - produccion
+      # Añadir otras ramas si es necesario
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches:
       - produccion
-      # Puedes añadir otras ramas si es necesario
+      # Añadir otras ramas si es necesario
 
 jobs:
   build_and_deploy_job:
@@ -30,27 +37,22 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Determine Environment
-        id: env
-        run: echo "ENVIRONMENT=$(if [[ $GITHUB_REF == 'refs/heads/produccion' ]]; then echo 'production'; else echo 'staging'; fi)" >> $GITHUB_ENV
+      - name: Set Environment Variable
+        id: set-env
+        run: echo "ENVIRONMENT=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_ENV
 
       - name: Build Application
         run: npm run build -- --configuration ${{ env.ENVIRONMENT }}
 
-      - name: Set API Token
-        id: set-api-token
-        run: |
-          echo "API_TOKEN=${{ secrets['AZURE_STATIC_WEB_APPS_API_TOKEN_' + (env.ENVIRONMENT == 'production' && 'PRODUCCION' || 'STAGING')] }}" >> $GITHUB_ENV
-
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ env.API_TOKEN }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+          azure_static_web_apps_api_token: ${{ secrets['AZURE_STATIC_WEB_APPS_API_TOKEN_' + env.ENVIRONMENT.toUpperCase()] }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }} # Usado para integraciones de GitHub (i.e., comentarios en PR)
           action: "upload"
-          app_location: "/frontend/src/clientes-estadistica-app" # App source code path
-          api_location: "" # Api source code path - optional
-          output_location: "dist/clientes-estadistica-app" # Built app content directory - optional
+          app_location: "/frontend/src/clientes-estadistica-app" # Ruta del código fuente de la aplicación
+          api_location: "" # Ruta del código de la API - opcional
+          output_location: "dist/clientes-estadistica-app" # Directorio del contenido construido - opcional
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
