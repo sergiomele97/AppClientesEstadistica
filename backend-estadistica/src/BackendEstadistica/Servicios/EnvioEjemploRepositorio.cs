@@ -13,13 +13,18 @@ namespace BackendEstadistica.Servicios
             this.contextoBBDD = contextoBBDD;
         }
 
-        public List<EnvioEjemplo> GetEnvio()
+        public void CrearEnvio(EnvioEjemplo envioEjemplo)
         {
             var envioFake = new EnvioEjemploFaker().Generate();
 
             contextoBBDD.EnvioEjemplo.Add(envioFake);
             contextoBBDD.SaveChanges();
 
+        }
+
+        public List<EnvioEjemplo> GetEnvio()
+        {
+     
            return contextoBBDD.EnvioEjemplo.ToList();
             
         }
