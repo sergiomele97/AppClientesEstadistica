@@ -30,6 +30,12 @@ namespace BackendEstadistica
                         .WithOrigins("http://localhost:4200")
                         .AllowAnyHeader()
                         .AllowAnyMethod());
+
+                options.AddPolicy("AllowAzureHost",
+                    builder => builder
+                        .WithOrigins("https://salmon-hill-0d0baa503.5.azurestaticapps.net")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
             });
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -43,6 +49,12 @@ namespace BackendEstadistica
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                // Allow Development
+                app.UseCors("AllowLocalhost");
+            } else
+            {
+                // Allow Production
+                app.UseCors("AllowAzureHost");
             }
 
             app.UseHttpsRedirection();
