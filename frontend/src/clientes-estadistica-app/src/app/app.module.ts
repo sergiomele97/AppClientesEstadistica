@@ -29,6 +29,7 @@ import { OutliersDetailGraphComponent } from './menu/usuarios/outliers/outliers-
 
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { ClustersDataService } from './servicios/clusters-data.service';
 
 
 @NgModule({
@@ -66,7 +67,8 @@ import { HighchartsChartModule } from 'highcharts-angular';
     ReactiveFormsModule
   ],
   providers: [
-    UserService
+    UserService,
+    ClustersDataService
   ],
   bootstrap: [AppComponent]
 })
