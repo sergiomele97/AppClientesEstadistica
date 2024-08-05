@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-
-namespace ApiBasesDeDatosProyecto.Perfiles
+﻿namespace ApiBasesDeDatosProyecto.Perfiles
 {
     /* Los perfiles en AutoMapper definen las configuraciones para mapear entre diferentes 
      * tipos de objetos, facilitando la conversión automática de datos entre ellos. 

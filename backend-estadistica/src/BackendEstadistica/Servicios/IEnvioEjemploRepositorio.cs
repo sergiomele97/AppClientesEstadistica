@@ -3,7 +3,7 @@
     public interface IEnvioEjemploRepositorio
     {
 
-        Task<EnvioEjemplo> GetEnvio(int id);
+        List<EnvioEjemplo> GetEnvio();
 
     }
 }

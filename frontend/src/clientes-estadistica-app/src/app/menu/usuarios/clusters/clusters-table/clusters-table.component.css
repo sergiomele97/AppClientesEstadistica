@@ -1,0 +1,7 @@
+table {
+  width: 100%;
+}
+
+.mat-elevation-z8 {
+  box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.2);
+}

@@ -22,9 +22,14 @@ import { TableComponent } from './menu/usuarios/table/table.component';
 import { BalanceComponent } from './menu/clientes/balance/balance.component';
 import { DivisePredictionComponent } from './menu/clientes/divise-prediction/divise-prediction.component';
 import { OutliersDetailComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail.component';
+import { ClustersGraphComponent } from './menu/usuarios/clusters/clusters-graph/clusters-graph.component';
+import { ClustersTableComponent } from './menu/usuarios/clusters/clusters-table/clusters-table.component';
+import { OutliersDetailTableComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail-table/outliers-detail-table.component';
+import { OutliersDetailGraphComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail-graph/outliers-detail-graph.component';
 
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 
 @NgModule({
   declarations: [					
@@ -44,7 +49,8 @@ import { HighchartsChartModule } from 'highcharts-angular';
       DivisePredictionComponent,
       BalanceComponent,
       OutliersComponent,
-      OutliersDetailComponent
+      OutliersDetailComponent,
+      UsersInfoComponent
       
    ],
   imports: [
@@ -52,6 +58,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     NgApexchartsModule,
     HighchartsChartModule,
     ReactiveFormsModule

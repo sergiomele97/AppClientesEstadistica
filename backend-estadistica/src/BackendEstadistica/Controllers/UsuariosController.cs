@@ -1,15 +1,4 @@
-﻿using BackendEstadistica.Repositorios;
-using Microsoft.EntityFrameworkCore.Internal;
-using System.Net.Http;
-using System.Text.Json;
-using System.Text;
-using AutoMapper;
-using BackendEstadistica.Utilidades;
-using BackendEstadistica.Entidades;
-using Microsoft.AspNetCore.Cors;
-using BackendEstadistica.Contexto;
-
-namespace BackendEstadistica.Controllers;
+﻿namespace BackendEstadistica.Controllers;
 
 /* Los controllers en ASP.NET Core MVC son responsables de manejar las solicitudes 
  * HTTP entrantes y coordinar la respuesta adecuada. 
@@ -24,14 +13,16 @@ namespace BackendEstadistica.Controllers;
 public class UsuariosController : ControllerBase
 {
     private readonly IUsuarioRepositorio usuarioRepositorio;
+    private readonly IEnvioEjemploRepositorio envioEjemploRepositorio;
     private readonly IMapper mapper;
 
 
     //  Constructor de la clase:
-    public UsuariosController( IUsuarioRepositorio usuarioRepositorio, IMapper mapper)
+    public UsuariosController( IUsuarioRepositorio usuarioRepositorio, IEnvioEjemploRepositorio envioEjemploRepositorio ,IMapper mapper)
     {
         this.usuarioRepositorio = usuarioRepositorio;
         this.mapper = mapper;
+        this.envioEjemploRepositorio = envioEjemploRepositorio;
     }
 
 
@@ -126,6 +117,15 @@ public class UsuariosController : ControllerBase
         return Ok("El usuario se borró correctamente");
 
     }
+
+
+    //public IActionResult GetEnvioEjemplo()
+    //{
+    //    List<EnvioEjemplo> envios = envioEjemploRepositorio.GetEnvio();
+
+    //    return Ok(mapper.Map<List<EnvioEjemplo>>(envios));
+
+    //}
 
 
     //      Post en el repositorio de la version modificada de clientes (PROVISIONAL, ESTE POST SE BORRARÁ)

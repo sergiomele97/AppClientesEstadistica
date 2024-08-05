@@ -14,9 +14,9 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUsuarios(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(this.url);
+    return this.http.get<Usuario[]>(`${this.url}Account/users`);
   }
-
+  
   autenticarUsuario(email: string, password: string, remember: boolean): Observable<any> {
     remember = false;
     return this.http.post<any>(`${this.url}Account/login`, { email, password, remember });
@@ -34,5 +34,6 @@ export class UserService {
     // Hacer la solicitud GET
     return this.http.get<{ id: number }>(url);
   }
+
   
 }

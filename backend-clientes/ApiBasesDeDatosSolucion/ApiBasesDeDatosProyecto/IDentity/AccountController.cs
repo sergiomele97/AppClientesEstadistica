@@ -7,21 +7,43 @@ public class AccountController : ControllerBase
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly ITokenService _tokenService;
     private readonly IClienteService _clienteService;
+    private readonly IUserService _userService;
+
 
     public AccountController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         RoleManager<IdentityRole> roleManager,
         ITokenService tokenService,
-        IClienteService clienteService)
+        IClienteService clienteService,
+        IUserService userService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
         _tokenService = tokenService;
         _clienteService = clienteService;
+        _userService = userService;
+
     }
 
+    [HttpGet("users")]
+    public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAllUsers()
+    {
+        var users = await _userService.GetAllUsersAsync();
+        return Ok(users);
+    }
+
+    [HttpDelete("users/{id}")]
+    public async Task<IActionResult> DeleteUser(string id)
+    {
+        var result = await _userService.DeleteUserAsync(id);
+        if (result)
+        {
+            return Ok(new { message = "User deleted successfully" });
+        }
+        return NotFound(new { message = "User not found" });
+    }
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
     {
