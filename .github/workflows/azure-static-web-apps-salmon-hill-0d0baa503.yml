@@ -19,36 +19,33 @@ jobs:
         with:
           submodules: true
           lfs: false
-	
-	# Configura Node.js y Angular CLI
+
+      # Configura Node.js y Angular CLI
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16' # Usa la versión de Node.js que necesitas
-      
+
       - name: Install dependencies
         run: |
           npm install
           npm install -g @angular/cli
-      
+
       # Construye la aplicación con el entorno de producción
       - name: Build Angular App
         run: |
           ng build --configuration production
 
-      - name: Build And Deploy
+      - name: Deploy to Azure Static Web Apps
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_SALMON_HILL_0D0BAA503 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
-          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "/frontend/src/clientes-estadistica-app" # App source code path
           api_location: "" # Api source code path - optional
           output_location: "dist/clientes-estadistica-app" # Built app content directory - optional
-          ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
