@@ -8,6 +8,16 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - produccion
+name: Azure Static Web Apps CI/CD
+
+on:
+  push:
+    branches:
+      - produccion
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - produccion
 
 jobs:
   build_and_deploy_job:
@@ -27,12 +37,14 @@ jobs:
           node-version: '16' # Usa la versión de Node.js que necesitas
 
       - name: Install dependencies
+        working-directory: frontend/src/clientes-estadistica-app
         run: |
           npm install
           npm install -g @angular/cli
 
       # Construye la aplicación con el entorno de producción
       - name: Build Angular App
+        working-directory: frontend/src/clientes-estadistica-app
         run: |
           ng build --configuration production
 
