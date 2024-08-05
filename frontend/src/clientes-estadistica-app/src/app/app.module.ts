@@ -31,6 +31,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 
 
+
 @NgModule({
   declarations: [					
     AppComponent,
@@ -64,6 +65,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
     NgApexchartsModule,
     HighchartsChartModule,
     ReactiveFormsModule
+  
   ],
   providers: [
     UserService
