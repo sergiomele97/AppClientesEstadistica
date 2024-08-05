@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 
 public class IdentityInitializer
 {
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManagerIdentity;
     private readonly RoleManager<IdentityRole> _roleManager;
 
     public IdentityInitializer(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
-        _userManager = userManager;
+        _userManagerIdentity = userManager;
         _roleManager = roleManager;
     }
 
@@ -28,7 +28,7 @@ public class IdentityInitializer
         }
 
         // Crear un usuario admin por defecto
-        var adminUser = await _userManager.FindByNameAsync("admin@domain.com");
+        var adminUser = await _userManagerIdentity.FindByNameAsync("admin@domain.com");
         if (adminUser == null)
         {
             adminUser = new ApplicationUser
@@ -37,7 +37,7 @@ public class IdentityInitializer
                 Rol = "Cliente"
                 // Inicializa aquí las propiedades obligatorias si las hay
             };
-            var result = await _userManager.CreateAsync(adminUser, "Password123!");
+            var result = await _userManagerIdentity.CreateAsync(adminUser, "Password123!");
             if (!result.Succeeded)
             {
                 throw new System.Exception("No se pudo crear el usuario admin.");
@@ -45,9 +45,9 @@ public class IdentityInitializer
         }
 
         // Asignar el rol de admin al usuario admin
-        if (!await _userManager.IsInRoleAsync(adminUser, "Admin"))
+        if (!await _userManagerIdentity.IsInRoleAsync(adminUser, "Admin"))
         {
-            await _userManager.AddToRoleAsync(adminUser, "Admin");
+            await _userManagerIdentity.AddToRoleAsync(adminUser, "Admin");
         }
     }
 }

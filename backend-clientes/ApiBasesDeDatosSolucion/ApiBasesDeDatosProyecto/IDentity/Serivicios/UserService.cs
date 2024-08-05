@@ -37,4 +37,15 @@ public class UserService : IUserService
         return false;
     }
 
+    public async Task<IList<string>> GetUserRolesByUsernameAsync(string username)
+    {
+        var user = await _userManager.FindByNameAsync(username);
+        if (user == null)
+        {
+            return null; // O manejar el caso según prefieras.
+        }
+
+        return await _userManager.GetRolesAsync(user);
+    }
+
 }
