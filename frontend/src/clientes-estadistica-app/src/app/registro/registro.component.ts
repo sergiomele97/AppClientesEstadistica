@@ -21,7 +21,6 @@ export class RegistroComponent implements OnInit {
       Correo: ['', [Validators.required, Validators.email]],
       Contraseña: ['', Validators.required],
       Contraseña2: ['', Validators.required],
-      Empleo: ['', ],
       Rol: ['Client', Validators.required],  // Puede ser un campo oculto si siempre es 'Client'
       PaisNombre: ['', ] // Campo para el nombre del país
     });
@@ -37,7 +36,7 @@ export class RegistroComponent implements OnInit {
       // Obtener el ID del país por nombre
        this.miServicio.obtenerPaisIdPorNombre(this.registroForm.value.PaisNombre).subscribe(
         response => {
-          this.paisId = response.id;
+          this.paisId = response.Id;
           if (this.paisId !== null) {
             // Crear el objeto usuario con el PaisId obtenido
             const usuario = {
@@ -47,9 +46,7 @@ export class RegistroComponent implements OnInit {
               Nombre: this.registroForm.value.Nombre,
               Apellido: this.registroForm.value.Apellido,
               Rol: this.registroForm.value.Rol,
-              PaisId: this.paisId, // Asignar el ID del país al usuario
-              Empleo: this.registroForm.value.Empleo
-              
+              PaisId: this.paisId // Asignar el ID del país al usuario
             };
             
             // Registrar el usuario

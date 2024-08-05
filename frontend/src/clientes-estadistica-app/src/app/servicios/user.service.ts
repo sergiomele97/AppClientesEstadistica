@@ -1,9 +1,8 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Usuario } from '../clases/usuario';
 import { environment } from '../../environments/environment';
-
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +18,7 @@ export class UserService {
   getUsuarios(): Observable<Usuario[]> {
     return this.http.get<Usuario[]>(`${this.url_estadistica}Account/users`);
   }
-  
+
   autenticarUsuario(email: string, password: string, remember: boolean): Observable<any> {
     remember = false;
     return this.http.post<any>(`${this.url_estadistica}Account/login`, { email, password, remember });
@@ -37,6 +36,5 @@ export class UserService {
     // Hacer la solicitud GET
     return this.http.get<{ id: number }>(url);
   }
-
   
 }
