@@ -27,18 +27,18 @@ namespace BackendEstadistica
             {
                 options.AddPolicy("AllowLocalhost",
                     builder => builder
-                        .WithOrigins("http://localhost:4200")
+                        .WithOrigins("http://localhost:4200")                                               // URL FRONT-END LOCAL
                         .AllowAnyHeader()
                         .AllowAnyMethod());
 
                 options.AddPolicy("AllowAzureHost",
                     builder => builder
-                        .WithOrigins("https://salmon-hill-0d0baa503.5.azurestaticapps.net")
+                        .WithOrigins("https://salmon-hill-0d0baa503.5.azurestaticapps.net")                 // URL FRONT-END PRODUCCIÓN
                         .AllowAnyHeader()
                         .AllowAnyMethod());
             });
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            // Build
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
