@@ -10,7 +10,7 @@ namespace ApiBasesDeDatosProyecto.Entities
         public int Id { get; set; }
 
         [Required] // Indica que esta propiedad es obligatoria
-        [StringLength(256)] // Limita la longitud de la cadena para UserName
+        [StringLength(40)] // Limita la longitud de la cadena para UserName
         public string UserName { get; set; }
 
         [Required]
