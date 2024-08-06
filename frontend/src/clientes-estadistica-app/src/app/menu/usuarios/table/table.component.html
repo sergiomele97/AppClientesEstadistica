@@ -21,7 +21,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let envio of enviosFilter" class="bg-white border-b">
+        <tr *ngFor="let envio of enviosFilter.slice(0, 20)" class="bg-white border-b">
           <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
             {{ envio.id }}
           </th>
