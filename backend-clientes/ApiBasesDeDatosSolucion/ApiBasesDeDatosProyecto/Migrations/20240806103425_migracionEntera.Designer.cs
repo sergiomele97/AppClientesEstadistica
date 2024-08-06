@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiBasesDeDatosProyecto.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240805121945_migracionActualizacionbd")]
-    partial class migracionActualizacionbd
+    [Migration("20240806103425_migracionEntera")]
+    partial class migracionEntera
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -250,6 +250,9 @@ namespace ApiBasesDeDatosProyecto.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<int?>("paisId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
