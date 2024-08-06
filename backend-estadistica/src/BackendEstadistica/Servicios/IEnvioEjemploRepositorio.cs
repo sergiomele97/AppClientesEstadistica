@@ -5,5 +5,7 @@
 
         List<EnvioEjemplo> GetEnvio();
 
+        void CrearEnvio(EnvioEjemplo envio);
+
     }
 }
