@@ -30,8 +30,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
-
-
+import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 
 @NgModule({
   declarations: [
@@ -66,9 +65,6 @@ import { HighchartsChartModule } from 'highcharts-angular';
     ReactiveFormsModule,
     NgApexchartsModule,
     HighchartsChartModule,
-    ReactiveFormsModule,
-
-
     NgxPaginationModule
   ],
   providers: [

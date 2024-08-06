@@ -6,7 +6,6 @@ import { Usuario } from 'src/app/clases/usuario';
 @Component({
   selector: 'app-users-info',
   templateUrl: './users-info.component.html',
-  styleUrls: ['./users-info.component.css']
 })
 export class UsersInfoComponent implements OnInit, OnDestroy {
 editUsuario(_t34: Usuario) {

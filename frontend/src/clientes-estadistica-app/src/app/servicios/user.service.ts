@@ -11,7 +11,8 @@ export class UserService {
 
   // IMPORTANTE:
   //    1 URL ESTADISTICA Y OTRA PARA CLIENTES
-  private url_estadistica = environment.apiUrl; 
+  private url_estadistica = environment.apiUrl;
+
 
   constructor(private http: HttpClient) { }
 
