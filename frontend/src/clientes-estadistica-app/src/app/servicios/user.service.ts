@@ -16,10 +16,14 @@ export class UserService {
 
   private readonly url_prueba = "https://localhost:7144/api/usuarios";
 
+  //URL AMIN
+  private readonly URL = "https://localhost:7107/api/";
+
+
   constructor(private http: HttpClient) { }
 
   getUsuarios(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(`${this.url_estadistica}Account/users`);
+    return this.http.get<Usuario[]>(`${this.URL}Account/users`);
   }
 
   autenticarUsuario(email: string, password: string, remember: boolean): Observable<any> {
