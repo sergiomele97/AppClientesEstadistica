@@ -1,38 +1,41 @@
-<div class="relative overflow-x-auto">
-  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+<div class="filter-container">
+    <input type="text" [(ngModel)]="filterEnvio" placeholder="Filtro">
+  </div>
+  
+  <div class="table-container">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" *ngIf="envios.length">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-              <th scope="col" class="px-6 py-3">
-                  Id del envío
-              </th>
-              <th scope="col" class="px-6 py-3">
-                  Cantidad
-              </th>
-              <th scope="col" class="px-6 py-3">
-                  Divisa
-              </th>
-              <th scope="col" class="px-6 py-3">
-                  Date
-              </th>
-          </tr>
+        <tr>
+          <th (click)="order('id')" scope="col" class="px-6 py-3">
+            Id del envío
+          </th>
+          <th (click)="order('cantidad')" scope="col" class="px-6 py-3">
+            Cantidad
+          </th>
+          <th (click)="order('divisa')" scope="col" class="px-6 py-3">
+            Divisa
+          </th>
+          <th (click)="order('fecha')" scope="col" class="px-6 py-3">
+            Fecha
+          </th>
+        </tr>
       </thead>
       <tbody>
-          <tr *ngFor="let envio of envios.slice(0,10)" class="bg-white border-b">
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                  {{ envio.id }}
-              </th>
-              <td class="px-6 py-4">
-                {{ envio.cantidad | currency:'':'':'1.2-2' }}
-              </td>
-              <td class="px-6 py-4">
-                  {{ envio.divisa }}
-              </td>
-              <td class="px-6 py-4">
-                {{ envio.fecha | date:'dd/MM/yyyy' }}
-              </td>
-              
-            </tr>
+        <tr *ngFor="let envio of enviosFilter" class="bg-white border-b">
+          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+            {{ envio.id }}
+          </th>
+          <td class="px-6 py-4">
+            {{ envio.cantidad | currency:envio.divisa:'symbol':'1.2-2' }}
+          </td>
+          <td class="px-6 py-4">
+            {{ envio.divisa }}
+          </td>
+          <td class="px-6 py-4">
+            {{ envio.fecha | date:'dd/MM/yyyy' }}
+          </td>
+        </tr>
       </tbody>
-  </table>
-</div>
-
+    </table>
+  </div>
+  
