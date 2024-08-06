@@ -25,8 +25,13 @@ jobs:
         with:
           node-version: '18'
       
-      - name: Install Dependencies
-        run: npm install
+      - name: List Files in Repository
+        run: ls -R
+      
+      - name: Change Directory and Install Dependencies
+        run: |
+          cd frontend/src/clientes-estadistica-app
+          npm install
       
       - name: Build And Deploy
         id: builddeploy
