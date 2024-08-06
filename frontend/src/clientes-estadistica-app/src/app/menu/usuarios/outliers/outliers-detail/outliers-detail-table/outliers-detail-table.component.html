@@ -1,64 +1,36 @@
-<div class="relative overflow-x-auto">
-  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+<div class="mt-40 ml-10">
+  <table class="w-full text-sm text-left text-gray-500">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
           <tr>
               <th scope="col" class="px-6 py-3">
-                  Product name
+                  ID Moneda
               </th>
               <th scope="col" class="px-6 py-3">
-                  Color
+                  Divisa
               </th>
               <th scope="col" class="px-6 py-3">
-                  Category
+                  Cantidad
               </th>
               <th scope="col" class="px-6 py-3">
-                  Price
+                  Fecha
               </th>
           </tr>
       </thead>
       <tbody>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  Apple MacBook Pro 17"
+          <tr *ngFor="let envio of envios.slice(0,10)" class="bg-white border-b">
+              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                  {{ envio.id }}
               </th>
               <td class="px-6 py-4">
-                  Silver
+                  {{ envio.divisa }}
               </td>
               <td class="px-6 py-4">
-                  Laptop
+                  {{ envio.cantidad }}
               </td>
               <td class="px-6 py-4">
-                  $2999
+                  {{ envio.fecha }}
               </td>
-          </tr>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  Microsoft Surface Pro
-              </th>
-              <td class="px-6 py-4">
-                  White
-              </td>
-              <td class="px-6 py-4">
-                  Laptop PC
-              </td>
-              <td class="px-6 py-4">
-                  $1999
-              </td>
-          </tr>
-          <tr class="bg-white dark:bg-gray-800">
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  Magic Mouse 2
-              </th>
-              <td class="px-6 py-4">
-                  Black
-              </td>
-              <td class="px-6 py-4">
-                  Accessories
-              </td>
-              <td class="px-6 py-4">
-                  $99
-              </td>
-          </tr>
+            </tr>
       </tbody>
   </table>
 </div>

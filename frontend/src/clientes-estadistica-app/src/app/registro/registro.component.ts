@@ -36,7 +36,7 @@ export class RegistroComponent implements OnInit {
       // Obtener el ID del país por nombre
        this.miServicio.obtenerPaisIdPorNombre(this.registroForm.value.PaisNombre).subscribe(
         response => {
-          this.paisId = response.Id;
+          this.paisId = response.id;
           if (this.paisId !== null) {
             // Crear el objeto usuario con el PaisId obtenido
             const usuario = {

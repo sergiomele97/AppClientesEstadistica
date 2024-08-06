@@ -32,6 +32,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { ClustersDataService } from './servicios/clusters-data.service';
 
 
+
 @NgModule({
   declarations: [					
     AppComponent,
@@ -65,6 +66,7 @@ import { ClustersDataService } from './servicios/clusters-data.service';
     NgApexchartsModule,
     HighchartsChartModule,
     ReactiveFormsModule
+  
   ],
   providers: [
     UserService,

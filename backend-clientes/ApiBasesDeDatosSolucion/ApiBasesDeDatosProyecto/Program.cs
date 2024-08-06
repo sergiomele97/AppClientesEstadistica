@@ -3,7 +3,7 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Agregar servicios a la aplicación
+// 1. Agregar servicios a la aplicaci?n
 builder.Services.AddDbContext<Contexto>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -90,13 +90,13 @@ app.UseHttpsRedirection();
 // Usar CORS
 app.UseCors("AllowSpecificOrigins");
 
-app.UseAuthentication(); // Agregar autenticación
+app.UseAuthentication(); // Agregar autenticaci?n
 app.UseAuthorization();
 
-// Enrutamiento, determina qué controlador y acción se ejecutará en función de la URL solicitada
+// Enrutamiento, determina qu? controlador y acci?n se ejecutar? en funci?n de la URL solicitada
 app.MapControllers();
 
-// Ejecutar la aplicación
+// Ejecutar la aplicaci?n
 app.Run();
 
 async Task CreateRoles(WebApplication app)
