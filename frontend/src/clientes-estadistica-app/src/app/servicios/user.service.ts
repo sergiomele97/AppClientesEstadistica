@@ -14,6 +14,8 @@ export class UserService {
   private url_estadistica = environment.apiUrl;
 
 
+  private readonly url_prueba = "https://localhost:7144/api/usuarios";
+
   constructor(private http: HttpClient) { }
 
   getUsuarios(): Observable<Usuario[]> {
@@ -36,6 +38,11 @@ export class UserService {
     
     // Hacer la solicitud GET
     return this.http.get<{ id: number }>(url);
+  }
+
+
+  getEnvios(): Observable<any> {
+    return this.http.get<any>(`${this.url_prueba}/getEnvios`);
   }
   
 }
