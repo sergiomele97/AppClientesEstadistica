@@ -1,4 +1,6 @@
-﻿namespace BackendEstadistica.Controllers;
+﻿using System.Runtime.InteropServices;
+
+namespace BackendEstadistica.Controllers;
 
 /* Los controllers en ASP.NET Core MVC son responsables de manejar las solicitudes 
  * HTTP entrantes y coordinar la respuesta adecuada. 
@@ -115,6 +117,16 @@ public class UsuariosController : ControllerBase
         }
 
         return Ok("El usuario se borró correctamente");
+
+    }
+
+    [HttpPost("crearEnvio")]
+    public IActionResult CrearEnvio(EnvioEjemplo nuevoEnvio)
+    {
+
+        envioEjemploRepositorio.CrearEnvio(nuevoEnvio);
+
+        return CreatedAtAction(nameof(CrearEnvio), new { id = nuevoEnvio.Id }, nuevoEnvio);
 
     }
 
