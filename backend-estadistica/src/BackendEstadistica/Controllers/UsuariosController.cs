@@ -34,10 +34,10 @@ public class UsuariosController : ControllerBase
     public IActionResult GetUsuarios()
     {
 
-        //List<Usuario> lista = usuarioRepositorio.GetUsuarios();
+        List<Usuario> lista = usuarioRepositorio.GetUsuarios();
 
-        //return Ok(mapper.Map<List<Usuario>>(lista));  
-        return Ok("Hola mundo");
+        return Ok(mapper.Map<List<Usuario>>(lista));  
+        
 
     }
 
