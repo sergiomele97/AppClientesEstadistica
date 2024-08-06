@@ -119,6 +119,7 @@ public class UsuariosController : ControllerBase
     }
 
 
+    [HttpGet("getEnvios")]
     public IActionResult GetEnvioEjemplo()
     {
         List<EnvioEjemplo> envios = envioEjemploRepositorio.GetEnvio();

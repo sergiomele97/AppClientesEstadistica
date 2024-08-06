@@ -15,12 +15,13 @@ namespace BackendEstadistica.Servicios
 
         public List<EnvioEjemplo> GetEnvio()
         {
+
             var envioFake = new EnvioEjemploFaker().Generate();
 
             contextoBBDD.EnvioEjemplo.Add(envioFake);
             contextoBBDD.SaveChanges();
 
-           return contextoBBDD.EnvioEjemplo.ToList();
+            return contextoBBDD.EnvioEjemplo.ToList();
             
         }
     }
