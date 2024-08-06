@@ -47,8 +47,8 @@ export class RegistroComponent implements OnInit {
               Apellido: this.registroForm.value.Apellido,
               Rol: this.registroForm.value.Rol,
               PaisId: this.paisId // Asignar el ID del país al usuario
+              
             };
-            
             // Registrar el usuario
             this.miServicio.registrarUsuario(usuario).subscribe(
               response => {
