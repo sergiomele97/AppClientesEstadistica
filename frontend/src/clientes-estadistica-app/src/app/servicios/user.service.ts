@@ -46,7 +46,7 @@ export class UserService {
 
 
   getEnvios(): Observable<any> {
-    return this.http.get<any>(`${this.url_prueba}/getEnvios`);
+    return this.http.get<any>(`${this.url_estadistica}/getEnvios`);
   }
   
 }
