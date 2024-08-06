@@ -28,18 +28,17 @@ export class UserService {
 
   autenticarUsuario(email: string, password: string, remember: boolean): Observable<any> {
     remember = false;
-    return this.http.post<any>(`${this.url_estadistica}Account/login`, { email, password, remember });
+    return this.http.post<any>(`${this.URL}Account/login`, { email, password, remember });
   }
 
   registrarUsuario(usuario: any): Observable<any> {
     console.log(usuario); // Asegúrate de que los campos estén presentes y correctos DEBUG
-    return this.http.post<any>(`${this.url_estadistica}Account/register`, usuario);
+    return this.http.post<any>(`${this.URL}Account/register`, usuario);
   }
 
   obtenerPaisIdPorNombre(nombre: string): Observable<{ id: number }> {
     // Construir la URL con el nombre del país
-    const url = `${this.url_estadistica}Paises/nombre/${nombre}`;
-    
+    const url = `${this.URL}Paises/nombre/${nombre}`;
     // Hacer la solicitud GET
     return this.http.get<{ id: number }>(url);
   }

@@ -75,6 +75,7 @@ public class AccountController : ControllerBase
                     Apellido = model.Apellido,
                     FechaNacimiento = model.FechaNacimiento,
                     PaisId = model.PaisId,
+                    Empleo = model.Empleo
                     // Asignar el ID del usuario si es necesario
                     //UserId = user.Id
                 };
