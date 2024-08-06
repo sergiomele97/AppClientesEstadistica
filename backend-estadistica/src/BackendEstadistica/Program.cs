@@ -44,6 +44,9 @@ namespace BackendEstadistica
 
             var app = builder.Build();
 
+            // Apply migrations at startup
+            ApplyMigrations(app);
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -69,5 +72,24 @@ namespace BackendEstadistica
             app.Run();
         }
 
+
+        // Aplicar migraciones automaticamente en la BBDD Azure
+        private static void ApplyMigrations(WebApplication app)
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var context = services.GetRequiredService<ContextoBBDD>();
+                    context.Database.Migrate();
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred while migrating the database.");
+                }
+            }
+        }
     }
 }
