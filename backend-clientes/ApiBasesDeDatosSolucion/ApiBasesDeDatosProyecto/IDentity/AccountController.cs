@@ -107,4 +107,40 @@ public class AccountController : ControllerBase
 
         return Unauthorized();
     }
+
+    [HttpPost("change-role")]
+    public async Task<IActionResult> ChangeRole([FromBody] ChangeRoleViewModel model)
+    {
+        // Validar que el rol sea válido
+        if (!await _roleManager.RoleExistsAsync(model.NuevoRol))
+        {
+            return BadRequest("Role does not exist.");
+        }
+
+        // Buscar el usuario por su ID
+        var user = await _userManager.FindByIdAsync(model.UserId);
+        if (user == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        // Obtener los roles actuales del usuario
+        var currentRoles = await _userManager.GetRolesAsync(user);
+
+        // Eliminar todos los roles actuales del usuario
+        var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+        if (!removeResult.Succeeded)
+        {
+            return BadRequest("Failed to remove current roles.");
+        }
+
+        // Asignar el nuevo rol al usuario
+        var addResult = await _userManager.AddToRoleAsync(user, model.NuevoRol);
+        if (!addResult.Succeeded)
+        {
+            return BadRequest("Failed to add new role.");
+        }
+
+        return Ok("Role changed successfully.");
+    }
 }

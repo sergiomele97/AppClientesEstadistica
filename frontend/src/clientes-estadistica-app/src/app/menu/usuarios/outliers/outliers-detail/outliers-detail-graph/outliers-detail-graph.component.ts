@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -10,6 +10,7 @@ import {
   ApexXAxis,
   ApexFill
 } from "ng-apexcharts";
+import { UserService } from 'src/app/servicios/user.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -28,17 +29,37 @@ export type ChartOptions = {
   styleUrls: ['./outliers-detail-graph.component.css']
 })
 
-export class OutliersDetailGraphComponent {
+export class OutliersDetailGraphComponent implements OnInit {
+
+
+  envios: any[];
 
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
-  constructor() {
+  ngOnInit(): void {
+      this.userService.getEnvios().subscribe( datos => {
+        this.envios = datos;
+        this.actualizarGrafico(); 
+        console.log(datos);
+      });
+  }
+
+  constructor(private userService: UserService) {}
+
+
+  private actualizarGrafico(): void {
+
+    const primerosEnvios = this.envios.slice(0, 5);
+
+    const categorias = primerosEnvios.map(envio => envio.fecha); // Formatear fecha si es necesario
+    const datos = primerosEnvios.map(envio => envio.cantidad);
+
     this.chartOptions = {
       series: [
         {
-          name: "Inflation",
-          data: [10,12,5,2.3,3.4,1296.32,5]
+          name: "Envio",
+          data: datos
         }
       ],
       chart: {
@@ -66,13 +87,7 @@ export class OutliersDetailGraphComponent {
 
       xaxis: {
         categories: [
-          "Lunes",
-          "Martes",
-          "Miercoles",
-          "Jueves",
-          "Viernes",
-          "Sabado",
-          "Domingo",
+          categorias
         ],
         position: "bottom",
         labels: {
@@ -111,7 +126,7 @@ export class OutliersDetailGraphComponent {
           inverseColors: true,
           opacityFrom: 1,
           opacityTo: 1,
-          stops: [50, 0, 100, 100]
+          stops: [20, 0, 100, 100]
         }
       },
       yaxis: {
@@ -124,7 +139,7 @@ export class OutliersDetailGraphComponent {
         labels: {
           show: false,
           formatter: function(val) {
-            return val + "%";
+            return val + "€";
           }
         }
       },
