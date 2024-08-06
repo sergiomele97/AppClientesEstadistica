@@ -1,10 +1,12 @@
 ﻿using ApiBasesDeDatosProyecto.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 
 namespace ApiBasesDeDatosProyecto.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class ClienteController : ControllerBase
     {
         private readonly IClienteRepository _clienteRepository;
@@ -26,6 +28,7 @@ namespace ApiBasesDeDatosProyecto.Controllers
 
         // GET: api/cliente
         [HttpGet]
+
         public async Task<ActionResult<List<ClienteDto>>> Get()
         {
             _logger.LogInformation($"Obteniendo todos los clientes.");
