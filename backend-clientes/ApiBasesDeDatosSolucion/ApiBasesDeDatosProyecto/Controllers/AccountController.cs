@@ -1,4 +1,6 @@
-﻿[Route("api/[controller]")]
+﻿using ApiBasesDeDatosProyecto.IDentity.Serivicios;
+
+[Route("api/[controller]")]
 [ApiController]
 public class AccountController : ControllerBase
 {
@@ -8,7 +10,6 @@ public class AccountController : ControllerBase
     private readonly ITokenService _tokenService;
     private readonly IClienteService _clienteService;
     private readonly IUserService _userService;
-
 
     public AccountController(
         UserManager<ApplicationUser> userManager,
@@ -24,7 +25,6 @@ public class AccountController : ControllerBase
         _tokenService = tokenService;
         _clienteService = clienteService;
         _userService = userService;
-
     }
 
     [HttpGet("users")]
@@ -44,6 +44,7 @@ public class AccountController : ControllerBase
         }
         return NotFound(new { message = "User not found" });
     }
+
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
     {
@@ -75,6 +76,7 @@ public class AccountController : ControllerBase
                     Apellido = model.Apellido,
                     FechaNacimiento = model.FechaNacimiento,
                     PaisId = model.PaisId,
+                    Empleo = model.Empleo
                     // Asignar el ID del usuario si es necesario
                     //UserId = user.Id
                 };

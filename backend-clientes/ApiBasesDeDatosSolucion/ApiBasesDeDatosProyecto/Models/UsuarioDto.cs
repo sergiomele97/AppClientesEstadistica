@@ -5,7 +5,7 @@
         public int Id { get; set; }
 
         [Required]
-        [StringLength(256)]
+        [StringLength(40)]
         public string UserName { get; set; }
 
         [Required]

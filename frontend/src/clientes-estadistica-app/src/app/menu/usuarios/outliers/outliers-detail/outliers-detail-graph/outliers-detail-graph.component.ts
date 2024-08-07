@@ -52,14 +52,14 @@ export class OutliersDetailGraphComponent implements OnInit {
 
     const primerosEnvios = this.envios.slice(0, 5);
 
-    const categorias = primerosEnvios.map(envio => envio.fecha); // Formatear fecha si es necesario
-    const datos = primerosEnvios.map(envio => envio.cantidad);
+    const fechas = primerosEnvios.map(envio => envio.fecha); // Formatear fecha si es necesario
+    const cantidad = primerosEnvios.map(envio => envio.cantidad);
 
     this.chartOptions = {
       series: [
         {
           name: "Envio",
-          data: datos
+          data: cantidad
         }
       ],
       chart: {
@@ -87,7 +87,7 @@ export class OutliersDetailGraphComponent implements OnInit {
 
       xaxis: {
         categories: [
-          categorias
+          fechas
         ],
         position: "bottom",
         labels: {

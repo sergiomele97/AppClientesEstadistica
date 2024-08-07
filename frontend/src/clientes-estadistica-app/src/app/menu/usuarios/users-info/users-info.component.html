@@ -1,59 +1,64 @@
 <div class="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
-  <!-- Header -->
+  <!-- Encabezado -->
   <header class="bg-gradient-to-r from-gray-800 to-gray-900 text-white p-4 rounded-t-lg shadow-lg">
     <div class="container mx-auto flex justify-between items-center">
       <div class="flex items-center space-x-4">
-       
-        <h1 class="text-2xl font-bold">Gestion de usuarios</h1>
+        <h1 class="text-2xl font-bold">Gestión de usuarios y clientes</h1>
       </div>
       <nav>
         <ul class="flex space-x-6">
-          <li><a href="#" class="text-lg hover:text-gray-400 transition duration-300">Home</a></li>
-          <li><a href="#" class="text-lg hover:text-gray-400 transition duration-300">Users</a></li>
-          <li><a href="#" class="text-lg hover:text-gray-400 transition duration-300">Settings</a></li>
+          <li><a href="#" class="text-lg hover:text-gray-400 transition duration-300">Inicio</a></li>
+          <li><a href="#" class="text-lg hover:text-gray-400 transition duration-300">Usuarios</a></li>
+          <li><a href="#" class="text-lg hover:text-gray-400 transition duration-300">Clientes</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <!-- Tabs for Table Navigation -->
+  <!-- Buscador -->
   <div class="p-4 bg-white">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="filterResults()"
+      placeholder="Buscar..."
+      class="mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
+
+    <!-- Pestañas para la navegación de la tabla -->
     <div class="flex border-b border-gray-200">
-      <button 
+      <button
         [ngClass]="{ 'text-blue-500 border-blue-500': activeTab === 'table1', 'text-gray-500 hover:text-blue-500': activeTab !== 'table1' }"
-        (click)="activeTab = 'table1'" 
-        class="px-4 py-2 font-semibold text-sm border-b-2 focus:outline-none">
+        (click)="activeTab = 'table1'; filterResults()"
+        class="px-4 py-2 font-semibold text-sm border-b-2 focus:outline-none"
+      >
         Usuarios
       </button>
-      <button 
+      <button
         [ngClass]="{ 'text-blue-500 border-blue-500': activeTab === 'table2', 'text-gray-500 hover:text-blue-500': activeTab !== 'table2' }"
-        (click)="activeTab = 'table2'" 
-        class="px-4 py-2 font-semibold text-sm border-b-2 focus:outline-none">
+        (click)="activeTab = 'table2'; filterResults()"
+        class="px-4 py-2 font-semibold text-sm border-b-2 focus:outline-none"
+      >
         Clientes
       </button>
     </div>
 
-    <!-- Table 1 -->
+    <!-- Tabla 1 (Usuarios) -->
     <div *ngIf="activeTab === 'table1'" class="overflow-x-auto mt-4">
       <table class="min-w-full border-collapse bg-white text-left text-sm text-gray-500">
         <thead class="bg-gray-100">
           <tr>
-            <th scope="col" class="px-6 py-4 font-medium text-gray-900">UserName</th>
-            <th scope="col" class="px-6 py-4 font-medium text-gray-900">Email</th>
-            <th scope="col" class="px-6 py-4 font-medium text-gray-900">Role</th>
-            <th scope="col" class="px-6 py-4 font-medium text-gray-900">Actions</th>
+            <th scope="col" class="px-6 py-4 font-medium text-gray-900">Nombre de usuario</th>
+            <th scope="col" class="px-6 py-4 font-medium text-gray-900">Correo electrónico</th>
+            <th scope="col" class="px-6 py-4 font-medium text-gray-900">Rol</th>
+            <th scope="col" class="px-6 py-4 font-medium text-gray-900">Acciones</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
           <tr *ngFor="let usuario of filteredUsuarios | paginate: { itemsPerPage: pageSize, currentPage: page }" class="hover:bg-gray-50">
             <td class="flex gap-3 px-6 py-4 font-normal text-gray-900">
               <div class="relative h-10 w-10">
-                <!-- Placeholder for user image if available -->
-                <img
-                  class="h-full w-full rounded-full object-cover object-center"
-                  [src]="'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'"
-                  alt="User Image"
-                />
+                <img class="h-full w-full rounded-full object-cover object-center" [src]="'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'" alt="Imagen del usuario" />
                 <span class="absolute right-0 bottom-0 h-2 w-2 rounded-full bg-green-400 ring ring-white"></span>
               </div>
               <div class="text-sm">
@@ -67,16 +72,16 @@
             <td class="px-6 py-4">{{ usuario.rol }}</td>
             <td class="px-6 py-4">
               <div class="flex justify-center gap-4">
-                <!-- Edit Button -->
-                <a (click)="editUsuario(usuario)" x-data="{ tooltip: 'Edit' }">
+                <!-- Botón Editar -->
+                <a (click)="editUsuario(usuario)" x-data="{ tooltip: 'Editar' }">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6" x-tooltip="tooltip">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                   </svg>
                 </a>
-                <!-- Delete Button -->
-                <a (click)="selectedUsuario(usuario)" x-data="{ tooltip: 'Delete' }">
+                <!-- Botón Eliminar -->
+                <a (click)="selectedUsuario(usuario)" x-data="{ tooltip: 'Eliminar' }">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6" x-tooltip="tooltip">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 6L18 18M6 18L18 6" />
                   </svg>
                 </a>
               </div>
@@ -86,29 +91,45 @@
       </table>
     </div>
 
-    <!-- Table 2 -->
+    <!-- Tabla 2 (Clientes) -->
     <div *ngIf="activeTab === 'table2'" class="overflow-x-auto mt-4">
       <table class="min-w-full border-collapse bg-white text-left text-sm text-gray-500">
         <thead class="bg-gray-100">
           <tr>
-            <th scope="col" class="px-6 py-4 font-medium text-gray-900">Product Name</th>
-            <th scope="col" class="px-6 py-4 font-medium text-gray-900">Price</th>
-            <th scope="col" class="px-6 py-4 font-medium text-gray-900">Stock</th>
-            <th scope="col" class="px-6 py-4 font-medium text-gray-900">Actions</th>
+            <th scope="col" class="px-6 py-4 font-medium text-gray-900">Nombre</th>
+            <th scope="col" class="px-6 py-4 font-medium text-gray-900">Apellido</th>
+            <th scope="col" class="px-6 py-4 font-medium text-gray-900">Fecha de Nacimiento</th>
+            <th scope="col" class="px-6 py-4 font-medium text-gray-900">Empleo</th>
+            <th scope="col" class="px-6 py-4 font-medium text-gray-900">Acciones</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
-          <tr class="hover:bg-gray-50">
-            <td class="px-6 py-4">Product 1</td>
-            <td class="px-6 py-4">$10</td>
-            <td class="px-6 py-4">Available</td>
-            <td class="px-6 py-4">Actions</td>
+          <tr *ngFor="let cliente of filteredClientes | paginate: { itemsPerPage: pageSize, currentPage: page }" class="hover:bg-gray-50">
+            <td class="px-6 py-4">{{ cliente.nombre }}</td>
+            <td class="px-6 py-4">{{ cliente.apellido }}</td>
+            <td class="px-6 py-4">{{ cliente.fechaNacimiento | date }}</td>
+            <td class="px-6 py-4">{{ cliente.empleo }}</td>
+            <td class="px-6 py-4">
+              <div class="flex justify-center gap-4">
+                <!-- Botón Editar -->
+                <a (click)="editCliente(cliente)" x-data="{ tooltip: 'Editar' }">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6" x-tooltip="tooltip">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                  </svg>
+                </a>
+                <!-- Botón Eliminar -->
+                <a (click)="selectedCliente(cliente)" x-data="{ tooltip: 'Eliminar' }">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6" x-tooltip="tooltip">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 6L18 18M6 18L18 6" />
+                  </svg>
+                </a>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
+    <!-- Paginación -->
+    <pagination-controls (pageChange)="page = $event"></pagination-controls>
   </div>
-
-  <!-- Paginación -->
-  <pagination-controls (pageChange)="page = $event"></pagination-controls>
 </div>
