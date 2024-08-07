@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../servicios/user.service';
-import { Usuario } from '../interfaces/usuario.interface';
+import { Usuario } from '../interfaces/usuario.interface'; // Ajusta la ruta según sea necesario
 
 @Component({
   selector: 'app-registro',
@@ -35,6 +35,20 @@ export class RegistroComponent implements OnInit {
       validators: this.passwordMatchValidator
     });
   }
+
+  passwordValidators(control: any) {
+    const value = control.value || '';
+    const errors: any = {};
+
+    if (!/[A-Z]/.test(value)) {
+      errors['passwordRequiresUpper'] = true;
+    }
+    if (!/[a-z]/.test(value)) {
+      errors['passwordRequiresLower'] = true;
+    }
+    if (!/\W/.test(value)) { // \W matches any non-word character
+      errors['passwordRequiresNonAlphanumeric'] = true;
+    }
 
     return Object.keys(errors).length ? errors : null;
   }
