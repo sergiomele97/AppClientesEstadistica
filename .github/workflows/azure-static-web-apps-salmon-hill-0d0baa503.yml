@@ -1,7 +1,4 @@
 on:
-name: CI/CD Workflow
-
-on:
   push:
     branches:
       - produccion
@@ -20,16 +17,10 @@ jobs:
         with:
           submodules: true
           lfs: false
-      
-      # Add setup-node step to install Node.js 18
-      - name: Setup Node.js 18
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-      
-      - name: Install Dependencies
-        run: npm install
-      
+          node-version: '18.x'  # Configura la versión de Node.js requerida para tu proyecto
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
