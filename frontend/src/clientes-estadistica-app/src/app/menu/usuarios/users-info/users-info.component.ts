@@ -10,16 +10,12 @@ import { Cliente } from 'src/app/clases/cliente';
   templateUrl: './users-info.component.html',
 })
 export class UsersInfoComponent implements OnInit, OnDestroy {
-selectedCliente(_t71: Cliente) {
-throw new Error('Method not implemented.');
-}
-editCliente(_t71: Cliente) {
-throw new Error('Method not implemented.');
-}
-editUsuario(_t37: Usuario) {
-throw new Error('Method not implemented.');
-}
-  selectedUsuario: any;
+  // Variables para almacenar el usuario o cliente seleccionado y el estado del modal
+  selectedCliente: Cliente | null = null;
+  selectedUsuario: Usuario | null = null;
+  isModalOpen = false;
+  editMode: 'user' | 'client' = 'user';
+
   usuarios: Usuario[] = [];
   filteredUsuarios: Usuario[] = [];
   clientes: Cliente[] = [];
@@ -93,6 +89,35 @@ throw new Error('Method not implemented.');
       this.totalClientes = this.filteredClientes.length;
     }
     this.page = 1; 
+  }
+
+  editUsuario(usuario: Usuario): void {
+    this.selectedUsuario = { ...usuario };
+    this.editMode = 'user';
+    this.isModalOpen = true;
+  }
+
+  editCliente(cliente: Cliente): void {
+    this.selectedCliente = { ...cliente };
+    this.editMode = 'client';
+    this.isModalOpen = true;
+  }
+
+  closeModal(): void {
+    this.isModalOpen = false;
+    this.selectedUsuario = null;
+    this.selectedCliente = null;
+  }
+
+  onSave(): void {
+    if (this.editMode === 'user' && this.selectedUsuario) {
+      // Implementa aquí la lógica para guardar el usuario editado
+      console.log('Usuario guardado:', this.selectedUsuario);
+    } else if (this.editMode === 'client' && this.selectedCliente) {
+      // Implementa aquí la lógica para guardar el cliente editado
+      console.log('Cliente guardado:', this.selectedCliente);
+    }
+    this.closeModal();
   }
 
   ngOnDestroy(): void {
