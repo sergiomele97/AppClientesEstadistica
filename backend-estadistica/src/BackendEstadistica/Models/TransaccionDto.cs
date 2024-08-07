@@ -1,7 +1,8 @@
-﻿namespace BackendEstadistica.Entidades;
+﻿namespace BackendEstadistica.Models;
 
-public class Transaccion
+public class TransaccionDto
 {
+
     [Key]
     public int Id { get; set; }
     public double? importeRecibido { get; set; }
