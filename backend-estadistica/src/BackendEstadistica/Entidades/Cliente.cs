@@ -12,5 +12,6 @@ public class Cliente
     public int? Edad { get; set; }
     public string? Sexo { get; set; }
     public string? Trabajo { get; set; }
+    public ICollection<Conversion> Conversionos { get; } = new List<Conversion>();
 
 }

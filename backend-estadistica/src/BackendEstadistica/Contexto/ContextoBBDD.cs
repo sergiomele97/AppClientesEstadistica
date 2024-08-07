@@ -16,9 +16,18 @@ public class ContextoBBDD : DbContext
     }
 
     // DEFINIR LAS TABLAS AQUÍ:
-    public DbSet<Usuario> Usuario { get; set; }     // 1º Tabla
+    public DbSet<Usuario> Usuario { get; set; } // 1º Tabla
 
     public DbSet<EnvioEjemplo> EnvioEjemplo { get; set; } // 2ª Tabla
+
+    public DbSet<Cliente> Cliente { get; set; } // 3ª Tabla
+
+    public DbSet<Pais> Pais { get; set; } // 4ª Tabla
+
+    public DbSet<Transaccion> Transacciones { get; set; } // 5ª Tabla
+
+    public DbSet<Conversion> Conversion { get; set; } // 6ª Tabla
+
 
 
 }

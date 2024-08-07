@@ -12,8 +12,6 @@ namespace BackendEstadistica.Entidades
     {
         [Key]
         public int Id { get; set; }
-        [Required]
-        [StringLength(50)]
         public string? Rol { get; set; }
         public string? Correo { get; set; }
         public string? Contraseña { get; set; }
