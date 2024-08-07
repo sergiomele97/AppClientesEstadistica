@@ -14,12 +14,14 @@ import { VolumetryComponent } from './menu/usuarios/volumetry/volumetry.componen
 import { TableComponent } from './menu/usuarios/table/table.component';
 import { OutliersDetailComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail.component';
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
+import { EstadisticaComponent } from './estadistica/estadistica.component';
 
 const routes: Routes = [
   { path: "login", component: LoginComponent},
   { path: "users", component: UsersInfoComponent},
-
   { path: "registro", component: RegistroComponent },
+
+  { path: "estadistica", component: EstadisticaComponent},
   { path: "menu", component: MenuComponent,
     children: [
       { path: "clientes", component: ClientesComponent},
