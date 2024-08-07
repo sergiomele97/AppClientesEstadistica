@@ -1,6 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -32,40 +32,46 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 
-@NgModule({ declarations: [
-        AppComponent,
-        LoginComponent,
-        RegistroComponent,
-        ClientesComponent,
-        UsuariosComponent,
-        MenuComponent,
-        VolumetryComponent,
-        ClustersComponent,
-        GraphComponent,
-        MapComponent,
-        OutliersComponent,
-        SpaghettiComponent,
-        TableComponent,
-        DivisePredictionComponent,
-        BalanceComponent,
-        OutliersComponent,
-        OutliersDetailComponent,
-        UsersInfoComponent,
-        ClustersGraphComponent,
-        ClustersTableComponent,
-        OutliersDetailTableComponent,
-        OutliersDetailGraphComponent
-    ],
-    bootstrap: [AppComponent],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA], imports: [BrowserModule,
-        AppRoutingModule,
-        FormsModule,
-        ReactiveFormsModule,
-        NgApexchartsModule,
-        HighchartsChartModule,
-        NgxPaginationModule], providers: [
-        UserService,
-        provideHttpClient(withInterceptorsFromDi())
-    ] })
+@NgModule({
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    RegistroComponent,
+    ClientesComponent,
+    UsuariosComponent,
+    MenuComponent,
+    VolumetryComponent,
+    ClustersComponent,
+    GraphComponent,
+    MapComponent,
+    OutliersComponent,
+    SpaghettiComponent,
+    TableComponent,
+    DivisePredictionComponent,
+    BalanceComponent,
+    OutliersComponent,
+    OutliersDetailComponent,
+    UsersInfoComponent,
+    ClustersGraphComponent,      
+    ClustersTableComponent,    
+    OutliersDetailTableComponent, 
+    OutliersDetailGraphComponent  
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgApexchartsModule,
+    HighchartsChartModule,
+    NgxPaginationModule
+  ],
+  providers: [
+    UserService
+  ],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA] 
+})
 
 export class AppModule { }
