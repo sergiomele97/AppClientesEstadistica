@@ -12,27 +12,57 @@ export class RegistroComponent implements OnInit {
 
   registroForm: FormGroup;
   paisId: number | null = null; // Para almacenar el ID del país
+  errorMessage: string | null = null; // Mensaje de error general
 
   constructor(private fb: FormBuilder, private miServicio: UserService) { }
 
   ngOnInit(): void {
     this.registroForm = this.fb.group({
-      Nombre: ['', Validators.required],
-      Apellido: ['', Validators.required],
+      Nombre: ['', [Validators.required, Validators.minLength(2)]],
+      Apellido: ['', [Validators.required, Validators.minLength(2)]],
       Correo: ['', [Validators.required, Validators.email]],
-      Contraseña: ['', Validators.required],
-      Contraseña2: ['', Validators.required],
-      Rol: ['Admin', Validators.required],  // Puede ser un campo oculto si siempre es 'Client'
-      PaisNombre: ['',], // Campo para el nombre del país
-      Empleo: ['',],
-      FechaNac: ['',]
+      Contraseña: ['', [
+        Validators.required,
+        Validators.minLength(6),
+        this.passwordValidators
+      ]],
+      Contraseña2: ['', [Validators.required, Validators.minLength(6)]],
+      Rol: ['Client', Validators.required],  // Puede ser un campo oculto si siempre es 'Client'
+      PaisNombre: [''],
+      Empleo: [''],
+      FechaNac: ['', Validators.required]
+    }, {
+      validators: this.passwordMatchValidator
     });
+  }
+
+  passwordValidators(control: any) {
+    const value = control.value || '';
+    const errors: any = {};
+
+    if (!/[A-Z]/.test(value)) {
+      errors['passwordRequiresUpper'] = true;
+    }
+    if (!/[a-z]/.test(value)) {
+      errors['passwordRequiresLower'] = true;
+    }
+    if (!/\W/.test(value)) { // \W matches any non-word character
+      errors['passwordRequiresNonAlphanumeric'] = true;
+    }
+
+    return Object.keys(errors).length ? errors : null;
+  }
+
+  passwordMatchValidator(form: FormGroup): { [key: string]: boolean } | null {
+    return form.get('Contraseña')?.value === form.get('Contraseña2')?.value
+      ? null
+      : { 'mismatch': true };
   }
 
   onSubmit(): void {
     if (this.registroForm.valid) {
       if (this.registroForm.value.Contraseña !== this.registroForm.value.Contraseña2) {
-        console.error('Las contraseñas no coinciden');
+        this.errorMessage = 'Passwords do not match.';
         return;
       }
 
@@ -58,28 +88,34 @@ export class RegistroComponent implements OnInit {
             this.miServicio.registrarUsuario(usuario).subscribe(
               response => {
                 console.log('Usuario registrado exitosamente', response);
+                this.errorMessage = null; // Limpiar mensaje de error
               },
               error => {
                 if (error.status === 400) {
                   console.error('Error de validación', error.error);
-                  alert('Error al registrar usuario: ' + error.error);
+                  // Verificar si el error es sobre el nombre de usuario duplicado
+                  if (error.error.code === 'DuplicateUserName') {
+                    this.errorMessage = `Username '${this.registroForm.value.Correo}' is already taken.`;
+                  } else {
+                    this.errorMessage = 'Error al registrar usuario: ' + error.error.description;
+                  }
                 } else if (error.status === 0) {
                   console.error('No se pudo conectar al servidor.');
-                  alert('No se pudo conectar al servidor.');
+                  this.errorMessage = 'No se pudo conectar al servidor.';
                 } else {
                   console.error(`Error ${error.status}: ${error.message}`);
-                  alert('Error al registrar usuario: ' + error.message);
+                  this.errorMessage = 'Error al registrar usuario: ' + error.message;
                 }
               }
             );
           } else {
             console.error('ID del país no encontrado.');
-            alert('No se encontró el país especificado.');
+            this.errorMessage = 'No se encontró el país especificado.';
           }
         },
         error => {
           console.error('Error al obtener el ID del país', error);
-          alert('Error al obtener el ID del país.');
+          this.errorMessage = 'Error al obtener el ID del país.';
         }
       );
     }

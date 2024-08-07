@@ -1,46 +1,87 @@
-<div class="container mx-auto mt-40">
-  <h2 class="text-center text-3xl font-bold mb-4">Registro</h2>
+<div class="max-w-4xl mx-auto font-[sans-serif] p-6">
+  <div class="text-center mb-16">
+    <a href="javascript:void(0)">
+      <img src="https://readymadeui.com/readymadeui.svg" alt="logo" class='w-52 inline-block' />
+    </a>
+    <h4 class="text-gray-800 text-base font-semibold mt-6">Sign up into your account</h4>
+  </div>
 
-  <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" class="form">
-    <div class="flex flex-col">
-      <label for="nombre" class="mb-2 text-lg font-semibold">Nombre</label>
-      <input id="nombre" class="input" type="text" formControlName="Nombre">
-    </div>
-
-    <div class="flex flex-col">
-      <label for="apellido" class="mb-2 text-lg font-semibold">Apellido</label>
-      <input id="apellido" class="input" type="text" formControlName="Apellido">
-    </div>
-
-    <div class="flex flex-col">
-      <label for="email" class="mb-2 text-lg font-semibold">Email</label>
-      <input id="email" class="input" type="email" formControlName="Correo">
+  <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
+    <!-- Mostrar alerta de error general si existe -->
+    <div *ngIf="errorMessage" class="alert alert-error">
+      {{ errorMessage }}
     </div>
 
-    <div class="flex flex-col">
-      <label for="password" class="mb-2 text-lg font-semibold">Contraseña</label>
-      <input id="password" class="input" type="password" formControlName="Contraseña">
-    </div>
+    <div class="grid sm:grid-cols-2 gap-8">
+      <div>
+        <label for="nombre" class="text-gray-800 text-sm mb-2 block">First Name</label>
+        <input id="nombre" name="name" type="text" formControlName="Nombre" class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" placeholder="Enter name" />
+        <div *ngIf="registroForm.get('Nombre')?.invalid && (registroForm.get('Nombre')?.touched || registroForm.get('Nombre')?.dirty)" class="text-red-500 text-sm">
+          <div *ngIf="registroForm.get('Nombre')?.errors?.['required']">First Name is required.</div>
+          <div *ngIf="registroForm.get('Nombre')?.errors?.['minlength']">First Name must be at least 2 characters long.</div>
+        </div>
+      </div>
+      <div>
+        <label for="apellido" class="text-gray-800 text-sm mb-2 block">Last Name</label>
+        <input id="apellido" name="lname" type="text" formControlName="Apellido" class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" placeholder="Enter last name" />
+        <div *ngIf="registroForm.get('Apellido')?.invalid && (registroForm.get('Apellido')?.touched || registroForm.get('Apellido')?.dirty)" class="text-red-500 text-sm">
+          <div *ngIf="registroForm.get('Apellido')?.errors?.['required']">Last Name is required.</div>
+          <div *ngIf="registroForm.get('Apellido')?.errors?.['minlength']">Last Name must be at least 2 characters long.</div>
+        </div>
+      </div>
+      <div>
+        <label for="email" class="text-gray-800 text-sm mb-2 block">Email Id</label>
+        <input id="email" name="email" type="email" formControlName="Correo" class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" placeholder="Enter email" />
+        <div *ngIf="registroForm.get('Correo')?.invalid && (registroForm.get('Correo')?.touched || registroForm.get('Correo')?.dirty)" class="text-red-500 text-sm">
+          <div *ngIf="registroForm.get('Correo')?.errors?.['required']">Email is required.</div>
+          <div *ngIf="registroForm.get('Correo')?.errors?.['email']">Invalid email format.</div>
+        </div>
+      </div>
 
-    <div class="flex flex-col">
-      <label for="password2" class="mb-2 text-lg font-semibold">Confirmar Contraseña</label>
-      <input id="password2" class="input" type="password" formControlName="Contraseña2">
-    </div>
-    <div class="flex flex-col">
-      <label for="pais" class="mb-2 text-lg font-semibold">Pais</label>
-      <input id="pais" class="input" type="text" formControlName="PaisNombre">
-    </div>
-    <div class="flex flex-col">
-      <label for="empleo" class="mb-2 text-lg font-semibold">Empleo</label>
-      <input id="empleo" class="input" type="text" formControlName="Empleo">
-    </div>
-    <div class="flex flex-col">
-      <label for="fecha" class="mb-2 text-lg font-semibold">Fecha de Nacimiento</label>
-      <input id="fecha" class="input" type="date" formControlName="FechaNac">
+      <div>
+        <label for="password" class="text-gray-800 text-sm mb-2 block">Password</label>
+        <input id="password" name="password" type="password" formControlName="Contraseña" class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" placeholder="Enter password" />
+        <div *ngIf="registroForm.get('Contraseña')?.invalid && (registroForm.get('Contraseña')?.touched || registroForm.get('Contraseña')?.dirty)" class="text-red-500 text-sm">
+          <div *ngIf="registroForm.get('Contraseña')?.errors?.['required']">Password is required.</div>
+          <div *ngIf="registroForm.get('Contraseña')?.errors?.['minlength']">Password must be at least 6 characters long.</div>
+          <div *ngIf="registroForm.get('Contraseña')?.errors?.['passwordRequiresNonAlphanumeric']">Password must contain at least one non-alphanumeric character.</div>
+          <div *ngIf="registroForm.get('Contraseña')?.errors?.['passwordRequiresLower']">Password must contain at least one lowercase letter.</div>
+          <div *ngIf="registroForm.get('Contraseña')?.errors?.['passwordRequiresUpper']">Password must contain at least one uppercase letter.</div>
+        </div>
+      </div>
+
+      <div>
+        <label for="cpassword" class="text-gray-800 text-sm mb-2 block">Confirm Password</label>
+        <input id="cpassword" name="cpassword" type="password" formControlName="Contraseña2" class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" placeholder="Confirm password" />
+        <div *ngIf="registroForm.errors?.['mismatch'] && (registroForm.get('Contraseña')?.touched || registroForm.get('Contraseña2')?.touched)" class="text-red-500 text-sm">
+          Passwords do not match.
+        </div>
+      </div>
+
+      <!-- Campos adicionales -->
+      <div>
+        <label for="pais" class="text-gray-800 text-sm mb-2 block">Country</label>
+        <input id="pais" name="pais" type="text" formControlName="PaisNombre" class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" placeholder="Enter country" />
+      </div>
+      <div>
+        <label for="empleo" class="text-gray-800 text-sm mb-2 block">Occupation</label>
+        <input id="empleo" name="empleo" type="text" formControlName="Empleo" class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" placeholder="Enter occupation" />
+      </div>
+      <div>
+        <label for="fecha" class="text-gray-800 text-sm mb-2 block">Date of Birth</label>
+        <input id="fecha" name="fecha" type="date" formControlName="FechaNac" class="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" placeholder="Enter date of birth" />
+        <div *ngIf="registroForm.get('FechaNac')?.invalid && (registroForm.get('FechaNac')?.touched || registroForm.get('FechaNac')?.dirty)" class="text-red-500 text-sm">
+          <div *ngIf="registroForm.get('FechaNac')?.errors?.['required']">Date of Birth is required.</div>
+        </div>
+      </div>
     </div>
 
     <input type="hidden" formControlName="Rol" value="Client">
 
-    <button type="submit" class="button">Registrar</button>
+    <div class="!mt-12">
+      <button type="submit" class="py-3.5 px-7 text-sm font-semibold tracking-wider rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
+        Register
+      </button>
+    </div>
   </form>
 </div>
