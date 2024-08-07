@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ClustersDataService } from 'src/app/servicios/clusters-data.service';
 
+
 @Component({
   selector: 'app-clusters',
   templateUrl: './clusters.component.html',
