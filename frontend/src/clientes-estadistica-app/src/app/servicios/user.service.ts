@@ -11,7 +11,7 @@ export class UserService {
 
   // IMPORTANTE:
   //    1 URL ESTADISTICA Y OTRA PARA CLIENTES
-  private url_estadistica = environment.apiUrl + "/api/usuarios";
+  private readonly url_estadistica = environment.apiUrl + "/api/usuarios";
 
 
   private readonly url_prueba = "https://localhost:7144/api/usuarios";
@@ -45,7 +45,7 @@ export class UserService {
 
 
   getEnvios(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.url_prueba}/getEnvios`).pipe(
+    return this.http.get<any[]>(`${this.url_estadistica}/getEnvios`).pipe(
       map(envios => envios.map(envio => ({
         ...envio,
         fecha: this.formatearFecha(envio.fecha),
