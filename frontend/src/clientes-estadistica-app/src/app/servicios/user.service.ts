@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Usuario } from '../clases/usuario';
 import { environment } from '../../environments/environment';
 
@@ -11,14 +11,10 @@ export class UserService {
 
   // IMPORTANTE:
   //    1 URL ESTADISTICA Y OTRA PARA CLIENTES
-  private url_estadistica = environment.apiUrl;
-
-
-  private readonly url_prueba = "https://localhost:7144/api/usuarios";
+  private readonly url_estadistica = environment.apiUrl;
 
   //URL AMIN
   private readonly URL = "https://localhost:7107/api/";
-
 
   constructor(private http: HttpClient) { }
 
@@ -44,8 +40,43 @@ export class UserService {
   }
 
 
-  getEnvios(): Observable<any> {
-    return this.http.get<any>(`${this.url_prueba}/getEnvios`);
+  getEnvios(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.url_estadistica}/getEnvios`).pipe(
+      map(envios => envios.map(envio => ({
+        ...envio,
+        fecha: this.formatearFecha(envio.fecha),
+        cantidad: this.formatearCantidad(envio.cantidad)
+      })))
+    );
+  }
+
+  private formatearFecha(fecha: any): string {
+    let fechaDate: Date;
+
+    // Intenta crear un objeto Date a partir del valor proporcionado
+    if (fecha instanceof Date) {
+      fechaDate = fecha;
+    } else if (typeof fecha === 'string') {
+      fechaDate = new Date(fecha);
+    } else {
+      // Si la fecha no es una instancia de Date ni una cadena, devuelves un valor vacío o un error.
+      return '';
+    }
+
+    // Verifica si la fecha es válida
+    if (isNaN(fechaDate.getTime())) {
+      return ''; // Retorna una cadena vacía o algún valor por defecto en caso de error
+    }
+
+    const day = fechaDate.getDate().toString().padStart(2, '0');
+    const month = (fechaDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = fechaDate.getFullYear().toString().slice(-2);
+
+    return `${day}/${month}/${year}`;
+  }
+
+  private formatearCantidad(cantidad: number): string {
+    return cantidad.toFixed(2);
   }
   
 }

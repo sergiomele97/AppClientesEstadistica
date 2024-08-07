@@ -27,22 +27,25 @@ namespace BackendEstadistica
             {
                 options.AddPolicy("AllowLocalhost",
                     builder => builder
-                        .WithOrigins("http://localhost:4200")
+                        .WithOrigins("http://localhost:4200")                                               // URL FRONT-END LOCAL
                         .AllowAnyHeader()
                         .AllowAnyMethod());
 
                 options.AddPolicy("AllowAzureHost",
                     builder => builder
-                        .WithOrigins("https://salmon-hill-0d0baa503.5.azurestaticapps.net")
+                        .WithOrigins("https://salmon-hill-0d0baa503.5.azurestaticapps.net")                 // URL FRONT-END PRODUCCIÓN
                         .AllowAnyHeader()
                         .AllowAnyMethod());
             });
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            // Build
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            // Apply migrations at startup
+            ApplyMigrations(app);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -69,5 +72,24 @@ namespace BackendEstadistica
             app.Run();
         }
 
+
+        // Aplicar migraciones automaticamente en la BBDD Azure
+        private static void ApplyMigrations(WebApplication app)
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var context = services.GetRequiredService<ContextoBBDD>();
+                    context.Database.Migrate();
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred while migrating the database.");
+                }
+            }
+        }
     }
 }

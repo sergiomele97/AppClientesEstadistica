@@ -39,6 +39,7 @@ public class UsuariosController : ControllerBase
         List<Usuario> lista = usuarioRepositorio.GetUsuarios();
 
         return Ok(mapper.Map<List<Usuario>>(lista));  
+        
 
     }
 

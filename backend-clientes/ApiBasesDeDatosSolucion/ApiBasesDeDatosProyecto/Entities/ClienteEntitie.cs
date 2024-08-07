@@ -6,18 +6,15 @@
         [Key]
         public int Id { get; set; }
 
-        //[Required]
-        //[StringLength(256)]
         //[ForeignKey(nameof(Usuario))]
-
         //public int UserId { get; set; }
 
         [Required]
-        [StringLength(20)]
+        [StringLength(25)]
         public string Nombre { get; set; }
 
         [Required]
-        [StringLength(25)]
+        [StringLength(30)]
         public string Apellido { get; set; }
 
         [Required]
@@ -29,8 +26,7 @@
         public int PaisId { get; set; }
 
         //[ForeignKey(nameof(PaisId))]
-        public Pais Pais { get; set; }
-        // public Pais? Pais { get; set; }  // Navegación a la entidad Pais
+        public Pais Pais { get; set; }  // Navegación a la entidad Pais
 
         //public Usuario? Usuario { get; set; }  // Navegación a la entidad Usuario
 

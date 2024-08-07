@@ -9,11 +9,11 @@ namespace ApiBasesDeDatosProyecto.Models
         public string UserId { get; set; }
 
         [Required]
-        [StringLength(20)]
+        [StringLength(25)]
         public string Nombre { get; set; }
 
         [Required]
-        [StringLength(25)]
+        [StringLength(30)]
         public string Apellido { get; set; }
 
         [Required]

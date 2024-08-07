@@ -31,8 +31,9 @@ export class GraphComponent {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
-
-  constructor() {    this.chartOptions = {
+  public dataType: string = 'sex';
+  private data = {
+    sex: {
       series: [
         {
           name: "male",
@@ -43,6 +44,56 @@ export class GraphComponent {
           data: [11, 32, 45, 32, 34, 52, 41]
         }
       ],
+      title: "Accesses by Sex"
+    },
+    age: {
+      series: [
+        {
+          name: "<30",
+          data: [20, 30, 25, 40, 33, 80, 70]
+        },
+        {
+          name: "30-50",
+          data: [15, 22, 34, 29, 20, 60, 50]
+        },
+        {
+          name: ">50",
+          data: [5, 10, 8, 12, 15, 20, 30]
+        }
+      ],
+      title: "Accesses by Age"
+    },
+    job: {
+      series: [
+        {
+          name: "administrativo",
+          data: [20, 30, 25, 35, 40, 50, 60]
+        },
+        {
+          name: "sanitario",
+          data: [10, 15, 20, 25, 30, 40, 50]
+        },
+        {
+          name: "economista",
+          data: [5, 10, 15, 20, 25, 30, 35]
+        },
+        {
+          name: "informatico",
+          data: [30, 40, 35, 45, 50, 60, 70]
+        }
+      ],
+      title: "Accesses by Job"
+    }
+  };
+
+  constructor() {
+    this.updateChart();
+  }
+
+  updateChart() {
+    const selectedData = this.data[this.dataType];
+    this.chartOptions = {
+      series: selectedData.series,
       chart: {
         height: 350,
         type: "area"
@@ -51,7 +102,7 @@ export class GraphComponent {
         enabled: false
       },
       title: {
-        text: "Accesses by Sex",
+        text: selectedData.title,
         align: "center"
       },
       stroke: {
@@ -75,6 +126,12 @@ export class GraphComponent {
         }
       }
     };
+  }
+
+  onSelectionChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    this.dataType = selectElement.value;
+    this.updateChart();
   }
 
   public generateData(baseval, count, yrange) {

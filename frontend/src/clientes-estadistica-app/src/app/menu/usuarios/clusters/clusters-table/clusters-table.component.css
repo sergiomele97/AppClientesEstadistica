@@ -1,7 +1,31 @@
-table {
-  width: 100%;
+.table-container {
+  max-width: 650px;
+  margin: 35px auto;
+  text-align: center;
 }
 
-.mat-elevation-z8 {
-  box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.2);
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+  background-color: #eaeaea;
 }

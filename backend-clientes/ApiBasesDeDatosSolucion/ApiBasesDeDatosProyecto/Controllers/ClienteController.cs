@@ -1,31 +1,37 @@
 ﻿using ApiBasesDeDatosProyecto.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 
 namespace ApiBasesDeDatosProyecto.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class ClienteController : ControllerBase
     {
         private readonly IClienteRepository _clienteRepository;
         private readonly IPaisRepository _paisRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<ClienteController> _logger;
+        private readonly ClienteService _clienteService;
 
         public ClienteController(
             IClienteRepository clienteRepository,
             IMapper mapper,
             IPaisRepository paisRepository,
-            ILogger<ClienteController> logger)
+            ILogger<ClienteController> logger,
+            ClienteService clienteService)
         {
             _clienteRepository = clienteRepository;
             _paisRepository = paisRepository;
             _mapper = mapper;
             _logger = logger;
+            _clienteService = clienteService;
         }
 
         // GET: api/cliente
         [HttpGet]
+
         public async Task<ActionResult<List<ClienteDto>>> Get()
         {
             _logger.LogInformation($"Obteniendo todos los clientes.");
@@ -68,6 +74,13 @@ namespace ApiBasesDeDatosProyecto.Controllers
             }
 
             return Ok(_mapper.Map<List<ClienteDto>>(clientes));
+        }
+
+        [HttpGet("generados")]
+        public ActionResult<List<Cliente>> GetClientesGenerados(int count = 10)
+        {
+            var clientes = _clienteService.GetClientes(count);
+            return Ok(clientes);
         }
 
         // POST api/cliente

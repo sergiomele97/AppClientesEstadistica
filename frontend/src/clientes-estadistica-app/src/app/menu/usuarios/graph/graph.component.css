@@ -1,5 +1,42 @@
+/* Estilo para el contenedor del dropdown */
+.dropdown-container {
+  max-width: 650px;
+  margin: 35px auto;
+  text-align: center;
+}
+
+/* Estilo para el label */
+.dropdown-container label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+/* Estilo para el select */
+.dropdown-container select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+/* Estilo para el select al estar enfocado */
+.dropdown-container select:focus {
+  outline: none;
+  border-color: #999;
+  box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+}
+
+/* Estilo para el gráfico */
 #chart {
-    max-width: 650px;
-    margin: 35px auto;
-  }
-  
+  max-width: 650px;
+  margin: 35px auto;
+}

@@ -11,7 +11,6 @@ public class AccountController : ControllerBase
     private readonly IClienteService _clienteService;
     private readonly IUserService _userService;
 
-
     public AccountController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
@@ -26,7 +25,6 @@ public class AccountController : ControllerBase
         _tokenService = tokenService;
         _clienteService = clienteService;
         _userService = userService;
-
     }
 
     [HttpGet("users")]
@@ -46,6 +44,7 @@ public class AccountController : ControllerBase
         }
         return NotFound(new { message = "User not found" });
     }
+
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
     {
