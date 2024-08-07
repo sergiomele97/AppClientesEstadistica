@@ -13,8 +13,8 @@ public class ClienteFaker : Faker<Cliente>
             .RuleFor(c => c.Telefono, f => f.Phone.PhoneNumber("##########"))   
             .RuleFor(c => c.Edad, f => f.Random.Int(18, 80))
             .RuleFor(c => c.Sexo, f => f.PickRandom(new[] { "Masculino", "Femenino" }))
-            .RuleFor(c => c.Trabajo, f => f.Name.JobTitle());
-            //.RuleFor(c => c.Conversionos, f => new ConversionFaker().Generate(f.Random.Int(1, 5)));
+            .RuleFor(c => c.Trabajo, f => f.Name.JobTitle())
+            .RuleFor(c => c.Conversionos, f => new ConversionFaker().Generate(f.Random.Int(1, 5)));
     }
 
 }
