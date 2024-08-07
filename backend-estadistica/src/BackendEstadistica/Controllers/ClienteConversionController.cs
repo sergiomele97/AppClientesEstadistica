@@ -2,11 +2,13 @@
 
 namespace BackendEstadistica.Controllers
 {
+
+    [Route("api/clienteConversion")]
+    [ApiController]
     public class ClienteConversionController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        
+
+
     }
 }
