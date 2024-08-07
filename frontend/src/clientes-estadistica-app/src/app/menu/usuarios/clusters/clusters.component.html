@@ -1,8 +1,12 @@
-<p>
-  clusters works!
-</p>
+<div class="dropdown-container">
+  <label for="data-type">Seleccione el sample:</label>
+  <select id="data-type" (change)="onSelectionChange($event)">
+    <option value="sample a">Sample A</option>
+    <option value="sample b">Sample B</option>
+    <option value="sample c">Sample C</option>
+  </select>
+</div>
 
 <app-clusters-graph></app-clusters-graph>
-
 
 <app-clusters-table></app-clusters-table>

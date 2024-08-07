@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -8,9 +8,11 @@ import {
   ApexYAxis,
   ApexTitleSubtitle,
   ApexXAxis,
-  ApexFill
-} from "ng-apexcharts";
-import { UserService } from 'src/app/servicios/user.service';
+  ApexFill,
+} from 'ng-apexcharts';
+import { Subscription } from 'rxjs';
+import { IEnvio } from 'src/app/interfaces/envios';
+import { EnviosService } from 'src/app/servicios/envios.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -26,133 +28,127 @@ export type ChartOptions = {
 @Component({
   selector: 'app-outliers-detail-graph',
   templateUrl: './outliers-detail-graph.component.html',
-  styleUrls: ['./outliers-detail-graph.component.css']
+  styleUrls: ['./outliers-detail-graph.component.css'],
 })
+export class OutliersDetailGraphComponent implements OnInit, OnDestroy {
 
-export class OutliersDetailGraphComponent implements OnInit {
-
-
-  envios: any[];
-
-  @ViewChild("chart") chart: ChartComponent;
+  @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
+  constructor(private envioService: EnviosService) {}
+
   ngOnInit(): void {
-      this.userService.getEnvios().subscribe( datos => {
-        this.envios = datos;
-        this.actualizarGrafico(); 
-        console.log(datos);
-      });
+    this.subscription = this.envioService.getEnvios().subscribe({
+      next: (envios) => {
+        this.envios = this.envioService.formatEnvios(envios);
+        this.actualizarGrafico();
+      },
+    });
   }
 
-  constructor(private userService: UserService) {}
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
+  subscription!: Subscription;
+  envios: IEnvio[] = [];
+  enviosFilter: IEnvio[] = [];
 
   private actualizarGrafico(): void {
-
     const primerosEnvios = this.envios.slice(0, 5);
 
-    const fechas = primerosEnvios.map(envio => envio.fecha); // Formatear fecha si es necesario
-    const cantidad = primerosEnvios.map(envio => envio.cantidad);
+    const fechas = primerosEnvios.map((envio) => envio.fecha); // Formatear fecha si es necesario
+    const cantidad = primerosEnvios.map((envio) => envio.cantidad);
 
     this.chartOptions = {
       series: [
         {
-          name: "Envio",
-          data: cantidad
-        }
+          name: 'Envio',
+          data: cantidad,
+        },
       ],
       chart: {
         height: 0,
-        type: "bar"
+        type: 'bar',
       },
       plotOptions: {
         bar: {
           dataLabels: {
-            position: "top" // top, center, bottom
-          }
-        }
+            position: 'top', // top, center, bottom
+          },
+        },
       },
       dataLabels: {
         enabled: true,
-        formatter: function(val) {
-          return val + "€";
-        },
         offsetY: 0,
         style: {
-          fontSize: "12px",
-          colors: ["#304758"]
-        }
+          fontSize: '12px',
+          colors: ['#304758'],
+        },
       },
 
       xaxis: {
-        categories: [
-          fechas
-        ],
-        position: "bottom",
+        categories: fechas,
+        position: 'bottom',
         labels: {
-          offsetY: 0
+          offsetY: 0,
         },
         axisBorder: {
-          show: false
+          show: false,
         },
         axisTicks: {
-          show: false
+          show: false,
         },
         crosshairs: {
           fill: {
-            type: "gradient",
+            type: 'gradient',
             gradient: {
-              colorFrom: "#D8E3F0",
-              colorTo: "#BED1E6",
+              colorFrom: '#D8E3F0',
+              colorTo: '#BED1E6',
               stops: [0, 100],
               opacityFrom: 0.4,
-              opacityTo: 0.5
-            }
-          }
+              opacityTo: 0.5,
+            },
+          },
         },
         tooltip: {
           enabled: true,
-          offsetY: 0
-        }
+          offsetY: 0,
+        },
       },
       fill: {
-        type: "gradient",
+        type: 'gradient',
         gradient: {
-          shade: "light",
-          type: "horizontal",
+          shade: 'light',
+          type: 'horizontal',
           shadeIntensity: 0.25,
           gradientToColors: undefined,
           inverseColors: true,
           opacityFrom: 1,
           opacityTo: 1,
-          stops: [20, 0, 100, 100]
-        }
+          stops: [20, 0, 100, 100],
+        },
       },
       yaxis: {
         axisBorder: {
-          show: false
+          show: false,
         },
         axisTicks: {
-          show: false
+          show: false,
         },
         labels: {
-          show: false,
-          formatter: function(val) {
-            return val + "€";
-          }
-        }
+          show: false
+        },
       },
       title: {
-        text: "Tabla de envios de dinero",
+        text: 'Tabla de envios de dinero',
         floating: false,
         offsetY: 0,
-        align: "center",
+        align: 'center',
         style: {
-          color: "#444"
-        }
-      }
+          color: '#444',
+        },
+      },
     };
   }
-
 }

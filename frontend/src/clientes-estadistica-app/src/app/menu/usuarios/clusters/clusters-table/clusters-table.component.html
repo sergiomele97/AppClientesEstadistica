@@ -1,71 +1,16 @@
-<p>
-  clusters-table works!
-</p>
-
-
-
-<div class="relative overflow-x-auto">
+<div class="relative overflow-x-auto" *ngIf="tableData">
   <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-              <th scope="col" class="px-6 py-3">
-                  SAMPLE A
-              </th>
-              <th scope="col" class="px-6 py-3">
-                  Name
-              </th>
-              <th scope="col" class="px-6 py-3">
-                  Email
-              </th>
-              <th scope="col" class="px-6 py-3">
-                  Balance
-              </th>
-          </tr>
-      </thead>
-      <tbody>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  SAMPLE A
-              </th>
-              <td class="px-6 py-4">
-                  Silver
-              </td>
-              <td class="px-6 py-4">
-                  silver@mail.com
-              </td>
-              <td class="px-6 py-4">
-                  $2999
-              </td>
-          </tr>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  SAMPLE A
-              </th>
-              <td class="px-6 py-4">
-                  White
-              </td>
-              <td class="px-6 py-4">
-                  white@mail.com
-              </td>
-              <td class="px-6 py-4">
-                  $1999
-              </td>
-          </tr>
-          <tr class="bg-white dark:bg-gray-800">
-              <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  SAMPLE A
-              </th>
-              <td class="px-6 py-4">
-                  Black
-              </td>
-              <td class="px-6 py-4">
-                  black@mail.com
-              </td>
-              <td class="px-6 py-4">
-                  $99
-              </td>
-          </tr>
-      </tbody>
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr>
+        <th scope="col" class="px-6 py-3">X</th>
+        <th scope="col" class="px-6 py-3">Y</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of tableData; let i = index" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+        <td class="px-6 py-4">{{ item[0] }}</td>
+        <td class="px-6 py-4">{{ item[1] }}</td>
+      </tr>
+    </tbody>
   </table>
 </div>
-
