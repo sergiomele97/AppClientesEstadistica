@@ -1,6 +1,13 @@
-<p>
-  graph works!
-</p>
+<div class="dropdown-container">
+  <label for="data-type">Seleccione el tipo de dato:</label>
+  <select id="data-type" (change)="onSelectionChange($event)">
+    <option value="sex">Sexo</option>
+    <option value="age">Edad</option>
+    <option value="job">Trabajo</option>
+  </select>
+</div>
+
+
 <!--The content below is only a placeholder and can be replaced.-->
 <div id="chart">
   <apx-chart

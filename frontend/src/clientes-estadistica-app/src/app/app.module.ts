@@ -30,6 +30,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { ClustersDataService } from './servicios/clusters-data.service';
+
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 
 @NgModule({
@@ -68,7 +70,8 @@ import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.compon
     NgxPaginationModule
   ],
   providers: [
-    UserService
+    UserService,
+    ClustersDataService
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA] 
