@@ -1,7 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Usuario } from 'src/app/clases/usuario';
 import { IEnvio } from 'src/app/interfaces/envios';
 import { EnviosService } from 'src/app/servicios/envios.service';
 
@@ -11,6 +9,7 @@ import { EnviosService } from 'src/app/servicios/envios.service';
   styleUrls: ['./table.component.css'],
 })
 export class TableComponent implements OnInit, OnDestroy {
+  
   constructor(private enviosService: EnviosService) {}
 
   ngOnInit(): void {
@@ -29,6 +28,7 @@ export class TableComponent implements OnInit, OnDestroy {
   subscription!: Subscription;
   envios: IEnvio[] = [];
   enviosFilter: IEnvio[] = [];
+  currentPage: number = 1;  // Página actual
 
   _filterEnvio: string = '';
 
@@ -43,7 +43,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
   filterEnviosByDivisa(filter: string): IEnvio[] {
     return this.envios.filter((envio: IEnvio) => 
-    envio?.divisa?.toLowerCase().includes(filter.toLowerCase()));
+      envio?.divisa?.toLowerCase().includes(filter.toLowerCase()));
   }
 
   columnOrder: string = '';
