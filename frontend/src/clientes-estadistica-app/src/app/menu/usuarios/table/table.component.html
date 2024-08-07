@@ -29,13 +29,13 @@
           {{ envio.id }}
         </th>
         <td class="px-6 py-4">
-          {{ envio.cantidad | currency:envio.divisa:'symbol':'1.2-2' }}
+          {{ envio.cantidad }}
         </td>
         <td class="px-6 py-4">
           {{ envio.divisa }}
         </td>
         <td class="px-6 py-4">
-          {{ envio.fecha | date:'dd/MM/yyyy' }}
+          {{ envio.fecha }}
         </td>
       </tr>
     </tbody>

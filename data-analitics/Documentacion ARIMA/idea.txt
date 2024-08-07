@@ -1,0 +1,69 @@
+using System.Diagnostics;
+using System.Text.Json;
+
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        var series = new double[] { 1.0, 2.0, 3.0, 4.0, 5.0 }; // Ejemplo de serie temporal
+        var requestPayload = new { series };
+        var requestJson = JsonSerializer.Serialize(requestPayload);
+
+        // Escribir datos en archivo temporal
+        string requestFile = Path.GetTempFileName();
+        await File.WriteAllTextAsync(requestFile, requestJson);
+
+        // Archivo temporal para la respuesta
+        string responseFile = Path.GetTempFileName();
+
+        // Ejecutar script de Python
+        ProcessStartInfo start = new ProcessStartInfo();
+        start.FileName = "python";
+        start.Arguments = $"\"C:\\Users\\pmpcurso1\\Desktop\\AppProyecto\\docs\\Documentacion ARIMA\\.venv\\src\\funcionPred.py\" \"{requestFile}\" \"{responseFile}\"";
+        start.UseShellExecute = false;
+        start.RedirectStandardOutput = true;
+        start.RedirectStandardError = true;
+
+        using (Process? process = Process.Start(start))
+        {
+            if (process == null)
+            {
+                Console.WriteLine("Failed to start the Python process.");
+                return;
+            }
+
+            string stderr = await process.StandardError.ReadToEndAsync();
+            string stdout = await process.StandardOutput.ReadToEndAsync();
+            process.WaitForExit();
+
+            if (process.ExitCode != 0)
+            {
+                Console.WriteLine($"Error in Python script: {stderr}");
+                return;
+            }
+
+            Console.WriteLine($"Python Output: {stdout}");
+        }
+
+        // Leer respuesta del archivo temporal
+        string responseJson = await File.ReadAllTextAsync(responseFile);
+        var responseData = JsonSerializer.Deserialize<Response>(responseJson);
+        if (responseData != null)
+        {
+            Console.WriteLine($"Prediction: {responseData.Prediction}");
+            Console.WriteLine($"Confidence Interval: [{responseData.ConfidenceInterval[0]}, {responseData.ConfidenceInterval[1]}]");
+        }
+        else
+        {
+            Console.WriteLine("No se ha recibido la predicción");
+        }
+    }
+}
+
+public class Response
+{
+    public double Prediction { get; set; }
+    public double[] ConfidenceInterval { get; set; }
+}
+

@@ -15,7 +15,7 @@ export class TableComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.enviosService.getEnvios().subscribe({
       next: (envios) => {
-        this.envios = envios;
+        this.envios = this.enviosService.formatEnvios(envios);
         this.enviosFilter = this.filterEnviosByDivisa(this.filterEnvio);
       },
     });
@@ -84,12 +84,6 @@ export class TableComponent implements OnInit, OnDestroy {
       }
 
       return this.directionOrder ? comparacion : -comparacion;
-    });
-  }
-
-  getEnvios() {
-    this.enviosService.getEnvios().subscribe((datos) => {
-      this.envios = datos;
     });
   }
 }
