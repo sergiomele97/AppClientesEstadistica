@@ -2,32 +2,35 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../servicios/user.service';
 import { Usuario } from '../interfaces/usuario.interface';
+import { UsuarioAdmin } from '../interfaces/usuarioAdmin.interface';
 
 @Component({
-  selector: 'app-registro',
-  templateUrl: './registro.component.html',
-  styleUrls: ['./registro.component.css']
+  selector: 'app-registroAdmin',
+  templateUrl: './registroAdmin.component.html',
+  styleUrls: ['./registroAdmin.component.css']
 })
-export class RegistroComponent implements OnInit {
+export class RegistroAdminComponent implements OnInit {
 
-  registroForm: FormGroup;
+  registroAdminForm: FormGroup;
   paisId: number | null = null;
+  isFormBlocked = false;
 
   constructor(private fb: FormBuilder, private miServicio: UserService) { }
 
   ngOnInit(): void {
-    this.registroForm = this.fb.group({
-      Nombre: ['', [Validators.required, Validators.minLength(3)]],
-      Apellido: ['', [Validators.required, Validators.minLength(3)]],
+    this.registroAdminForm = this.fb.group({
       Correo: ['', [Validators.required, Validators.email]],
       Contraseña: ['', [Validators.required, Validators.minLength(6)]],
       Contraseña2: ['', [Validators.required]],
-      Rol: ['Client', Validators.required],
+      Rol: ['Admin', Validators.required],
       PaisNombre: ['', Validators.required],
-      Empleo: [''],
       FechaNac: ['', Validators.required]
     }, {
       validator: this.passwordMatchValidator('Contraseña', 'Contraseña2')
+    });
+
+    this.registroAdminForm.valueChanges.subscribe(() => {
+      this.checkFormErrors();
     });
   }
 
@@ -49,30 +52,27 @@ export class RegistroComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.registroForm.invalid) {
-      this.showValidationErrors();
+    if (this.registroAdminForm.invalid) {
+      this.checkFormErrors();
       return;
     }
 
-    if (this.registroForm.value.Contraseña !== this.registroForm.value.Contraseña2) {
+    if (this.registroAdminForm.value.Contraseña !== this.registroAdminForm.value.Contraseña2) {
       alert('Las contraseñas no coinciden.');
       return;
     }
 
-    this.miServicio.obtenerPaisIdPorNombre(this.registroForm.value.PaisNombre).subscribe(
+    this.miServicio.obtenerPaisIdPorNombre(this.registroAdminForm.value.PaisNombre).subscribe(
       response => {
         this.paisId = response.id;
         if (this.paisId !== null) {
-          const fechaNacTimestamp = new Date(this.registroForm.value.FechaNac).getTime();
-          const usuario: Usuario = {
-            Email: this.registroForm.value.Correo,
-            Password: this.registroForm.value.Contraseña,
-            ConfirmPassword: this.registroForm.value.Contraseña2,
-            Nombre: this.registroForm.value.Nombre,
-            Apellido: this.registroForm.value.Apellido,
-            Rol: this.registroForm.value.Rol,
+          const fechaNacTimestamp = new Date(this.registroAdminForm.value.FechaNac).getTime();
+          const usuario: UsuarioAdmin = {
+            Email: this.registroAdminForm.value.Correo,
+            Password: this.registroAdminForm.value.Contraseña,
+            ConfirmPassword: this.registroAdminForm.value.Contraseña2,
+            Rol: this.registroAdminForm.value.Rol,
             PaisId: this.paisId,
-            Empleo: this.registroForm.value.Empleo,
             FechaNacimiento: fechaNacTimestamp
           };
           this.miServicio.registrarUsuario(usuario).subscribe(
@@ -104,36 +104,7 @@ export class RegistroComponent implements OnInit {
     );
   }
 
-  private showValidationErrors(): void {
-    let errorMessage = 'Por favor corrige los siguientes errores:\n';
-    const controls = this.registroForm.controls;
-
-    for (const key in controls) {
-      if (controls.hasOwnProperty(key)) {
-        const control = controls[key];
-        if (control.invalid) {
-          if (control.errors) {
-            if (control.errors['required']) {
-              errorMessage += `- El campo ${key} es requerido.\n`;
-            }
-            if (control.errors['minlength']) {
-              errorMessage += `- El campo ${key} debe tener al menos ${control.errors['minlength'].requiredLength} caracteres.\n`;
-            }
-            if (control.errors['email']) {
-              errorMessage += `- El campo ${key} debe ser un email válido.\n`;
-            }
-            if (control.errors['passwordMismatch']) {
-              errorMessage += `- Las contraseñas no coinciden.\n`;
-            }
-          }
-        }
-      }
-    }
-
-    if (errorMessage === 'Por favor corrige los siguientes errores:\n') {
-      errorMessage = 'Hay errores en el formulario. Por favor, corrígelos antes de enviar.';
-    }
-
-    alert(errorMessage);
+  private checkFormErrors(): void {
+    this.isFormBlocked = this.registroAdminForm.invalid;
   }
 }
