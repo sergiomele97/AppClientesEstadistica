@@ -1,8 +1,12 @@
 export class Usuario {
-
-    Id?: number;    // Puedes tener un ID opcional si el backend lo devuelve
-    Nombre: string;
-    Correo: string;
-    Contraseña: string;
-
-}
+    id: string;
+    userName: string;
+    email: string;
+    rol: string;
+    passwordHash: string;
+    securityStamp: string;
+    concurrencyStamp: string;
+    paisId:number
+    
+  }
+  

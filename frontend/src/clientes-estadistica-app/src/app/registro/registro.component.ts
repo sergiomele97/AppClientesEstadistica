@@ -22,7 +22,8 @@ export class RegistroComponent implements OnInit {
       Contraseña: ['', Validators.required],
       Contraseña2: ['', Validators.required],
       Rol: ['Client', Validators.required],  // Puede ser un campo oculto si siempre es 'Client'
-      PaisNombre: ['', ] // Campo para el nombre del país
+      PaisNombre: ['', ], // Campo para el nombre del país
+      Empleo: ['',]
     });
   }
 
@@ -46,9 +47,10 @@ export class RegistroComponent implements OnInit {
               Nombre: this.registroForm.value.Nombre,
               Apellido: this.registroForm.value.Apellido,
               Rol: this.registroForm.value.Rol,
-              PaisId: this.paisId // Asignar el ID del país al usuario
+              PaisId: this.paisId, // Asignar el ID del país al usuario
+              Empleo: this.registroForm.value.Empleo
+              
             };
-            
             // Registrar el usuario
             this.miServicio.registrarUsuario(usuario).subscribe(
               response => {

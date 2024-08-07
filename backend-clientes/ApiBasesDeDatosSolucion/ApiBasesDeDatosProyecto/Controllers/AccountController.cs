@@ -1,4 +1,6 @@
-﻿[Route("api/[controller]")]
+﻿using ApiBasesDeDatosProyecto.IDentity.Serivicios;
+
+[Route("api/[controller]")]
 [ApiController]
 public class AccountController : ControllerBase
 {
@@ -7,19 +9,40 @@ public class AccountController : ControllerBase
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly ITokenService _tokenService;
     private readonly IClienteService _clienteService;
+    private readonly IUserService _userService;
 
     public AccountController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         RoleManager<IdentityRole> roleManager,
         ITokenService tokenService,
-        IClienteService clienteService)
+        IClienteService clienteService,
+        IUserService userService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
         _tokenService = tokenService;
         _clienteService = clienteService;
+        _userService = userService;
+    }
+
+    [HttpGet("users")]
+    public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAllUsers()
+    {
+        var users = await _userService.GetAllUsersAsync();
+        return Ok(users);
+    }
+
+    [HttpDelete("users/{id}")]
+    public async Task<IActionResult> DeleteUser(string id)
+    {
+        var result = await _userService.DeleteUserAsync(id);
+        if (result)
+        {
+            return Ok(new { message = "User deleted successfully" });
+        }
+        return NotFound(new { message = "User not found" });
     }
 
     [HttpPost("register")]
@@ -53,6 +76,7 @@ public class AccountController : ControllerBase
                     Apellido = model.Apellido,
                     FechaNacimiento = model.FechaNacimiento,
                     PaisId = model.PaisId,
+                    Empleo = model.Empleo
                     // Asignar el ID del usuario si es necesario
                     //UserId = user.Id
                 };
@@ -83,5 +107,41 @@ public class AccountController : ControllerBase
         }
 
         return Unauthorized();
+    }
+
+    [HttpPost("change-role")]
+    public async Task<IActionResult> ChangeRole([FromBody] ChangeRoleViewModel model)
+    {
+        // Validar que el rol sea válido
+        if (!await _roleManager.RoleExistsAsync(model.NuevoRol))
+        {
+            return BadRequest("Role does not exist.");
+        }
+
+        // Buscar el usuario por su ID
+        var user = await _userManager.FindByIdAsync(model.UserId);
+        if (user == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        // Obtener los roles actuales del usuario
+        var currentRoles = await _userManager.GetRolesAsync(user);
+
+        // Eliminar todos los roles actuales del usuario
+        var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+        if (!removeResult.Succeeded)
+        {
+            return BadRequest("Failed to remove current roles.");
+        }
+
+        // Asignar el nuevo rol al usuario
+        var addResult = await _userManager.AddToRoleAsync(user, model.NuevoRol);
+        if (!addResult.Succeeded)
+        {
+            return BadRequest("Failed to add new role.");
+        }
+
+        return Ok("Role changed successfully.");
     }
 }

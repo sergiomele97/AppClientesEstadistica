@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiBasesDeDatosProyecto.IDentity.Serivicios;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-public interface IUserService
-{
-    Task<IEnumerable<ApplicationUser>> GetAllUsersAsync();
-    Task<bool> DeleteUserAsync(string userId);
-}
+
 
 public class UserService : IUserService
 {
@@ -21,31 +18,15 @@ public class UserService : IUserService
 
     public async Task<IEnumerable<ApplicationUser>> GetAllUsersAsync()
     {
-        return await _userManager.Users.Where(u => !u.IsDeleted).ToListAsync();
+        return _userManager.Users.ToList(); // Asegúrate de manejar la paginación si es necesario
     }
 
-
-    public async Task<bool> DeleteUserAsync(string userId)
+    public async Task<bool> DeleteUserAsync(string id)
     {
-        var user = await _userManager.FindByIdAsync(userId);
-        if (user != null)
-        {
-            user.IsDeleted = true;
-            var result = await _userManager.UpdateAsync(user);
-            return result.Succeeded;
-        }
-        return false;
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null) return false;
+        var result = await _userManager.DeleteAsync(user);
+        return result.Succeeded;
     }
-
-    public async Task<IList<string>> GetUserRolesByUsernameAsync(string username)
-    {
-        var user = await _userManager.FindByNameAsync(username);
-        if (user == null)
-        {
-            return null; // O manejar el caso según prefieras.
-        }
-
-        return await _userManager.GetRolesAsync(user);
-    }
-
 }
+

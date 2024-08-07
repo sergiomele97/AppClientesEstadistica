@@ -1,7 +1,10 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxPaginationModule } from 'ngx-pagination'; 
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -26,37 +29,34 @@ import { ClustersGraphComponent } from './menu/usuarios/clusters/clusters-graph/
 import { ClustersTableComponent } from './menu/usuarios/clusters/clusters-table/clusters-table.component';
 import { OutliersDetailTableComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail-table/outliers-detail-table.component';
 import { OutliersDetailGraphComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail-graph/outliers-detail-graph.component';
-
-import { NgApexchartsModule } from 'ng-apexcharts';
-import { HighchartsChartModule } from 'highcharts-angular';
+import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 import { ClustersDataService } from './servicios/clusters-data.service';
 
-
-
 @NgModule({
-  declarations: [					
+  declarations: [
     AppComponent,
-      LoginComponent,
-      RegistroComponent,
-      ClientesComponent,
-      UsuariosComponent,
-      MenuComponent,
-      VolumetryComponent,
-      ClustersComponent,
-      GraphComponent,
-      MapComponent,
-      OutliersComponent,
-      SpaghettiComponent,
-      TableComponent,
-      DivisePredictionComponent,
-      BalanceComponent,
-      OutliersComponent,
-      OutliersDetailComponent,
-      ClustersGraphComponent,
-      ClustersTableComponent,
-      OutliersDetailTableComponent,
-      OutliersDetailGraphComponent
-   ],
+    LoginComponent,
+    RegistroComponent,
+    ClientesComponent,
+    UsuariosComponent,
+    MenuComponent,
+    VolumetryComponent,
+    ClustersComponent,
+    GraphComponent,
+    MapComponent,
+    OutliersComponent,
+    SpaghettiComponent,
+    TableComponent,
+    DivisePredictionComponent,
+    BalanceComponent,
+    OutliersComponent,
+    OutliersDetailComponent,
+    UsersInfoComponent,
+    ClustersGraphComponent,      
+    ClustersTableComponent,    
+    OutliersDetailTableComponent, 
+    OutliersDetailGraphComponent  
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -65,14 +65,14 @@ import { ClustersDataService } from './servicios/clusters-data.service';
     ReactiveFormsModule,
     NgApexchartsModule,
     HighchartsChartModule,
-    ReactiveFormsModule
-  
+    NgxPaginationModule
   ],
   providers: [
     UserService,
     ClustersDataService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA] 
 })
 
 export class AppModule { }

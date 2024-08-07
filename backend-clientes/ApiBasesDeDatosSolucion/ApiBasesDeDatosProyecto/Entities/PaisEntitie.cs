@@ -13,7 +13,7 @@ namespace ApiBasesDeDatosProyecto.Entities
         [StringLength(100)] // Limita la longitud de la cadena
         public string Nombre { get; set; }
 
-        [StringLength(50)] // Limita la longitud de la cadena para la divisa
+        [StringLength(20)] // Limita la longitud de la cadena para la divisa
         public string Divisa { get; set; }
 
 
