@@ -1,6 +1,10 @@
-<p>
-  volumetry works!
-</p>
+<div class="dropdown-container">
+  <label for="data-type">Seleccione el tipo de dato:</label>
+  <select id="data-type" (change)="onSelectionChange($event)">
+    <option value="usuarios">Usuarios</option>
+    <option value="transacciones">Transacciones</option>
+  </select>
+</div>
 
 <!--The content below is only a placeholder and can be replaced.-->
 <div id="chart">

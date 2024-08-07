@@ -10,6 +10,7 @@ import {
   ApexXAxis,
   ApexFill
 } from "ng-apexcharts";
+import { EnviosService } from 'src/app/servicios/envios.service';
 import { UserService } from 'src/app/servicios/user.service';
 
 export type ChartOptions = {
@@ -31,21 +32,20 @@ export type ChartOptions = {
 
 export class OutliersDetailGraphComponent implements OnInit {
 
-
   envios: any[];
 
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
   ngOnInit(): void {
-      this.userService.getEnvios().subscribe( datos => {
+      this.envioService.getEnvios().subscribe( datos => {
         this.envios = datos;
         this.actualizarGrafico(); 
         console.log(datos);
       });
   }
 
-  constructor(private userService: UserService) {}
+  constructor(private envioService: EnviosService ) {}
 
 
   private actualizarGrafico(): void {
@@ -86,9 +86,7 @@ export class OutliersDetailGraphComponent implements OnInit {
       },
 
       xaxis: {
-        categories: [
-          fechas
-        ],
+        categories: fechas,
         position: "bottom",
         labels: {
           offsetY: 0

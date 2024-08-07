@@ -1,6 +1,13 @@
-<p>
-  divise-prediction works!
-</p>
+<div class="dropdown-container">
+  <label for="currency-select">Seleccione la divisa:</label>
+  <select id="currency-select" (change)="onCurrencyChange($event)">
+    <option value="euros">Euros</option>
+    <option value="dolares">Dólares</option>
+    <option value="libras">Libras</option>
+  </select>
+</div>
+
+
 <!--The content below is only a placeholder and can be replaced.-->
 <div id="chart">
   <apx-chart

@@ -37,12 +37,22 @@ export class DivisePredictionComponent {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
+  private data = {
+    euros: [4, 3, 10, 9, 29, 19, 22, 9, 12, 7, 19, 5, 13, 9, 17, 2, 7, 5],
+    dolares: [5, 2, 15, 14, 20, 25, 20, 10, 14, 8, 22, 6, 16, 11, 19, 4, 9, 7],
+    libras: [6, 3, 13, 12, 18, 22, 17, 8, 10, 6, 25, 7, 14, 10, 20, 3, 8, 6]
+  };
+
   constructor() {
+    this.updateChart('euros');
+  }
+
+  updateChart(currency: string) {
     this.chartOptions = {
       series: [
         {
-          name: "Likes",
-          data: [4, 3, 10, 9, 29, 19, 22, 9, 12, 7, 19, 5, 13, 9, 17, 2, 7, 5]
+          name: currency,
+          data: this.data[currency]
         }
       ],
       chart: {
@@ -77,7 +87,7 @@ export class DivisePredictionComponent {
         ]
       },
       title: {
-        text: "Social Media",
+        text: "Evolución del Valor de la Divisa",
         align: "left",
         style: {
           fontSize: "16px",
@@ -109,9 +119,15 @@ export class DivisePredictionComponent {
         min: -10,
         max: 40,
         title: {
-          text: "Engagement"
+          text: "Valor"
         }
       }
     };
+  }
+
+  onCurrencyChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedCurrency = selectElement.value;
+    this.updateChart(selectedCurrency);
   }
 }

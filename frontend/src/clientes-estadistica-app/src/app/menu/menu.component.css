@@ -1,28 +1,28 @@
+/* Estilo para el menú de navegación */
 nav {
-    background-color: #333;
-    color: white;
-    padding: 1rem;
-  }
-  
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-  }
-  
-  li {
-    margin-right: 10px;
-  }
-  
-  a {
-    color: white;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-  }
-  
-  a.active {
-    background-color: #555;
-    border-radius: 5px;
-  }
-  
+  background-color: #333;
+  color: white;
+  padding: 1rem;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+li {
+  margin-right: 10px;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+}
+
+a.active {
+  background-color: #555;
+  border-radius: 5px;
+}
