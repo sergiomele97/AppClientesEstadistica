@@ -1,5 +1,4 @@
 import pandas as pd
-from statsmodels.tsa.holtwinters import ExponentialSmoothing
 import numpy as np 
 import matplotlib.pyplot as plt
 from statsmodels.tsa.arima.model import ARIMA
@@ -26,7 +25,7 @@ pred_mean = pred.predicted_mean
 pred_ci = pred.conf_int()
 
 # Mostrar las predicciones
-print(pred_mean)
+print(len(np.concatenate([ts, pred_mean])))
 print(pred_ci)
 
 # Visualizar los resultados
