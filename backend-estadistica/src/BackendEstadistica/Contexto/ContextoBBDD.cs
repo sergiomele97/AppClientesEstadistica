@@ -20,9 +20,9 @@ public class ContextoBBDD : DbContext
 
     public DbSet<EnvioEjemplo> EnvioEjemplo { get; set; } // 2ª Tabla
 
-    public DbSet<Cliente> Cliente { get; set; } // 3ª Tabla
+    public DbSet<Cliente> Clientes { get; set; } // 3ª Tabla
 
-    public DbSet<Pais> Pais { get; set; } // 4ª Tabla
+    public DbSet<Pais> Paises { get; set; } // 4ª Tabla
 
     public DbSet<Transaccion> Transacciones { get; set; } // 5ª Tabla
 
