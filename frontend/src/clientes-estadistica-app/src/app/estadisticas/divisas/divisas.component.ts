@@ -28,11 +28,11 @@ export type ChartOptions = {
 };
 
 @Component({
-  selector: 'app-divise-prediction',
-  templateUrl: './divise-prediction.component.html',
-  styleUrls: ['./divise-prediction.component.css']
+  selector: 'app-divisas',
+  templateUrl: './divisas.component.html',
+  styleUrls: ['./divisas.component.css']
 })
-export class DivisePredictionComponent {
+export class DivisasComponent {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
