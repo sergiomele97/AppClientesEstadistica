@@ -42,6 +42,7 @@ export class DivisePredictionComponent {
     libras: [6, 3, 13, 12, 18, 22, 17, 8, 10, 6, 25, 7, 14, 10, 20, 3, 8, 6]
   };
 
+
   private fechas = {
     euros: [ "2000-01-01", "2000-01-02", "2000-01-03", "2000-01-04", "2000-01-05", "2000-01-06", "2000-01-07", "2000-01-08", "2000-01-09", "2000-01-10", "2000-01-11", "2000-01-12", "2000-01-13", "2000-01-14", "2000-01-15", "2000-01-16", "2000-01-17", "2000-01-18"],
     dolares: [ "2000-01-01", "2000-01-02", "2000-01-03", "2000-01-04", "2000-01-05", "2000-01-06", "2000-01-07", "2000-01-08", "2000-01-09", "2000-01-10", "2000-01-11", "2000-01-12", "2000-01-13", "2000-01-14", "2000-01-15", "2000-01-16", "2000-01-17", "2000-01-18"],
@@ -60,7 +61,7 @@ export class DivisePredictionComponent {
         console.log('Received data:', response);
         const predictions = response.Prediction || [];
         const predictionData = predictions.length ? predictions : new Array(10).fill(0);
-
+        
         const historicalData = this.data[currency];
         const historicalDates = this.fechas[currency];
         const predictionDates = ["2000-01-19", "2000-01-20", "2000-01-21", "2000-01-22", "2000-01-23", "2000-01-24", "2000-01-25", "2000-01-26", "2000-01-27", "2000-01-28"];

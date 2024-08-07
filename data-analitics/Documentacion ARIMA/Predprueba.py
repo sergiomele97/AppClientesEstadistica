@@ -25,6 +25,12 @@ def main(requestFile, response_file):
     with open(response_file, 'w') as f:
         json.dump(response, f)
 
+
+
+
+
+
+
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print("Usage: script.py <requestFile> <response_file>")
