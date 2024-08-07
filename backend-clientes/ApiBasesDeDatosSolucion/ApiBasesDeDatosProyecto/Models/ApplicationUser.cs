@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace ApiBasesDeDatosProyecto.IDentity
+namespace ApiBasesDeDatosProyecto.Models
 {
     public class ApplicationUser : IdentityUser
     {
@@ -8,13 +8,10 @@ namespace ApiBasesDeDatosProyecto.IDentity
         public string? FullName { get; set; }
         public string? Address { get; set; }
         public DateTime? DateOfBirth { get; set; }
-        public required string Rol { get; set; } 
+        public required string Rol { get; set; }
 
         public bool IsDeleted { get; set; }
         public int? paisId { get; set; }
-
-
-
 
     }
 }
