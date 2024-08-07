@@ -1,0 +1,52 @@
+<div class="container mx-auto mt-40">
+    <h2 class="text-center text-3xl font-bold mb-4">Registro</h2>
+  
+    <form [formGroup]="registroAdminForm" (ngSubmit)="onSubmit()" class="form">
+  
+      <div class="flex flex-col">
+        <label for="email" class="mb-2 text-lg font-semibold">Email</label>
+        <input id="email" class="input" type="email" formControlName="Correo">
+        <div *ngIf="registroAdminForm.get('Correo').invalid && registroAdminForm.get('Correo').touched" class="text-red-500">
+          <div *ngIf="registroAdminForm.get('Correo').hasError('required')">El email es requerido.</div>
+          <div *ngIf="registroAdminForm.get('Correo').hasError('email')">El email no es válido.</div>
+        </div>
+      </div>
+  
+      <div class="flex flex-col">
+        <label for="password" class="mb-2 text-lg font-semibold">Contraseña</label>
+        <input id="password" class="input" type="password" formControlName="Contraseña">
+        <div *ngIf="registroAdminForm.get('Contraseña').invalid && registroAdminForm.get('Contraseña').touched" class="text-red-500">
+          <div *ngIf="registroAdminForm.get('Contraseña').hasError('required')">La contraseña es requerida.</div>
+          <div *ngIf="registroAdminForm.get('Contraseña').hasError('minlength')">La contraseña debe tener al menos 6 caracteres.</div>
+        </div>
+      </div>
+  
+      <div class="flex flex-col">
+        <label for="password2" class="mb-2 text-lg font-semibold">Confirmar Contraseña</label>
+        <input id="password2" class="input" type="password" formControlName="Contraseña2">
+        <div *ngIf="registroAdminForm.get('Contraseña2').invalid && registroAdminForm.get('Contraseña2').touched" class="text-red-500">
+          <div *ngIf="registroAdminForm.get('Contraseña2').hasError('required')">Debes confirmar la contraseña.</div>
+          <div *ngIf="registroAdminForm.get('Contraseña2').hasError('passwordMismatch')">Las contraseñas no coinciden.</div>
+        </div>
+      </div>
+  
+      <div class="flex flex-col">
+        <label for="pais" class="mb-2 text-lg font-semibold">País</label>
+        <input id="pais" class="input" type="text" formControlName="PaisNombre">
+        <div *ngIf="registroAdminForm.get('PaisNombre').invalid && registroAdminForm.get('PaisNombre').touched" class="text-red-500">
+          <div *ngIf="registroAdminForm.get('PaisNombre').hasError('required')">El país es requerido.</div>
+        </div>
+      </div>
+  
+      <div class="flex flex-col">
+        <label for="fecha" class="mb-2 text-lg font-semibold">Fecha de Nacimiento</label>
+        <input id="fecha" class="input" type="date" formControlName="FechaNac">
+        <div *ngIf="registroAdminForm.get('FechaNac').invalid && registroAdminForm.get('FechaNac').touched" class="text-red-500">
+          <div *ngIf="registroAdminForm.get('FechaNac').hasError('required')">La fecha de nacimiento es requerida.</div>
+        </div>
+      </div>
+  
+      <button type="submit" class="button">Registrar</button>
+    </form>
+  </div>
+  
