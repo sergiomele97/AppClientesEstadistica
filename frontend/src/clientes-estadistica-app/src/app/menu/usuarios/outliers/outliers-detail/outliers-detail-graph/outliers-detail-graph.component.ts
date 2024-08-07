@@ -31,7 +31,6 @@ export type ChartOptions = {
 
 export class OutliersDetailGraphComponent implements OnInit {
 
-
   envios: any[];
 
   @ViewChild("chart") chart: ChartComponent;
@@ -86,9 +85,7 @@ export class OutliersDetailGraphComponent implements OnInit {
       },
 
       xaxis: {
-        categories: [
-          fechas
-        ],
+        categories: fechas,
         position: "bottom",
         labels: {
           offsetY: 0
