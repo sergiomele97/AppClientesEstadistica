@@ -1,4 +1,6 @@
-﻿[Route("api/[controller]")]
+﻿using System;
+
+[Route("api/[controller]")]
 [ApiController]
 public class AccountController : ControllerBase
 {
@@ -52,12 +54,14 @@ public class AccountController : ControllerBase
         {
             return BadRequest("Role does not exist.");
         }
+        DateTime FechaNac = DateTimeOffset.FromUnixTimeMilliseconds(model.FechaNacimiento).UtcDateTime;
 
         var user = new ApplicationUser
         {
             UserName = model.Email,
             Email = model.Email,
-            Rol = model.Rol // Asignar el rol recibido
+            Rol = model.Rol, // Asignar el rol recibido
+            DateOfBirth = FechaNac
         };
 
         var result = await _userManager.CreateAsync(user, model.Password);
@@ -73,9 +77,9 @@ public class AccountController : ControllerBase
                 {
                     Nombre = model.Nombre,
                     Apellido = model.Apellido,
-                    FechaNacimiento = model.FechaNacimiento,
                     PaisId = model.PaisId,
-                    Empleo = model.Empleo
+                    Empleo = model.Empleo,
+                    FechaNacimiento = FechaNac,
                     // Asignar el ID del usuario si es necesario
                     //UserId = user.Id
                 };

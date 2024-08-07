@@ -11,7 +11,6 @@ namespace ApiBasesDeDatosProyecto.IDentity
         public required string Rol { get; set; } 
 
         public bool IsDeleted { get; set; }
-        public int? paisId { get; set; }
 
 
 

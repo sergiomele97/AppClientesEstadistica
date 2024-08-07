@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiBasesDeDatosProyecto.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240806103425_migracionEntera")]
-    partial class migracionEntera
+    [Migration("20240802110356_MigracionEmpleoClientes")]
+    partial class MigracionEmpleoClientes
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -211,9 +211,6 @@ namespace ApiBasesDeDatosProyecto.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -250,9 +247,6 @@ namespace ApiBasesDeDatosProyecto.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<int?>("paisId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

@@ -208,9 +208,6 @@ namespace ApiBasesDeDatosProyecto.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -247,9 +244,6 @@ namespace ApiBasesDeDatosProyecto.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<int?>("paisId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

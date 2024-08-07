@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../servicios/user.service';
+import { Usuario } from '../interfaces/usuario.interface'; // Ajusta la ruta según sea necesario
 
 @Component({
   selector: 'app-registro',
@@ -21,9 +22,10 @@ export class RegistroComponent implements OnInit {
       Correo: ['', [Validators.required, Validators.email]],
       Contraseña: ['', Validators.required],
       Contraseña2: ['', Validators.required],
-      Rol: ['Client', Validators.required],  // Puede ser un campo oculto si siempre es 'Client'
-      PaisNombre: ['', ], // Campo para el nombre del país
-      Empleo: ['',]
+      Rol: ['Admin', Validators.required],  // Puede ser un campo oculto si siempre es 'Client'
+      PaisNombre: ['',], // Campo para el nombre del país
+      Empleo: ['',],
+      FechaNac: ['',]
     });
   }
 
@@ -33,14 +35,15 @@ export class RegistroComponent implements OnInit {
         console.error('Las contraseñas no coinciden');
         return;
       }
-      
+
       // Obtener el ID del país por nombre
-       this.miServicio.obtenerPaisIdPorNombre(this.registroForm.value.PaisNombre).subscribe(
+      this.miServicio.obtenerPaisIdPorNombre(this.registroForm.value.PaisNombre).subscribe(
         response => {
           this.paisId = response.id;
           if (this.paisId !== null) {
             // Crear el objeto usuario con el PaisId obtenido
-            const usuario = {
+            const fechaNacTimestamp = new Date(this.registroForm.value.FechaNac).getTime();
+            const usuario: Usuario = {
               Email: this.registroForm.value.Correo,
               Password: this.registroForm.value.Contraseña,
               ConfirmPassword: this.registroForm.value.Contraseña2,
@@ -48,8 +51,8 @@ export class RegistroComponent implements OnInit {
               Apellido: this.registroForm.value.Apellido,
               Rol: this.registroForm.value.Rol,
               PaisId: this.paisId, // Asignar el ID del país al usuario
-              Empleo: this.registroForm.value.Empleo
-              
+              Empleo: this.registroForm.value.Empleo,
+              FechaNacimiento: fechaNacTimestamp
             };
             // Registrar el usuario
             this.miServicio.registrarUsuario(usuario).subscribe(
