@@ -1,8 +1,8 @@
-﻿namespace BackendEstadistica.Entidades;
+﻿namespace BackendEstadistica.Models;
 
-public class Conversion
+public class ConversionDto
 {
-    [Key]
+
     public int Id { get; set; }
     public int ClienteId { get; set; }
     public DateTime? Fecha { get; set; }
