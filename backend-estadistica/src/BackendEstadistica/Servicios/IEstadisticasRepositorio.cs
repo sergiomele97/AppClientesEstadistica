@@ -17,10 +17,6 @@
         Transaccion GetTransaccionById(int id);
         void CrearTransaccion(Conversion conversion);
 
-        //Pais
-        List<Pais>GetPais();
-        Pais GetPaisById(int id);
-        void CrearPais(Pais pais);
 
     }
 }
