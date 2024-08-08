@@ -22,7 +22,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegistroComponent },
   { path: "registroAdmin", component: RegistroAdminComponent },
-  { path: 'users-info', component: UsersInfoComponent },
+  { path: 'users-info', component: UsersInfoComponent, canActivate: [AuthGuard], },
   { path: "estadistica", component: EstadisticaComponent},
   { path: "estadisticas", component: EstadisticasComponent, canActivate: [AuthGuard],
     children: [
