@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../servicios/user.service';
-import { Usuario } from '../interfaces/usuario.interface';
+import { Usuario } from '../interfaces/usuario.interface'; // Ajusta la ruta según sea necesario
 
 @Component({
   selector: 'app-registro',
@@ -16,47 +16,53 @@ export class RegistroComponent implements OnInit {
 
   ngOnInit(): void {
     this.registroForm = this.fb.group({
-      Nombre: ['', [Validators.required, Validators.minLength(3)]],
-      Apellido: ['', [Validators.required, Validators.minLength(3)]],
+      Nombre: ['', [Validators.required, Validators.minLength(2)]],
+      Apellido: ['', [Validators.required, Validators.minLength(2)]],
       Correo: ['', [Validators.required, Validators.email]],
-      Contraseña: ['', [Validators.required, Validators.minLength(6)]],
-      Contraseña2: ['', [Validators.required]],
-      Rol: ['Client', Validators.required],
-      PaisNombre: ['', Validators.required],
+      Contraseña: ['', [
+        Validators.required,
+        Validators.minLength(6),
+        this.passwordValidators
+      ]],
+      Contraseña2: ['', [Validators.required, Validators.minLength(6)]],
+      Rol: ['Client', Validators.required],  // Puede ser un campo oculto si siempre es 'Client'
+      PaisNombre: [''],
       Empleo: [''],
       FechaNac: ['', Validators.required]
     }, {
-      validator: this.passwordMatchValidator('Contraseña', 'Contraseña2')
+      validators: this.passwordMatchValidator
     });
   }
 
-  passwordMatchValidator(password: string, confirmPassword: string) {
-    return (formGroup: FormGroup) => {
-      const passwordControl = formGroup.get(password);
-      const confirmPasswordControl = formGroup.get(confirmPassword);
+  passwordValidators(control: any) {
+    const value = control.value || '';
+    const errors: any = {};
 
-      if (confirmPasswordControl?.errors && !confirmPasswordControl.errors['passwordMismatch']) {
-        return;
-      }
+    if (!/[A-Z]/.test(value)) {
+      errors['passwordRequiresUpper'] = true;
+    }
+    if (!/[a-z]/.test(value)) {
+      errors['passwordRequiresLower'] = true;
+    }
+    if (!/\W/.test(value)) { // \W matches any non-word character
+      errors['passwordRequiresNonAlphanumeric'] = true;
+    }
 
-      if (passwordControl?.value !== confirmPasswordControl?.value) {
-        confirmPasswordControl?.setErrors({ passwordMismatch: true });
-      } else {
-        confirmPasswordControl?.setErrors(null);
-      }
-    };
+    return Object.keys(errors).length ? errors : null;
+  }
+
+  passwordMatchValidator(form: FormGroup): { [key: string]: boolean } | null {
+    return form.get('Contraseña')?.value === form.get('Contraseña2')?.value
+      ? null
+      : { 'mismatch': true };
   }
 
   onSubmit(): void {
-    if (this.registroForm.invalid) {
-      this.showValidationErrors();
-      return;
-    }
-
-    if (this.registroForm.value.Contraseña !== this.registroForm.value.Contraseña2) {
-      alert('Las contraseñas no coinciden.');
-      return;
-    }
+    if (this.registroForm.valid) {
+      if (this.registroForm.value.Contraseña !== this.registroForm.value.Contraseña2) {
+        this.errorMessage = 'Passwords do not match.';
+        return;
+      }
 
     const fechaNacTimestamp = new Date(this.registroForm.value.FechaNac).getTime();
 
