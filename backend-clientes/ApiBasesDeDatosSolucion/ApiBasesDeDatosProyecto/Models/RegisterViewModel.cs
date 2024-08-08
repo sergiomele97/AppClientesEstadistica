@@ -15,5 +15,5 @@
     public string ?Nombre { get; set; }
     public string ?Apellido { get; set; }
     public long FechaNacimiento { get; set; }
-    public int PaisId { get; set; }
+    public string PaisNombre { get; set; }
 }

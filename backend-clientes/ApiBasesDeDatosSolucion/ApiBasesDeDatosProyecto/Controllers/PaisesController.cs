@@ -1,8 +1,11 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
+
 namespace ApiBasesDeDatosProyecto.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PaisesController : ControllerBase
     {
         private readonly IPaisRepository _paisRepository;
