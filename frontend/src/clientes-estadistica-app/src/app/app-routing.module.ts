@@ -15,12 +15,18 @@ import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 import { ClientesComponent } from './estadisticas/clientes/clientes.component';
 import { DivisasComponent } from './estadisticas/divisas/divisas.component';
 import { AuthGuard } from './auth.guard';
+import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
+import { EstadisticaComponent } from './estadistica/estadistica.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegistroComponent },
   { path: "registroAdmin", component: RegistroAdminComponent },
   { path: "estadisticas", component: EstadisticasComponent, canActivate: [AuthGuard],
+  { path: 'users-info', component: UsersInfoComponent },
+ 
+  { path: "estadistica", component: EstadisticaComponent},
+  { path: "estadisticas", component: EstadisticasComponent,
     children: [
       { path: 'outliers', component: OutliersComponent },
       { path: 'outliers/:id', component: OutliersDetailComponent },

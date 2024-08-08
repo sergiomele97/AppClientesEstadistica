@@ -26,13 +26,15 @@ import { ClustersTableComponent } from './estadisticas/clusters/clusters-table/c
 import { OutliersDetailTableComponent } from './estadisticas/outliers/outliers-detail/outliers-detail-table/outliers-detail-table.component';
 import { OutliersDetailGraphComponent } from './estadisticas/outliers/outliers-detail/outliers-detail-graph/outliers-detail-graph.component';
 import { ClustersDataService } from './servicios/clusters-data.service';
+import { EstadisticaComponent } from './estadistica/estadistica.component';
 import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 import { ClientesComponent } from './estadisticas/clientes/clientes.component';
 import { DivisasComponent } from './estadisticas/divisas/divisas.component';
 import { AuthGuard } from './auth.guard';
+import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 
 @NgModule({
-  declarations: [
+  declarations: [	
     AppComponent,
     LoginComponent,
     RegistroComponent,
@@ -52,9 +54,10 @@ import { AuthGuard } from './auth.guard';
     OutliersDetailComponent,
     OutliersDetailTableComponent, 
     OutliersDetailGraphComponent,
+    EstadisticaComponent,
     ClientesComponent,
     DivisasComponent,
-    
+    UsersInfoComponent
   ],
   imports: [
     BrowserModule,
