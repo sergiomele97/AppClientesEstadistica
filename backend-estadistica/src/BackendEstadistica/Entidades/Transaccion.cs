@@ -4,10 +4,12 @@ public class Transaccion
 {
     [Key]
     public int Id { get; set; }
-    public double? importeRecibido { get; set; }
-    public double? importeEnviado { get; set; }
+    public double? ImporteRecibido { get; set; }
+    public double? ImporteEnviado { get; set; }
     public DateTime? Fecha { get; set; }
-    public int idOrigen { get; set; }
-    public int idDestino { get; set; }
+    public int IdOrigen { get; set; }
+    public int IdDestino { get; set; }
+    public Cliente ClienteOrigen { get; set; }
+    public Cliente ClienteDestino { get; set; }
 
 }

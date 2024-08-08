@@ -29,5 +29,22 @@ public class ContextoBBDD : DbContext
     public DbSet<Conversion> Conversion { get; set; } // 6ª Tabla
 
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Transaccion>()
+            .HasOne(t => t.ClienteOrigen)
+            .WithMany(c => c.TransaccionesOrigen)
+            .HasForeignKey(t => t.IdOrigen)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Transaccion>()
+            .HasOne(t => t.ClienteDestino)
+            .WithMany(c => c.TransaccionesDestino)
+            .HasForeignKey(t => t.IdDestino)
+            .OnDelete(DeleteBehavior.Restrict);
+    }
+
 
 }
