@@ -1,6 +1,8 @@
-import { Component, ViewChildren, QueryList, ViewContainerRef, ElementRef, AfterViewInit, OnInit } from '@angular/core';
+import { Component, ViewChildren, QueryList, ViewContainerRef, ElementRef, AfterViewInit, OnInit, Type } from '@angular/core';
 import { VolumetryComponent } from '../estadisticas/volumetry/volumetry.component'; // Asegúrate de importar el componente que deseas añadir
 import { GraphComponent } from '../estadisticas/graph/graph.component';
+import { MapComponent } from '../estadisticas/map/map.component';
+import { SpaghettiComponent } from '../estadisticas/spaghetti/spaghetti.component';
 
 @Component({
   selector: 'app-estadistica',
@@ -44,7 +46,7 @@ export class EstadisticaComponent implements OnInit, AfterViewInit {
   }
 
   // Añadir componente al contenedor
-  addComponent() {
+  addComponent(componente: string) {
     for (let i = 0; i < this.ContenedoresLibres.length; i++) {
 
       if (this.ContenedoresLibres[i]) {
@@ -59,7 +61,22 @@ export class EstadisticaComponent implements OnInit, AfterViewInit {
         element.nativeElement.style.display = 'none'; // Oculta el div
 
         // Crea y añade el nuevo componente
-        container.createComponent(GraphComponent);
+        switch (componente) {
+          case 'Volumetria':
+            container.createComponent(VolumetryComponent);
+            break
+          case 'Map':
+            container.createComponent(MapComponent);
+            break
+          case 'Graph':
+            container.createComponent(GraphComponent);
+            break
+          case 'Spaghetti':
+            container.createComponent(SpaghettiComponent);
+            break
+          default:
+            break
+        }
 
         this.ContenedoresLibres[i] = false
         return;
