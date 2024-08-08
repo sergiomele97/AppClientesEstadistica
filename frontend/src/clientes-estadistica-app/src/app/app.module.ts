@@ -29,6 +29,7 @@ import { ClustersDataService } from './servicios/clusters-data.service';
 import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 import { ClientesComponent } from './estadisticas/clientes/clientes.component';
 import { DivisasComponent } from './estadisticas/divisas/divisas.component';
+import { AuthGuard } from './auth.guard';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { DivisasComponent } from './estadisticas/divisas/divisas.component';
     OutliersDetailGraphComponent,
     ClientesComponent,
     DivisasComponent,
+    
   ],
   imports: [
     BrowserModule,
