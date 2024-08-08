@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { RegistroComponent } from './registro/registro.component';
+import { RegistroAdminComponent } from './registroAdmin/registroAdmin.component';
 import { LoginComponent } from './login/login.component';
 import { UserService } from './servicios/user.service';
 import { MenuComponent } from './menu/menu.component';
@@ -38,6 +39,7 @@ import { EstadisticaComponent } from './estadistica/estadistica.component';
     AppComponent,
     LoginComponent,
     RegistroComponent,
+    RegistroAdminComponent,
     ClientesComponent,
     UsuariosComponent,
     MenuComponent,
