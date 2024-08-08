@@ -28,13 +28,13 @@ public class IdentityInitializer
         }
 
         // Crear un usuario admin por defecto
-        var adminUser = await _userManagerIdentity.FindByNameAsync("admin@domain.com");
+        var adminUser = await _userManagerIdentity.FindByEmailAsync("admin@domain.com");
         if (adminUser == null)
         {
             adminUser = new ApplicationUser
             {
                 Email = "admin@domain.com",
-                Rol = "Cliente"
+                Rol = "Admin"
                 // Inicializa aquí las propiedades obligatorias si las hay
             };
             var result = await _userManagerIdentity.CreateAsync(adminUser, "Password123!");

@@ -1,4 +1,6 @@
 ﻿using ApiBasesDeDatosProyecto.IDentity.Serivicios;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR.Protocol;
 using System;
 
 [Route("api/[controller]")]
@@ -35,6 +37,19 @@ public class AccountController : ControllerBase
         return Ok(users);
     }
 
+    [HttpGet("verificarRol")]
+    public async Task<IActionResult> VerificarRol(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+            return NotFound("Usuario no encontrado.");
+        }
+
+        var roles = await _userManager.GetRolesAsync(user);
+        return Ok(new { roles });
+    }
+
     [HttpDelete("users/{id}")]
     public async Task<IActionResult> DeleteUser(string id)
     {
@@ -49,29 +64,25 @@ public class AccountController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
     {
-        // Validar que el rol sea válido
-        if (!await _roleManager.RoleExistsAsync(model.Rol))
-        {
-            return BadRequest("Role does not exist.");
-        }
         DateTime FechaNac = DateTimeOffset.FromUnixTimeMilliseconds(model.FechaNacimiento).UtcDateTime;
+        string rolPorDefecto = "Admin";
 
         var user = new ApplicationUser
         {
             UserName = model.Email,
             Email = model.Email,
-            Rol = model.Rol, // Asignar el rol recibido
-            DateOfBirth = FechaNac
+            DateOfBirth = FechaNac,
+            Rol = rolPorDefecto
         };
 
         var result = await _userManager.CreateAsync(user, model.Password);
         if (result.Succeeded)
         {
-            // Asignar rol a usuario
-            await _userManager.AddToRoleAsync(user, user.Rol);
+            //Asignar un rol predeterminado
+            await _userManager.AddToRoleAsync(user, rolPorDefecto);
 
             // Si es un cliente, guardar datos adicionales
-            if (user.Rol == "Client")
+            if (rolPorDefecto == "Client")
             {
                 var cliente = new Cliente
                 {
@@ -85,7 +96,7 @@ public class AccountController : ControllerBase
                 };
                 await _clienteService.RegisterClientAsync(cliente);
             }
-
+           
             var token = _tokenService.GenerateJwtToken(user);
             return Ok(new { Token = token });
         }
@@ -112,39 +123,35 @@ public class AccountController : ControllerBase
         return Unauthorized();
     }
 
-    [HttpPost("change-role")]
-    public async Task<IActionResult> ChangeRole([FromBody] ChangeRoleViewModel model)
+    [HttpPost("cambiarRolPorEmail")]
+    //[Authorize(Roles = "Admin")]
+    public async Task<IActionResult> CambiarRolUsuario([FromBody] ChangeRoleViewModel model)
     {
-        // Validar que el rol sea válido
-        if (!await _roleManager.RoleExistsAsync(model.NuevoRol))
-        {
-            return BadRequest("Role does not exist.");
-        }
-
-        // Buscar el usuario por su ID
-        var user = await _userManager.FindByIdAsync(model.UserId);
+        var user = await _userManager.FindByEmailAsync(model.Email);
         if (user == null)
         {
-            return NotFound("User not found.");
+            return NotFound();
         }
 
-        // Obtener los roles actuales del usuario
-        var currentRoles = await _userManager.GetRolesAsync(user);
+        var rolesActuales = await _userManager.GetRolesAsync(user);
 
-        // Eliminar todos los roles actuales del usuario
-        var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
-        if (!removeResult.Succeeded)
+        if (!await _roleManager.RoleExistsAsync(model.NuevoRol))
         {
-            return BadRequest("Failed to remove current roles.");
+            return BadRequest();
         }
 
-        // Asignar el nuevo rol al usuario
-        var addResult = await _userManager.AddToRoleAsync(user, model.NuevoRol);
-        if (!addResult.Succeeded)
+        if (await _userManager.IsInRoleAsync(user, model.NuevoRol))
         {
-            return BadRequest("Failed to add new role.");
+            return BadRequest();
         }
 
-        return Ok("Role changed successfully.");
+        var result = await _userManager.AddToRoleAsync(user, model.NuevoRol);
+        if (!result.Succeeded)
+        {
+            return BadRequest();
+        }
+
+        rolesActuales = await _userManager.GetRolesAsync(user);
+        return Ok($"Rol actualizado correctamente - Roles actuales del usuario con Email {model.Email}: {string.Join(", ", rolesActuales)}");
     }
 }
