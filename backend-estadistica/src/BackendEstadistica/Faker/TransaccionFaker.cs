@@ -5,8 +5,9 @@ namespace BackendEstadistica.Faker
     public class TransaccionFaker : Faker<Transaccion>
     {
 
-        public TransaccionFaker(List<Cliente> clientes)
+        public TransaccionFaker()
         {
+            List<Cliente> clientes = new List<Cliente>();
             int maxClienteId = clientes.Max(c => c.Id);
 
             RuleFor(t => t.ImporteRecibido, f => f.Random.Double(1.0, 100.0))

@@ -16,7 +16,6 @@ namespace BackendEstadistica.Controllers
             this.estadisticasRepositorio = estadisticasRepositorio;
             this.mapper = mapper;
         }
-
       
 
     }

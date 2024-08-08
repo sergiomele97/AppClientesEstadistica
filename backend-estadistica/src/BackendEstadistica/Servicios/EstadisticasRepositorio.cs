@@ -52,21 +52,25 @@ namespace BackendEstadistica.Servicios
             return contextoBBDD.Conversion.FirstOrDefault(c => c.Id == id);
         }
 
+
         //Transacciones
 
         public void CrearTransaccion(Conversion conversion)
         {
-            throw new NotImplementedException();
+            var transaccionFake = new TransaccionFaker().Generate();
+
+            contextoBBDD.Transacciones.Add(transaccionFake);
+            contextoBBDD.SaveChanges();
         }
 
         public List<Transaccion> GetTransacciones()
         {
-            throw new NotImplementedException();
+            return contextoBBDD.Transacciones.ToList();
         }
 
         public Transaccion GetTransaccionById(int id)
         {
-            throw new NotImplementedException();
+            return contextoBBDD.Transacciones.FirstOrDefault(t => t.Id == id);
         }
 
     }

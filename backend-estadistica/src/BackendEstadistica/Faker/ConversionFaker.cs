@@ -5,8 +5,9 @@ namespace BackendEstadistica.Faker
     public class ConversionFaker : Faker<Conversion>
     {
 
-        public ConversionFaker(List<Cliente> clientes)
+        public ConversionFaker()
         {
+            List<Cliente> clientes = new List<Cliente>();
             int maxClienteId = clientes.Max(c => c.Id);
 
             RuleFor(c => c.Fecha, f => f.Date.Past(1))
