@@ -3,9 +3,9 @@
 namespace BackendEstadistica.Controllers
 {
 
-    [Route("api/clienteConversion")]
+    [Route("api/estadisticas")]
     [ApiController]
-    public class ClienteConversionController : Controller
+    public class EstadisticasController : Controller
     {
         
 

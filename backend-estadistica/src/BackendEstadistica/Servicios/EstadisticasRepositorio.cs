@@ -1,11 +1,11 @@
 ﻿
 namespace BackendEstadistica.Servicios
 {
-    public class ClienteConversionRepositorio : IClienteConversionRepositorio
+    public class EstadisticasRepositorio : IEstadisticasRepositorio
     {
         private readonly ContextoBBDD contextoBBDD;
 
-        public ClienteConversionRepositorio(ContextoBBDD contextoBBDD)
+        public EstadisticasRepositorio(ContextoBBDD contextoBBDD)
         {
             this.contextoBBDD = contextoBBDD;
         }
@@ -50,6 +50,23 @@ namespace BackendEstadistica.Servicios
         public Conversion GetConversionById(int id)
         {
             return contextoBBDD.Conversion.FirstOrDefault(c => c.Id == id);
+        }
+
+        //Transacciones
+
+        public void CrearTransaccion(Conversion conversion)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Transaccion> GetTransacciones()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Transaccion GetTransaccionById(int id)
+        {
+            throw new NotImplementedException();
         }
 
     }
