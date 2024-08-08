@@ -26,6 +26,7 @@ export type ChartOptions = {
   templateUrl: './graph.component.html',
   styleUrls: ['./graph.component.css']
 })
+
 export class GraphComponent {
 
   @ViewChild("chart") chart: ChartComponent;

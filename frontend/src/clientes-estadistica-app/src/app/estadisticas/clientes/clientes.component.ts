@@ -19,12 +19,12 @@ export type ChartOptions = {
 };
 
 @Component({
-  selector: 'app-balance',
-  templateUrl: './balance.component.html',
-  styleUrls: ['./balance.component.css']
+  selector: 'app-clientes',
+  templateUrl: './clientes.component.html',
+  styleUrls: ['./clientes.component.css']
 })
 
-export class BalanceComponent  {
+export class ClientesComponent  {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
