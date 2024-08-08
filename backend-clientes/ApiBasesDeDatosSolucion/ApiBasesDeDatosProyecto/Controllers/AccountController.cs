@@ -143,28 +143,33 @@ namespace ApiBasesDeDatosProyecto.Controllers
         }
 
         [HttpPost("cambiarRolPorEmail")]
-        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> CambiarRolUsuario([FromBody] ChangeRoleViewModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                return NotFound();
+                return NotFound("User not found.");
             }
-
-            var rolesActuales = await _userManager.GetRolesAsync(user);
 
             if (!await _roleManager.RoleExistsAsync(model.NuevoRol))
             {
-                return BadRequest();
+                return BadRequest("Role does not exist.");
             }
 
             // Obtener los roles actuales del usuario
             var currentRoles = await _userManager.GetRolesAsync(user);
 
-            if (await _userManager.IsInRoleAsync(user, model.NuevoRol))
+            // Eliminar roles antiguos si es necesario
+            foreach (var role in currentRoles)
             {
-                return BadRequest();
+                if (await _userManager.IsInRoleAsync(user, role))
+                {
+                    var removeResult = await _userManager.RemoveFromRoleAsync(user, role);
+                    if (!removeResult.Succeeded)
+                    {
+                        return BadRequest("Failed to remove old role.");
+                    }
+                }
             }
 
             // Asignar el nuevo rol al usuario
@@ -172,11 +177,6 @@ namespace ApiBasesDeDatosProyecto.Controllers
             if (!addResult.Succeeded)
             {
                 return BadRequest("Failed to add new role.");
-            }
-            var result = await _userManager.AddToRoleAsync(user, model.NuevoRol);
-            if (!result.Succeeded)
-            {
-                return BadRequest();
             }
 
             return Ok("Role changed successfully.");
