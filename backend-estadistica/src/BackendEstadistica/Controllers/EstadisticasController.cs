@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BackendEstadistica.Servicios;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BackendEstadistica.Controllers
 {
@@ -16,7 +17,19 @@ namespace BackendEstadistica.Controllers
             this.estadisticasRepositorio = estadisticasRepositorio;
             this.mapper = mapper;
         }
-      
+
+
+        //Clientes
+
+        [HttpPost("crearCliente")]
+        public string CrearCliente(Cliente nuevoCliente)
+        {
+
+            estadisticasRepositorio.CrearCliente(nuevoCliente);
+
+            return "Usuario creado correctamente";
+
+        }
 
     }
 }

@@ -8,7 +8,7 @@ namespace BackendEstadistica.Faker
         public ConversionFaker()
         {
             List<Cliente> clientes = new List<Cliente>();
-            int maxClienteId = clientes.Max(c => c.Id);
+            int maxClienteId = clientes.Max(c => c.ClienteId);
 
             RuleFor(c => c.Fecha, f => f.Date.Past(1))
             .RuleFor(c => c.MonedaOrigen, f => f.Finance.Currency().Code)

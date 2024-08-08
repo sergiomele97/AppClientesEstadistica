@@ -28,7 +28,7 @@ namespace BackendEstadistica.Servicios
 
         public Cliente GetClienteById(int id)
         {
-            return contextoBBDD.Clientes.FirstOrDefault(c => c.Id == id);
+            return contextoBBDD.Clientes.FirstOrDefault(c => c.ClienteId == id);
         }
         
 
@@ -49,7 +49,7 @@ namespace BackendEstadistica.Servicios
 
         public Conversion GetConversionById(int id)
         {
-            return contextoBBDD.Conversion.FirstOrDefault(c => c.Id == id);
+            return contextoBBDD.Conversion.FirstOrDefault(c => c.ConversionId == id);
         }
 
 
@@ -70,7 +70,7 @@ namespace BackendEstadistica.Servicios
 
         public Transaccion GetTransaccionById(int id)
         {
-            return contextoBBDD.Transacciones.FirstOrDefault(t => t.Id == id);
+            return contextoBBDD.Transacciones.FirstOrDefault(t => t.TransaccionId == id);
         }
 
     }

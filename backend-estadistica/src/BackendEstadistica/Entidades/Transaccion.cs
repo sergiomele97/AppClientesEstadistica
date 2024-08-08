@@ -3,13 +3,15 @@
 public class Transaccion
 {
     [Key]
-    public int Id { get; set; }
+    public int TransaccionId { get; set; }
     public double? ImporteRecibido { get; set; }
     public double? ImporteEnviado { get; set; }
     public DateTime? Fecha { get; set; }
-    public int IdOrigen { get; set; }
-    public int IdDestino { get; set; }
-    public Cliente ClienteOrigen { get; set; }
-    public Cliente ClienteDestino { get; set; }
+    public int ClienteOrigenId { get; set; }
+    public int ClienteDestinoId { get; set; }
+
+    //Relaciones
+    public Cliente ClienteOrigen { get; set; } = null!;
+    public Cliente ClienteDestino { get; set; } = null!;
 
 }

@@ -15,16 +15,14 @@ namespace BackendEstadistica.Controllers;
 public class UsuariosController : ControllerBase
 {
     private readonly IUsuarioRepositorio usuarioRepositorio;
-    private readonly IEnvioEjemploRepositorio envioEjemploRepositorio;
     private readonly IMapper mapper;
 
 
     //  Constructor de la clase:
-    public UsuariosController( IUsuarioRepositorio usuarioRepositorio, IEnvioEjemploRepositorio envioEjemploRepositorio ,IMapper mapper)
+    public UsuariosController( IUsuarioRepositorio usuarioRepositorio, IMapper mapper)
     {
         this.usuarioRepositorio = usuarioRepositorio;
         this.mapper = mapper;
-        this.envioEjemploRepositorio = envioEjemploRepositorio;
     }
 
 
@@ -118,26 +116,6 @@ public class UsuariosController : ControllerBase
         }
 
         return Ok("El usuario se borró correctamente");
-
-    }
-
-    [HttpPost("crearEnvio")]
-    public IActionResult CrearEnvio(EnvioEjemplo nuevoEnvio)
-    {
-
-        envioEjemploRepositorio.CrearEnvio(nuevoEnvio);
-
-        return CreatedAtAction(nameof(CrearEnvio), new { id = nuevoEnvio.Id }, nuevoEnvio);
-
-    }
-
-
-    [HttpGet("getEnvios")]
-    public IActionResult GetEnvioEjemplo()
-    {
-        List<EnvioEjemplo> envios = envioEjemploRepositorio.GetEnvio();
-
-        return Ok(mapper.Map<List<EnvioEjemplo>>(envios));
 
     }
 
