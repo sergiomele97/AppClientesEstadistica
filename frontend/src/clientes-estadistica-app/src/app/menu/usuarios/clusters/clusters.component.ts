@@ -8,29 +8,21 @@ import { ClustersDataService } from 'src/app/servicios/clusters-data.service';
   styleUrls: ['./clusters.component.css'],
 })
 export class ClustersComponent implements OnInit {
+  private n_cluster: number | null = null;  // Propiedad para almacenar n_cluster
+
   constructor(private dataService: ClustersDataService) {}
 
-  ngOnInit() {}
 
+
+  ngOnInit() {}
 
   onSelectionCluster(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const cluster = selectElement.value;
 
-    let n_cluster: any = [];
-    if (cluster === '1') {
-      n_cluster=1
-   } else if (cluster === '2') {
-    n_cluster=2
-   }else if (cluster === '3') {
-    n_cluster=3
-   }else if (cluster === '4') {
-    n_cluster=4
-   }else if (cluster === '5') {
-    n_cluster=5
-   };
-  
-   this.dataService.setSelectednCluster(n_cluster);
+    this.n_cluster = parseInt(cluster, 10);
+
+    this.dataService.setSelectednCluster(this.n_cluster);
   }
 
   onSelectionChange(event: Event) {
@@ -70,8 +62,47 @@ export class ClustersComponent implements OnInit {
         [33.4, 0], [16.4, 0],
       ];
     }
+    
+
+    
 
     this.dataService.setSelectedData(sampleData);
-    
+
+    if (this.n_cluster !== null && !Number.isNaN(this.n_cluster)) {
+      console.log('cluster:', this.n_cluster);
+      this.dataService.sendDataToBackend(sampleData, this.n_cluster).subscribe(
+        response => {
+          console.log('Received data:', response);
+          //recogemos los datos del codigo de python
+          const etiqueta = response.etiqueta || [];
+          const centros = response.centros || [];
+          const db_index = response.db_index || [];
+          //enviamos el valor de la etiqueta
+          this.dataService.setSendLabel(etiqueta);
+
+        },
+        error => {
+          console.error('Error al enviar datos al backend:', error);
+        }
+      );
+    } else {
+      console.error('n_cluster no está definido.');
+      this.n_cluster=2;
+      this.dataService.sendDataToBackend(sampleData, this.n_cluster).subscribe(
+        response => {
+          console.log('Received data:', response);
+          //recogemos los datos del codigo de python
+          const etiqueta = response.etiqueta || [];
+          const centros = response.centros || [];
+          const db_index = response.db_index || [];
+          //enviamos el valor de la etiqueta
+          this.dataService.setSendLabel(etiqueta);
+          
+        },
+        error => {
+          console.error('Error al enviar datos al backend:', error);
+        }
+      );
+    }
   }
 }

@@ -32,7 +32,13 @@ def predict():
 @app.route('/cluster', methods=['POST'])
 def cluster():
     # requestFile: en teoría es un json habrá que leerlo
-    data = request.json
+    print("Se ejecuta el python cluster")
+    recibido = request.json
+# Acceder a los elementos
+    data = recibido['sampleData']
+    n_clusters = recibido['nCluster']
+    #print(data)
+    #print(n_clusters)
     # Aplicar K-means
     kmeans = KMeans(n_clusters=n_clusters, random_state=0)
     kmeans.fit(data)
@@ -41,12 +47,16 @@ def cluster():
 
     # Calcular el índice de Davies-Bouldin
     db_score = davies_bouldin_score(data, labels)
+    n_cluster=2
+    sample_data = 18
 
     response = {
        "etiqueta": kmeans.labels_, 
        "centros": centers,
        "DB_index": db_score
     }
+
+    print(response)
     return jsonify(response)
 
 
