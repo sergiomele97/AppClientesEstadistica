@@ -1,23 +1,20 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-
-import { DivisePredictionComponent } from './divise-prediction.component';
+import { DivisasComponent } from './divisas.component';
 
 describe('DivisePredictionComponent', () => {
-  let component: DivisePredictionComponent;
-  let fixture: ComponentFixture<DivisePredictionComponent>;
+  let component: DivisasComponent;
+  let fixture: ComponentFixture<DivisasComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DivisePredictionComponent ]
+      declarations: [ DivisasComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DivisePredictionComponent);
+    fixture = TestBed.createComponent(DivisasComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

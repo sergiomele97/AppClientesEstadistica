@@ -21,11 +21,13 @@ export type ChartOptions = {
   legend: ApexLegend;
   fill: ApexFill;
 };
+
 @Component({
   selector: 'app-spaghetti',
   templateUrl: './spaghetti.component.html',
   styleUrls: ['./spaghetti.component.css']
 })
+
 export class SpaghettiComponent {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
