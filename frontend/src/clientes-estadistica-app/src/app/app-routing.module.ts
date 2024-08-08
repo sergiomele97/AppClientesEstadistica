@@ -17,11 +17,9 @@ import { DivisasComponent } from './estadisticas/divisas/divisas.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-
   { path: 'registro', component: RegistroComponent },
-
-  { path: "registro", component: RegistroComponent },
   { path: "registroAdmin", component: RegistroAdminComponent },
+ 
   { path: "estadisticas", component: EstadisticasComponent,
     children: [
       { path: 'outliers', component: OutliersComponent },
