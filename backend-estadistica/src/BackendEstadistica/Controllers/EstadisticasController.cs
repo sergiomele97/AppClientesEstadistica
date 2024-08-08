@@ -8,7 +8,16 @@ namespace BackendEstadistica.Controllers
     public class EstadisticasController : Controller
     {
         
+        private readonly IEstadisticasRepositorio estadisticasRepositorio;
+        private readonly IMapper mapper;
 
+        public EstadisticasController(IEstadisticasRepositorio estadisticasRepositorio, IMapper mapper)
+        {
+            this.estadisticasRepositorio = estadisticasRepositorio;
+            this.mapper = mapper;
+        }
+
+      
 
     }
 }
