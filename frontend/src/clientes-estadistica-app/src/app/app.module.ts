@@ -38,8 +38,6 @@ import { DivisasComponent } from './estadisticas/divisas/divisas.component';
     EstadisticasComponent,
     RegistroAdminComponent,
     ClientesComponent,
-    UsuariosComponent,
-    MenuComponent,
     VolumetryComponent,
     ClustersComponent,
     ClustersGraphComponent,      

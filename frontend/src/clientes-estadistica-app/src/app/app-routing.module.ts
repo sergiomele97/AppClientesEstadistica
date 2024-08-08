@@ -19,12 +19,10 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
 
   { path: 'registro', component: RegistroComponent },
-  {
-    path: 'estadisticas',
-    component: EstadisticasComponent,
+
   { path: "registro", component: RegistroComponent },
   { path: "registroAdmin", component: RegistroAdminComponent },
-  { path: "menu", component: MenuComponent,
+  { path: "estadisticas", component: EstadisticasComponent,
     children: [
       { path: 'outliers', component: OutliersComponent },
       { path: 'outliers/:id', component: OutliersDetailComponent },
