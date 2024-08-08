@@ -26,7 +26,9 @@
     <tbody>
       <tr *ngFor="let envio of enviosFilter | paginate: { itemsPerPage: 20, currentPage: currentPage }" class="bg-white border-b">
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-          {{ envio.id }}
+          <a [routerLink]="['/estadisticas/clientes', envio.id]">
+            {{ envio.id }}
+          </a>
         </th>
         <td class="px-6 py-4">
           {{ envio.cantidad }}

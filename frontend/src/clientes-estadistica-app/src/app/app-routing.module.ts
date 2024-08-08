@@ -36,6 +36,7 @@ const routes: Routes = [
       { path: 'spaghetti', component: SpaghettiComponent },
       { path: 'table', component: TableComponent },
       { path: 'clientes', component: ClientesComponent },
+      { path: 'clientes/:id', component: ClientesComponent },
       { path: 'divisas', component: DivisasComponent },
     ],
   },
