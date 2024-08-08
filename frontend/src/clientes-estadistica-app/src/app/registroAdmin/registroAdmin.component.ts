@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../servicios/user.service';
-import { Usuario } from '../interfaces/usuario.interface';
 import { UsuarioAdmin } from '../interfaces/usuarioAdmin.interface';
 
 @Component({
@@ -12,7 +11,6 @@ import { UsuarioAdmin } from '../interfaces/usuarioAdmin.interface';
 export class RegistroAdminComponent implements OnInit {
 
   registroAdminForm: FormGroup;
-  paisId: number | null = null;
   isFormBlocked = false;
 
   constructor(private fb: FormBuilder, private miServicio: UserService) { }
@@ -62,44 +60,31 @@ export class RegistroAdminComponent implements OnInit {
       return;
     }
 
-    this.miServicio.obtenerPaisIdPorNombre(this.registroAdminForm.value.PaisNombre).subscribe(
+    const fechaNacTimestamp = new Date(this.registroAdminForm.value.FechaNac).getTime();
+    const usuario: UsuarioAdmin = {
+      Email: this.registroAdminForm.value.Correo,
+      Password: this.registroAdminForm.value.Contraseña,
+      ConfirmPassword: this.registroAdminForm.value.Contraseña2,
+      Rol: this.registroAdminForm.value.Rol,
+      PaisNombre: this.registroAdminForm.value.PaisNombre,
+      FechaNacimiento: fechaNacTimestamp
+    };
+
+    this.miServicio.registrarUsuario(usuario).subscribe(
       response => {
-        this.paisId = response.id;
-        if (this.paisId !== null) {
-          const fechaNacTimestamp = new Date(this.registroAdminForm.value.FechaNac).getTime();
-          const usuario: UsuarioAdmin = {
-            Email: this.registroAdminForm.value.Correo,
-            Password: this.registroAdminForm.value.Contraseña,
-            ConfirmPassword: this.registroAdminForm.value.Contraseña2,
-            Rol: this.registroAdminForm.value.Rol,
-            PaisId: this.paisId,
-            FechaNacimiento: fechaNacTimestamp
-          };
-          this.miServicio.registrarUsuario(usuario).subscribe(
-            response => {
-              console.log('Usuario registrado exitosamente', response);
-            },
-            error => {
-              if (error.status === 400) {
-                console.error('Error de validación', error.error);
-                alert('Error al registrar usuario: ' + error.error);
-              } else if (error.status === 0) {
-                console.error('No se pudo conectar al servidor.');
-                alert('No se pudo conectar al servidor.');
-              } else {
-                console.error(`Error ${error.status}: ${error.message}`);
-                alert('Error al registrar usuario: ' + error.message);
-              }
-            }
-          );
-        } else {
-          console.error('ID del país no encontrado.');
-          alert('No se encontró el país especificado.');
-        }
+        console.log('Usuario registrado exitosamente', response);
       },
       error => {
-        console.error('Error al obtener el ID del país', error);
-        alert('Error al obtener el ID del país.');
+        if (error.status === 400) {
+          console.error('Error de validación', error.error);
+          alert('Error al registrar usuario: ' + error.error);
+        } else if (error.status === 0) {
+          console.error('No se pudo conectar al servidor.');
+          alert('No se pudo conectar al servidor.');
+        } else {
+          console.error(`Error ${error.status}: ${error.message}`);
+          alert('Error al registrar usuario: ' + error.message);
+        }
       }
     );
   }
