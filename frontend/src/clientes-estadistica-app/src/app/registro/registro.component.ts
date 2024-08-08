@@ -11,7 +11,6 @@ import { Usuario } from '../interfaces/usuario.interface';
 export class RegistroComponent implements OnInit {
 
   registroForm: FormGroup;
-  paisId: number | null = null;
 
   constructor(private fb: FormBuilder, private miServicio: UserService) { }
 
@@ -59,47 +58,35 @@ export class RegistroComponent implements OnInit {
       return;
     }
 
-    this.miServicio.obtenerPaisIdPorNombre(this.registroForm.value.PaisNombre).subscribe(
+    const fechaNacTimestamp = new Date(this.registroForm.value.FechaNac).getTime();
+
+    const usuario: Usuario = {
+      Email: this.registroForm.value.Correo,
+      Password: this.registroForm.value.Contraseña,
+      ConfirmPassword: this.registroForm.value.Contraseña2,
+      Nombre: this.registroForm.value.Nombre,
+      Apellido: this.registroForm.value.Apellido,
+      Rol: this.registroForm.value.Rol,
+      PaisNombre: this.registroForm.value.PaisNombre,
+      Empleo: this.registroForm.value.Empleo,
+      FechaNacimiento: fechaNacTimestamp
+    };
+
+    this.miServicio.registrarUsuario(usuario).subscribe(
       response => {
-        this.paisId = response.id;
-        if (this.paisId !== null) {
-          const fechaNacTimestamp = new Date(this.registroForm.value.FechaNac).getTime();
-          const usuario: Usuario = {
-            Email: this.registroForm.value.Correo,
-            Password: this.registroForm.value.Contraseña,
-            ConfirmPassword: this.registroForm.value.Contraseña2,
-            Nombre: this.registroForm.value.Nombre,
-            Apellido: this.registroForm.value.Apellido,
-            Rol: this.registroForm.value.Rol,
-            PaisId: this.paisId,
-            Empleo: this.registroForm.value.Empleo,
-            FechaNacimiento: fechaNacTimestamp
-          };
-          this.miServicio.registrarUsuario(usuario).subscribe(
-            response => {
-              console.log('Usuario registrado exitosamente', response);
-            },
-            error => {
-              if (error.status === 400) {
-                console.error('Error de validación', error.error);
-                alert('Error al registrar usuario: ' + error.error);
-              } else if (error.status === 0) {
-                console.error('No se pudo conectar al servidor.');
-                alert('No se pudo conectar al servidor.');
-              } else {
-                console.error(`Error ${error.status}: ${error.message}`);
-                alert('Error al registrar usuario: ' + error.message);
-              }
-            }
-          );
-        } else {
-          console.error('ID del país no encontrado.');
-          alert('No se encontró el país especificado.');
-        }
+        console.log('Usuario registrado exitosamente', response);
       },
       error => {
-        console.error('Error al obtener el ID del país', error);
-        alert('Error al obtener el ID del país.');
+        if (error.status === 400) {
+          console.error('Error de validación', error.error);
+          alert('Error al registrar usuario: ' + error.error);
+        } else if (error.status === 0) {
+          console.error('No se pudo conectar al servidor.');
+          alert('No se pudo conectar al servidor.');
+        } else {
+          console.error(`Error ${error.status}: ${error.message}`);
+          alert('Error al registrar usuario: ' + error.message);
+        }
       }
     );
   }
