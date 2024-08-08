@@ -1,4 +1,5 @@
 import { Component, ViewChild } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -8,6 +9,9 @@ import {
   ApexYAxis,
   ApexXAxis
 } from "ng-apexcharts";
+import { Subscription } from "rxjs";
+import { ICliente } from "src/app/interfaces/cliente";
+import { ClienteEstService } from "src/app/servicios/cliente-est.service";
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -28,7 +32,9 @@ export class ClientesComponent  {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
-  constructor() {
+  constructor(
+    private route: ActivatedRoute,
+    private clienteService: ClienteEstService) {
     this.chartOptions = {
       series: [
         {
@@ -148,5 +154,31 @@ export class ClientesComponent  {
         }
       }
     };
+  }
+
+  cliente: ICliente | undefined;
+  subscription!: Subscription;
+
+  ngOnInit(): void {
+    // Obtener el ID del cliente desde la ruta actual
+    const clienteId = Number(this.route.snapshot.paramMap.get('id'));
+    
+    // Llamar a getCliente con el ID del cliente
+    this.subscription = this.clienteService.getCliente(clienteId).subscribe({
+      next: (cliente) => {
+        // Asignar el cliente obtenido a la propiedad del componente
+        this.cliente = cliente;
+        // Aquí puedes formatear los datos si es necesario
+        // Por ejemplo: this.cliente = this.clienteService.formatCliente(cliente);
+      },
+      error: (err) => {
+        console.error('Error al obtener el cliente:', err);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    // Cancelar la suscripción cuando el componente se destruya
+    this.subscription.unsubscribe();
   }
 }
