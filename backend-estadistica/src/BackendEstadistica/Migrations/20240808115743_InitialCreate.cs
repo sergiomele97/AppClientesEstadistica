@@ -122,7 +122,8 @@ namespace BackendEstadistica.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Clientes_PaisId",
                 table: "Clientes",
-                column: "PaisId");
+                column: "PaisId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Conversion_ClienteId",

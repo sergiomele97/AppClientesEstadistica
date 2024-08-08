@@ -56,9 +56,10 @@ namespace BackendEstadistica.Migrations
 
                     b.HasKey("ClienteId");
 
-                    b.HasIndex("PaisId");
+                    b.HasIndex("PaisId")
+                        .IsUnique();
 
-                    b.ToTable("Clientes", (string)null);
+                    b.ToTable("Clientes");
                 });
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Conversion", b =>
@@ -91,7 +92,7 @@ namespace BackendEstadistica.Migrations
 
                     b.HasIndex("ClienteId");
 
-                    b.ToTable("Conversion", (string)null);
+                    b.ToTable("Conversion");
                 });
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Pais", b =>
@@ -110,7 +111,7 @@ namespace BackendEstadistica.Migrations
 
                     b.HasKey("PaisId");
 
-                    b.ToTable("Paises", (string)null);
+                    b.ToTable("Paises");
                 });
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Transaccion", b =>
@@ -142,7 +143,7 @@ namespace BackendEstadistica.Migrations
 
                     b.HasIndex("ClienteOrigenId");
 
-                    b.ToTable("Transacciones", (string)null);
+                    b.ToTable("Transacciones");
                 });
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Usuario", b =>
@@ -164,14 +165,14 @@ namespace BackendEstadistica.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Usuario", (string)null);
+                    b.ToTable("Usuario");
                 });
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Cliente", b =>
                 {
                     b.HasOne("BackendEstadistica.Entidades.Pais", "Pais")
-                        .WithMany("Clientes")
-                        .HasForeignKey("PaisId")
+                        .WithOne("Cliente")
+                        .HasForeignKey("BackendEstadistica.Entidades.Cliente", "PaisId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -219,7 +220,7 @@ namespace BackendEstadistica.Migrations
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Pais", b =>
                 {
-                    b.Navigation("Clientes");
+                    b.Navigation("Cliente");
                 });
 #pragma warning restore 612, 618
         }

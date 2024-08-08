@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendEstadistica.Migrations
 {
     [DbContext(typeof(ContextoBBDD))]
-    [Migration("20240808113749_InitialCreate")]
+    [Migration("20240808115743_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -59,7 +59,8 @@ namespace BackendEstadistica.Migrations
 
                     b.HasKey("ClienteId");
 
-                    b.HasIndex("PaisId");
+                    b.HasIndex("PaisId")
+                        .IsUnique();
 
                     b.ToTable("Clientes");
                 });
@@ -173,8 +174,8 @@ namespace BackendEstadistica.Migrations
             modelBuilder.Entity("BackendEstadistica.Entidades.Cliente", b =>
                 {
                     b.HasOne("BackendEstadistica.Entidades.Pais", "Pais")
-                        .WithMany("Clientes")
-                        .HasForeignKey("PaisId")
+                        .WithOne("Cliente")
+                        .HasForeignKey("BackendEstadistica.Entidades.Cliente", "PaisId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -222,7 +223,7 @@ namespace BackendEstadistica.Migrations
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Pais", b =>
                 {
-                    b.Navigation("Clientes");
+                    b.Navigation("Cliente");
                 });
 #pragma warning restore 612, 618
         }
