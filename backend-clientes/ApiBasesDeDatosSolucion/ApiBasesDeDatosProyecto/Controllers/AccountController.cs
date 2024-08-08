@@ -89,67 +89,39 @@ namespace ApiBasesDeDatosProyecto.Controllers
             {
                 UserName = model.Email,
                 Email = model.Email,
-                Rol = model.Rol, // Asignar el rol recibido
-                DateOfBirth = FechaNac
-            };
-            var user = new ApplicationUser
-            {
-                UserName = model.Email,
-                Email = model.Email,
                 DateOfBirth = FechaNac,
                 Rol = rolPorDefecto
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                // Asignar rol a usuario
-                await _userManager.AddToRoleAsync(user, user.Rol);
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    //Asignar un rol predeterminado
-                    await _userManager.AddToRoleAsync(user, rolPorDefecto);
-
-                    // Si es un cliente, guardar datos adicionales
-                    if (user.Rol == "Client")
-                    {
-                        var cliente = new Cliente
-                        {
-                            Nombre = model.Nombre,
-                            Apellido = model.Apellido,
-                            PaisId = pais.Id, // Asignar el ID del país obtenido
-                            Empleo = model.Empleo,
-                            FechaNacimiento = FechaNac
-                        };
-                        await _clienteService.RegisterClientAsync(cliente);
-                    }
-
-                    var token = _tokenService.GenerateJwtToken(user);
-                    return Ok(new { Token = token });
-                }
-                // Si es un cliente, guardar datos adicionales
-                if (rolPorDefecto == "Client")
-                {
-                    var cliente = new Cliente
-                    {
-                        Nombre = model.Nombre,
-                        Apellido = model.Apellido,
-                        PaisId = model.PaisId,
-                        Empleo = model.Empleo,
-                        FechaNacimiento = FechaNac,
-                        // Asignar el ID del usuario si es necesario
-                        //UserId = user.Id
-                    };
-                    await _clienteService.RegisterClientAsync(cliente);
-                }
-
-                var token = _tokenService.GenerateJwtToken(user);
-                return Ok(new { Token = token });
+                return BadRequest(result.Errors);
             }
 
-            return BadRequest(result.Errors);
+            // Asignar rol a usuario
+            await _userManager.AddToRoleAsync(user, user.Rol);
+            if (rolPorDefecto == "Client")
+            {
+                // Si es un cliente, guardar datos adicionales
+                var cliente = new Cliente
+                {
+                    Nombre = model.Nombre,
+                    Apellido = model.Apellido,
+                    PaisId = pais.Id, // Asignar el ID del país obtenido
+                    Empleo = model.Empleo,
+                    FechaNacimiento = FechaNac,
+                    // Asignar el ID del usuario si es necesario
+                    //UserId = user.Id
+                };
+                await _clienteService.RegisterClientAsync(cliente);
+            }
+
+            // Generar el token y devolverlo
+            var token = _tokenService.GenerateJwtToken(user);
+            return Ok(new { Token = token });
         }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
