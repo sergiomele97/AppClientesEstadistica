@@ -1,5 +1,6 @@
 import { Component, ViewChildren, QueryList, ViewContainerRef, ElementRef, AfterViewInit, OnInit } from '@angular/core';
 import { VolumetryComponent } from '../estadisticas/volumetry/volumetry.component'; // Asegúrate de importar el componente que deseas añadir
+import { GraphComponent } from '../estadisticas/graph/graph.component';
 
 @Component({
   selector: 'app-estadistica',
@@ -55,9 +56,10 @@ export class EstadisticaComponent implements OnInit, AfterViewInit {
         // Boramos lo que había
         container.clear();  
         element.nativeElement.innerHTML = '';
+        element.nativeElement.style.display = 'none'; // Oculta el div
 
         // Crea y añade el nuevo componente
-        container.createComponent(VolumetryComponent);
+        container.createComponent(GraphComponent);
 
         this.ContenedoresLibres[i] = false
         return;
