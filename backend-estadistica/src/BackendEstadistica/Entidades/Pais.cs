@@ -8,6 +8,6 @@ public class Pais
     public string? Divisa { get; set; }
 
     //Relaciones
-    public ICollection<Cliente> Clientes { get; set; } = new List<Cliente>();
+    public Cliente? Cliente { get; set; }
 
 }

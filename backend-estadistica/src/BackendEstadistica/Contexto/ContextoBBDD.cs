@@ -31,9 +31,9 @@ public class ContextoBBDD : DbContext
 
         // Relación Cliente-Pais
         modelBuilder.Entity<Cliente>()
-            .HasOne(c => c.Pais)
-            .WithMany(p => p.Clientes)
-            .HasForeignKey(c => c.PaisId);
+       .HasOne(c => c.Pais)
+       .WithOne(p => p.Cliente) 
+       .HasForeignKey<Cliente>(c => c.PaisId);
 
         // Relación Cliente-Conversion
         modelBuilder.Entity<Conversion>()

@@ -13,7 +13,19 @@ public class ClienteFaker : Faker<Cliente>
             .RuleFor(c => c.Telefono, f => f.Phone.PhoneNumber("##########"))
             .RuleFor(c => c.Edad, f => f.Random.Int(18, 80))
             .RuleFor(c => c.Sexo, f => f.PickRandom(new[] { "Masculino", "Femenino" }))
-            .RuleFor(c => c.Trabajo, f => f.Name.JobTitle());
+            .RuleFor(c => c.Trabajo, f => f.Name.JobTitle())
+            .RuleFor(c => c.PaisId, f => f.Random.Int(1, 10));
+
+        // Simulación de relaciones, puedes ajustar según tus necesidades
+        RuleFor(c => c.Conversiones, f => new List<Conversion> {
+                new ConversionFaker().Generate()
+            });
+        RuleFor(c => c.TransaccionesOrigen, f => new List<Transaccion> {
+                new TransaccionFaker().Generate()
+            });
+        RuleFor(c => c.TransaccionesDestino, f => new List<Transaccion> {
+                new TransaccionFaker().Generate()
+            });
     }
 
 }
