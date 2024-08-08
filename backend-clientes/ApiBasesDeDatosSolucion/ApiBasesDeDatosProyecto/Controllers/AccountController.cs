@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR.Protocol;
 using System;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace ApiBasesDeDatosProyecto.Controllers
 {
@@ -40,13 +41,27 @@ namespace ApiBasesDeDatosProyecto.Controllers
             _userService = userService;
             _paisRepository = paisRepository; // Añadido
         }
-
         [HttpGet("users")]
-        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers(string? mail = null)
         {
-            var users = await _userService.GetAllUsersAsync();
-            return Ok(users);
+            if (string.IsNullOrEmpty(mail))
+            {
+                // Si no se proporciona un mail, devuelve todos los usuarios.
+                var users = await _userService.GetAllUsersAsync();
+                return Ok(users);
+            }
+            else
+            {
+                // Si se proporciona un mail, busca un usuario específico por correo electrónico.
+                var user = await _userService.GetUserByEmailAsync(mail);
+                if (user == null)
+                {
+                    return NotFound(new { message = "User not found" });
+                }
+                return Ok(user);
+            }
         }
+
 
         [HttpGet("verificarRol")]
         public async Task<IActionResult> VerificarRol(string email)
@@ -71,6 +86,18 @@ namespace ApiBasesDeDatosProyecto.Controllers
             }
             return NotFound(new { message = "User not found" });
         }
+
+        [HttpGet("users/{email}")]
+        public async Task<ActionResult<ApplicationUser>> GetUserByEmail(string email)
+        {
+            var user = await _userService.GetUserByEmailAsync(email);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+            return Ok(user);
+        }
+
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
