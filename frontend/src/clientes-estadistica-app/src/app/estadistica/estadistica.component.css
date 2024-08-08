@@ -13,3 +13,12 @@ a {
   a {
     opacity: 1;
   }
+
+  /* Asegúrate de que el contenido no sobresalga del contenedor */
+#contenedor1 * {
+  box-sizing: border-box;
+}
+  /* Asegúrate de que el contenido no sobresalga del contenedor */
+  #contenedor2 * {
+    box-sizing: border-box;
+  }

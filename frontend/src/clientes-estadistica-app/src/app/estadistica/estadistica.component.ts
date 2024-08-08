@@ -1,5 +1,6 @@
 import { Component, ViewChildren, QueryList, ViewContainerRef, ElementRef, AfterViewInit, OnInit } from '@angular/core';
 import { VolumetryComponent } from '../estadisticas/volumetry/volumetry.component'; // Asegúrate de importar el componente que deseas añadir
+import { GraphComponent } from '../estadisticas/graph/graph.component';
 
 @Component({
   selector: 'app-estadistica',
@@ -19,6 +20,7 @@ export class EstadisticaComponent implements OnInit, AfterViewInit {
 
   private containers: ViewContainerRef[] = [];
   private elements: ElementRef[] = [];
+  private ContenedoresLibres: Boolean[] = [true,true,true,true];   // Si el contenedor esta libre es True
 
   constructor() { }
 
@@ -41,14 +43,27 @@ export class EstadisticaComponent implements OnInit, AfterViewInit {
     ];
   }
 
-  addComponent(divNumber: number) {
-    if (divNumber >= 1 && divNumber <= 4) {
-      const container = this.containers[divNumber - 1];
-      const element = this.elements[divNumber - 1];
-      container.clear();  // Limpia los componentes dinámicos del contenedor
-      // Limpia el contenido HTML estático
-      element.nativeElement.innerHTML = '';
-      container.createComponent(VolumetryComponent); // Crea y añade el nuevo componente
+  // Añadir componente al contenedor
+  addComponent() {
+    for (let i = 0; i < this.ContenedoresLibres.length; i++) {
+
+      if (this.ContenedoresLibres[i]) {
+
+        // Define contenedor y elemento
+        const container = this.containers[i];
+        const element = this.elements[i];
+
+        // Boramos lo que había
+        container.clear();  
+        element.nativeElement.innerHTML = '';
+        element.nativeElement.style.display = 'none'; // Oculta el div
+
+        // Crea y añade el nuevo componente
+        container.createComponent(GraphComponent);
+
+        this.ContenedoresLibres[i] = false
+        return;
+      }
     }
   }
 }
