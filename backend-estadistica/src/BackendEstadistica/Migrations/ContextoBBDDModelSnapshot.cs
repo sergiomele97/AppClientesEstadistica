@@ -58,7 +58,7 @@ namespace BackendEstadistica.Migrations
 
                     b.HasIndex("PaisId");
 
-                    b.ToTable("Clientes");
+                    b.ToTable("Clientes", (string)null);
                 });
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Conversion", b =>
@@ -91,7 +91,7 @@ namespace BackendEstadistica.Migrations
 
                     b.HasIndex("ClienteId");
 
-                    b.ToTable("Conversion");
+                    b.ToTable("Conversion", (string)null);
                 });
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Pais", b =>
@@ -110,7 +110,7 @@ namespace BackendEstadistica.Migrations
 
                     b.HasKey("PaisId");
 
-                    b.ToTable("Paises");
+                    b.ToTable("Paises", (string)null);
                 });
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Transaccion", b =>
@@ -142,7 +142,7 @@ namespace BackendEstadistica.Migrations
 
                     b.HasIndex("ClienteOrigenId");
 
-                    b.ToTable("Transacciones");
+                    b.ToTable("Transacciones", (string)null);
                 });
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Usuario", b =>
@@ -164,7 +164,7 @@ namespace BackendEstadistica.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Usuario");
+                    b.ToTable("Usuario", (string)null);
                 });
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Cliente", b =>

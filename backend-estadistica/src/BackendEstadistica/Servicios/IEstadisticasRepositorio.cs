@@ -10,12 +10,12 @@
         //Conversiones
         List<Conversion> GetConversiones();
         Conversion GetConversionById(int id);
-        void GenerarConversion(Conversion conversion);
+        void CrearConversion(Conversion conversion);
 
         // Transacciones
         List<Transaccion> GetTransacciones();
         Transaccion GetTransaccionById(int id);
-        void CrearTransaccion(Conversion conversion);
+        void CrearTransaccion(Transaccion transaccion);
 
 
     }

@@ -34,7 +34,7 @@ namespace BackendEstadistica.Servicios
 
         //Conversiones
 
-        public void GenerarConversion(Conversion conversion)
+        public void CrearConversion(Conversion conversion)
         {
             var conversionFake = new ConversionFaker().Generate();
 
@@ -55,7 +55,7 @@ namespace BackendEstadistica.Servicios
 
         //Transacciones
 
-        public void CrearTransaccion(Conversion conversion)
+        public void CrearTransaccion(Transaccion transaccion)
         {
             var transaccionFake = new TransaccionFaker().Generate();
 
