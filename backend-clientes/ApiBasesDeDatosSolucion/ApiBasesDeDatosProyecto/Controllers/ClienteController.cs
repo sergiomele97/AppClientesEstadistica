@@ -1,6 +1,6 @@
-﻿using ApiBasesDeDatosProyecto.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
+﻿using ApiBasesDeDatosProyecto.Helpers;
+using ApiBasesDeDatosProyecto.Repository;
+using FluentAssertions;
 
 namespace ApiBasesDeDatosProyecto.Controllers
 {
@@ -14,19 +14,22 @@ namespace ApiBasesDeDatosProyecto.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<ClienteController> _logger;
         private readonly ClienteService _clienteService;
+        private readonly Contexto _contexto;
 
         public ClienteController(
             IClienteRepository clienteRepository,
             IMapper mapper,
             IPaisRepository paisRepository,
             ILogger<ClienteController> logger,
-            ClienteService clienteService)
+            ClienteService clienteService,
+            Contexto contexto)
         {
             _clienteRepository = clienteRepository;
             _paisRepository = paisRepository;
             _mapper = mapper;
             _logger = logger;
             _clienteService = clienteService;
+            _contexto = contexto;
         }
 
         // GET: api/cliente
@@ -81,6 +84,27 @@ namespace ApiBasesDeDatosProyecto.Controllers
         {
             var clientes = _clienteService.GetClientes(count);
             return Ok(clientes);
+        }
+
+        [HttpGet("ClientesFake")]
+        public ActionResult<List<ClienteDto>> GetClientesFake(int count)
+        {
+            /*var clientesRepositorio = new ClienteRepository(_contexto);
+            var cliente = new ClienteFaker().Generate();
+            _contexto.Clientes.Add(cliente);
+            _contexto.SaveChanges();
+
+            var clienteRecuperado = await clientesRepositorio.ObtenerPorId(cliente.Id);
+
+            clienteRecuperado.Should().BeEquivalentTo(cliente, options => options.
+            ComparingByMembers<Cliente>());*/
+
+            var clientesFaker = new ClienteFaker().Generate(count);
+            _contexto.Clientes.AddRange(clientesFaker);
+            _contexto.SaveChanges();
+
+            var clienteDtos = _mapper.Map<List<Cliente>>(clientesFaker);
+            return Ok(clienteDtos);
         }
 
         // POST api/cliente

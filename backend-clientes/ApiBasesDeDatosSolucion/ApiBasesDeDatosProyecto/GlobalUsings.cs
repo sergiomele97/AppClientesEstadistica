@@ -17,3 +17,6 @@ global using System.Text;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using ApiBasesDeDatosProyecto;
 global using Bogus;
+global using Xunit;
+global using ApiBasesDeDatosProyecto.Repository;
+global using ApiBasesDeDatosProyecto.IDentity.Serivicios;
