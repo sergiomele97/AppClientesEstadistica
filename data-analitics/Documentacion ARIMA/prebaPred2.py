@@ -35,25 +35,23 @@ def cluster():
     print("Se ejecuta el python cluster")
     recibido = request.json
 # Acceder a los elementos
-    data = recibido['sampleData']
-    n_clusters = recibido['nCluster']
+    print(recibido)
+    data = recibido['data']
+    n_clusters = recibido['n_clusters']
     #print(data)
     #print(n_clusters)
     # Aplicar K-means
     kmeans = KMeans(n_clusters=n_clusters, random_state=0)
     kmeans.fit(data)
-    labels = kmeans.labels_
-    centers = kmeans.cluster_centers_
+    labels = kmeans.labels_.tolist()  # Convert ndarray to list
 
+    
     # Calcular el índice de Davies-Bouldin
-    db_score = davies_bouldin_score(data, labels)
-    n_cluster=2
-    sample_data = 18
+   # db_score = davies_bouldin_score(data, labels)
 
+  
     response = {
-       "etiqueta": kmeans.labels_, 
-       "centros": centers,
-       "DB_index": db_score
+        "etiqueta": labels       
     }
 
     print(response)
