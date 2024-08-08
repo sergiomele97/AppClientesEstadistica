@@ -12,6 +12,7 @@ import {
 } from "ng-apexcharts";
 import { Subscription } from "rxjs";
 import { ICliente } from "src/app/interfaces/cliente";
+import { ITransaccion } from "src/app/interfaces/transaccion";
 import { ClienteEstService } from "src/app/servicios/cliente-est.service";
 
 export type ChartOptions = {
@@ -60,25 +61,46 @@ export class ClientesComponent  {
   }
 
   private actualizarGrafico(): void {
-    const ingresos = this.cliente.transaccionesDestino?.map(transaccion => ({
-      fecha: new Date(transaccion.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }),
-      cantidad: transaccion.cantidad
-    }));
+    if (!this.cliente) return;
   
-    const perdidas = this.cliente.transaccionesOrigen?.map(transaccion => ({
-      fecha: new Date(transaccion.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }),
-      cantidad: transaccion.cantidad
-    }));
+    // Función para agrupar transacciones por fecha
+    const agruparPorFecha = (transacciones: ITransaccion[], esIngreso: boolean) => {
+      const resultado: Record<string, number> = {};
+  
+      transacciones.forEach(transaccion => {
+        const fecha = new Date(transaccion.fecha || '').toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const cantidad = esIngreso ? transaccion.importeRecibido || 0 : transaccion.importeEnviado || 0;
+  
+        if (resultado[fecha]) {
+          resultado[fecha] += cantidad;
+        } else {
+          resultado[fecha] = cantidad;
+        }
+      });
+  
+      return resultado;
+    };
+  
+    // Obtener transacciones de ingreso y pérdida agrupadas por fecha
+    const ingresosPorFecha = agruparPorFecha(this.cliente.transaccionesDestino || [], true);
+    const perdidasPorFecha = agruparPorFecha(this.cliente.transaccionesOrigen || [], false);
+  
+    // Obtener todas las fechas únicas
+    const fechas = Array.from(new Set([...Object.keys(ingresosPorFecha), ...Object.keys(perdidasPorFecha)]));
+  
+    // Crear datos para el gráfico
+    const dataIngresos = fechas.map(fecha => ingresosPorFecha[fecha] || 0);
+    const dataPerdidas = fechas.map(fecha => perdidasPorFecha[fecha] || 0);
   
     this.chartOptions = {
       series: [
         {
           name: "Ingresos",
-          data: ingresos?.map(trans => trans.cantidad) || []
+          data: dataIngresos
         },
         {
           name: "Pérdidas",
-          data: perdidas?.map(trans => trans.cantidad) || []
+          data: dataPerdidas
         }
       ],
       chart: {
@@ -94,14 +116,14 @@ export class ClientesComponent  {
       },
       dataLabels: {
         enabled: true,
-        formatter: (val, opts) => `${val} ${this.cliente.transaccionesOrigen?.[opts.dataPointIndex]?.divisa || ''}`,
+        formatter: (val) => `${val}`, // Puedes agregar el símbolo de la moneda si es necesario
         style: {
           fontSize: "12px",
           colors: ["#304758"]
         }
       },
       xaxis: {
-        categories: ingresos?.map(trans => trans.fecha) || perdidas?.map(trans => trans.fecha) || [],
+        categories: fechas,
         position: "bottom",
         labels: {
           offsetY: 0
@@ -110,9 +132,7 @@ export class ClientesComponent  {
       yaxis: {
         labels: {
           show: true,
-          formatter: function (val) {
-            return `${val}`;
-          },
+          formatter: (val) => `${val}` // Puedes formatear el valor si es necesario
         }
       },
       title: {
@@ -121,6 +141,7 @@ export class ClientesComponent  {
       }
     };
   }
+  
   
   ngOnDestroy(): void {
     // Cancelar la suscripción cuando el componente se destruya
