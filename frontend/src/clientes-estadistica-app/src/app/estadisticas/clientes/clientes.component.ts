@@ -7,7 +7,8 @@ import {
   ApexDataLabels,
   ApexPlotOptions,
   ApexYAxis,
-  ApexXAxis
+  ApexXAxis,
+  ApexTitleSubtitle
 } from "ng-apexcharts";
 import { Subscription } from "rxjs";
 import { ICliente } from "src/app/interfaces/cliente";
@@ -20,6 +21,7 @@ export type ChartOptions = {
   plotOptions: ApexPlotOptions;
   yaxis: ApexYAxis;
   xaxis: ApexXAxis;
+  title: ApexTitleSubtitle;
 };
 
 @Component({
@@ -34,127 +36,7 @@ export class ClientesComponent  {
 
   constructor(
     private route: ActivatedRoute,
-    private clienteService: ClienteEstService) {
-    this.chartOptions = {
-      series: [
-        {
-          name: "Cash Flow",
-          data: [
-            1.45,
-            5.42,
-            5.9,
-            -0.42,
-            -12.6,
-            -18.1,
-            -18.2,
-            -14.16,
-            -11.1,
-            -6.09,
-            0.34,
-            3.88,
-            13.07,
-            5.8,
-            2,
-            7.37,
-            8.1,
-            13.57,
-            15.75,
-            17.1,
-            19.8,
-            -27.03,
-            -54.4,
-            -47.2,
-            -43.3,
-            -18.6,
-            -48.6,
-            -41.1,
-            -39.6,
-            -37.6,
-            -29.4,
-            -21.4,
-            -2.4
-          ]
-        }
-      ],
-      chart: {
-        type: "bar",
-        height: 350
-      },
-      plotOptions: {
-        bar: {
-          colors: {
-            ranges: [
-              {
-                from: -100,
-                to: -46,
-                color: "#F15B46"
-              },
-              {
-                from: -45,
-                to: 0,
-                color: "#FEB019"
-              }
-            ]
-          },
-          columnWidth: "80%"
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      yaxis: {
-        title: {
-          text: "Growth"
-        },
-        labels: {
-          formatter: function(y) {
-            return y.toFixed(0) + "%";
-          }
-        }
-      },
-      xaxis: {
-        type: "datetime",
-        categories: [
-          "2011-01-01",
-          "2011-02-01",
-          "2011-03-01",
-          "2011-04-01",
-          "2011-05-01",
-          "2011-06-01",
-          "2011-07-01",
-          "2011-08-01",
-          "2011-09-01",
-          "2011-10-01",
-          "2011-11-01",
-          "2011-12-01",
-          "2012-01-01",
-          "2012-02-01",
-          "2012-03-01",
-          "2012-04-01",
-          "2012-05-01",
-          "2012-06-01",
-          "2012-07-01",
-          "2012-08-01",
-          "2012-09-01",
-          "2012-10-01",
-          "2012-11-01",
-          "2012-12-01",
-          "2013-01-01",
-          "2013-02-01",
-          "2013-03-01",
-          "2013-04-01",
-          "2013-05-01",
-          "2013-06-01",
-          "2013-07-01",
-          "2013-08-01",
-          "2013-09-01"
-        ],
-        labels: {
-          rotate: -90
-        }
-      }
-    };
-  }
+    private clienteService: ClienteEstService) {}
 
   cliente: ICliente | undefined;
   subscription!: Subscription;
@@ -168,8 +50,8 @@ export class ClientesComponent  {
       next: (cliente) => {
         // Asignar el cliente obtenido a la propiedad del componente
         this.cliente = cliente;
-        // Aquí puedes formatear los datos si es necesario
-        // Por ejemplo: this.cliente = this.clienteService.formatCliente(cliente);
+        // Actualizar gráfico
+        this.actualizarGrafico();
       },
       error: (err) => {
         console.error('Error al obtener el cliente:', err);
@@ -177,6 +59,69 @@ export class ClientesComponent  {
     });
   }
 
+  private actualizarGrafico(): void {
+    const ingresos = this.cliente.transaccionesDestino?.map(transaccion => ({
+      fecha: new Date(transaccion.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+      cantidad: transaccion.cantidad
+    }));
+  
+    const perdidas = this.cliente.transaccionesOrigen?.map(transaccion => ({
+      fecha: new Date(transaccion.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+      cantidad: transaccion.cantidad
+    }));
+  
+    this.chartOptions = {
+      series: [
+        {
+          name: "Ingresos",
+          data: ingresos?.map(trans => trans.cantidad) || []
+        },
+        {
+          name: "Pérdidas",
+          data: perdidas?.map(trans => trans.cantidad) || []
+        }
+      ],
+      chart: {
+        type: "bar",
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          dataLabels: {
+            position: "top"
+          }
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: (val, opts) => `${val} ${this.cliente.transaccionesOrigen?.[opts.dataPointIndex]?.divisa || ''}`,
+        style: {
+          fontSize: "12px",
+          colors: ["#304758"]
+        }
+      },
+      xaxis: {
+        categories: ingresos?.map(trans => trans.fecha) || perdidas?.map(trans => trans.fecha) || [],
+        position: "bottom",
+        labels: {
+          offsetY: 0
+        }
+      },
+      yaxis: {
+        labels: {
+          show: true,
+          formatter: function (val) {
+            return `${val}`;
+          },
+        }
+      },
+      title: {
+        text: "Ingresos y Pérdidas del Cliente",
+        align: "center"
+      }
+    };
+  }
+  
   ngOnDestroy(): void {
     // Cancelar la suscripción cuando el componente se destruya
     this.subscription.unsubscribe();

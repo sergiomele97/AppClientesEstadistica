@@ -1,5 +1,4 @@
 import { IConversion } from "./conversion";
-import { ITransaccion } from "./transaccion";
 
 export interface ICliente {
     id: number;
@@ -11,7 +10,15 @@ export interface ICliente {
     sexo?: string;
     trabajo?: string;
     conversiones?: IConversion[];  // Relación con Conversiones
-    transaccionesOrigen?: ITransaccion[];  // Relación con Transacciones como origen
-    transaccionesDestino?: ITransaccion[];  // Relación con Transacciones como destino
+    transaccionesOrigen?: ITransaccion[];  // Relación con Transacciones como origen (pérdidas)
+    transaccionesDestino?: ITransaccion[];  // Relación con Transacciones como destino (ingresos)
   }
   
+  // datos para ejemplo
+
+  export interface ITransaccion {
+    id: number;
+    cantidad: number;
+    fecha: string;
+    divisa: string;
+}
