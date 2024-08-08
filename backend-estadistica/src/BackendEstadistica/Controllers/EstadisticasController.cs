@@ -118,5 +118,37 @@ namespace BackendEstadistica.Controllers
 
         }
 
+
+        //Paises
+
+        [HttpPost("crearPais")]
+        public string CrearConversion(Pais nuevoPais)
+        {
+
+            estadisticasRepositorio.CrearPais(nuevoPais);
+
+            return "Conversion creada correctamente";
+
+        }
+
+        [HttpGet("getPaises")]
+        public IActionResult GetPaises()
+        {
+
+            List<Pais> paises = estadisticasRepositorio.GetPaises();
+
+            return Ok(mapper.Map<List<Pais>>(paises));
+
+        }
+
+        [HttpGet("getPaises/{id}")]
+        public IActionResult GetPaisById(int id)
+        {
+
+            Pais paisId = estadisticasRepositorio.GetPaisById(id);
+
+            return Ok(mapper.Map<Pais>(paisId));
+
+        }
     }
 }

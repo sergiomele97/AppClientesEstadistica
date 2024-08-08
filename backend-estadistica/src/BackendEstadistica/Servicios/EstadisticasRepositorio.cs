@@ -73,5 +73,26 @@ namespace BackendEstadistica.Servicios
             return contextoBBDD.Transacciones.FirstOrDefault(t => t.TransaccionId == id);
         }
 
+
+
+        //Paises
+
+        public void CrearPais(Pais pais)
+        {
+            var paisFake = new PaisFaker().Generate();
+
+            contextoBBDD.Paises.Add(paisFake);
+            contextoBBDD.SaveChanges();
+        }
+
+        public List<Pais> GetPaises()
+        {
+            return contextoBBDD.Paises.ToList();
+        }
+
+        public Pais GetPaisById(int id)
+        {
+            return contextoBBDD.Paises.FirstOrDefault(p => p.PaisId == id);
+        }
     }
 }

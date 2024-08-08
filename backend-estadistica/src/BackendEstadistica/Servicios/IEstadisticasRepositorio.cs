@@ -17,6 +17,11 @@
         Transaccion GetTransaccionById(int id);
         void CrearTransaccion(Transaccion transaccion);
 
+        //Pais 
+        List<Pais> GetPaises();
+        Pais GetPaisById(int id);
+        void CrearPais(Pais pais);
+
 
     }
 }
