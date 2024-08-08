@@ -14,11 +14,13 @@ import { OutliersDetailComponent } from './estadisticas/outliers/outliers-detail
 import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 import { ClientesComponent } from './estadisticas/clientes/clientes.component';
 import { DivisasComponent } from './estadisticas/divisas/divisas.component';
+import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegistroComponent },
   { path: "registroAdmin", component: RegistroAdminComponent },
+  { path: 'usersInfo', component: UsersInfoComponent },
  
   { path: "estadisticas", component: EstadisticasComponent,
     children: [
