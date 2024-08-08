@@ -9,9 +9,6 @@
     [Required]
     public string ConfirmPassword { get; set; }
 
-    [Required]
-    public string Rol { get; set; } // Ejemplo: "Client" o "Admin"
-
     public string ?Empleo { get; set; }
 
     // Campos adicionales para clientes

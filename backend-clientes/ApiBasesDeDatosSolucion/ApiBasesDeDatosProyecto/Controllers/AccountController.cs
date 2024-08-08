@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR.Protocol;
+using System;
 
 namespace ApiBasesDeDatosProyecto.Controllers
 {
@@ -45,6 +48,19 @@ namespace ApiBasesDeDatosProyecto.Controllers
             return Ok(users);
         }
 
+        [HttpGet("verificarRol")]
+        public async Task<IActionResult> VerificarRol(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return NotFound("Usuario no encontrado.");
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            return Ok(new { roles });
+        }
+
         [HttpDelete("users/{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
@@ -59,13 +75,8 @@ namespace ApiBasesDeDatosProyecto.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
-            // Validar que el rol sea válido
-            if (!await _roleManager.RoleExistsAsync(model.Rol))
-            {
-                return BadRequest("Role does not exist.");
-            }
-
             DateTime FechaNac = DateTimeOffset.FromUnixTimeMilliseconds(model.FechaNacimiento).UtcDateTime;
+            string rolPorDefecto = "Admin";
 
             // Obtener el ID del país a través del repositorio
             var pais = await _paisRepository.ObtenerPorNombre(model.PaisNombre);
@@ -78,36 +89,39 @@ namespace ApiBasesDeDatosProyecto.Controllers
             {
                 UserName = model.Email,
                 Email = model.Email,
-                Rol = model.Rol, // Asignar el rol recibido
-                DateOfBirth = FechaNac
+                DateOfBirth = FechaNac,
+                Rol = rolPorDefecto
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                // Asignar rol a usuario
-                await _userManager.AddToRoleAsync(user, user.Rol);
-
-                // Si es un cliente, guardar datos adicionales
-                if (user.Rol == "Client")
-                {
-                    var cliente = new Cliente
-                    {
-                        Nombre = model.Nombre,
-                        Apellido = model.Apellido,
-                        PaisId = pais.Id, // Asignar el ID del país obtenido
-                        Empleo = model.Empleo,
-                        FechaNacimiento = FechaNac
-                    };
-                    await _clienteService.RegisterClientAsync(cliente);
-                }
-
-                var token = _tokenService.GenerateJwtToken(user);
-                return Ok(new { Token = token });
+                return BadRequest(result.Errors);
             }
 
-            return BadRequest(result.Errors);
+            // Asignar rol a usuario
+            await _userManager.AddToRoleAsync(user, user.Rol);
+            if (rolPorDefecto == "Client")
+            {
+                // Si es un cliente, guardar datos adicionales
+                var cliente = new Cliente
+                {
+                    Nombre = model.Nombre,
+                    Apellido = model.Apellido,
+                    PaisId = pais.Id, // Asignar el ID del país obtenido
+                    Empleo = model.Empleo,
+                    FechaNacimiento = FechaNac,
+                    // Asignar el ID del usuario si es necesario
+                    //UserId = user.Id
+                };
+                await _clienteService.RegisterClientAsync(cliente);
+            }
+
+            // Generar el token y devolverlo
+            var token = _tokenService.GenerateJwtToken(user);
+            return Ok(new { Token = token });
         }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
@@ -128,30 +142,34 @@ namespace ApiBasesDeDatosProyecto.Controllers
             return Unauthorized();
         }
 
-        [HttpPost("change-role")]
-        public async Task<IActionResult> ChangeRole([FromBody] ChangeRoleViewModel model)
+        [HttpPost("cambiarRolPorEmail")]
+        public async Task<IActionResult> CambiarRolUsuario([FromBody] ChangeRoleViewModel model)
         {
-            // Validar que el rol sea válido
-            if (!await _roleManager.RoleExistsAsync(model.NuevoRol))
-            {
-                return BadRequest("Role does not exist.");
-            }
-
-            // Buscar el usuario por su ID
-            var user = await _userManager.FindByIdAsync(model.UserId);
+            var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
                 return NotFound("User not found.");
             }
 
+            if (!await _roleManager.RoleExistsAsync(model.NuevoRol))
+            {
+                return BadRequest("Role does not exist.");
+            }
+
             // Obtener los roles actuales del usuario
             var currentRoles = await _userManager.GetRolesAsync(user);
 
-            // Eliminar todos los roles actuales del usuario
-            var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
-            if (!removeResult.Succeeded)
+            // Eliminar roles antiguos si es necesario
+            foreach (var role in currentRoles)
             {
-                return BadRequest("Failed to remove current roles.");
+                if (await _userManager.IsInRoleAsync(user, role))
+                {
+                    var removeResult = await _userManager.RemoveFromRoleAsync(user, role);
+                    if (!removeResult.Succeeded)
+                    {
+                        return BadRequest("Failed to remove old role.");
+                    }
+                }
             }
 
             // Asignar el nuevo rol al usuario
