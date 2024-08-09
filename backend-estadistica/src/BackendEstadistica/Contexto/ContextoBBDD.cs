@@ -55,5 +55,4 @@ public class ContextoBBDD : DbContext
             .OnDelete(DeleteBehavior.Restrict);
     }
 
-
 }
