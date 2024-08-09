@@ -1,32 +1,47 @@
 <div class="filter-container">
-  <input type="text" [(ngModel)]="filterEnvio" placeholder="Filtro">
+  <input type="text" [(ngModel)]="filterEnvio" placeholder="Filtro" />
 </div>
 
 <div class="table-container">
   <div class="pagination-controls">
-    <pagination-controls (pageChange)="currentPage = $event" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+    <pagination-controls
+      (pageChange)="currentPage = $event"
+      previousLabel="Anterior"
+      nextLabel="Siguiente"
+    ></pagination-controls>
   </div>
-  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400" *ngIf="envios.length">
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+  <table
+    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+    *ngIf="envios.length"
+  >
+    <thead
+      class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+    >
       <tr>
-        <th (click)="order('id')" scope="col" class="px-6 py-3">
-          Id
-        </th>
+        <th (click)="order('id')" scope="col" class="px-6 py-3">Id</th>
         <th (click)="order('cantidad')" scope="col" class="px-6 py-3">
           Cantidad
         </th>
-        <th (click)="order('divisa')" scope="col" class="px-6 py-3">
-          Divisa
-        </th>
-        <th (click)="order('fecha')" scope="col" class="px-6 py-3">
-          Fecha
-        </th>
+        <th (click)="order('divisa')" scope="col" class="px-6 py-3">Divisa</th>
+        <th (click)="order('fecha')" scope="col" class="px-6 py-3">Fecha</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let envio of enviosFilter | paginate: { itemsPerPage: 20, currentPage: currentPage }" class="bg-white border-b">
-        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-          <a [routerLink]="['/estadisticas/clientes', envio.id]" class="block w-full h-full">
+      <tr
+        *ngFor="
+          let envio of enviosFilter
+            | paginate : { itemsPerPage: 20, currentPage: currentPage }
+        "
+        class="bg-white border-b"
+      >
+        <th
+          scope="row"
+          class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+        >
+          <a
+            [routerLink]="['/estadisticas/clientes', envio.id]"
+            class="block w-full h-full"
+          >
             {{ envio.id }}
           </a>
         </th>
@@ -40,6 +55,6 @@
           {{ envio.fecha }}
         </td>
       </tr>
-    </tbody>    
+    </tbody>
   </table>
 </div>
