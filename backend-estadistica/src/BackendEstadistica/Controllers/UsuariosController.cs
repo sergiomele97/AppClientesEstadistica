@@ -56,49 +56,53 @@ public class UsuariosController : ControllerBase
 
     //     Post en nuestro Repositorio
     [HttpPost("crearUsuario")]
-    public IActionResult AddUsuario([FromBody] Usuario nuevoUsuario)
+    public string AddUsuario(Usuario nuevoUsuario)
     {
+
+        usuarioRepositorio.AddUsuario(nuevoUsuario);
+
+        return "Usuario creado correctamente";
 
 
         // NotFound() -> El POST está vacio
-        if (nuevoUsuario == null)
-        {
-            return NotFound();
-        }
+        //if (nuevoUsuario == null)
+        //{
+        //    return NotFound();
+        //}
         // NotFound() -> Estos campos son obligatorios
-        if (string.IsNullOrEmpty(nuevoUsuario.Rol) ||
-            string.IsNullOrEmpty(nuevoUsuario.Correo) ||
-            string.IsNullOrEmpty(nuevoUsuario.Contraseña))
-        {
-            return BadRequest("Todos los campos del usuario (Nombre, Correo, Contraseña) son obligatorios.");
-        }
+        //if (string.IsNullOrEmpty(nuevoUsuario.Rol) ||
+        //    string.IsNullOrEmpty(nuevoUsuario.Correo) ||
+        //    string.IsNullOrEmpty(nuevoUsuario.Contraseña))
+        //{
+        //    return BadRequest("Todos los campos del usuario (Nombre, Correo, Contraseña) son obligatorios.");
+        //}
         // Si todo OK: Llamamos al método Agregar usuario y devolvemos OK.
-        if (!nuevoUsuario.Correo.IsValidEmail())
-        {
+        //if (!nuevoUsuario.Correo.IsValidEmail())
+        //{
 
-            return BadRequest("El formato del correo no es válido");
+        //    return BadRequest("El formato del correo no es válido");
 
-        }
+        //}
 
-        if(usuarioRepositorio.EmailExist(nuevoUsuario.Correo)) {
+        //if(usuarioRepositorio.EmailExist(nuevoUsuario.Correo)) {
 
-            return BadRequest("El email ya está en uso.");
+        //    return BadRequest("El email ya está en uso.");
             
-        }
+        //}
 
-        try
-        {
-            // Agregar el usuario usando el repositorio
-            usuarioRepositorio.AddUsuario(nuevoUsuario);
+        //try
+        //{
+        //     Agregar el usuario usando el repositorio
+        //    usuarioRepositorio.AddUsuario(nuevoUsuario);
 
-            // Devolver un código de estado 201 (Creado) y la ubicación del nuevo recurso
-            return CreatedAtAction(nameof(AddUsuario), new { id = nuevoUsuario.Id }, nuevoUsuario);
-        }
-        catch (Exception ex)
-        {
-            // Manejar errores, por ejemplo, problemas con la base de datos
-            return StatusCode(500, $"Error al agregar el usuario: {ex.Message}");
-        }
+        //     Devolver un código de estado 201 (Creado) y la ubicación del nuevo recurso
+        //    return CreatedAtAction(nameof(AddUsuario), new { id = nuevoUsuario.Id }, nuevoUsuario);
+        //}
+        //catch (Exception ex)
+        //{
+        //     Manejar errores, por ejemplo, problemas con la base de datos
+        //    return StatusCode(500, $"Error al agregar el usuario: {ex.Message}");
+        //}
 
     }
 
