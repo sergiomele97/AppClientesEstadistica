@@ -1,7 +1,7 @@
 ﻿namespace ApiBasesDeDatosProyecto.Helpers;
 public class ClienteFaker: Faker<Cliente>
 {
-    public ClienteFaker()
+    public ClienteFaker(): base("es")
     {
         RuleFor(d => d.Nombre, f => f.Name.ToString());
         RuleFor(d => d.Apellido, f => f.Name.LastName());
