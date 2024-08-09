@@ -56,6 +56,14 @@ namespace ApiBasesDeDatosProyecto.Controllers
             return Ok(new { Id = pais.Id });
         }
 
+       /* [HttpGet("GenerarPaisesFake")]
+        public List<Pais> GenerarPaisesFake()
+        {
+            var paisFaker = new PaisFaker();
+            var paises = paisFaker.Generate(50);
+
+            return paises;
+        }*/
 
         // POST api/paises
         [HttpPost]
