@@ -235,7 +235,6 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Rol")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")

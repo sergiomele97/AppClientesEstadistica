@@ -32,6 +32,11 @@ export class UserService {
     return this.http.post<any>(`${this.URL}Account/register`, usuario);
   }
 
+  añadirRolUsuario(usuario: any): Observable<any> {
+    console.log(usuario); // Asegúrate de que los campos estén presentes y correctos DEBUG
+    return this.http.post<any>(`${this.URL}Account/cambiarRolPorEmail`, usuario);
+  }
+
   obtenerPaisIdPorNombre(nombre: string): Observable<{ id: number }> {
     // Construir la URL con el nombre del país
     const url = `${this.URL}Paises/nombre/${nombre}`;

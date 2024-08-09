@@ -6,9 +6,7 @@ export interface Usuario {
     ConfirmPassword: string;
     Nombre: string;
     Apellido: string;
-    Rol: string;
     PaisNombre: number;
-    Empleo: string;
     FechaNacimiento: number; // Asegúrate de que FechaNac sea de tipo Date
   }
   

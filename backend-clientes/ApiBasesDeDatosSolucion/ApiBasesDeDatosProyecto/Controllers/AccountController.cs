@@ -1,4 +1,6 @@
-﻿[Route("api/[controller]")]
+﻿using ApiBasesDeDatosProyecto.Entities;
+
+[Route("api/[controller]")]
 [ApiController]
 public class AccountController : ControllerBase
 {
@@ -7,7 +9,7 @@ public class AccountController : ControllerBase
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly ITokenService _tokenService;
     private readonly IClienteService _clienteService;
-    private readonly IUserService _userService;
+    private readonly ApiBasesDeDatosProyecto.IDentity.Serivicios.IUserService _userService;
     private readonly IPaisRepository _paisRepository; // Añadido
 
     public AccountController(
@@ -16,7 +18,7 @@ public class AccountController : ControllerBase
         RoleManager<IdentityRole> roleManager,
         ITokenService tokenService,
         IClienteService clienteService,
-        IUserService userService,
+        ApiBasesDeDatosProyecto.IDentity.Serivicios.IUserService userService,
         IPaisRepository paisRepository) // Añadido
     {
         _userManager = userManager;
@@ -87,46 +89,23 @@ public class AccountController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
     {
-        DateTime FechaNac = DateTimeOffset.FromUnixTimeMilliseconds(model.FechaNacimiento).UtcDateTime;
+        
         string rolPorDefecto = "Admin";
+        DateTime FechaNac = DateTimeOffset.FromUnixTimeMilliseconds(model.FechaNacimiento).UtcDateTime;
 
-        // Obtener el ID del país a través del repositorio
-        var pais = await _paisRepository.ObtenerPorNombre(model.PaisNombre);
-        if (pais == null)
-        {
-            return BadRequest("Country not found.");
-        }
 
         var user = new ApplicationUser
         {
+            FullName = model.Nombre + " " + model.Apellido,
             UserName = model.Email,
             Email = model.Email,
             DateOfBirth = FechaNac,
-            Rol = rolPorDefecto
         };
 
         var result = await _userManager.CreateAsync(user, model.Password);
         if (!result.Succeeded)
         {
             return BadRequest(result.Errors);
-        }
-
-        // Asignar rol a usuario
-        await _userManager.AddToRoleAsync(user, user.Rol);
-        if (rolPorDefecto == "Client")
-        {
-            // Si es un cliente, guardar datos adicionales
-            var cliente = new Cliente
-            {
-                Nombre = model.Nombre,
-                Apellido = model.Apellido,
-                PaisId = pais.Id, // Asignar el ID del país obtenido
-                Empleo = model.Empleo,
-                FechaNacimiento = FechaNac,
-                // Asignar el ID del usuario si es necesario
-                //UserId = user.Id
-            };
-            await _clienteService.RegisterClientAsync(cliente);
         }
 
         // Generar el token y devolverlo
@@ -191,6 +170,32 @@ public class AccountController : ControllerBase
             return BadRequest("Failed to add new role.");
         }
 
-        return Ok("Role changed successfully.");
+        if (model.NuevoRol == "Client")
+        {
+
+         // Obtener el ID del país a través del repositorio
+        var pais = await _paisRepository.ObtenerPorNombre(model.Pais);
+        if (pais == null)
+        {
+            return BadRequest("Country not found.");
+        }
+
+        DateTime FechaNac = DateTimeOffset.FromUnixTimeMilliseconds(model.FechaNacimiento).UtcDateTime;
+            // Si es un cliente, guardar datos adicionales
+            var cliente = new Cliente
+            {
+                Nombre = model.Nombre,
+                Apellido = model.Apellido,
+                PaisId = pais.Id, // Asignar el ID del país obtenido
+                Empleo = model.Empleo,
+                FechaNacimiento = FechaNac,
+                // Asignar el ID del usuario si es necesario
+                //UserId = user.Id
+            };
+            await _clienteService.RegisterClientAsync(cliente);
+        }
+
+
+        return Ok(new { message = "Role changed successfully." });
     }
 }

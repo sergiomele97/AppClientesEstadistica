@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../servicios/user.service';
 import { Usuario } from '../interfaces/usuario.interface';
+import { CambioRolModel } from '../interfaces/cambioRol.interface';
 
 @Component({
   selector: 'app-registro',
@@ -53,37 +54,66 @@ export class RegistroComponent implements OnInit {
       this.showValidationErrors();
       return;
     }
-
+  
     if (this.registroForm.value.Contraseña !== this.registroForm.value.Contraseña2) {
       alert('Las contraseñas no coinciden.');
       return;
     }
-
+  
     const fechaNacTimestamp = new Date(this.registroForm.value.FechaNac).getTime();
-
+  
     const usuario: Usuario = {
       Email: this.registroForm.value.Correo,
       Password: this.registroForm.value.Contraseña,
       ConfirmPassword: this.registroForm.value.Contraseña2,
       Nombre: this.registroForm.value.Nombre,
       Apellido: this.registroForm.value.Apellido,
-      Rol: this.registroForm.value.Rol,
       PaisNombre: this.registroForm.value.PaisNombre,
-      Empleo: this.registroForm.value.Empleo,
       FechaNacimiento: fechaNacTimestamp
     };
-
+  
+    // Registrar usuario
     this.miServicio.registrarUsuario(usuario).subscribe(
       response => {
         console.log('Usuario registrado exitosamente', response);
+  
+        // Solo después de que el usuario ha sido registrado exitosamente, agregar el rol
+        const datosCambioRol: CambioRolModel = {
+          Email: this.registroForm.value.Correo,
+          NuevoRol: "Admin",
+          Nombre: this.registroForm.value.Nombre,
+          Apellido: this.registroForm.value.Apellido,
+          Pais: this.registroForm.value.PaisNombre,
+          Empleo: this.registroForm.value.Empleo,
+          FechaNacimiento: fechaNacTimestamp
+        };
+  
+        this.miServicio.añadirRolUsuario(datosCambioRol).subscribe(
+          response => {
+            console.log('Rol añadido exitosamente', response);
+          },
+          error => {
+            if (error.status === 400) {
+              console.error('Error de validación al añadir rol', error.error);
+              alert('Error al añadir rol: ' + error.error);
+            } else if (error.status === 0) {
+              console.error('No se pudo conectar al servidor al añadir rol.');
+              alert('No se pudo conectar al servidor al añadir rol.');
+            } else {
+              console.error(`Error ${error.status}: ${error.message}`);
+              alert('Error al añadir rol: ' + error.message);
+            }
+          }
+        );
+  
       },
       error => {
         if (error.status === 400) {
-          console.error('Error de validación', error.error);
+          console.error('Error de validación al registrar usuario', error.error);
           alert('Error al registrar usuario: ' + error.error);
         } else if (error.status === 0) {
-          console.error('No se pudo conectar al servidor.');
-          alert('No se pudo conectar al servidor.');
+          console.error('No se pudo conectar al servidor al registrar usuario.');
+          alert('No se pudo conectar al servidor al registrar usuario.');
         } else {
           console.error(`Error ${error.status}: ${error.message}`);
           alert('Error al registrar usuario: ' + error.message);
@@ -91,6 +121,7 @@ export class RegistroComponent implements OnInit {
       }
     );
   }
+  
 
   private showValidationErrors(): void {
     let errorMessage = 'Por favor corrige los siguientes errores:\n';
