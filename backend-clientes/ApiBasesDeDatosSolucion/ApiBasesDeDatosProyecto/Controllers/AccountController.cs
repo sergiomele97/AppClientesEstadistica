@@ -1,7 +1,4 @@
-﻿using ApiBasesDeDatosProyecto.IDentity.Serivicios;
-using System;
-
-[Route("api/[controller]")]
+﻿[Route("api/[controller]")]
 [ApiController]
 public class AccountController : ControllerBase
 {
@@ -11,6 +8,7 @@ public class AccountController : ControllerBase
     private readonly ITokenService _tokenService;
     private readonly IClienteService _clienteService;
     private readonly IUserService _userService;
+    private readonly IPaisRepository _paisRepository; // Añadido
 
     public AccountController(
         UserManager<ApplicationUser> userManager,
@@ -18,7 +16,8 @@ public class AccountController : ControllerBase
         RoleManager<IdentityRole> roleManager,
         ITokenService tokenService,
         IClienteService clienteService,
-        IUserService userService)
+        IUserService userService,
+        IPaisRepository paisRepository) // Añadido
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -26,13 +25,40 @@ public class AccountController : ControllerBase
         _tokenService = tokenService;
         _clienteService = clienteService;
         _userService = userService;
+        _paisRepository = paisRepository; // Añadido
+    }
+    [HttpGet("users")]
+    public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers(string? mail = null)
+    {
+        if (string.IsNullOrEmpty(mail))
+        {
+            // Si no se proporciona un mail, devuelve todos los usuarios.
+            var users = await _userService.GetAllUsersAsync();
+            return Ok(users);
+        }
+        else
+        {
+            // Si se proporciona un mail, busca un usuario específico por correo electrónico.
+            var user = await _userService.GetUserByEmailAsync(mail);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+            return Ok(user);
+        }
     }
 
-    [HttpGet("users")]
-    public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetAllUsers()
+    [HttpGet("verificarRol")]
+    public async Task<IActionResult> VerificarRol(string email)
     {
-        var users = await _userService.GetAllUsersAsync();
-        return Ok(users);
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+            return NotFound("Usuario no encontrado.");
+        }
+
+        var roles = await _userManager.GetRolesAsync(user);
+        return Ok(new { roles });
     }
 
     [HttpDelete("users/{id}")]
@@ -46,52 +72,68 @@ public class AccountController : ControllerBase
         return NotFound(new { message = "User not found" });
     }
 
+    [HttpGet("users/{email}")]
+    public async Task<ActionResult<ApplicationUser>> GetUserByEmail(string email)
+    {
+        var user = await _userService.GetUserByEmailAsync(email);
+        if (user == null)
+        {
+            return NotFound(new { message = "User not found" });
+        }
+        return Ok(user);
+    }
+
+
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
     {
-        // Validar que el rol sea válido
-        if (!await _roleManager.RoleExistsAsync(model.Rol))
-        {
-            return BadRequest("Role does not exist.");
-        }
         DateTime FechaNac = DateTimeOffset.FromUnixTimeMilliseconds(model.FechaNacimiento).UtcDateTime;
+        string rolPorDefecto = "Admin";
+
+        // Obtener el ID del país a través del repositorio
+        var pais = await _paisRepository.ObtenerPorNombre(model.PaisNombre);
+        if (pais == null)
+        {
+            return BadRequest("Country not found.");
+        }
 
         var user = new ApplicationUser
         {
             UserName = model.Email,
             Email = model.Email,
-            Rol = model.Rol, // Asignar el rol recibido
-            DateOfBirth = FechaNac
+            DateOfBirth = FechaNac,
+            Rol = rolPorDefecto
         };
 
         var result = await _userManager.CreateAsync(user, model.Password);
-        if (result.Succeeded)
+        if (!result.Succeeded)
         {
-            // Asignar rol a usuario
-            await _userManager.AddToRoleAsync(user, user.Rol);
-
-            // Si es un cliente, guardar datos adicionales
-            if (user.Rol == "Client")
-            {
-                var cliente = new Cliente
-                {
-                    Nombre = model.Nombre,
-                    Apellido = model.Apellido,
-                    PaisId = model.PaisId,
-                    Empleo = model.Empleo,
-                    FechaNacimiento = FechaNac,
-                    // Asignar el ID del usuario si es necesario
-                    //UserId = user.Id
-                };
-                await _clienteService.RegisterClientAsync(cliente);
-            }
-
-            var token = _tokenService.GenerateJwtToken(user);
-            return Ok(new { Token = token });
+            return BadRequest(result.Errors);
         }
 
-        return BadRequest(result.Errors);
+        // Asignar rol a usuario
+        await _userManager.AddToRoleAsync(user, user.Rol);
+        if (rolPorDefecto == "Client")
+        {
+            // Si es un cliente, guardar datos adicionales
+            var cliente = new Cliente
+            {
+                Nombre = model.Nombre,
+                Apellido = model.Apellido,
+                PaisId = pais.Id, // Asignar el ID del país obtenido
+                Empleo = model.Empleo,
+                FechaNacimiento = FechaNac,
+                // Asignar el ID del usuario si es necesario
+                //UserId = user.Id
+            };
+            await _clienteService.RegisterClientAsync(cliente);
+        }
+
+        // Generar el token y devolverlo
+        var token = _tokenService.GenerateJwtToken(user);
+        return Ok(new { Token = token });
     }
+
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginViewModel model)
@@ -112,30 +154,34 @@ public class AccountController : ControllerBase
         return Unauthorized();
     }
 
-    [HttpPost("change-role")]
-    public async Task<IActionResult> ChangeRole([FromBody] ChangeRoleViewModel model)
+    [HttpPost("cambiarRolPorEmail")]
+    public async Task<IActionResult> CambiarRolUsuario([FromBody] ChangeRoleViewModel model)
     {
-        // Validar que el rol sea válido
-        if (!await _roleManager.RoleExistsAsync(model.NuevoRol))
-        {
-            return BadRequest("Role does not exist.");
-        }
-
-        // Buscar el usuario por su ID
-        var user = await _userManager.FindByIdAsync(model.UserId);
+        var user = await _userManager.FindByEmailAsync(model.Email);
         if (user == null)
         {
             return NotFound("User not found.");
         }
 
+        if (!await _roleManager.RoleExistsAsync(model.NuevoRol))
+        {
+            return BadRequest("Role does not exist.");
+        }
+
         // Obtener los roles actuales del usuario
         var currentRoles = await _userManager.GetRolesAsync(user);
 
-        // Eliminar todos los roles actuales del usuario
-        var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
-        if (!removeResult.Succeeded)
+        // Eliminar roles antiguos si es necesario
+        foreach (var role in currentRoles)
         {
-            return BadRequest("Failed to remove current roles.");
+            if (await _userManager.IsInRoleAsync(user, role))
+            {
+                var removeResult = await _userManager.RemoveFromRoleAsync(user, role);
+                if (!removeResult.Succeeded)
+                {
+                    return BadRequest("Failed to remove old role.");
+                }
+            }
         }
 
         // Asignar el nuevo rol al usuario

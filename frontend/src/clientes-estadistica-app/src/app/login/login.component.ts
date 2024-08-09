@@ -37,13 +37,13 @@ username: any;
   authentication() {
     this.usuarioService.autenticarUsuario(this.email, this.contrase, true).subscribe(response => {
       if (response && response.token) {
-        // Guarda el token en almacenamiento local o en algún servicio de autenticación
         localStorage.setItem('token', response.token);
-        this.route.navigate(['/registro']);
+        this.route.navigate(['/estadisticas']); // Redirige a la ruta protegida
       } else {
         alert('Credenciales incorrectas');
       }
     });
   }
+  
   
 }

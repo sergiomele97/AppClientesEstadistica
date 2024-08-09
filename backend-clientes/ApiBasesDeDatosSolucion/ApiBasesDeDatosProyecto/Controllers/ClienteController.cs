@@ -1,170 +1,189 @@
-﻿using ApiBasesDeDatosProyecto.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
+﻿namespace ApiBasesDeDatosProyecto.Controllers;
 
-namespace ApiBasesDeDatosProyecto.Controllers
+[Route("api/[controller]")]
+[ApiController]
+
+public class ClienteController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    private readonly IClienteRepository _clienteRepository;
+    private readonly IPaisRepository _paisRepository;
+    private readonly IMapper _mapper;
+    private readonly ILogger<ClienteController> _logger;
+    private readonly ClienteService _clienteService;
+    private readonly Contexto _contexto;
 
-    public class ClienteController : ControllerBase
+    public ClienteController(
+        IClienteRepository clienteRepository,
+        IMapper mapper,
+        IPaisRepository paisRepository,
+        ILogger<ClienteController> logger,
+        ClienteService clienteService,
+        Contexto contexto)
     {
-        private readonly IClienteRepository _clienteRepository;
-        private readonly IPaisRepository _paisRepository;
-        private readonly IMapper _mapper;
-        private readonly ILogger<ClienteController> _logger;
-        private readonly ClienteService _clienteService;
+        _clienteRepository = clienteRepository;
+        _paisRepository = paisRepository;
+        _mapper = mapper;
+        _logger = logger;
+        _clienteService = clienteService;
+        _contexto = contexto;
+    }
 
-        public ClienteController(
-            IClienteRepository clienteRepository,
-            IMapper mapper,
-            IPaisRepository paisRepository,
-            ILogger<ClienteController> logger,
-            ClienteService clienteService)
+    // GET: api/cliente
+    [HttpGet]
+
+    public async Task<ActionResult<List<ClienteDto>>> Get()
+    {
+        _logger.LogInformation($"Obteniendo todos los clientes.");
+        List<Cliente> lista = await _clienteRepository.ObtenerTodos();
+        _logger.LogInformation($"Se obtuvieron {lista.Count} clientes.");
+        return Ok(_mapper.Map<List<ClienteDto>>(lista));
+    }
+
+    // GET api/cliente/5
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ClienteDto>> Get(int id)
+    {
+        _logger.LogInformation($"Obteniendo cliente con ID {id}.");
+        var cliente = await _clienteRepository.ObtenerPorId(id);
+        if (cliente == null)
         {
-            _clienteRepository = clienteRepository;
-            _paisRepository = paisRepository;
-            _mapper = mapper;
-            _logger = logger;
-            _clienteService = clienteService;
+            _logger.LogWarning($"Cliente con ID {id} no encontrado.");
+            return NotFound();
+        }
+        return Ok(_mapper.Map<ClienteDto>(cliente));
+    }
+
+    // GET api/cliente/paisNombre/{nombre}
+    [HttpGet("paisNombre/{nombre}")]
+    public async Task<ActionResult<List<ClienteDto>>> GetClientesPorNombrePais(string nombre)
+    {
+        _logger.LogInformation($"Obteniendo clientes para el país con nombre {nombre}.");
+        var pais = await _paisRepository.ObtenerPorNombre(nombre);
+        if (pais == null)
+        {
+            _logger.LogWarning($"País con nombre {nombre} no encontrado.");
+            return NotFound();
         }
 
-        // GET: api/cliente
-        [HttpGet]
-
-        public async Task<ActionResult<List<ClienteDto>>> Get()
+        var clientes = await _clienteRepository.ObtenerClientesPorPaisId(pais.Id);
+        if (clientes == null || clientes.Count == 0)
         {
-            _logger.LogInformation($"Obteniendo todos los clientes.");
-            List<Cliente> lista = await _clienteRepository.ObtenerTodos();
-            _logger.LogInformation($"Se obtuvieron {lista.Count} clientes.");
-            return Ok(_mapper.Map<List<ClienteDto>>(lista));
+            _logger.LogWarning($"No se encontraron clientes para el país con nombre {nombre}.");
+            return NotFound();
         }
 
-        // GET api/cliente/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ClienteDto>> Get(int id)
+        return Ok(_mapper.Map<List<ClienteDto>>(clientes));
+    }
+
+    [HttpGet("generados")]
+    public ActionResult<List<Cliente>> GetClientesGenerados(int count = 10)
+    {
+        var clientes = _clienteService.GetClientes(count);
+        return Ok(clientes);
+    }
+
+    [HttpGet("ClientesFake")]
+    public ActionResult<List<ClienteDto>> GetClientesFake(int count)
+    {
+        /*var clientesRepositorio = new ClienteRepository(_contexto);
+        var cliente = new ClienteFaker().Generate();
+        _contexto.Clientes.Add(cliente);
+        _contexto.SaveChanges();
+
+        var clienteRecuperado = await clientesRepositorio.ObtenerPorId(cliente.Id);
+
+        clienteRecuperado.Should().BeEquivalentTo(cliente, options => options.
+        ComparingByMembers<Cliente>());*/
+
+        var clientesFaker = new ClienteFaker().Generate(count);
+        _contexto.Clientes.AddRange(clientesFaker);
+        _contexto.SaveChanges();
+
+        var clienteDtos = _mapper.Map<List<Cliente>>(clientesFaker);
+        return Ok(clienteDtos);
+    }
+
+    // POST api/cliente
+    [HttpPost]
+    public async Task<ActionResult> Post([FromBody] ClienteDto clienteDto)
+    {
+        _logger.LogInformation($"Creando un nuevo cliente.");
+        if (clienteDto == null)
         {
-            _logger.LogInformation($"Obteniendo cliente con ID {id}.");
-            var cliente = await _clienteRepository.ObtenerPorId(id);
-            if (cliente == null)
-            {
-                _logger.LogWarning($"Cliente con ID {id} no encontrado.");
-                return NotFound();
-            }
-            return Ok(_mapper.Map<ClienteDto>(cliente));
+            _logger.LogWarning($"El objeto ClienteDto recibido es nulo.");
+            return BadRequest($"El objeto ClienteDto no puede ser nulo.");
         }
 
-        // GET api/cliente/paisNombre/{nombre}
-        [HttpGet("paisNombre/{nombre}")]
-        public async Task<ActionResult<List<ClienteDto>>> GetClientesPorNombrePais(string nombre)
+        if (!ModelState.IsValid)
         {
-            _logger.LogInformation($"Obteniendo clientes para el país con nombre {nombre}.");
-            var pais = await _paisRepository.ObtenerPorNombre(nombre);
-            if (pais == null)
-            {
-                _logger.LogWarning($"País con nombre {nombre} no encontrado.");
-                return NotFound();
-            }
-
-            var clientes = await _clienteRepository.ObtenerClientesPorPaisId(pais.Id);
-            if (clientes == null || clientes.Count == 0)
-            {
-                _logger.LogWarning($"No se encontraron clientes para el país con nombre {nombre}.");
-                return NotFound();
-            }
-
-            return Ok(_mapper.Map<List<ClienteDto>>(clientes));
+            _logger.LogWarning($"El modelo ClienteDto no es válido. Errores: {ModelState}");
+            return BadRequest(ModelState);
         }
 
-        [HttpGet("generados")]
-        public ActionResult<List<Cliente>> GetClientesGenerados(int count = 10)
+        var cliente = _mapper.Map<Cliente>(clienteDto);
+        _clienteRepository.Agregar(cliente);
+
+        if (await _clienteRepository.GuardarCambios())
         {
-            var clientes = _clienteService.GetClientes(count);
-            return Ok(clientes);
+            _logger.LogInformation($"Cliente con ID {cliente.Id} creado correctamente.");
+            return CreatedAtAction(nameof(Get), new { id = cliente.Id }, clienteDto);
         }
 
-        // POST api/cliente
-        [HttpPost]
-        public async Task<ActionResult> Post([FromBody] ClienteDto clienteDto)
+        _logger.LogError($"No se pudo agregar el cliente.");
+        return BadRequest($"No se pudo agregar el cliente.");
+    }
+
+    // PUT api/cliente/5
+    [HttpPut("{id}")]
+    public async Task<ActionResult> Put(int id, [FromBody] ClienteDto clienteDto)
+    {
+        _logger.LogInformation($"Actualizando cliente con ID {id}.");
+        if (id != clienteDto.ClienteId)
         {
-            _logger.LogInformation($"Creando un nuevo cliente.");
-            if (clienteDto == null)
-            {
-                _logger.LogWarning($"El objeto ClienteDto recibido es nulo.");
-                return BadRequest($"El objeto ClienteDto no puede ser nulo.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                _logger.LogWarning($"El modelo ClienteDto no es válido. Errores: {ModelState}");
-                return BadRequest(ModelState);
-            }
-
-            var cliente = _mapper.Map<Cliente>(clienteDto);
-            _clienteRepository.Agregar(cliente);
-
-            if (await _clienteRepository.GuardarCambios())
-            {
-                _logger.LogInformation($"Cliente con ID {cliente.Id} creado correctamente.");
-                return CreatedAtAction(nameof(Get), new { id = cliente.Id }, clienteDto);
-            }
-
-            _logger.LogError($"No se pudo agregar el cliente.");
-            return BadRequest($"No se pudo agregar el cliente.");
+            _logger.LogWarning($"ID del cliente en la solicitud ({clienteDto.ClienteId}) no coincide con el ID de la URL ({id}).");
+            return BadRequest("ID del cliente no coincide.");
         }
 
-        // PUT api/cliente/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] ClienteDto clienteDto)
+        if (!ModelState.IsValid)
         {
-            _logger.LogInformation($"Actualizando cliente con ID {id}.");
-            if (id != clienteDto.ClienteId)
-            {
-                _logger.LogWarning($"ID del cliente en la solicitud ({clienteDto.ClienteId}) no coincide con el ID de la URL ({id}).");
-                return BadRequest("ID del cliente no coincide.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                _logger.LogWarning($"El modelo ClienteDto no es válido. Errores: {ModelState}");
-                return BadRequest(ModelState);
-            }
-
-            var cliente = _mapper.Map<Cliente>(clienteDto);
-            _clienteRepository.Actualizar(cliente);
-
-            if (await _clienteRepository.GuardarCambios())
-            {
-                _logger.LogInformation($"Cliente con ID {id} actualizado correctamente.");
-                return NoContent();
-            }
-
-            _logger.LogError($"No se pudo actualizar el cliente con ID {id}.");
-            return BadRequest($"No se pudo actualizar el cliente.");
+            _logger.LogWarning($"El modelo ClienteDto no es válido. Errores: {ModelState}");
+            return BadRequest(ModelState);
         }
 
-        // DELETE api/cliente/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        var cliente = _mapper.Map<Cliente>(clienteDto);
+        _clienteRepository.Actualizar(cliente);
+
+        if (await _clienteRepository.GuardarCambios())
         {
-            _logger.LogInformation($"Eliminando cliente con ID {id}.");
-            var cliente = await _clienteRepository.ObtenerPorId(id);
-            if (cliente == null)
-            {
-                _logger.LogWarning($"Cliente con ID {id} no encontrado para eliminar.");
-                return NotFound();
-            }
-
-            _clienteRepository.Eliminar(cliente);
-
-            if (await _clienteRepository.GuardarCambios())
-            {
-                _logger.LogInformation($"Cliente con ID {id} eliminado correctamente.");
-                return NoContent();
-            }
-
-            _logger.LogError($"No se pudo eliminar el cliente con ID {id}.");
-            return BadRequest($"No se pudo eliminar el cliente.");
+            _logger.LogInformation($"Cliente con ID {id} actualizado correctamente.");
+            return NoContent();
         }
+
+        _logger.LogError($"No se pudo actualizar el cliente con ID {id}.");
+        return BadRequest($"No se pudo actualizar el cliente.");
+    }
+
+    // DELETE api/cliente/5
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        _logger.LogInformation($"Eliminando cliente con ID {id}.");
+        var cliente = await _clienteRepository.ObtenerPorId(id);
+        if (cliente == null)
+        {
+            _logger.LogWarning($"Cliente con ID {id} no encontrado para eliminar.");
+            return NotFound();
+        }
+
+        _clienteRepository.Eliminar(cliente);
+
+        if (await _clienteRepository.GuardarCambios())
+        {
+            _logger.LogInformation($"Cliente con ID {id} eliminado correctamente.");
+            return NoContent();
+        }
+
+        _logger.LogError($"No se pudo eliminar el cliente con ID {id}.");
+        return BadRequest($"No se pudo eliminar el cliente.");
     }
 }
