@@ -1,7 +1,9 @@
-﻿namespace BackendEstadistica.Models;
+﻿namespace BackendEstadistica.Entidades;
 
-public class ClienteDto
+public class Cliente
 {
+
+    [Key]
     public int ClienteId { get; set; }
     public string? Nombre { get; set; }
     public string? Contraseña { get; set; }
@@ -17,4 +19,5 @@ public class ClienteDto
     public ICollection<Conversion> Conversiones { get; set; } = new List<Conversion>();
     public ICollection<Transaccion> TransaccionesOrigen { get; set; } = new List<Transaccion>();
     public ICollection<Transaccion> TransaccionesDestino { get; set; } = new List<Transaccion>();
+
 }

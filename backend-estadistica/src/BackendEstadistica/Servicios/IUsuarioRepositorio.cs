@@ -5,7 +5,7 @@ namespace BackendEstadistica.Servicios;
 public interface IUsuarioRepositorio
 {
     List<Usuario> GetUsuarios();
-    List<Usuario> GetUsuariosFiltrando(string nombre, int numeroPagina, int tamañoPagina);
+    List<Usuario> GetUsuariosFiltrando(string email, int numeroPagina, int tamañoPagina);
     Usuario GetUsuarioById(int id);
     bool GuardarCambios();
     bool EmailExist(string email);
