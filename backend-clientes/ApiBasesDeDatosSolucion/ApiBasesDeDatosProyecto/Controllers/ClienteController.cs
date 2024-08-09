@@ -39,6 +39,7 @@ public class ClienteController : ControllerBase
         return Ok(_mapper.Map<List<ClienteDto>>(lista));
     }
 
+
     // GET api/cliente/5
     [HttpGet("{id}")]
     public async Task<ActionResult<ClienteDto>> Get(int id)
@@ -186,4 +187,23 @@ public class ClienteController : ControllerBase
         _logger.LogError($"No se pudo eliminar el cliente con ID {id}.");
         return BadRequest($"No se pudo eliminar el cliente.");
     }
+
+    [HttpGet("GetPaisPorEmail")]
+    public IActionResult GetPaisPorEmail(string email)
+    {
+        
+        var cliente = _contexto.Clientes
+            .Include(c => c.Pais)  
+            .FirstOrDefault(c => c.Email == email);
+
+    
+        if (cliente == null)
+        {
+            return NotFound("Cliente no encontrado.");
+        }
+
+        // Si el cliente se encuentra, retorna el nombre del país en un OK
+        return Ok(cliente.Pais.Nombre);
+    }
+
 }
