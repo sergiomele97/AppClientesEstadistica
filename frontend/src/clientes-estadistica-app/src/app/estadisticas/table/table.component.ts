@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { IEnvio } from 'src/app/interfaces/envios';
-import { EnviosService } from 'src/app/servicios/envios.service';
+import { ITransaccion } from 'src/app/interfaces/transaccion';
+import { TransaccionService } from 'src/app/servicios/transaccion.service';
 
 @Component({
   selector: 'app-table',
@@ -9,14 +9,14 @@ import { EnviosService } from 'src/app/servicios/envios.service';
   styleUrls: ['./table.component.css'],
 })
 export class TableComponent implements OnInit, OnDestroy {
-  
-  constructor(private enviosService: EnviosService) {}
+  constructor(private transaccionesService: TransaccionService) {}
 
   ngOnInit(): void {
-    this.subscription = this.enviosService.getEnvios().subscribe({
-      next: (envios) => {
-        this.envios = this.enviosService.formatEnvios(envios);
-        this.enviosFilter = this.filterEnviosByDivisa(this.filterEnvio);
+    this.subscription = this.transaccionesService.getTransacciones().subscribe({
+      next: (transacciones) => {
+        this.transaccionesFilter = this.filterTransaccionesByCliente(
+          this.filterTransaccion
+        );
       },
     });
   }
@@ -26,32 +26,33 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   subscription!: Subscription;
-  envios: IEnvio[] = [];
-  enviosFilter: IEnvio[] = [];
-  currentPage: number = 1;  // Página actual
+  transacciones: ITransaccion[] = [];
+  transaccionesFilter: ITransaccion[] = [];
+  currentPage: number = 1; // Página actual
 
-  _filterEnvio: string = '';
+  _filterTransaccion: number;
 
-  get filterEnvio(): string {
-    return this._filterEnvio;
+  get filterTransaccion(): number {
+    return this._filterTransaccion;
   }
 
-  set filterEnvio(value: string) {
-    this._filterEnvio = value;
+  set filterTransaccion(value: number) {
+    this._filterTransaccion = value;
     this.currentPage = 1;
-    this.enviosFilter = this.filterEnviosByDivisa(value)
+    this.transaccionesFilter = this.filterTransaccionesByCliente(value);
   }
 
-  filterEnviosByDivisa(filter: string): IEnvio[] {
-    return this.envios.filter((envio: IEnvio) => 
-      envio?.divisa?.toLowerCase().includes(filter.toLowerCase()));
+  filterTransaccionesByCliente(filter: number): ITransaccion[] {
+    return this.transacciones.filter((transaccion: ITransaccion) =>
+      transaccion?.clienteOrigenId === filter ||
+      transaccion?.clienteDestinoId === filter
+    );
   }
 
   columnOrder: string = '';
   directionOrder: boolean = true;
 
   order(column: string): void {
-
     if (this.columnOrder === column) {
       this.directionOrder = !this.directionOrder;
     } else {
@@ -59,17 +60,29 @@ export class TableComponent implements OnInit, OnDestroy {
       this.directionOrder = true;
     }
 
-    this.enviosFilter.sort((a, b) => {
+    this.transaccionesFilter.sort((a, b) => {
       let valorA, valorB;
 
       switch (column) {
-        case 'id':
-          valorA = a.id;
-          valorB = b.id;
+        case 'transaccionId':
+          valorA = a.transaccionId;
+          valorB = b.transaccionId;
           break;
-        case 'cantidad':
-          valorA = a.cantidad;
-          valorB = b.cantidad;
+        case 'clienteOrigenId':
+          valorA = a.clienteOrigenId;
+          valorB = b.clienteOrigenId;
+          break;
+        case 'clienteDestinoId':
+          valorA = a.clienteDestinoId;
+          valorB = b.clienteDestinoId;
+          break;
+        case 'importeOrigen':
+          valorA = a.importeRecibido;
+          valorB = b.importeRecibido;
+          break;
+        case 'importeRecibido':
+          valorA = a.importeRecibido;
+          valorB = b.importeRecibido;
           break;
         case 'fecha':
           valorA = a.fecha;

@@ -1,5 +1,5 @@
 <div class="filter-container">
-  <input type="text" [(ngModel)]="filterEnvio" placeholder="Filtro" />
+  <input type="text" [(ngModel)]="filterTransaccion" placeholder="Filtro" />
 </div>
 
 <div class="table-container">
@@ -12,7 +12,7 @@
   </div>
   <table
     class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
-    *ngIf="envios.length"
+    *ngIf="transacciones.length"
   >
     <thead
       class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
@@ -29,7 +29,7 @@
     <tbody>
       <tr
         *ngFor="
-          let envio of enviosFilter
+          let transaccion of transaccionesFilter
             | paginate : { itemsPerPage: 20, currentPage: currentPage }
         "
         class="bg-white border-b"
@@ -39,20 +39,25 @@
           class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
         >
           <a
-            [routerLink]="['/estadisticas/clientes', envio.id]"
+            [routerLink]="['/estadisticas/clientes', transaccion.clienteOrigenId]"
             class="block w-full h-full"
           >
-            {{ envio.id }}
+            {{ transaccion.clienteOrigenId }}
+          </a>
+        </th>
+        <th
+          scope="row"
+          class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+        >
+          <a
+            [routerLink]="['/estadisticas/clientes', transaccion.clienteDestinoId]"
+            class="block w-full h-full"
+          >
+            {{ transaccion.clienteDestinoId }}
           </a>
         </th>
         <td class="px-6 py-4">
-          {{ envio.cantidad }}
-        </td>
-        <td class="px-6 py-4">
-          {{ envio.divisa }}
-        </td>
-        <td class="px-6 py-4">
-          {{ envio.fecha }}
+          {{ transaccion.fecha }}
         </td>
       </tr>
     </tbody>
