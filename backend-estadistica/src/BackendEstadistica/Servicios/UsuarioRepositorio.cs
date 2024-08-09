@@ -23,9 +23,11 @@ namespace BackendEstadistica.Servicios
 
         public void AddUsuario(Usuario usuario)
         {
+
+            var usuarioFaker = new UsuarioFaker().Generate();
             
             // Añadir el usuario al DbSet
-            contextoBBDD.Add(usuario);
+            contextoBBDD.Add(usuarioFaker);
             contextoBBDD.SaveChanges();
 
         }
