@@ -1,9 +1,11 @@
-<select id="clienteSelect" (change)="onSelectCliente($event)">
-  <option *ngFor="let cliente of clientes" [value]="cliente.id">
-    {{ cliente.nombre }}
-  </option>
-</select>
-
+<div class="select-container">
+  <select id="clienteSelect" (change)="onSelectCliente($event)">
+    <option value="" disabled selected>Seleccionar cliente</option>
+    <option *ngFor="let cliente of clientes" [value]="cliente.id">
+      {{ cliente.nombre }}
+    </option>
+  </select>
+</div>
 
 <div id="data" *ngIf="cliente">
   <h1>Detalles del Cliente</h1>

@@ -1,3 +1,40 @@
+/* Contenedor del select */
+.select-container {
+  max-width: 650px; /* Ancho máximo del contenedor */
+  margin: 35px auto; /* Centrado horizontal con margen superior/inferior */
+  text-align: center; /* Centrar el contenido dentro del contenedor */
+}
+
+/* Estilo del select (dropdown) */
+.select-container select {
+  width: 100%; /* Ancho completo del select */
+  padding: 10px; /* Espaciado interno para el select */
+  font-size: 16px; /* Tamaño de la fuente */
+  border: 1px solid #ccc; /* Borde gris claro */
+  border-radius: 4px; /* Bordes redondeados */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  background-color: #fff; /* Fondo blanco */
+  color: #555; /* Color del texto */
+  appearance: none; /* Remover la apariencia por defecto */
+  -webkit-appearance: none; /* Remover la apariencia por defecto en WebKit */
+  -moz-appearance: none; /* Remover la apariencia por defecto en Mozilla */
+  margin-bottom: 10px; /* Margen inferior */
+}
+
+/* Estilo del select en foco (cuando se selecciona) */
+.select-container select:focus {
+  outline: none; /* Remover el contorno por defecto */
+  border-color: #999; /* Color del borde en foco */
+  box-shadow: 0 0 5px rgba(81, 203, 238, 1); /* Sombra azul en foco */
+}
+
+/* Estilo para la opción seleccionada */
+.select-container select option:checked {
+  background-color: #007bff; /* Fondo azul para la opción seleccionada */
+  color: #fff; /* Texto blanco para la opción seleccionada */
+}
+
+
 /* Contenedor principal */
 #data {
   max-width: 800px;
@@ -6,6 +43,7 @@
   background-color: #f9f9f9;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center; /* Centrar el contenido dentro del contenedor */
 }
 
 /* Encabezado */
@@ -28,31 +66,10 @@
   font-weight: bold;
 }
 
-/* Estilo del contenedor del select */
-#clienteSelectContainer {
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-/* Estilo del select (dropdown) */
-#clienteSelect {
-  width: 100%;
-  max-width: 400px;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  color: #555;
-}
-
 /* Contenedor del gráfico */
 #chart {
   margin-top: 40px;
+  text-align: center; /* Centrar el gráfico */
 }
 
 /* Responsividad */
