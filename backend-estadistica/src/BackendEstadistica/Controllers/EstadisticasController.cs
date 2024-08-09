@@ -127,7 +127,7 @@ namespace BackendEstadistica.Controllers
 
             estadisticasRepositorio.CrearPais(nuevoPais);
 
-            return "Conversion creada correctamente";
+            return "País creado correctamente";
 
         }
 
