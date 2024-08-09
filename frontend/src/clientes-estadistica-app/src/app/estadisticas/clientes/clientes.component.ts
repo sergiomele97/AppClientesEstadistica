@@ -1,4 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Subscription } from "rxjs";
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -6,8 +8,12 @@ import {
   ApexDataLabels,
   ApexPlotOptions,
   ApexYAxis,
-  ApexXAxis
+  ApexXAxis,
+  ApexTitleSubtitle
 } from "ng-apexcharts";
+import { ICliente } from "src/app/interfaces/cliente";
+import { ITransaccion } from "src/app/interfaces/transaccion";
+import { ClienteEstService } from "src/app/servicios/cliente-est.service";
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -16,6 +22,7 @@ export type ChartOptions = {
   plotOptions: ApexPlotOptions;
   yaxis: ApexYAxis;
   xaxis: ApexXAxis;
+  title: ApexTitleSubtitle;
 };
 
 @Component({
@@ -28,46 +35,91 @@ export class ClientesComponent  {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
-  constructor() {
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,  
+    private clienteService: ClienteEstService) {}
+
+  cliente: ICliente | undefined;
+  clientes: ICliente[] = [];
+  subscription!: Subscription;
+
+  ngOnInit(): void {
+    // Obtener la lista de clientes
+    this.subscription = this.clienteService.getClientes().subscribe({
+      next: (clientes) => {
+        this.clientes = clientes;
+      },
+      error: (err) => {
+        console.error('Error al obtener la lista de clientes:', err);
+      }
+    });
+
+    // Obtener el ID del cliente desde la ruta actual
+    const clienteId = Number(this.route.snapshot.paramMap.get('id'));
+    
+    // Llamar a getCliente con el ID del cliente
+    this.subscription = this.clienteService.getCliente(clienteId).subscribe({
+      next: (cliente) => {
+        // Asignar el cliente obtenido a la propiedad del componente
+        this.cliente = cliente;
+        // Actualizar gráfico
+        this.actualizarGrafico();
+      },
+      error: (err) => {
+        console.error('Error al obtener el cliente:', err);
+      }
+    });
+  }
+  
+  onSelectCliente(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement; // Asegurarte de que es un HTMLSelectElement
+    const clienteId = Number(selectElement.value);
+    this.router.navigate(['/estadisticas/clientes', clienteId]);
+  }
+  
+
+  private actualizarGrafico(): void {
+    if (!this.cliente) return;
+  
+    // Función para agrupar transacciones por fecha
+    const agruparPorFecha = (transacciones: ITransaccion[], esIngreso: boolean) => {
+      const resultado: Record<string, number> = {};
+  
+      transacciones.forEach(transaccion => {
+        const fecha = new Date(transaccion.fecha || '').toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const cantidad = esIngreso ? transaccion.importeRecibido || 0 : transaccion.importeEnviado || 0;
+  
+        if (resultado[fecha]) {
+          resultado[fecha] += cantidad;
+        } else {
+          resultado[fecha] = cantidad;
+        }
+      });
+  
+      return resultado;
+    };
+  
+    // Obtener transacciones de ingreso y pérdida agrupadas por fecha
+    const ingresosPorFecha = agruparPorFecha(this.cliente.transaccionesDestino || [], true);
+    const perdidasPorFecha = agruparPorFecha(this.cliente.transaccionesOrigen || [], false);
+  
+    // Obtener todas las fechas únicas
+    const fechas = Array.from(new Set([...Object.keys(ingresosPorFecha), ...Object.keys(perdidasPorFecha)]));
+  
+    // Crear datos para el gráfico
+    const dataIngresos = fechas.map(fecha => ingresosPorFecha[fecha] || 0);
+    const dataPerdidas = fechas.map(fecha => perdidasPorFecha[fecha] || 0);
+  
     this.chartOptions = {
       series: [
         {
-          name: "Cash Flow",
-          data: [
-            1.45,
-            5.42,
-            5.9,
-            -0.42,
-            -12.6,
-            -18.1,
-            -18.2,
-            -14.16,
-            -11.1,
-            -6.09,
-            0.34,
-            3.88,
-            13.07,
-            5.8,
-            2,
-            7.37,
-            8.1,
-            13.57,
-            15.75,
-            17.1,
-            19.8,
-            -27.03,
-            -54.4,
-            -47.2,
-            -43.3,
-            -18.6,
-            -48.6,
-            -41.1,
-            -39.6,
-            -37.6,
-            -29.4,
-            -21.4,
-            -2.4
-          ]
+          name: "Ingresos",
+          data: dataIngresos
+        },
+        {
+          name: "Pérdidas",
+          data: dataPerdidas
         }
       ],
       chart: {
@@ -76,77 +128,42 @@ export class ClientesComponent  {
       },
       plotOptions: {
         bar: {
-          colors: {
-            ranges: [
-              {
-                from: -100,
-                to: -46,
-                color: "#F15B46"
-              },
-              {
-                from: -45,
-                to: 0,
-                color: "#FEB019"
-              }
-            ]
-          },
-          columnWidth: "80%"
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      yaxis: {
-        title: {
-          text: "Growth"
-        },
-        labels: {
-          formatter: function(y) {
-            return y.toFixed(0) + "%";
+          dataLabels: {
+            position: "top"
           }
         }
       },
-      xaxis: {
-        type: "datetime",
-        categories: [
-          "2011-01-01",
-          "2011-02-01",
-          "2011-03-01",
-          "2011-04-01",
-          "2011-05-01",
-          "2011-06-01",
-          "2011-07-01",
-          "2011-08-01",
-          "2011-09-01",
-          "2011-10-01",
-          "2011-11-01",
-          "2011-12-01",
-          "2012-01-01",
-          "2012-02-01",
-          "2012-03-01",
-          "2012-04-01",
-          "2012-05-01",
-          "2012-06-01",
-          "2012-07-01",
-          "2012-08-01",
-          "2012-09-01",
-          "2012-10-01",
-          "2012-11-01",
-          "2012-12-01",
-          "2013-01-01",
-          "2013-02-01",
-          "2013-03-01",
-          "2013-04-01",
-          "2013-05-01",
-          "2013-06-01",
-          "2013-07-01",
-          "2013-08-01",
-          "2013-09-01"
-        ],
-        labels: {
-          rotate: -90
+      dataLabels: {
+        enabled: true,
+        formatter: (val) => `${val}`, // Puedes agregar el símbolo de la moneda si es necesario
+        style: {
+          fontSize: "12px",
+          colors: ["#304758"]
         }
+      },
+      xaxis: {
+        categories: fechas,
+        position: "bottom",
+        labels: {
+          offsetY: 0
+        }
+      },
+      yaxis: {
+        labels: {
+          show: true,
+          formatter: (val) => `${val}` // Puedes formatear el valor si es necesario
+        }
+      },
+      title: {
+        text: "Ingresos y Pérdidas del Cliente",
+        align: "center"
       }
     };
+  }
+  
+  
+  ngOnDestroy(): void {
+    // Cancelar la suscripción cuando el componente se destruya
+    this.subscription.unsubscribe();
   }
 }

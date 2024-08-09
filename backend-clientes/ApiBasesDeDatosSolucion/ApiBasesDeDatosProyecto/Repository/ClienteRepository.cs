@@ -67,6 +67,12 @@ namespace ApiBasesDeDatosProyecto.Repository
             return await contexto.Clientes.ToListAsync();
         }
 
+        /*public List<Cliente> GenerarClientesFake()
+        {
+            var clienteFaker = new ClienteFaker();
+            var clientes = clienteFaker.Generate(50);
 
+            return clientes;
+        }*/
     }
 }

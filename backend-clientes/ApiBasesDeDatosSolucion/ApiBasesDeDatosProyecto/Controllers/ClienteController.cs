@@ -39,6 +39,7 @@ public class ClienteController : ControllerBase
         return Ok(_mapper.Map<List<ClienteDto>>(lista));
     }
 
+
     // GET api/cliente/5
     [HttpGet("{id}")]
     public async Task<ActionResult<ClienteDto>> Get(int id)
@@ -75,32 +76,13 @@ public class ClienteController : ControllerBase
         return Ok(_mapper.Map<List<ClienteDto>>(clientes));
     }
 
-    [HttpGet("generados")]
-    public ActionResult<List<Cliente>> GetClientesGenerados(int count = 10)
+    [HttpGet("GenerarClientesFake")]
+    public List<Cliente> GenerarClientesFake()
     {
-        var clientes = _clienteService.GetClientes(count);
-        return Ok(clientes);
-    }
+        var clienteFaker = new ClienteFaker();
+        var clientes = clienteFaker.Generate(50);
 
-    [HttpGet("ClientesFake")]
-    public ActionResult<List<ClienteDto>> GetClientesFake(int count)
-    {
-        /*var clientesRepositorio = new ClienteRepository(_contexto);
-        var cliente = new ClienteFaker().Generate();
-        _contexto.Clientes.Add(cliente);
-        _contexto.SaveChanges();
-
-        var clienteRecuperado = await clientesRepositorio.ObtenerPorId(cliente.Id);
-
-        clienteRecuperado.Should().BeEquivalentTo(cliente, options => options.
-        ComparingByMembers<Cliente>());*/
-
-        var clientesFaker = new ClienteFaker().Generate(count);
-        _contexto.Clientes.AddRange(clientesFaker);
-        _contexto.SaveChanges();
-
-        var clienteDtos = _mapper.Map<List<Cliente>>(clientesFaker);
-        return Ok(clienteDtos);
+        return clientes;
     }
 
     // POST api/cliente
@@ -186,4 +168,23 @@ public class ClienteController : ControllerBase
         _logger.LogError($"No se pudo eliminar el cliente con ID {id}.");
         return BadRequest($"No se pudo eliminar el cliente.");
     }
+
+    [HttpGet("GetPaisPorEmail")]
+    public IActionResult GetPaisPorEmail(string email)
+    {
+        
+        var cliente = _contexto.Clientes
+            .Include(c => c.Pais)  
+            .FirstOrDefault(c => c.Email == email);
+
+    
+        if (cliente == null)
+        {
+            return NotFound("Cliente no encontrado.");
+        }
+
+        // Si el cliente se encuentra, retorna el nombre del país en un OK
+        return Ok(cliente.Pais.Nombre);
+    }
+
 }

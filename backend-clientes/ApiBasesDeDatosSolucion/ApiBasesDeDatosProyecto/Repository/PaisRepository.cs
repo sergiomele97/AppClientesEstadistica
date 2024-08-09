@@ -54,15 +54,9 @@ namespace ApiBasesDeDatosProyecto.Repository
                 .FirstOrDefaultAsync();
         }
 
-
-
-
-
         public async Task<List<Pais>> ObtenerTodos()
         {
             return await contexto.Paises.ToListAsync();
         }
-
-
     }
 }

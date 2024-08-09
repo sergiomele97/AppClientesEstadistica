@@ -24,6 +24,12 @@ namespace ApiBasesDeDatosProyecto.Models
         public string NombrePais { get; set; }
 
         [Required]
+
+        public string Email { get; set; }   
+
+
+
+        [Required]
         public int PaisId { get; set; }
     }
 }

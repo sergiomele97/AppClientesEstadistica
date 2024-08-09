@@ -25,13 +25,15 @@ import { ClustersGraphComponent } from './estadisticas/clusters/clusters-graph/c
 import { ClustersTableComponent } from './estadisticas/clusters/clusters-table/clusters-table.component';
 import { OutliersDetailTableComponent } from './estadisticas/outliers/outliers-detail/outliers-detail-table/outliers-detail-table.component';
 import { OutliersDetailGraphComponent } from './estadisticas/outliers/outliers-detail/outliers-detail-graph/outliers-detail-graph.component';
-import { ClustersDataService } from './servicios/clusters-data.service';
 import { EstadisticaComponent } from './estadistica/estadistica.component';
 import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 import { ClientesComponent } from './estadisticas/clientes/clientes.component';
 import { DivisasComponent } from './estadisticas/divisas/divisas.component';
 import { AuthGuard } from './auth.guard';
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
+import { ClustersDataService } from './servicios/clusters-data.service';
+import { HomeComponent } from './home/home.component';
+import { PruebaConexionService } from './servicios/pruebaConexion.service';
 
 @NgModule({
   declarations: [	
@@ -53,7 +55,8 @@ import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.compon
     OutliersComponent,
     OutliersDetailComponent,
     OutliersDetailTableComponent, 
-    OutliersDetailGraphComponent,
+    OutliersDetailGraphComponent, 
+    HomeComponent ,
     EstadisticaComponent,
     ClientesComponent,
     DivisasComponent,
@@ -71,6 +74,7 @@ import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.compon
   ],
   providers: [
     UserService,
+    PruebaConexionService,
     ClustersDataService
   ],
   bootstrap: [AppComponent],

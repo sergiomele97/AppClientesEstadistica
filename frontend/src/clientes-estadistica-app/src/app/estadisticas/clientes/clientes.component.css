@@ -1,5 +1,97 @@
+/* Contenedor del select */
+.select-container {
+  max-width: 650px; /* Ancho máximo del contenedor */
+  margin: 35px auto; /* Centrado horizontal con margen superior/inferior */
+  text-align: center; /* Centrar el contenido dentro del contenedor */
+}
+
+/* Estilo del select (dropdown) */
+.select-container select {
+  width: 100%; /* Ancho completo del select */
+  padding: 10px; /* Espaciado interno para el select */
+  font-size: 16px; /* Tamaño de la fuente */
+  border: 1px solid #ccc; /* Borde gris claro */
+  border-radius: 4px; /* Bordes redondeados */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  background-color: #fff; /* Fondo blanco */
+  color: #555; /* Color del texto */
+  appearance: none; /* Remover la apariencia por defecto */
+  -webkit-appearance: none; /* Remover la apariencia por defecto en WebKit */
+  -moz-appearance: none; /* Remover la apariencia por defecto en Mozilla */
+  margin-bottom: 10px; /* Margen inferior */
+}
+
+/* Estilo del select en foco (cuando se selecciona) */
+.select-container select:focus {
+  outline: none; /* Remover el contorno por defecto */
+  border-color: #999; /* Color del borde en foco */
+  box-shadow: 0 0 5px rgba(81, 203, 238, 1); /* Sombra azul en foco */
+}
+
+/* Estilo para la opción seleccionada */
+.select-container select option:checked {
+  background-color: #007bff; /* Fondo azul para la opción seleccionada */
+  color: #fff; /* Texto blanco para la opción seleccionada */
+}
+
+
+/* Contenedor principal */
+#data {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center; /* Centrar el contenido dentro del contenedor */
+}
+
+/* Encabezado */
+#data h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Estilos de los párrafos */
+#data p {
+  font-size: 16px;
+  margin: 10px 0;
+  color: #555;
+}
+
+/* Resaltado de etiquetas (ID, Nombre, etc.) */
+#data p strong {
+  color: #333;
+  font-weight: bold;
+}
+
+/* Contenedor del gráfico */
 #chart {
-    max-width: 650px;
-    margin: 35px auto;
+  margin-top: 40px;
+  text-align: center; /* Centrar el gráfico */
+}
+
+/* Responsividad */
+@media (max-width: 600px) {
+  #data {
+    padding: 15px;
   }
-  
+
+  #data h1 {
+    font-size: 20px;
+  }
+
+  #data p {
+    font-size: 14px;
+  }
+
+  #chart {
+    margin-top: 20px;
+  }
+
+  #clienteSelect {
+    width: 100%;
+    font-size: 14px;
+  }
+}

@@ -44,7 +44,6 @@ export class UserService {
     return this.http.get<{ id: number }>(url);
   }
 
-
   getEnvios(): Observable<any[]> {
     return this.http.get<any[]>(`${this.url_estadistica}/getEnvios`).pipe(
       map(envios => envios.map(envio => ({
