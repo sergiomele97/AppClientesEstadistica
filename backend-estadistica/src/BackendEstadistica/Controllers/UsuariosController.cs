@@ -30,6 +30,7 @@ public class UsuariosController : ControllerBase
 
 
     //      Get Usuarios
+    // -------------------- Método Sergio para Debuggear en Azure, no borrar:
     [HttpGet]
     public IActionResult GetUsuarios()
     {
@@ -40,7 +41,7 @@ public class UsuariosController : ControllerBase
         
 
     }
-
+    // -------------------- Fin Método Sergio para Debuggear en Azure, no borrar:
 
     //      Get Usuarios By Id
     [HttpGet("{id}")]

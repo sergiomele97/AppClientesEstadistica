@@ -33,6 +33,7 @@ import { AuthGuard } from './auth.guard';
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 import { ClustersDataService } from './servicios/clusters-data.service';
 import { HomeComponent } from './home/home.component';
+import { PruebaConexionService } from './servicios/pruebaConexion.service';
 
 @NgModule({
   declarations: [	
@@ -73,6 +74,7 @@ import { HomeComponent } from './home/home.component';
   ],
   providers: [
     UserService,
+    PruebaConexionService,
     ClustersDataService
   ],
   bootstrap: [AppComponent],
