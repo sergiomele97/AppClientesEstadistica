@@ -66,7 +66,7 @@ namespace BackendEstadistica.Controllers
         }
 
         [HttpGet("getTransacciones")]
-        public IActionResult GetTransacciones()
+        public IActionResult GetTransacciones() 
         {
 
             List<Transaccion> transacciones = estadisticasRepositorio.GetTransacciones();
