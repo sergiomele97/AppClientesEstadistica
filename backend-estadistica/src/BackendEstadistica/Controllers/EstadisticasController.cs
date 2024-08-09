@@ -1,4 +1,5 @@
-﻿using BackendEstadistica.Servicios;
+﻿
+using BackendEstadistica.Servicios;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackendEstadistica.Controllers
@@ -65,7 +66,7 @@ namespace BackendEstadistica.Controllers
         }
 
         [HttpGet("getTransacciones")]
-        public IActionResult GetTransacciones()
+        public IActionResult GetTransacciones() 
         {
 
             List<Transaccion> transacciones = estadisticasRepositorio.GetTransacciones();

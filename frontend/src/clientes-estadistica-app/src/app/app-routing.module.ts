@@ -28,7 +28,7 @@ const routes: Routes = [
   { path: "registroAdmin", component: RegistroAdminComponent },
   { path: 'users-info', component: UsersInfoComponent, canActivate: [AuthGuard], },
   { path: "estadistica", component: EstadisticaComponent},
-  { path: "estadisticas", component: EstadisticasComponent, canActivate: [AuthGuard],
+  { path: "estadisticas", component: EstadisticasComponent,
     children: [
       { path: 'outliers', component: OutliersComponent },
       { path: 'outliers/:id', component: OutliersDetailComponent },
@@ -39,6 +39,7 @@ const routes: Routes = [
       { path: 'spaghetti', component: SpaghettiComponent },
       { path: 'table', component: TableComponent },
       { path: 'clientes', component: ClientesComponent },
+      { path: 'clientes/:id', component: ClientesComponent },
       { path: 'divisas', component: DivisasComponent },
     ],
   },

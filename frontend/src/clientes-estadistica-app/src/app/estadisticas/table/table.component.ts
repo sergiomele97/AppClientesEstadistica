@@ -38,6 +38,7 @@ export class TableComponent implements OnInit, OnDestroy {
 
   set filterEnvio(value: string) {
     this._filterEnvio = value;
+    this.currentPage = 1;
     this.enviosFilter = this.filterEnviosByDivisa(value)
   }
 
