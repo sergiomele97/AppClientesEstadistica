@@ -1,4 +1,5 @@
-﻿using BackendEstadistica.Servicios;
+﻿
+using BackendEstadistica.Servicios;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackendEstadistica.Controllers
