@@ -15,10 +15,12 @@ import { VolumetryComponent } from './menu/usuarios/volumetry/volumetry.componen
 import { TableComponent } from './menu/usuarios/table/table.component';
 import { OutliersDetailComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail.component';
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   { path: "login", component: LoginComponent},
   { path: "users", component: UsersInfoComponent},
+  { path: 'home', component: HomeComponent },
 
   { path: "registro", component: RegistroComponent },
   { path: "registroAdmin", component: RegistroAdminComponent },

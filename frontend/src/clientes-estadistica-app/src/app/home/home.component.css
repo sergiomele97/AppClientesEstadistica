@@ -1,0 +1,198 @@
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  a {
+    text-decoration: none;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Header Styles */
+  header {
+    padding: 1rem;
+    background-color: white;
+  }
+  
+  header .logo {
+    width: 10rem;
+  }
+  
+  header .menu-button {
+    background-color: white;
+    padding: 0.75rem;
+    border-radius: 9999px;
+    position: fixed;
+    top: 0.5rem;
+    right: 1rem;
+    z-index: 100;
+  }
+  
+  header .menu-button svg {
+    width: 1rem;
+    fill: black;
+  }
+  
+  header .menu {
+    display: flex;
+    margin-left: 3rem;
+    gap: 1.5rem;
+  }
+  
+  header .menu.hidden {
+    display: block;
+  }
+  
+  header .menu-item {
+    padding: 0.5rem;
+  }
+  
+  header .menu-item:hover {
+    color: #2563eb; /* Tailwind's blue-600 */
+  }
+  
+  header .menu-item svg {
+    width: 0.75rem;
+    fill: currentColor;
+  }
+  
+  header .submenu {
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    top: 1.25rem;
+    left: 0;
+    min-width: 15.625rem;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.5s, max-height 0.5s;
+  }
+  
+  header .submenu.open {
+    opacity: 1;
+    max-height: 30rem;
+  }
+  
+  header .submenu-item {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.5rem 0;
+  }
+  
+  header .submenu-item a {
+    color: #2563eb; /* Tailwind's blue-600 */
+  }
+  
+  header .submenu-item a:hover {
+    color: #1d4ed8; /* Tailwind's blue-700 */
+  }
+  
+  header .menu-button, .submenu-item {
+    transition: color 0.3s;
+  }
+  
+  /* Main Section Styles */
+  .main-section {
+    min-height: 35rem;
+    background-color: #dbeafe; /* Tailwind's blue-100 */
+    padding: 1rem;
+  }
+  
+  .main-section .heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    line-height: 3.5rem;
+  }
+  
+  .main-section .paragraph {
+    font-size: 1rem;
+    line-height: 1.75rem;
+  }
+  
+  .main-section .button {
+    display: flex;
+    align-items: center;
+    background-color: black;
+    color: white;
+    padding: 1rem 1.25rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    transition: background-color 0.3s;
+  }
+  
+  .main-section .button:hover {
+    background-color: #111827; /* Tailwind's gray-900 */
+  }
+  
+  .main-section .button svg {
+    width: 0.875rem;
+    fill: currentColor;
+  }
+  
+  /* Subsection Styles */
+  .subsection {
+    margin-top: 7rem;
+    padding: 1rem;
+  }
+  
+  .subsection .heading {
+    font-size: 2.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  
+  .subsection .paragraph {
+    font-size: 1rem;
+    line-height: 1.75rem;
+  }
+  
+  .subsection .button {
+    display: flex;
+    align-items: center;
+    background-color: black;
+    color: white;
+    padding: 1rem 1.25rem;
+    border-radius: 0.375rem;
+    font-weight: 600;
+    transition: background-color 0.3s;
+  }
+  
+  .subsection .button:hover {
+    background-color: #111827; /* Tailwind's gray-900 */
+  }
+  
+  .subsection .icon-card {
+    text-align: center;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(93, 96, 127, 0.2);
+    padding: 1.5rem;
+    border-radius: 0.375rem;
+  }
+  
+  .subsection .icon-card svg {
+    width: 3rem;
+    fill: #2563eb; /* Tailwind's blue-600 */
+  }
+  
+  .subsection .icon-card .title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .subsection .icon-card a {
+    color: #2563eb; /* Tailwind's blue-600 */
+  }
+  
+  .subsection .icon-card a:hover {
+    color: #1d4ed8; /* Tailwind's blue-700 */
+  }
+  

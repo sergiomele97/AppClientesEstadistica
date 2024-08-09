@@ -32,6 +32,7 @@ import { OutliersDetailTableComponent } from './menu/usuarios/outliers/outliers-
 import { OutliersDetailGraphComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail-graph/outliers-detail-graph.component';
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 import { ClustersDataService } from './servicios/clusters-data.service';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,7 @@ import { ClustersDataService } from './servicios/clusters-data.service';
     ClustersGraphComponent,      
     ClustersTableComponent,    
     OutliersDetailTableComponent, 
-    OutliersDetailGraphComponent  
+    OutliersDetailGraphComponent, HomeComponent  
   ],
   imports: [
     BrowserModule,
