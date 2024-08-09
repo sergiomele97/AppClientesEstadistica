@@ -8,7 +8,7 @@ namespace BackendEstadistica.Controllers
     [ApiController]
     public class EstadisticasController : Controller
     {
-        
+
         private readonly IEstadisticasRepositorio estadisticasRepositorio;
         private readonly IMapper mapper;
 
@@ -22,7 +22,7 @@ namespace BackendEstadistica.Controllers
         //Clientes
 
         [HttpPost("crearCliente")]
-        public string CrearCliente(Cliente nuevoCliente)
+        public string CrearCliente([FromBody] Cliente nuevoCliente)
         {
 
             estadisticasRepositorio.CrearCliente(nuevoCliente);
@@ -114,7 +114,7 @@ namespace BackendEstadistica.Controllers
 
             Conversion conversionId = estadisticasRepositorio.GetConversionById(id);
 
-            return Ok(mapper.Map<Cliente>(conversionId));
+            return Ok(mapper.Map<Conversion>(conversionId));
 
         }
 
@@ -122,7 +122,7 @@ namespace BackendEstadistica.Controllers
         //Paises
 
         [HttpPost("crearPais")]
-        public string CrearConversion(Pais nuevoPais)
+        public string CrearPais(Pais nuevoPais)
         {
 
             estadisticasRepositorio.CrearPais(nuevoPais);
