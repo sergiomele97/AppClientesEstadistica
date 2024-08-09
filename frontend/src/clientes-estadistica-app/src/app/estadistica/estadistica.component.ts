@@ -20,6 +20,7 @@ export class EstadisticaComponent implements OnInit, AfterViewInit {
   @ViewChildren('contenedor3', { read: ElementRef }) elements3!: QueryList<ElementRef>;
   @ViewChildren('contenedor4', { read: ElementRef }) elements4!: QueryList<ElementRef>;
 
+  // Declarar las listas
   private containers: ViewContainerRef[] = [];
   private elements: ElementRef[] = [];
   private ContenedoresLibres: Boolean[] = [true,true,true,true];   // Si el contenedor esta libre es True
@@ -28,8 +29,8 @@ export class EstadisticaComponent implements OnInit, AfterViewInit {
 
   ngOnInit() { }
 
+  // Inicializa la lista de contenedores y elementos después de que se haya renderizado el HTML
   ngAfterViewInit() {
-    // Inicializa la lista de contenedores y elementos después de que se haya renderizado el HTML
     this.containers = [
       this.containers1.first,
       this.containers2.first,
