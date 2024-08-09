@@ -7,6 +7,6 @@ public class PaisDto
     public string? Divisa { get; set; }
 
     //Relaciones
-    public Cliente? Cliente { get; set; }
+    public ICollection<Cliente> Clientes { get; set; } = new List<Cliente>();
 
 }
