@@ -24,7 +24,7 @@ const routes: Routes = [
   { path: "registroAdmin", component: RegistroAdminComponent },
   { path: 'users-info', component: UsersInfoComponent, canActivate: [AuthGuard], },
   { path: "estadistica", component: EstadisticaComponent},
-  { path: "estadisticas", component: EstadisticasComponent, canActivate: [AuthGuard],
+  { path: "estadisticas", component: EstadisticasComponent,
     children: [
       { path: 'outliers', component: OutliersComponent },
       { path: 'outliers/:id', component: OutliersDetailComponent },
