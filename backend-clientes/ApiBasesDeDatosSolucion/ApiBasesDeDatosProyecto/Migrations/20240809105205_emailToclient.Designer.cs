@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiBasesDeDatosProyecto.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240807105548_fechaRegistro")]
-    partial class fechaRegistro
+    [Migration("20240809105205_emailToclient")]
+    partial class emailToclient
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,10 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Empleo")
                         .IsRequired()
@@ -64,6 +68,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         {
                             Id = 1,
                             Apellido = "Perez",
+                            Email = "amin1@gmail.com",
                             Empleo = "Delincuente",
                             FechaNacimiento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nombre = "Juan",
@@ -73,6 +78,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         {
                             Id = 2,
                             Apellido = "Lopez",
+                            Email = "amin1@gmail.com",
                             Empleo = "Profesor",
                             FechaNacimiento = new DateTime(1985, 5, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nombre = "Maria",
@@ -82,6 +88,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         {
                             Id = 3,
                             Apellido = "Gomez",
+                            Email = "amin1@gmail.com",
                             Empleo = "Abogado",
                             FechaNacimiento = new DateTime(1978, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nombre = "Carlos",

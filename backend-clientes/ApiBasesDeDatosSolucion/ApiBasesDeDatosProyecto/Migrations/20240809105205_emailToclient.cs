@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ApiBasesDeDatosProyecto.Migrations
 {
     /// <inheritdoc />
-    public partial class fechaRegistro : Migration
+    public partial class emailToclient : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -202,7 +202,8 @@ namespace ApiBasesDeDatosProyecto.Migrations
                     Apellido = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     FechaNacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Empleo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PaisId = table.Column<int>(type: "int", nullable: false)
+                    PaisId = table.Column<int>(type: "int", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -237,12 +238,12 @@ namespace ApiBasesDeDatosProyecto.Migrations
 
             migrationBuilder.InsertData(
                 table: "Clientes",
-                columns: new[] { "Id", "Apellido", "Empleo", "FechaNacimiento", "Nombre", "PaisId" },
+                columns: new[] { "Id", "Apellido", "Email", "Empleo", "FechaNacimiento", "Nombre", "PaisId" },
                 values: new object[,]
                 {
-                    { 1, "Perez", "Delincuente", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Juan", 1 },
-                    { 2, "Lopez", "Profesor", new DateTime(1985, 5, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), "Maria", 2 },
-                    { 3, "Gomez", "Abogado", new DateTime(1978, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "Carlos", 3 }
+                    { 1, "Perez", "amin1@gmail.com", "Delincuente", new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Juan", 1 },
+                    { 2, "Lopez", "amin1@gmail.com", "Profesor", new DateTime(1985, 5, 23, 0, 0, 0, 0, DateTimeKind.Unspecified), "Maria", 2 },
+                    { 3, "Gomez", "amin1@gmail.com", "Abogado", new DateTime(1978, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "Carlos", 3 }
                 });
 
             migrationBuilder.CreateIndex(
