@@ -1,7 +1,4 @@
-﻿using ApiBasesDeDatosProyecto.Helpers;
-using FluentAssertions;
-
-namespace ApiBasesDeDatosProyecto.Tests;
+﻿namespace ApiBasesDeDatosProyecto.Tests;
 public class ClientesTest
 {
     private readonly Contexto _contexto;

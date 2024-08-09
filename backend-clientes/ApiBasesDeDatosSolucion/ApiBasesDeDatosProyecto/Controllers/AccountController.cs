@@ -1,16 +1,4 @@
-﻿using ApiBasesDeDatosProyecto.IDentity.Serivicios;
-using ApiBasesDeDatosProyecto.Models;
-using ApiBasesDeDatosProyecto.Repository;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR.Protocol;
-using System;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
-
-[Route("api/[controller]")]
+﻿[Route("api/[controller]")]
 [ApiController]
 public class AccountController : ControllerBase
 {
@@ -22,53 +10,52 @@ public class AccountController : ControllerBase
     private readonly IUserService _userService;
     private readonly IPaisRepository _paisRepository; // Añadido
 
-        public AccountController(
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            RoleManager<IdentityRole> roleManager,
-            ITokenService tokenService,
-            IClienteService clienteService,
-            IUserService userService,
-            IPaisRepository paisRepository) // Añadido
+    public AccountController(
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager,
+        RoleManager<IdentityRole> roleManager,
+        ITokenService tokenService,
+        IClienteService clienteService,
+        IUserService userService,
+        IPaisRepository paisRepository) // Añadido
+    {
+        _userManager = userManager;
+        _signInManager = signInManager;
+        _roleManager = roleManager;
+        _tokenService = tokenService;
+        _clienteService = clienteService;
+        _userService = userService;
+        _paisRepository = paisRepository; // Añadido
+    }
+    [HttpGet("users")]
+    public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers(string? mail = null)
+    {
+        if (string.IsNullOrEmpty(mail))
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _roleManager = roleManager;
-            _tokenService = tokenService;
-            _clienteService = clienteService;
-            _userService = userService;
-            _paisRepository = paisRepository; // Añadido
+            // Si no se proporciona un mail, devuelve todos los usuarios.
+            var users = await _userService.GetAllUsersAsync();
+            return Ok(users);
         }
-        [HttpGet("users")]
-        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers(string? mail = null)
+        else
         {
-            if (string.IsNullOrEmpty(mail))
-            {
-                // Si no se proporciona un mail, devuelve todos los usuarios.
-                var users = await _userService.GetAllUsersAsync();
-                return Ok(users);
-            }
-            else
-            {
-                // Si se proporciona un mail, busca un usuario específico por correo electrónico.
-                var user = await _userService.GetUserByEmailAsync(mail);
-                if (user == null)
-                {
-                    return NotFound(new { message = "User not found" });
-                }
-                return Ok(user);
-            }
-        }
-
-
-        [HttpGet("verificarRol")]
-        public async Task<IActionResult> VerificarRol(string email)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
+            // Si se proporciona un mail, busca un usuario específico por correo electrónico.
+            var user = await _userService.GetUserByEmailAsync(mail);
             if (user == null)
             {
-                return NotFound("Usuario no encontrado.");
+                return NotFound(new { message = "User not found" });
             }
+            return Ok(user);
+        }
+    }
+
+    [HttpGet("verificarRol")]
+    public async Task<IActionResult> VerificarRol(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+            return NotFound("Usuario no encontrado.");
+        }
 
         var roles = await _userManager.GetRolesAsync(user);
         return Ok(new { roles });
@@ -85,23 +72,23 @@ public class AccountController : ControllerBase
         return NotFound(new { message = "User not found" });
     }
 
-        [HttpGet("users/{email}")]
-        public async Task<ActionResult<ApplicationUser>> GetUserByEmail(string email)
+    [HttpGet("users/{email}")]
+    public async Task<ActionResult<ApplicationUser>> GetUserByEmail(string email)
+    {
+        var user = await _userService.GetUserByEmailAsync(email);
+        if (user == null)
         {
-            var user = await _userService.GetUserByEmailAsync(email);
-            if (user == null)
-            {
-                return NotFound(new { message = "User not found" });
-            }
-            return Ok(user);
+            return NotFound(new { message = "User not found" });
         }
+        return Ok(user);
+    }
 
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
-        {
-            DateTime FechaNac = DateTimeOffset.FromUnixTimeMilliseconds(model.FechaNacimiento).UtcDateTime;
-            string rolPorDefecto = "Admin";
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
+    {
+        DateTime FechaNac = DateTimeOffset.FromUnixTimeMilliseconds(model.FechaNacimiento).UtcDateTime;
+        string rolPorDefecto = "Admin";
 
         // Obtener el ID del país a través del repositorio
         var pais = await _paisRepository.ObtenerPorNombre(model.PaisNombre);

@@ -20,3 +20,6 @@ global using Bogus;
 global using Xunit;
 global using ApiBasesDeDatosProyecto.Repository;
 global using ApiBasesDeDatosProyecto.IDentity.Serivicios;
+global using ApiBasesDeDatosProyecto.Helpers;
+global using FluentAssertions;
+global using Serilog;

@@ -1,8 +1,3 @@
-using ApiBasesDeDatosProyecto.Helpers;
-using ApiBasesDeDatosProyecto.IDentity.Serivicios;
-using ApiBasesDeDatosProyecto.Repository;
-using Serilog;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Agregar servicios a la aplicaci?n
