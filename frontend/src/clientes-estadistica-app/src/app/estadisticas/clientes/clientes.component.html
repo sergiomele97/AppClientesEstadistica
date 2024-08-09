@@ -1,4 +1,11 @@
-<div id="data" *ngIf="cliente;">
+<select id="clienteSelect" (change)="onSelectCliente($event)">
+  <option *ngFor="let cliente of clientes" [value]="cliente.id">
+    {{ cliente.nombre }}
+  </option>
+</select>
+
+
+<div id="data" *ngIf="cliente">
   <h1>Detalles del Cliente</h1>
   <p><strong>ID:</strong> {{ cliente.id }}</p>
   <p><strong>Nombre:</strong> {{ cliente.nombre }}</p>
@@ -9,7 +16,7 @@
   <p><strong>Trabajo:</strong> {{ cliente.trabajo }}</p>
 </div>
 
-<div id="chart">
+<div id="chart" *ngIf="cliente">
   <apx-chart
     [series]="chartOptions.series"
     [chart]="chartOptions.chart"

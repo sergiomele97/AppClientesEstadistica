@@ -28,6 +28,28 @@
   font-weight: bold;
 }
 
+/* Estilo del contenedor del select */
+#clienteSelectContainer {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Estilo del select (dropdown) */
+#clienteSelect {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  color: #555;
+}
+
 /* Contenedor del gráfico */
 #chart {
   margin-top: 40px;
@@ -49,5 +71,10 @@
 
   #chart {
     margin-top: 20px;
+  }
+
+  #clienteSelect {
+    width: 100%;
+    font-size: 14px;
   }
 }

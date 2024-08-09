@@ -1,5 +1,6 @@
 import { Component, ViewChild } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Subscription } from "rxjs";
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -10,7 +11,6 @@ import {
   ApexXAxis,
   ApexTitleSubtitle
 } from "ng-apexcharts";
-import { Subscription } from "rxjs";
 import { ICliente } from "src/app/interfaces/cliente";
 import { ITransaccion } from "src/app/interfaces/transaccion";
 import { ClienteEstService } from "src/app/servicios/cliente-est.service";
@@ -37,12 +37,24 @@ export class ClientesComponent  {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,  
     private clienteService: ClienteEstService) {}
 
   cliente: ICliente | undefined;
+  clientes: ICliente[] = [];
   subscription!: Subscription;
 
   ngOnInit(): void {
+    // Obtener la lista de clientes
+    this.subscription = this.clienteService.getClientes().subscribe({
+      next: (clientes) => {
+        this.clientes = clientes;
+      },
+      error: (err) => {
+        console.error('Error al obtener la lista de clientes:', err);
+      }
+    });
+
     // Obtener el ID del cliente desde la ruta actual
     const clienteId = Number(this.route.snapshot.paramMap.get('id'));
     
@@ -59,6 +71,13 @@ export class ClientesComponent  {
       }
     });
   }
+  
+  onSelectCliente(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement; // Asegurarte de que es un HTMLSelectElement
+    const clienteId = Number(selectElement.value);
+    this.router.navigate(['/estadisticas/clientes', clienteId]);
+  }
+  
 
   private actualizarGrafico(): void {
     if (!this.cliente) return;
