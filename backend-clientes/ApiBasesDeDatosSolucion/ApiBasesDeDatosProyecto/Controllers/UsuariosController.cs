@@ -36,15 +36,7 @@ namespace ApiBasesDeDatosProyecto.Controllers
                 return Ok(usuario);
         }
 
-        [HttpGet("GenerarUsuariosFake")]
-        public List<Usuario> GenerarUsuariosFake()
-        {
-            var usuarioFaker = new UserFaker();
-            var usuarios = usuarioFaker.Generate(50);
-
-            return usuarios;
-        }
-
+        
         [HttpPost]
         public async Task<ActionResult> PostUsuario(Usuario usuario)
         {

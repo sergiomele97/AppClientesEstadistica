@@ -80,7 +80,7 @@ export class RegistroComponent implements OnInit {
         // Solo después de que el usuario ha sido registrado exitosamente, agregar el rol
         const datosCambioRol: CambioRolModel = {
           Email: this.registroForm.value.Correo,
-          NuevoRol: "Admin",
+          NuevoRol: "Client",
           Nombre: this.registroForm.value.Nombre,
           Apellido: this.registroForm.value.Apellido,
           Pais: this.registroForm.value.PaisNombre,
