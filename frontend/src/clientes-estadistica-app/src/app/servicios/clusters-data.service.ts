@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
@@ -28,32 +29,11 @@ export class ClustersDataService {
     this.selectedClusterSubject.next(data);
   }
 
-  setSendLabel(data: any[]) {
+  setLabel(data: any[]) {
     this.selectedLabelSubject.next(data);
   }
-  async sendDataToBackend(): Promise<any> {
-    try {
-      // Convert Observables to Promises
-      const data = [[0,0],[1,1]];//await this.selectedData$.toPromise();
-      const n_clusters = 2;//await this.selectedCluster$.toPromise();
-      
-      // Send data to backend
-      const response = await this.http.post<any>(this.apiUrl, { data, n_clusters }).toPromise();
-  
-      // Handle response
-      console.log('Received data:', response);
-      const etiqueta = response.etiqueta || [];
-      console.log('etiqueta:', etiqueta);
-  
-      // Set label in the service
-      this.setSendLabel(etiqueta);
-  
-      return response;
-    } catch (error) {
-      // Handle errors
-      console.error('Error al enviar datos al backend:', error);
-      throw new Error('Error al enviar datos al backend');
-    }
+  async sendDataToBackend(){
+ 
   }
   
   

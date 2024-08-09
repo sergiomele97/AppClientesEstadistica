@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ClustersDataService } from 'src/app/servicios/clusters-data.service';
-
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-clusters',
@@ -10,25 +10,44 @@ import { ClustersDataService } from 'src/app/servicios/clusters-data.service';
 
 ///////////////////////////////////////
 export class ClustersComponent implements OnInit {
-  private n_cluster: number | null = null;  // Propiedad para almacenar n_cluster
 
-  constructor(private dataService: ClustersDataService) {}
+constructor(private dataService: ClustersDataService,private http: HttpClient) {}
+private apiUrl = 'http://127.0.0.1:5000/cluster';
 
 
-
-  ngOnInit() {}
+  ngOnInit() {
+  }
 //////////////////////////////
-  onSelectionCluster(event: Event) {
-    console.log(event); // Verifica el evento en la consola
+async onSelectionCluster(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const numerosSelect = selectElement.value;
-    console.warn('El cluster es ', numerosSelect);
-    this.n_cluster = parseInt(numerosSelect, 10);
-    console.log(this.n_cluster);
-    this.dataService.setSelectednCluster(this.n_cluster);
+    console.log('El cluster es ', numerosSelect);
+    const n_cluster = parseInt(numerosSelect, 10);
+    this.dataService.setSelectednCluster(n_cluster);
+    
+      // Call sendDataToBackend and handle the response
+      try {
+        // Convert Observables to Promises
+        const data = this.dataService.selectedData$;
+        // Send data to backend
+        const response = await this.http.post<any>(this.apiUrl, { data, n_cluster }).toPromise();
+    
+        // Handle response
+        console.log('Received data:', response);
+        const etiqueta = response.etiqueta || [];
+        console.log('etiqueta:', etiqueta);
+        // Set label in the service
+        
+  
+      } catch (error) {
+        // Handle errors
+        console.error('Error al enviar datos al backend:', error);
+        throw new Error('Error al enviar datos al backend');
+      }
+ 
   }
   ////////////////////////////
-  async onSelectionChange(event: Event) {
+   onSelectionChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const selectedSample = selectElement.value;
     const sampleData = this.getSampleData(selectedSample);
@@ -36,19 +55,6 @@ export class ClustersComponent implements OnInit {
     // Set the selected data
     this.dataService.setSelectedData(sampleData);
   
-    try {
-      // Call sendDataToBackend and handle the response
-      const response = await this.dataService.sendDataToBackend();
-      console.log('Received data:', response);
-      
-      // Extract and handle the label
-      const etiqueta = response.etiqueta || [];
-      console.log('etiqueta:', etiqueta);
-      this.dataService.setSendLabel(etiqueta);
-    } catch (error) {
-      // Handle errors
-      console.error('Error al enviar datos al backend:', error);
-    }
   }
   
 //////////////////////////////
