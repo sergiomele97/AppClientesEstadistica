@@ -14,16 +14,19 @@ import { OutliersDetailComponent } from './estadisticas/outliers/outliers-detail
 import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 import { ClientesComponent } from './estadisticas/clientes/clientes.component';
 import { DivisasComponent } from './estadisticas/divisas/divisas.component';
+import { AuthGuard } from './auth.guard';
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 import { EstadisticaComponent } from './estadistica/estadistica.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
+  { path: "login", component: LoginComponent},
   { path: "users", component: UsersInfoComponent},
-  { path: 'registro', component: RegistroComponent },
+  { path: 'home', component: HomeComponent },
+
+  { path: "registro", component: RegistroComponent },
   { path: "registroAdmin", component: RegistroAdminComponent },
-  { path: 'users-info', component: UsersInfoComponent },
- 
+  { path: 'users-info', component: UsersInfoComponent, canActivate: [AuthGuard], },
   { path: "estadistica", component: EstadisticaComponent},
   { path: "estadisticas", component: EstadisticasComponent,
     children: [
