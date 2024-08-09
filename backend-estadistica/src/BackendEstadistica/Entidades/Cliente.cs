@@ -1,4 +1,6 @@
-﻿namespace BackendEstadistica.Entidades;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BackendEstadistica.Entidades;
 
 public class Cliente
 {
