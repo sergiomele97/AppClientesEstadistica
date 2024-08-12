@@ -32,6 +32,11 @@ import { OutliersDetailGraphComponent } from './menu/usuarios/outliers/outliers-
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 import { ClustersDataService } from './servicios/clusters-data.service';
 
+
+
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,7 +70,9 @@ import { ClustersDataService } from './servicios/clusters-data.service';
     ReactiveFormsModule,
     NgApexchartsModule,
     HighchartsChartModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    BrowserModule,
+    FormsModule
   ],
   providers: [
     UserService,

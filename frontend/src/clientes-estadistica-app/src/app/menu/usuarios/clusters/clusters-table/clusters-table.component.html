@@ -1,22 +1,32 @@
-<div class="relative overflow-x-auto" *ngIf="tableData && tableData.length > 0">
-  <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-      <tr>
-        <!-- Generar encabezados dinámicos -->
-        <ng-container *ngFor="let header of columnHeaders">
-          <th scope="col" class="px-6 py-3">{{ header }}</th>
-        </ng-container>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let row of tableData">
-        <!-- Generar celdas dinámicas -->
-        <ng-container *ngFor="let cell of row; let last = last">
-          <td [ngClass]="{'px-6 py-3': !last, 'px-6 py-3 text-right': last}">
-            {{ cell }}
-          </td>
-        </ng-container>
-      </tr>
-    </tbody>
-  </table>
+<div class="table-container">
+  <input
+  type="text"
+  placeholder="Filtrar por etiqueta"
+  [(ngModel)]="filterText"
+  (ngModelChange)="onFilterChange()"
+  class="mb-4 px-4 py-2 border border-gray-300 rounded"
+/>
+  
+  <div class="relative overflow-x-auto" *ngIf="tableData && tableData.length > 0">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <!-- Generar encabezados dinámicos -->
+          <ng-container *ngFor="let header of columnHeaders">
+            <th scope="col" class="px-6 py-3">{{ header }}</th>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of filteredTableData">
+          <!-- Generar celdas dinámicas -->
+          <ng-container *ngFor="let cell of row; let last = last">
+            <td [ngClass]="{'px-6 py-3': !last, 'px-6 py-3 text-right': last}">
+              {{ cell }}
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

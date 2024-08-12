@@ -1,14 +1,13 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
-import { throwError } from 'rxjs';
-import { catchError, sample, tap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ClustersDataService {
-  private apiUrl = 'http://127.0.0.1:5000/cluster';  // URL del servidor Flask
+  
 
   private selectedDataSubject = new Subject<any[]>();
   selectedData$ = this.selectedDataSubject.asObservable();
@@ -19,7 +18,7 @@ export class ClustersDataService {
   private selectedLabelSubject = new Subject<any[]>();
   selectedLabel$ = this.selectedLabelSubject.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
   setSelectedData(data: any[]) {
     this.selectedDataSubject.next(data);
