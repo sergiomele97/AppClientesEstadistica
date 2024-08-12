@@ -8,6 +8,35 @@ body {
     font-family: Arial, sans-serif;
 }
 
+/* Estilo para la capa de bloqueo */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; /* Asegúrate de que está encima de otros elementos */
+}
+
+/* Estilo para el formulario bloqueado */
+.form-blocked {
+    background-color: #f9fafb; /* Gris muy claro */
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para el texto del mensaje de error */
+.error-message {
+    color: #dc2626; /* Rojo para el mensaje de error */
+    font-weight: bold;
+    text-align: center;
+}
+
+
 .container {
     background-color: #ffffff;
     padding: 2rem;
@@ -87,3 +116,24 @@ body {
 .button:hover {
     background-color: #2563eb;
 }
+
+/* estilos.css */
+.alert {
+    @apply p-4 mb-4 text-sm font-medium rounded-lg;
+  }
+  
+  .alert-success {
+    @apply bg-green-100 text-green-800;
+  }
+  
+  .alert-error {
+    @apply bg-red-100 text-red-800;
+  }
+  
+  .alert-info {
+    @apply bg-blue-100 text-blue-800;
+  }
+.alert-error {
+    @apply bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative;
+  }
+  

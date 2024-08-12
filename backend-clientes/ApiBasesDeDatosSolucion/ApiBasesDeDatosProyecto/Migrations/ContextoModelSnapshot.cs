@@ -180,7 +180,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ApiBasesDeDatosProyecto.IDentity.ApplicationUser", b =>
+            modelBuilder.Entity("ApiBasesDeDatosProyecto.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -247,9 +247,6 @@ namespace ApiBasesDeDatosProyecto.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<int?>("paisId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -419,7 +416,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("ApiBasesDeDatosProyecto.IDentity.ApplicationUser", null)
+                    b.HasOne("ApiBasesDeDatosProyecto.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -428,7 +425,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("ApiBasesDeDatosProyecto.IDentity.ApplicationUser", null)
+                    b.HasOne("ApiBasesDeDatosProyecto.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -443,7 +440,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiBasesDeDatosProyecto.IDentity.ApplicationUser", null)
+                    b.HasOne("ApiBasesDeDatosProyecto.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -452,7 +449,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("ApiBasesDeDatosProyecto.IDentity.ApplicationUser", null)
+                    b.HasOne("ApiBasesDeDatosProyecto.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

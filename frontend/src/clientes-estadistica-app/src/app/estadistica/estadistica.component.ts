@@ -1,14 +1,19 @@
+<<<<<<< HEAD
 import { Component, ViewChildren, QueryList, ViewContainerRef, ElementRef, AfterViewInit, OnInit, Type } from '@angular/core';
 import { VolumetryComponent } from '../estadisticas/volumetry/volumetry.component'; // Asegúrate de importar el componente que deseas añadir
 import { GraphComponent } from '../estadisticas/graph/graph.component';
 import { MapComponent } from '../estadisticas/map/map.component';
 import { SpaghettiComponent } from '../estadisticas/spaghetti/spaghetti.component';
+=======
+import { Component, OnInit } from '@angular/core';
+>>>>>>> origin/backfront
 
 @Component({
   selector: 'app-estadistica',
   templateUrl: './estadistica.component.html',
   styleUrls: ['./estadistica.component.css']
 })
+<<<<<<< HEAD
 export class EstadisticaComponent implements OnInit, AfterViewInit {
   @ViewChildren('contenedor1', { read: ViewContainerRef }) containers1!: QueryList<ViewContainerRef>;
   @ViewChildren('contenedor2', { read: ViewContainerRef }) containers2!: QueryList<ViewContainerRef>;
@@ -83,4 +88,13 @@ export class EstadisticaComponent implements OnInit, AfterViewInit {
       }
     } 
   }
+=======
+export class EstadisticaComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+>>>>>>> origin/backfront
 }

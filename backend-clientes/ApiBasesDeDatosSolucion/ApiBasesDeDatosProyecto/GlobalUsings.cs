@@ -7,7 +7,6 @@ global using System.ComponentModel.DataAnnotations.Schema;
 global using Microsoft.EntityFrameworkCore;
 global using ApiBasesDeDatosProyecto.Servicios;
 global using ApiBasesDeDatosProyecto.Entities;
-
 global using AutoMapper;
 global using System.Text.RegularExpressions;
 global using ApiBasesDeDatosProyecto.Context;
@@ -17,4 +16,4 @@ global using Microsoft.IdentityModel.Tokens;
 global using System.Text;
 global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using ApiBasesDeDatosProyecto;
-
+global using Bogus;

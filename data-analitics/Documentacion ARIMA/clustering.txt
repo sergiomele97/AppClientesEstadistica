@@ -1,0 +1,7 @@
+Para los administradores de un banco igual le es interesante ver las similitudes entre sus clientes
+Para ello se pueden usar diferentes herramientas como el clustering para agruparlos entre ellos
+
+Vamos a definir el kmeans en el que el administrador elegirá el número de clusters y habrá un índice para poder compararlos entre ellos
+
+Para ellos vamos a usar el kmeans y el índice de davies bouldin
+
