@@ -13,7 +13,7 @@ export class ClustersComponent implements OnInit {
 
 constructor(private dataService: ClustersDataService,private http: HttpClient) {}
 private apiUrl = 'http://127.0.0.1:5000/cluster';
-
+private datos;
 
   ngOnInit() {
   }
@@ -27,17 +27,17 @@ async onSelectionCluster(event: Event) {
     
       // Call sendDataToBackend and handle the response
       try {
-        // Convert Observables to Promises
-        const data = this.dataService.selectedData$;
+        // Convert Observable to Promise and get the emitted data
+     
+        const data =  this.dataService.selectedData$.toPromise();
         // Send data to backend
-        const response = await this.http.post<any>(this.apiUrl, { data, n_cluster }).toPromise();
-    
+        const response = await this.http.post<any>(this.apiUrl, {data: this.datos ,nCluster:  n_cluster }).toPromise();
+        
         // Handle response
         console.log('Received data:', response);
         const etiqueta = response.etiqueta || [];
         console.log('etiqueta:', etiqueta);
-        // Set label in the service
-        
+             
   
       } catch (error) {
         // Handle errors
@@ -51,7 +51,7 @@ async onSelectionCluster(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const selectedSample = selectElement.value;
     const sampleData = this.getSampleData(selectedSample);
-  
+    this.datos = sampleData;
     // Set the selected data
     this.dataService.setSelectedData(sampleData);
   

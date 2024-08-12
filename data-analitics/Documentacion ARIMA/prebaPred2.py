@@ -37,9 +37,9 @@ def cluster():
 # Acceder a los elementos
     print(recibido)
     data = recibido['data']
-    n_clusters = recibido['n_clusters']
-    #print(data)
-    #print(n_clusters)
+    n_clusters = recibido['nCluster']
+    print(data)
+    print(n_clusters)
     # Aplicar K-means
     kmeans = KMeans(n_clusters=n_clusters, random_state=0)
     kmeans.fit(data)

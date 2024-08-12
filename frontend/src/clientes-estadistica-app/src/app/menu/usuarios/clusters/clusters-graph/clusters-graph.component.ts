@@ -54,9 +54,7 @@ export class ClustersGraphComponent {
     this.dataService.selectedData$.subscribe(data => {
       this.updateChartData(data);
     });
-    this.dataService.selectedCluster$.subscribe(nCluster => {
-      this.updateChartData(nCluster);
-    });
+  
   }
 
   updateChartData(data: any[]) {
@@ -65,10 +63,6 @@ export class ClustersGraphComponent {
       data: data
     }];
   }
-  updateChartCluster(nCluster: any) {
-      this.chartOptions.series = [{
-        name: 'Selected cluster number',
-        data: nCluster
-      }];
-  }
+
+  
 }
