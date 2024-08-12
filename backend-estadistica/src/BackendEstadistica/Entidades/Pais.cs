@@ -1,4 +1,6 @@
-﻿namespace BackendEstadistica.Entidades;
+﻿
+
+namespace BackendEstadistica.Entidades;
 
 public class Pais
 {
@@ -8,6 +10,6 @@ public class Pais
     public string? Divisa { get; set; }
 
     //Relaciones
+    [JsonIgnore]
     public ICollection<Cliente> Clientes { get; set; } = new List<Cliente>();
-
 }

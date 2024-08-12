@@ -33,24 +33,31 @@ public class EstadisticasController : Controller
     }
 
     [HttpGet("getClientes")]
-    public IActionResult GetClientes() 
+    public IActionResult GetClientes()
     {
-    
+        // Obtén los clientes con detalles completos
         List<Cliente> clientes = estadisticasRepositorio.GetClientes();
 
+        // Mapea a DTOs si es necesario, o devuelve las entidades directamente
         return Ok(mapper.Map<List<Cliente>>(clientes));
-
     }
 
     [HttpGet("getCliente/{id}")]
-    public IActionResult GetClienteById(int id) 
+    public IActionResult GetClienteById(int id)
     {
-    
-        Cliente clienteId = estadisticasRepositorio.GetClienteById(id);
+        // Obtén el cliente por ID con detalles completos
+        var cliente = estadisticasRepositorio.GetClienteById(id);
 
-        return Ok(mapper.Map<Cliente>(clienteId));
-    
+        // Verifica si el cliente existe
+        if (cliente == null)
+        {
+            return NotFound("Cliente no encontrado.");
+        }
+
+        // Mapea a DTOs si es necesario, o devuelve la entidad directamente
+        return Ok(mapper.Map<ClienteDto>(cliente));
     }
+
 
 
     //Transacciones
@@ -138,11 +145,9 @@ public class EstadisticasController : Controller
     [HttpGet("getPaises")]
     public IActionResult GetPaises()
     {
-
         List<Pais> paises = estadisticasRepositorio.GetPaises();
 
         return Ok(mapper.Map<List<Pais>>(paises));
-
     }
 
     [HttpGet("getPaises/{id}")]

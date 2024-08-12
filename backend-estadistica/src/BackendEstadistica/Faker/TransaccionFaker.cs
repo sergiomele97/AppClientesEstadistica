@@ -14,6 +14,14 @@ public class TransaccionFaker : Faker<TransaccionDto>
             .RuleFor(t => t.ImporteEnviado, f => f.Random.Double(1.0, 100.0))
             .RuleFor(t => t.Fecha, f => f.Date.Past(1))
             .RuleFor(t => t.ClienteOrigenId, f => f.Random.Int(1, 10))
-            .RuleFor(t => t.ClienteDestinoId, f => f.Random.Int(1, 10));
+            .RuleFor(t => t.ClienteDestinoId, (f, t) =>
+                {
+                    int destinoId;
+                    do
+                    {
+                        destinoId = f.Random.Int(1, 10);
+                    } while (destinoId == t.ClienteOrigenId);
+                    return destinoId;
+                });
     }
 }

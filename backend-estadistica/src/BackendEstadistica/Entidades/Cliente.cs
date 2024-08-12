@@ -16,8 +16,11 @@ public class Cliente
 
     //Relaciones
     public Pais Pais { get; set; } = null!;
+    [JsonIgnore]
     public ICollection<Conversion>? Conversiones { get; set; } = new List<Conversion>();
+    [JsonIgnore]
     public ICollection<Transaccion>? TransaccionesOrigen { get; set; } = new List<Transaccion>();
+    [JsonIgnore]
     public ICollection<Transaccion>? TransaccionesDestino { get; set; } = new List<Transaccion>();
 
 }
