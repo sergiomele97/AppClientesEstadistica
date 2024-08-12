@@ -38,13 +38,13 @@ def cluster():
     print(recibido)
     data = recibido['data']
     n_clusters = recibido['nCluster']
-    print(data)
-    print(n_clusters)
+    #print(data)
+    #print(n_clusters)
     # Aplicar K-means
     kmeans = KMeans(n_clusters=n_clusters, random_state=0)
     kmeans.fit(data)
     labels = kmeans.labels_.tolist()  # Convert ndarray to list
-
+    labels = [x + 1 for x in labels]
     
     # Calcular el índice de Davies-Bouldin
    # db_score = davies_bouldin_score(data, labels)
