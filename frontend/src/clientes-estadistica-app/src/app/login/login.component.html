@@ -53,5 +53,13 @@
         </form>
       </div>
     </div>
+
+    <div *ngIf="isErrorVisible" class="fixed top-4 right-4 w-96 p-4 rounded shadow-lg bg-red-500 text-white">
+      <div class="flex justify-between items-center">
+        <span>{{ errorMessage }}</span>
+        <button (click)="isErrorVisible = false" class="ml-4 text-xl font-bold">&times;</button>
+      </div>
+    </div>
+    
   </div>
 </div>

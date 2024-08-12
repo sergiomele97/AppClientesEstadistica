@@ -36,6 +36,7 @@ namespace ApiBasesDeDatosProyecto.Controllers
                 return Ok(usuario);
         }
 
+        
         [HttpPost]
         public async Task<ActionResult> PostUsuario(Usuario usuario)
         {

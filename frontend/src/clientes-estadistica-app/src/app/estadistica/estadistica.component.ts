@@ -3,6 +3,8 @@ import { VolumetryComponent } from '../estadisticas/volumetry/volumetry.componen
 import { GraphComponent } from '../estadisticas/graph/graph.component';
 import { MapComponent } from '../estadisticas/map/map.component';
 import { SpaghettiComponent } from '../estadisticas/spaghetti/spaghetti.component';
+import { Usuario } from '../clases/usuario';
+import { PruebaConexionService } from '../servicios/pruebaConexion.service';
 
 @Component({
   selector: 'app-estadistica',
@@ -24,10 +26,21 @@ export class EstadisticaComponent implements OnInit, AfterViewInit {
   private containers: ViewContainerRef[] = [];
   private elements: ElementRef[] = [];
   private ContenedoresLibres: Boolean[] = [true,true,true,true];   // Si el contenedor esta libre es True
+  private usuarios: Usuario[] = [];
+  private usuarioService: PruebaConexionService;
 
-  constructor() { }
+  constructor(private pruebaConexionService: PruebaConexionService) { }
 
-  ngOnInit() { }
+  // -------------------- Método Sergio para Debuggear en Azure, no borrar:
+  ngOnInit(): void {
+    this.pruebaConexionService.getUsuariosPrueba().subscribe((data: Usuario[]) => {
+      this.usuarios = data;
+      console.log('Usuarios obtenidos:', this.usuarios)
+    }, error => {
+      console.error('Error al obtener los usuarios', error);
+    });
+  }
+  // -------------------- Fin Método Sergio para Debuggear en Azure, no borrar:
 
   // Inicializa la lista de contenedores y elementos después de que se haya renderizado el HTML
   ngAfterViewInit() {

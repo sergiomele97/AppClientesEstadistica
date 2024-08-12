@@ -30,6 +30,10 @@
 
         //public Usuario? Usuario { get; set; }  // Navegación a la entidad Usuario
 
+        [Required]
+
+        public string Email { get; set; }
+
         public IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(ValidationContext validationContext)
         {
             if (FechaNacimiento > DateTime.Now)

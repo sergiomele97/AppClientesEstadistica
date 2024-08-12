@@ -23,3 +23,4 @@ global using ApiBasesDeDatosProyecto.IDentity.Serivicios;
 global using ApiBasesDeDatosProyecto.Helpers;
 global using FluentAssertions;
 global using Serilog;
+global using Microsoft.AspNetCore.Authorization;
