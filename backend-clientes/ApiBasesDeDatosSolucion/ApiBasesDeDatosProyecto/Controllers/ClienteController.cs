@@ -209,4 +209,21 @@ public class ClienteController : ControllerBase
         return Ok(cliente.Pais.Nombre);
     }
 
+    [HttpGet("GetClientePorEmail")]
+    public IActionResult GetClientePorEmail(string email)
+    {
+
+        var cliente = _contexto.Clientes
+            .FirstOrDefault(c => c.Email == email);
+
+
+        if (cliente == null)
+        {
+            return NotFound("Cliente no encontrado.");
+        }
+
+        // Si el cliente se encuentra, retorna el nombre del país en un OK
+        return Ok(cliente);
+    }
+
 }

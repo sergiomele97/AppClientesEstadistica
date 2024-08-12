@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiBasesDeDatosProyecto.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240809120501_bbdd")]
-    partial class bbdd
+    [Migration("20240809122325_AñadidoMailCliente")]
+    partial class AñadidoMailCliente
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
