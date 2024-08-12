@@ -1,12 +1,15 @@
-﻿using Bogus;
+﻿using BackendEstadistica.Contexto;
+using Bogus;
 
 namespace BackendEstadistica.Faker;
 
-public class ClienteFaker : Faker<Cliente>
+// Faker para Cliente
+public class ClienteFaker : Faker<ClienteDto>
 {
-
     public ClienteFaker()
     {
+        //int maxPaisId = contextoBBDD.Paises.Max(p => p.PaisId); // Obtén el máximo PaisId en la base de datos
+
         RuleFor(c => c.Nombre, f => f.Name.FullName())
             .RuleFor(c => c.Contraseña, f => f.Internet.Password())
             .RuleFor(c => c.Correo, f => f.Internet.Email())
@@ -15,17 +18,5 @@ public class ClienteFaker : Faker<Cliente>
             .RuleFor(c => c.Sexo, f => f.PickRandom(new[] { "Masculino", "Femenino" }))
             .RuleFor(c => c.Trabajo, f => f.Name.JobTitle())
             .RuleFor(c => c.PaisId, f => f.Random.Int(1, 10));
-
-        // Simulación de relaciones, puedes ajustar según tus necesidades
-        RuleFor(c => c.Conversiones, f => new List<Conversion> {
-                new ConversionFaker().Generate()
-            });
-        RuleFor(c => c.TransaccionesOrigen, f => new List<Transaccion> {
-                new TransaccionFaker().Generate()
-            });
-        RuleFor(c => c.TransaccionesDestino, f => new List<Transaccion> {
-                new TransaccionFaker().Generate()
-            });
     }
-
 }

@@ -22,6 +22,5 @@
         Pais GetPaisById(int id);
         void CrearPais(Pais pais);
 
-
     }
 }

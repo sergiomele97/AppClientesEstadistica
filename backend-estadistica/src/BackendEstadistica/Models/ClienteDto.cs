@@ -12,9 +12,8 @@ public class ClienteDto
     public string? Trabajo { get; set; }
     public int PaisId { get; set; }
 
-    //Relaciones
-    public Pais Pais { get; set; } = null!;
-    public ICollection<Conversion> Conversiones { get; set; } = new List<Conversion>();
-    public ICollection<Transaccion> TransaccionesOrigen { get; set; } = new List<Transaccion>();
-    public ICollection<Transaccion> TransaccionesDestino { get; set; } = new List<Transaccion>();
+    public PaisDto? Pais { get; set; } // DTO para el país
+    public List<TransaccionDto> TransaccionesOrigen { get; set; } = new List<TransaccionDto>();
+    public List<TransaccionDto> TransaccionesDestino { get; set; } = new List<TransaccionDto>();
+    public List<ConversionDto> Conversiones { get; set; } = new List<ConversionDto>(); // DTO para las conversiones
 }

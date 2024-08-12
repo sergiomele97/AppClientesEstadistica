@@ -2,13 +2,8 @@
 {
     public class Cliente : Profile
     {
-
         public Cliente() 
-        {
-        
-            CreateMap<Cliente, ClienteDto>().ReverseMap();   
-
+        {            CreateMap<Cliente, ClienteDto>().ReverseMap();   
         }
-
     }
 }
