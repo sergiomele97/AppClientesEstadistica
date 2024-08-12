@@ -11,7 +11,4 @@ public class ConversionDto
     public double? ValorDestino { get; set; }
     public int ClienteId { get; set; }
 
-    //Relaciones
-    public Cliente Cliente { get; set; } = null!;
-
 }
