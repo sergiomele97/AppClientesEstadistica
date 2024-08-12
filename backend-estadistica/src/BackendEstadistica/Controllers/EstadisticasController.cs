@@ -2,154 +2,156 @@
 using BackendEstadistica.Servicios;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BackendEstadistica.Controllers
+namespace BackendEstadistica.Controllers;
+
+[Route("api/estadisticas")]
+[ApiController]
+public class EstadisticasController : Controller
 {
+    private readonly ContextoBBDD contextoBBDD;
+    private readonly IEstadisticasRepositorio estadisticasRepositorio;
+    private readonly IMapper mapper;
 
-    [Route("api/estadisticas")]
-    [ApiController]
-    public class EstadisticasController : Controller
+    public EstadisticasController(IEstadisticasRepositorio estadisticasRepositorio, IMapper mapper)
     {
-        
-        private readonly IEstadisticasRepositorio estadisticasRepositorio;
-        private readonly IMapper mapper;
-
-        public EstadisticasController(IEstadisticasRepositorio estadisticasRepositorio, IMapper mapper)
-        {
-            this.estadisticasRepositorio = estadisticasRepositorio;
-            this.mapper = mapper;
-        }
+        this.estadisticasRepositorio = estadisticasRepositorio;
+        this.mapper = mapper;
+    }
 
 
-        //Clientes
+    //Clientes
+    [HttpPost("crearCliente")]
+    public IActionResult CrearCliente()
+    {
+        var clienteFaker = new ClienteFaker();
+        var clienteDto = clienteFaker.Generate();
 
-        [HttpPost("crearCliente")]
-        public string CrearCliente(Cliente nuevoCliente)
-        {
+        var nuevoCliente = this.mapper.Map<Cliente>(clienteDto);
+        this.estadisticasRepositorio.CrearCliente(nuevoCliente);
 
-            estadisticasRepositorio.CrearCliente(nuevoCliente);
+        return Ok("Cliente creado correctamente");
+    }
 
-            return "Usuario creado correctamente";
+    [HttpGet("getClientes")]
+    public IActionResult GetClientes() 
+    {
+    
+        List<Cliente> clientes = estadisticasRepositorio.GetClientes();
 
-        }
+        return Ok(mapper.Map<List<Cliente>>(clientes));
 
-        [HttpGet("getClientes")]
-        public IActionResult GetClientes() 
-        {
-        
-            List<Cliente> clientes = estadisticasRepositorio.GetClientes();
+    }
 
-            return Ok(mapper.Map<List<Cliente>>(clientes));
+    [HttpGet("getCliente/{id}")]
+    public IActionResult GetClienteById(int id) 
+    {
+    
+        Cliente clienteId = estadisticasRepositorio.GetClienteById(id);
 
-        }
-
-        [HttpGet("getCliente/{id}")]
-        public IActionResult GetClienteById(int id) 
-        {
-        
-            Cliente clienteId = estadisticasRepositorio.GetClienteById(id);
-
-            return Ok(mapper.Map<Cliente>(clienteId));
-        
-        }
+        return Ok(mapper.Map<Cliente>(clienteId));
+    
+    }
 
 
-        //Transacciones
+    //Transacciones
+    [HttpPost("crearTransaccion")]
+    public IActionResult CrearTransaccion()
+    {
+        var transaccionFaker = new TransaccionFaker();
+        var transaccionDto = transaccionFaker.Generate();
 
-        [HttpPost("crearTransaccion")]
-        public string CrearTransaccion(Transaccion nuevaTransaccion)
-        {
+        var nuevaTransaccion = this.mapper.Map<Transaccion>(transaccionDto);
+        this.estadisticasRepositorio.CrearTransaccion(nuevaTransaccion);
 
-            estadisticasRepositorio.CrearTransaccion(nuevaTransaccion);
+        return Ok("Transacción creada correctamente");
+    }
 
-            return "Transaccion creada correctamente";
+    [HttpGet("getTransacciones")]
+    public IActionResult GetTransacciones() 
+    {
 
-        }
+        List<Transaccion> transacciones = estadisticasRepositorio.GetTransacciones();
 
-        [HttpGet("getTransacciones")]
-        public IActionResult GetTransacciones() 
-        {
+        return Ok(mapper.Map<List<Transaccion>>(transacciones));
 
-            List<Transaccion> transacciones = estadisticasRepositorio.GetTransacciones();
+    }
 
-            return Ok(mapper.Map<List<Transaccion>>(transacciones));
+    [HttpGet("getTransacciones/{id}")]
+    public IActionResult GetTransaccionesById(int id)
+    {
 
-        }
+        Transaccion transaccionId = estadisticasRepositorio.GetTransaccionById(id);
 
-        [HttpGet("getTransacciones/{id}")]
-        public IActionResult GetTransaccionesById(int id)
-        {
+        return Ok(mapper.Map<Transaccion>(transaccionId));
 
-            Transaccion transaccionId = estadisticasRepositorio.GetTransaccionById(id);
-
-            return Ok(mapper.Map<Transaccion>(transaccionId));
-
-        }
+    }
 
 
 
-        //Conversiones
+    //Conversiones
+    [HttpPost("crearConversion")]
+    public IActionResult CrearConversion()
+    {
+        var conversionFaker = new ConversionFaker();
+        var conversionDto = conversionFaker.Generate();
 
-        [HttpPost("crearConversion")]
-        public string CrearConversion(Conversion nuevaConversion)
-        {
+        var nuevaConversion = this.mapper.Map<Conversion>(conversionDto);
+        this.estadisticasRepositorio.CrearConversion(nuevaConversion);
 
-            estadisticasRepositorio.CrearConversion(nuevaConversion);
+        return Ok("Conversión creada correctamente");
+    }
 
-            return "Conversion creada correctamente";
+    [HttpGet("getConversion")]
+    public IActionResult GetConversiones()
+    {
 
-        }
+        List<Conversion> conversiones = estadisticasRepositorio.GetConversiones();
 
-        [HttpGet("getConversion")]
-        public IActionResult GetConversiones()
-        {
+        return Ok(mapper.Map<List<Conversion>>(conversiones));
 
-            List<Conversion> conversiones = estadisticasRepositorio.GetConversiones();
+    }
 
-            return Ok(mapper.Map<List<Conversion>>(conversiones));
+    [HttpGet("getConversion/{id}")]
+    public IActionResult GetConversionById(int id)
+    {
 
-        }
+        Conversion conversionId = estadisticasRepositorio.GetConversionById(id);
 
-        [HttpGet("getConversion/{id}")]
-        public IActionResult GetConversionById(int id)
-        {
+        return Ok(mapper.Map<Cliente>(conversionId));
 
-            Conversion conversionId = estadisticasRepositorio.GetConversionById(id);
-
-            return Ok(mapper.Map<Cliente>(conversionId));
-
-        }
+    }
 
 
-        //Paises
+    //Paises
+    [HttpPost("crearPais")]
+    public IActionResult CrearPais()
+    {
+        var paisFaker = new PaisFaker();
+        var paisDto = paisFaker.Generate();
 
-        [HttpPost("crearPais")]
-        public string CrearConversion(Pais nuevoPais)
-        {
+        var nuevoPais = this.mapper.Map<Pais>(paisDto);
+        this.estadisticasRepositorio.CrearPais(nuevoPais);
 
-            estadisticasRepositorio.CrearPais(nuevoPais);
+        return Ok("País creado correctamente");
+    }
 
-            return "Conversion creada correctamente";
+    [HttpGet("getPaises")]
+    public IActionResult GetPaises()
+    {
 
-        }
+        List<Pais> paises = estadisticasRepositorio.GetPaises();
 
-        [HttpGet("getPaises")]
-        public IActionResult GetPaises()
-        {
+        return Ok(mapper.Map<List<Pais>>(paises));
 
-            List<Pais> paises = estadisticasRepositorio.GetPaises();
+    }
 
-            return Ok(mapper.Map<List<Pais>>(paises));
+    [HttpGet("getPaises/{id}")]
+    public IActionResult GetPaisById(int id)
+    {
 
-        }
+        Pais paisId = estadisticasRepositorio.GetPaisById(id);
 
-        [HttpGet("getPaises/{id}")]
-        public IActionResult GetPaisById(int id)
-        {
+        return Ok(mapper.Map<Pais>(paisId));
 
-            Pais paisId = estadisticasRepositorio.GetPaisById(id);
-
-            return Ok(mapper.Map<Pais>(paisId));
-
-        }
     }
 }

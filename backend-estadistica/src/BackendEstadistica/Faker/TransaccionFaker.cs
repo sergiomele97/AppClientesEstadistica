@@ -1,22 +1,19 @@
-﻿using Bogus;
+﻿using BackendEstadistica.Contexto;
+using Bogus;
 
-namespace BackendEstadistica.Faker
+namespace BackendEstadistica.Faker;
+
+// Faker para Transacción
+public class TransaccionFaker : Faker<TransaccionDto>
 {
-    public class TransaccionFaker : Faker<Transaccion>
+    public TransaccionFaker()
     {
+        //int maxClienteId = contextoBBDD.Paises.Max(p => p.PaisId); // Obtén el máximo PaisId en la base de datos
 
-        public TransaccionFaker()
-        {
-            List<Cliente> clientes = new List<Cliente>();
-            int maxClienteId = clientes.Max(c => c.ClienteId);
-
-            RuleFor(t => t.ImporteRecibido, f => f.Random.Double(1.0, 100.0))
-                .RuleFor(t => t.ImporteEnviado, f => f.Random.Double(1.0, 100.0))
-                .RuleFor(t => t.Fecha, f => f.Date.Past(1))
-                .RuleFor(t => t.ClienteOrigenId, f => f.Random.Int(1, maxClienteId))
-                .RuleFor(t => t.ClienteDestinoId, f => f.Random.Int(1, maxClienteId));
-
-        }
-
+        RuleFor(t => t.ImporteRecibido, f => f.Random.Double(1.0, 100.0))
+            .RuleFor(t => t.ImporteEnviado, f => f.Random.Double(1.0, 100.0))
+            .RuleFor(t => t.Fecha, f => f.Date.Past(1))
+            .RuleFor(t => t.ClienteOrigenId, f => f.Random.Int(1, 10))
+            .RuleFor(t => t.ClienteDestinoId, f => f.Random.Int(1, 10));
     }
 }

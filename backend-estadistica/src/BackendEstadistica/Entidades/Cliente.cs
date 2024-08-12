@@ -16,8 +16,8 @@ public class Cliente
 
     //Relaciones
     public Pais Pais { get; set; } = null!;
-    public ICollection<Conversion> Conversiones { get; set; } = new List<Conversion>();
-    public ICollection<Transaccion> TransaccionesOrigen { get; set; } = new List<Transaccion>();
-    public ICollection<Transaccion> TransaccionesDestino { get; set; } = new List<Transaccion>();
+    public ICollection<Conversion>? Conversiones { get; set; } = new List<Conversion>();
+    public ICollection<Transaccion>? TransaccionesOrigen { get; set; } = new List<Transaccion>();
+    public ICollection<Transaccion>? TransaccionesDestino { get; set; } = new List<Transaccion>();
 
 }

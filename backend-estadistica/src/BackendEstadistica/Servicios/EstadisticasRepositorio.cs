@@ -1,98 +1,85 @@
-﻿
-namespace BackendEstadistica.Servicios
+﻿namespace BackendEstadistica.Servicios;
+
+public class EstadisticasRepositorio : IEstadisticasRepositorio
 {
-    public class EstadisticasRepositorio : IEstadisticasRepositorio
+    private readonly ContextoBBDD _contextoBBDD;
+    private readonly IMapper _mapper;
+
+    public EstadisticasRepositorio(ContextoBBDD contextoBBDD, IMapper mapper)
     {
-        private readonly ContextoBBDD contextoBBDD;
+        _contextoBBDD = contextoBBDD;
+        _mapper = mapper;
+    }
 
-        public EstadisticasRepositorio(ContextoBBDD contextoBBDD)
-        {
-            this.contextoBBDD = contextoBBDD;
-        }
+    //Clientes
+    public void CrearCliente(Cliente cliente)
+    {
+        var clienteEntity = _mapper.Map<Cliente>(cliente);
+        _contextoBBDD.Clientes.Add(clienteEntity);
+        _contextoBBDD.SaveChanges();
+    }
 
+    public List<Cliente> GetClientes()
+    {
+        return _contextoBBDD.Clientes.ToList();
+    }
 
-        //Clientes
+    public Cliente GetClienteById(int id)
+    {
+        return _contextoBBDD.Clientes.FirstOrDefault(c => c.ClienteId == id);
+    }
 
-        public void CrearCliente(Cliente cliente)
-        {
-            var clienteFake = new ClienteFaker().Generate();
+    //Conversiones
+    public void CrearConversion(Conversion conversion)
+    {
+        var conversionEntity = _mapper.Map<Conversion>(conversion);
+        _contextoBBDD.Conversion.Add(conversionEntity);
+        _contextoBBDD.SaveChanges();
+    }
 
-            contextoBBDD.Clientes.Add(clienteFake);
-            contextoBBDD.SaveChanges();
-        }
+    public List<Conversion> GetConversiones()
+    {
+        return _contextoBBDD.Conversion.ToList();
+    }
 
-        public List<Cliente> GetClientes()
-        {
-            return contextoBBDD.Clientes.ToList();
-        }
+    public Conversion GetConversionById(int id)
+    {
+        return _contextoBBDD.Conversion.FirstOrDefault(c => c.ConversionId == id);
+    }
 
-        public Cliente GetClienteById(int id)
-        {
-            return contextoBBDD.Clientes.FirstOrDefault(c => c.ClienteId == id);
-        }
-        
+    //Transacciones
+    public void CrearTransaccion(Transaccion transaccion)
+    {
+        var transaccionEntity = _mapper.Map<Transaccion>(transaccion);
+        _contextoBBDD.Transacciones.Add(transaccionEntity);
+        _contextoBBDD.SaveChanges();
+    }
 
-        //Conversiones
+    public List<Transaccion> GetTransacciones()
+    {
+        return _contextoBBDD.Transacciones.ToList();
+    }
 
-        public void CrearConversion(Conversion conversion)
-        {
-            var conversionFake = new ConversionFaker().Generate();
+    public Transaccion GetTransaccionById(int id)
+    {
+        return _contextoBBDD.Transacciones.FirstOrDefault(t => t.TransaccionId == id);
+    }
 
-            contextoBBDD.Conversion.Add(conversionFake);
-            contextoBBDD.SaveChanges();
-        }
+    //Paises
+    public void CrearPais(Pais pais)
+    {
+        var paisEntity = _mapper.Map<Pais>(pais);
+        _contextoBBDD.Paises.Add(paisEntity);
+        _contextoBBDD.SaveChanges();
+    }
 
-        public List<Conversion> GetConversiones()
-        {
-            return contextoBBDD.Conversion.ToList();
-        }
+    public List<Pais> GetPaises()
+    {
+        return _contextoBBDD.Paises.ToList();
+    }
 
-        public Conversion GetConversionById(int id)
-        {
-            return contextoBBDD.Conversion.FirstOrDefault(c => c.ConversionId == id);
-        }
-
-
-        //Transacciones
-
-        public void CrearTransaccion(Transaccion transaccion)
-        {
-            var transaccionFake = new TransaccionFaker().Generate();
-
-            contextoBBDD.Transacciones.Add(transaccionFake);
-            contextoBBDD.SaveChanges();
-        }
-
-        public List<Transaccion> GetTransacciones()
-        {
-            return contextoBBDD.Transacciones.ToList();
-        }
-
-        public Transaccion GetTransaccionById(int id)
-        {
-            return contextoBBDD.Transacciones.FirstOrDefault(t => t.TransaccionId == id);
-        }
-
-
-
-        //Paises
-
-        public void CrearPais(Pais pais)
-        {
-            var paisFake = new PaisFaker().Generate();
-
-            contextoBBDD.Paises.Add(paisFake);
-            contextoBBDD.SaveChanges();
-        }
-
-        public List<Pais> GetPaises()
-        {
-            return contextoBBDD.Paises.ToList();
-        }
-
-        public Pais GetPaisById(int id)
-        {
-            return contextoBBDD.Paises.FirstOrDefault(p => p.PaisId == id);
-        }
+    public Pais GetPaisById(int id)
+    {
+        return _contextoBBDD.Paises.FirstOrDefault(p => p.PaisId == id);
     }
 }

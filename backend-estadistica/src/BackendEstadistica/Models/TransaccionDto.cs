@@ -10,8 +10,4 @@ public class TransaccionDto
     public int ClienteOrigenId { get; set; }
     public int ClienteDestinoId { get; set; }
 
-    //Relaciones
-    public Cliente ClienteOrigen { get; set; } = null!;
-    public Cliente ClienteDestino { get; set; } = null!;
-
 }
