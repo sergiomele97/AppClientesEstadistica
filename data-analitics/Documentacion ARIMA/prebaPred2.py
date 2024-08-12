@@ -32,10 +32,10 @@ def predict():
 @app.route('/cluster', methods=['POST'])
 def cluster():
     # requestFile: en teoría es un json habrá que leerlo
-    print("Se ejecuta el python cluster")
+   # print("Se ejecuta el python cluster")
     recibido = request.json
 # Acceder a los elementos
-    print(recibido)
+    #print(recibido)
     data = recibido['data']
     n_clusters = recibido['nCluster']
     #print(data)

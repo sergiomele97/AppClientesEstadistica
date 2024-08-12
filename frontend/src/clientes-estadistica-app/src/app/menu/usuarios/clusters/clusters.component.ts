@@ -21,7 +21,7 @@ private datos;
 async onSelectionCluster(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const numerosSelect = selectElement.value;
-    console.log('El cluster es ', numerosSelect);
+    //console.log('El cluster es ', numerosSelect);
     const n_cluster = parseInt(numerosSelect, 10);
     this.dataService.setSelectednCluster(n_cluster);
     
@@ -33,7 +33,7 @@ async onSelectionCluster(event: Event) {
 
         //console.log('Received data:', response);
         const etiqueta = response.etiqueta || [];
-        console.log('etiqueta:', etiqueta);
+        //console.log('etiqueta:', etiqueta);
         this.dataService.setLabel(etiqueta);    
   
       } catch (error) {
@@ -58,15 +58,14 @@ async onSelectionCluster(event: Event) {
     private getSampleData(selectedSample: string): any[] {
       switch (selectedSample) {
         case 'sample a':
-          return  [
-            [16.4, 5.4], [21.7, 2], [25.4, 3], [19, 2], [10.9, 1],
-            [13.6, 3.2], [10.9, 7.4], [10.9, 0], [10.9, 8.2], [16.4, 0],
-            [16.4, 1.8], [13.6, 0.3], [13.6, 0], [29.9, 0], [27.1, 2.3],
-            [16.4, 0], [13.6, 3.7], [10.9, 5.2], [16.4, 6.5], [10.9, 0],
-            [24.5, 7.1], [10.9, 0], [8.1, 4.7], [19, 0], [21.7, 1.8],
-            [27.1, 0], [24.5, 0], [27.1, 0], [29.9, 1.5], [27.1, 0.8],
-            [22.1, 2],
-          ];
+          return   [
+            [16.4, 5.4, 0, 8.7, 1.1], [21.7, 2.8, 4.3, 9.5, 6.1],[19.0, 2.1, 5.6, 3.3, 7.8],[10.9, 1.8, 9.2, 4.4, 3.6],[13.6, 3.2, 4.0, 7.3, 6.7],[10.9, 7.4, 7.5, 8.1, 5.0], 
+            [10.9, 0.4, 2.6, 1.7, 4.5], [10.9, 8.2, 9.1, 6.4, 3.9],[16.4, 0.2, 5.5, 3.2, 7.0],[16.4, 1.8, 6.4, 2.2, 8.3],[13.6, 0.3, 1.4, 7.0, 5.6],[22.1, 2.7, 4.3, 6.4, 7.8],
+            [13.6, 0.1, 2.5, 4.4, 6.7],[29.9, 0.4, 5.1, 7.3, 8.6],[27.1, 2.3, 8.7, 4.2, 9.5],[16.4, 0.7, 3.9, 5.4, 2.8],[13.6, 3.7, 3.6, 7.2, 5.1],[10.9, 5.2, 7.1, 6.6, 4.9], 
+            [16.4, 6.5, 3.5, 8.0, 2.4],[10.9, 0.6, 4.2, 7.8, 5.3],[24.5, 7.1, 1.2, 3.6, 8.4],[10.9, 0.4, 2.3, 6.7, 7.5],[8.1, 4.7, 7.0, 9.1, 2.6],[19.0, 0.3, 8.4, 3.7, 6.5], 
+            [21.7, 1.8, 6.0, 7.2, 9.8],[27.1, 0.4, 4.6, 5.7, 8.9],[24.5, 0.3, 9.0, 6.1, 7.8],[27.1, 0.7, 3.5, 5.9, 8.3],[29.9, 1.5, 7.2, 4.8, 6.9],[27.1, 0.8, 2.9, 8.1, 5.6] 
+            ]; 
+            
         case 'sample b':
           return[
             [36.4, 13.4], [1.7, 11], [5.4, 8], [9, 17], [1.9, 4],

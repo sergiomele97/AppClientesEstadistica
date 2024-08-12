@@ -19,8 +19,8 @@ export class ClustersTableComponent implements OnInit {
   ngOnInit() {
     combineLatest([this.dataService.selectedData$, this.dataService.selectedLabel$])
       .subscribe(([data, label]) => {
-        console.log('Data:', data);
-        console.log('Label:', label);
+       // console.log('Data:', data);
+       // console.log('Label:', label);
 
         if (!Array.isArray(data) || !Array.isArray(label)) {
           console.error('Data or label is not an array');
@@ -30,7 +30,7 @@ export class ClustersTableComponent implements OnInit {
         const maxItemLength = Math.max(...data.map(item => item.length));
         
         this.columnHeaders = Array.from({ length: maxItemLength }, (_, i) => `Variable ${i + 1}`);
-        this.columnHeaders.push('Etiqueta');
+        this.columnHeaders.push('Grupo');
 
         this.tableData = data.map((item: any[], index: number) => {
           const paddedItem = [...item, ...Array(maxItemLength - item.length).fill('')];
