@@ -7,3 +7,10 @@
   p {
     font-family: Lato;
   }
+
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Ajusta la altura según sea necesario */
+  }
