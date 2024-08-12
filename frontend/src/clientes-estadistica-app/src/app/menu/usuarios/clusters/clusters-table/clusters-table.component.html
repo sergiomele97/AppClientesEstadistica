@@ -1,15 +1,21 @@
-<div class="relative overflow-x-auto" *ngIf="tableData">
+<div class="relative overflow-x-auto" *ngIf="tableData && tableData.length > 0">
   <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
       <tr>
-        <th scope="col" class="px-6 py-3">X</th>
-        <th scope="col" class="px-6 py-3">Y</th>
+        <!-- Generar encabezados dinámicos -->
+        <ng-container *ngFor="let header of columnHeaders">
+          <th scope="col" class="px-6 py-3">{{ header }}</th>
+        </ng-container>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of tableData; let i = index" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-        <td class="px-6 py-4">{{ item[0] }}</td>
-        <td class="px-6 py-4">{{ item[1] }}</td>
+      <tr *ngFor="let row of tableData">
+        <!-- Generar celdas dinámicas -->
+        <ng-container *ngFor="let cell of row; let last = last">
+          <td [ngClass]="{'px-6 py-3': !last, 'px-6 py-3 text-right': last}">
+            {{ cell }}
+          </td>
+        </ng-container>
       </tr>
     </tbody>
   </table>

@@ -27,17 +27,14 @@ async onSelectionCluster(event: Event) {
     
       // Call sendDataToBackend and handle the response
       try {
-        // Convert Observable to Promise and get the emitted data
      
-        const data =  this.dataService.selectedData$.toPromise();
         // Send data to backend
         const response = await this.http.post<any>(this.apiUrl, {data: this.datos ,nCluster:  n_cluster }).toPromise();
-        
-        // Handle response
-        console.log('Received data:', response);
+
+        //console.log('Received data:', response);
         const etiqueta = response.etiqueta || [];
         console.log('etiqueta:', etiqueta);
-             
+        this.dataService.setLabel(etiqueta);    
   
       } catch (error) {
         // Handle errors

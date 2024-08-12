@@ -44,7 +44,8 @@ def cluster():
     kmeans = KMeans(n_clusters=n_clusters, random_state=0)
     kmeans.fit(data)
     labels = kmeans.labels_.tolist()  # Convert ndarray to list
-    labels = [x + 1 for x in labels]
+    for i,lab in enumerate(labels):
+        labels[i] = lab + 1
     
     # Calcular el índice de Davies-Bouldin
    # db_score = davies_bouldin_score(data, labels)
