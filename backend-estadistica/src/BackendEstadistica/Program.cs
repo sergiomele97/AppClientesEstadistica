@@ -1,5 +1,6 @@
 
 using BackendEstadistica.Contexto;
+using BackendEstadistica.Mappings;
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendEstadistica
@@ -18,7 +19,7 @@ namespace BackendEstadistica
             builder.Services.AddControllers();
 
             // Servicio para el mapeado
-            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             builder.Services.AddDbContext<ContextoBBDD>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

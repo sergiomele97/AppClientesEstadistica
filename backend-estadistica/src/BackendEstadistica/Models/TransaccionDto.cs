@@ -2,7 +2,6 @@
 
 public class TransaccionDto
 {
-
     public int TransaccionId { get; set; }
     public double? ImporteRecibido { get; set; }
     public double? ImporteEnviado { get; set; }
@@ -10,8 +9,6 @@ public class TransaccionDto
     public int ClienteOrigenId { get; set; }
     public int ClienteDestinoId { get; set; }
 
-    //Relaciones
-    public Cliente ClienteOrigen { get; set; } = null!;
-    public Cliente ClienteDestino { get; set; } = null!;
-
+    public ClienteDto ClienteOrigen { get; set; } = new ClienteDto(); // DTO para el cliente origen
+    public ClienteDto ClienteDestino { get; set; } = new ClienteDto(); // DTO para el cliente destino
 }

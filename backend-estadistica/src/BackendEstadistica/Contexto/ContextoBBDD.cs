@@ -29,30 +29,24 @@ public class ContextoBBDD : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
-        // Relación Cliente-Pais
-        modelBuilder.Entity<Cliente>()
-       .HasOne(c => c.Pais)
-       .WithOne(p => p.Cliente) 
-       .HasForeignKey<Cliente>(c => c.PaisId);
-
-        // Relación Cliente-Conversion
-        modelBuilder.Entity<Conversion>()
-            .HasOne(c => c.Cliente)
-            .WithMany(c => c.Conversiones)
-            .HasForeignKey(c => c.ClienteId);
-
-        // Relación Transacción con Cliente (envío y recibo)
-        modelBuilder.Entity<Transaccion>()
-            .HasOne(t => t.ClienteDestino)
-            .WithMany(c => c.TransaccionesDestino)
-            .HasForeignKey(t => t.ClienteDestinoId)
-            .OnDelete(DeleteBehavior.Restrict); // Para evitar ciclos de eliminación
-
         modelBuilder.Entity<Transaccion>()
             .HasOne(t => t.ClienteOrigen)
             .WithMany(c => c.TransaccionesOrigen)
             .HasForeignKey(t => t.ClienteOrigenId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Transaccion>()
+            .HasOne(t => t.ClienteDestino)
+            .WithMany(c => c.TransaccionesDestino)
+            .HasForeignKey(t => t.ClienteDestinoId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Cliente>()
+            .HasOne(c => c.Pais)
+            .WithMany(p => p.Clientes)
+            .HasForeignKey(c => c.PaisId)
+            .OnDelete(DeleteBehavior.Restrict);
+
     }
 
 

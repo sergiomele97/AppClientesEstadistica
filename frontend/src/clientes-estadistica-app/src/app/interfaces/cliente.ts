@@ -10,6 +10,7 @@ export interface ICliente {
   edad?: number;
   sexo?: string;
   trabajo?: string;
+  
   conversiones?: IConversion[]; // Relación con Conversiones
   transaccionesOrigen?: ITransaccion[]; // Relación con Transacciones como origen (pérdidas)
   transaccionesDestino?: ITransaccion[]; // Relación con Transacciones como destino (ingresos)
