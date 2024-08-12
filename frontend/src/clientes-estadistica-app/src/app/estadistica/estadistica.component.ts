@@ -16,16 +16,24 @@ export class EstadisticaComponent implements OnInit, AfterViewInit {
   @ViewChildren('contenedor2', { read: ViewContainerRef }) containers2!: QueryList<ViewContainerRef>;
   @ViewChildren('contenedor3', { read: ViewContainerRef }) containers3!: QueryList<ViewContainerRef>;
   @ViewChildren('contenedor4', { read: ViewContainerRef }) containers4!: QueryList<ViewContainerRef>;
+  @ViewChildren('contenedor5', { read: ViewContainerRef }) containers5!: QueryList<ViewContainerRef>;
+  @ViewChildren('contenedor6', { read: ViewContainerRef }) containers6!: QueryList<ViewContainerRef>;
+  @ViewChildren('contenedor7', { read: ViewContainerRef }) containers7!: QueryList<ViewContainerRef>;
+  @ViewChildren('contenedor8', { read: ViewContainerRef }) containers8!: QueryList<ViewContainerRef>;
 
   @ViewChildren('contenedor1', { read: ElementRef }) elements1!: QueryList<ElementRef>;
   @ViewChildren('contenedor2', { read: ElementRef }) elements2!: QueryList<ElementRef>;
   @ViewChildren('contenedor3', { read: ElementRef }) elements3!: QueryList<ElementRef>;
   @ViewChildren('contenedor4', { read: ElementRef }) elements4!: QueryList<ElementRef>;
+  @ViewChildren('contenedor5', { read: ElementRef }) elements5!: QueryList<ElementRef>;
+  @ViewChildren('contenedor6', { read: ElementRef }) elements6!: QueryList<ElementRef>;
+  @ViewChildren('contenedor7', { read: ElementRef }) elements7!: QueryList<ElementRef>;
+  @ViewChildren('contenedor8', { read: ElementRef }) elements8!: QueryList<ElementRef>;
 
   // Declarar las listas
   private containers: ViewContainerRef[] = [];
   private elements: ElementRef[] = [];
-  private ContenedoresLibres: Boolean[] = [true,true,true,true];   // Si el contenedor esta libre es True
+  private ContenedoresLibres: Boolean[] = [true,true,true,true,true,true,true,true];   // Si el contenedor esta libre es True
   private usuarios: Usuario[] = [];
   private usuarioService: PruebaConexionService;
 
@@ -48,14 +56,22 @@ export class EstadisticaComponent implements OnInit, AfterViewInit {
       this.containers1.first,
       this.containers2.first,
       this.containers3.first,
-      this.containers4.first
+      this.containers4.first,
+      this.containers5.first,
+      this.containers6.first,
+      this.containers7.first,
+      this.containers8.first
     ];
     
     this.elements = [
       this.elements1.first,
       this.elements2.first,
       this.elements3.first,
-      this.elements4.first
+      this.elements4.first,
+      this.elements5.first,
+      this.elements6.first,
+      this.elements7.first,
+      this.elements8.first
     ];
   }
 
