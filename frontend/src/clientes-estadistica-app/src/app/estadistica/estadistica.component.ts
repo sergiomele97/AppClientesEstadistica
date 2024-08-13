@@ -25,7 +25,7 @@ export class EstadisticaComponent implements OnInit, AfterViewInit {
   @ViewChildren('contenedor2', { read: ElementRef }) elements2!: QueryList<ElementRef>;
   @ViewChildren('contenedor3', { read: ElementRef }) elements3!: QueryList<ElementRef>;
   @ViewChildren('contenedor4', { read: ElementRef }) elements4!: QueryList<ElementRef>;
-  @ViewChildren('contenedor5', { read: ElementRef }) elements5!: QueryList<ElementRef>;
+  @ViewChildren('contenedor5', { read: ElementRef }) elements5!: QueryList<ElementRef>; 
   @ViewChildren('contenedor6', { read: ElementRef }) elements6!: QueryList<ElementRef>;
   @ViewChildren('contenedor7', { read: ElementRef }) elements7!: QueryList<ElementRef>;
   @ViewChildren('contenedor8', { read: ElementRef }) elements8!: QueryList<ElementRef>; 
