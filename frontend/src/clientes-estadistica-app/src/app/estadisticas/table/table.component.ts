@@ -47,6 +47,26 @@ export class TableComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+<<<<<<< HEAD
+=======
+  subscription!: Subscription;
+  transacciones: ITransaccion[] = [];
+  transaccionesFilter: ITransaccion[] = [];
+  currentPage: number = 1; // Página actual
+
+  _filterTransaccion: number;
+
+  get filterTransaccion(): number {
+    return this._filterTransaccion;
+  }
+
+  set filterTransaccion(value: number) {
+    this._filterTransaccion = value;
+    this.currentPage = 1;
+    this.transaccionesFilter = this.filterTransaccionesByCliente(value);
+  }
+
+>>>>>>> front-outliers
   filterTransaccionesByCliente(filter: number): ITransaccion[] {
     if (!filter) {
       return this.transacciones;  // Si no hay filtro, retorna todas las transacciones

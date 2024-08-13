@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { OutliersDetailGraphComponent } from './outliers-detail-graph.component';
+import { ShowOutlierComponent } from './show-outlier.component';
 
-describe('OutliersDetailGraphComponent', () => {
-  let component: OutliersDetailGraphComponent;
-  let fixture: ComponentFixture<OutliersDetailGraphComponent>;
+describe('ShowOutlierComponent', () => {
+  let component: ShowOutlierComponent;
+  let fixture: ComponentFixture<ShowOutlierComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OutliersDetailGraphComponent ]
+      declarations: [ ShowOutlierComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OutliersDetailGraphComponent);
+    fixture = TestBed.createComponent(ShowOutlierComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
