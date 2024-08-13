@@ -36,17 +36,10 @@ export class TableComponent implements OnInit, OnDestroy {
     return this._filterTransaccion;
   }
 
-<<<<<<< HEAD
   set filterTransaccion(value: number) {
     this._filterTransaccion = value;
     this.currentPage = 1;
     this.transaccionesFilter = this.filterTransaccionesByCliente(value);
-=======
-  set filterEnvio(value: string) {
-    this._filterEnvio = value;
-    
-    this.enviosFilter = this.filterEnviosByDivisa(value)
->>>>>>> main
   }
 
   filterTransaccionesByCliente(filter: number): ITransaccion[] {
