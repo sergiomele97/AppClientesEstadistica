@@ -14,14 +14,12 @@ export class ClienteEstService {
 
   private readonly url_estadistica = environment.apiUrl;
 
-  private readonly url_prueba = 'https://localhost:7144/api/usuarios';
-
   getClientes(): Observable<ICliente[]> {
     return this.http.get<ICliente[]>(`${this.url_estadistica}/getclientes`);
   }
 
   getCliente(clienteId: number): Observable<ICliente> {
-    return this.http.get<ICliente>(`${this.url_estadistica}/getclientes/${clienteId}`)
+    return this.http.get<ICliente>(`${this.url_estadistica}/getcliente/${clienteId}`)
   }
 
 }
