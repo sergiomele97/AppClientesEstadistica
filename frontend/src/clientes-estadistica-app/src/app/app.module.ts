@@ -33,6 +33,11 @@ import { PruebaConexionService } from './servicios/pruebaConexion.service';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';
 import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
 
+
+
+
+
+
 @NgModule({
   declarations: [	
     AppComponent,
@@ -65,7 +70,9 @@ import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-ou
     ReactiveFormsModule,
     NgApexchartsModule,
     HighchartsChartModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    BrowserModule,
+    FormsModule
   ],
   providers: [
     UserService,
