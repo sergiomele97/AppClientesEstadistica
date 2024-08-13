@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { Usuario } from '../clases/usuario';
 import { environment } from '../../environments/environment';
+import { Cliente } from '../clases/cliente';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,13 @@ export class UserService {
     const url = `${this.URL}Paises/nombre/${nombre}`;
     // Hacer la solicitud GET
     return this.http.get<{ id: number }>(url);
+  }
+
+  editarCliente(cliente: Cliente): Observable<any>{
+    console.log('Enviando PUT para cliente:', cliente);
+    const url = `${this.URL}Cliente/${cliente.email}`;
+    cliente.fechaNacimiento = new Date(cliente.fechaNacimiento).getTime();
+    return this.http.put(url, cliente);
   }
 
   getEnvios(): Observable<any[]> {

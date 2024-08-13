@@ -11,6 +11,11 @@
     {
         await _clienteRepository.AddClienteAsync(cliente);
     }
+    
+    public async Task EditClientAsync(Cliente cliente)
+    {
+        await _clienteRepository.EditClienteAsync(cliente);
+    }
 
     public List<Cliente> GetClientes(int count)
     {

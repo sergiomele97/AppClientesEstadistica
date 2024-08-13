@@ -116,6 +116,15 @@ export class UsersInfoComponent implements OnInit, OnDestroy {
     } else if (this.editMode === 'client' && this.selectedCliente) {
       // Implementa aquí la lógica para guardar el cliente editado
       console.log('Cliente guardado:', this.selectedCliente);
+      this.userService.editarCliente(this.selectedCliente).subscribe(
+        response => {
+          console.log('Cliente actualizado correctamente', response);
+        },
+        error => {
+          console.error('Error al actualizar el cliente', error);
+        }
+      );
+
     }
     this.closeModal();
   }

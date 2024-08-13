@@ -125,14 +125,16 @@ public class ClienteController : ControllerBase
     }
 
     // PUT api/cliente/5
-    [HttpPut("{id}")]
-    public async Task<ActionResult> Put(int id, [FromBody] ClienteDto clienteDto)
+    // PUT api/cliente/{email}
+    [HttpPut("{email}")]
+    public async Task<ActionResult> Put(string email, [FromBody] EditViewModel clienteDto)
     {
-        _logger.LogInformation($"Actualizando cliente con ID {id}.");
-        if (id != clienteDto.ClienteId)
+        _logger.LogInformation($"Actualizando cliente con email {email}.");
+
+        if (email != clienteDto.Email)
         {
-            _logger.LogWarning($"ID del cliente en la solicitud ({clienteDto.ClienteId}) no coincide con el ID de la URL ({id}).");
-            return BadRequest("ID del cliente no coincide.");
+            _logger.LogWarning($"Email del cliente en la solicitud ({clienteDto.Email}) no coincide con el email de la URL ({email}).");
+            return BadRequest("El email del cliente no coincide.");
         }
 
         if (!ModelState.IsValid)
@@ -141,18 +143,36 @@ public class ClienteController : ControllerBase
             return BadRequest(ModelState);
         }
 
-        var cliente = _mapper.Map<Cliente>(clienteDto);
-        _clienteRepository.Actualizar(cliente);
+        // Buscar el cliente existente en la base de datos
+        var clienteExistente = await _clienteRepository.ObtenerPorEmail(email);
+        if (clienteExistente == null)
+        {
+            _logger.LogWarning($"Cliente con email {email} no encontrado.");
+            return NotFound("Cliente no encontrado.");
+        }
 
+        // Mapear las propiedades del DTO al cliente existente
+        DateTime FechaNac = DateTimeOffset.FromUnixTimeMilliseconds(clienteDto.FechaNacimiento).UtcDateTime;
+        //_mapper.Map(clienteDto, clienteExistente);
+
+        clienteExistente.Nombre = clienteDto.Nombre;
+        clienteExistente.Apellido = clienteDto.Apellido;
+        clienteExistente.FechaNacimiento = FechaNac;
+        clienteExistente.PaisId = clienteDto.PaisId;
+        clienteExistente.Empleo = clienteDto.Empleo;
+
+        await _clienteRepository.EditClienteAsync(clienteExistente);
+
+        // Intentar guardar los cambios en la base de datos
         if (await _clienteRepository.GuardarCambios())
         {
-            _logger.LogInformation($"Cliente con ID {id} actualizado correctamente.");
+            _logger.LogInformation($"Cliente con email {email} actualizado correctamente.");
             return NoContent();
         }
 
-        _logger.LogError($"No se pudo actualizar el cliente con ID {id}.");
-        return BadRequest($"No se pudo actualizar el cliente.");
+        return Ok(new { message = "Client edited successfully." });
     }
+
 
     // DELETE api/cliente/5
     [HttpDelete("{id}")]
