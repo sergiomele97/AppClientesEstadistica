@@ -1,9 +1,9 @@
-<div class="filter-container">
+<div class="filter-container" *ngIf="transacciones.length">
   <input type="text" [(ngModel)]="filterTransaccion" placeholder="Filtro" />
 </div>
 
 <div class="table-container">
-  <div class="pagination-controls">
+  <div class="pagination-controls" *ngIf="transaccionesFilter.length > 20">
     <pagination-controls
       (pageChange)="currentPage = $event"
       previousLabel="Anterior"
@@ -18,12 +18,22 @@
       class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
     >
       <tr>
-        <th (click)="order('id')" scope="col" class="px-6 py-3">Id</th>
-        <th (click)="order('cantidad')" scope="col" class="px-6 py-3">
-          Cantidad
+        <th (click)="order('transaccionId')" scope="col" class="px-6 py-3">
+          Id Transaccion
         </th>
-        <th (click)="order('divisa')" scope="col" class="px-6 py-3">Divisa</th>
+        <th (click)="order('clienteOrigenId')" scope="col" class="px-6 py-3">
+          Cliente Origen
+        </th>
+        <th (click)="order('clienteDestinoId')" scope="col" class="px-6 py-3">
+          Cliente Destino
+        </th>
         <th (click)="order('fecha')" scope="col" class="px-6 py-3">Fecha</th>
+        <th (click)="order('importeEnviado')" scope="col" class="px-6 py-3">
+          Importe Enviado
+        </th>
+        <th (click)="order('importeRecibido')" scope="col" class="px-6 py-3">
+          Importe Recibido
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -34,12 +44,18 @@
         "
         class="bg-white border-b"
       >
+        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+          {{ transaccion.transaccionId }}
+        </td>
         <th
           scope="row"
           class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
         >
           <a
-            [routerLink]="['/estadisticas/clientes', transaccion.clienteOrigenId]"
+            [routerLink]="[
+              '/estadisticas/clientes/',
+              transaccion.clienteOrigenId
+            ]"
             class="block w-full h-full"
           >
             {{ transaccion.clienteOrigenId }}
@@ -50,7 +66,10 @@
           class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
         >
           <a
-            [routerLink]="['/estadisticas/clientes', transaccion.clienteDestinoId]"
+            [routerLink]="[
+              '/estadisticas/clientes/',
+              transaccion.clienteDestinoId
+            ]"
             class="block w-full h-full"
           >
             {{ transaccion.clienteDestinoId }}
@@ -58,6 +77,12 @@
         </th>
         <td class="px-6 py-4">
           {{ transaccion.fecha }}
+        </td>
+        <td class="px-6 py-4">
+          {{ transaccion.importeEnviado }}
+        </td>
+        <td class="px-6 py-4">
+          {{ transaccion.importeRecibido }}
         </td>
       </tr>
     </tbody>
