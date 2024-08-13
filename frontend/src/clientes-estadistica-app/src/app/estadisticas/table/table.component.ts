@@ -8,28 +8,15 @@ import { TransaccionService } from 'src/app/servicios/transaccion.service';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
 })
+
 export class TableComponent implements OnInit, OnDestroy {
+
   constructor(private transaccionesService: TransaccionService) {}
-
-  ngOnInit(): void {
-    this.subscription = this.transaccionesService.getTransacciones().subscribe({
-      next: (transacciones) => {
-        this.transaccionesFilter = this.filterTransaccionesByCliente(
-          this.filterTransaccion
-        );
-      },
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
 
   subscription!: Subscription;
   transacciones: ITransaccion[] = [];
   transaccionesFilter: ITransaccion[] = [];
   currentPage: number = 1; // Página actual
-
   _filterTransaccion: number;
 
   get filterTransaccion(): number {
@@ -42,12 +29,35 @@ export class TableComponent implements OnInit, OnDestroy {
     this.transaccionesFilter = this.filterTransaccionesByCliente(value);
   }
 
-  filterTransaccionesByCliente(filter: number): ITransaccion[] {
-    return this.transacciones.filter((transaccion: ITransaccion) =>
-      transaccion?.clienteOrigenId === filter ||
-      transaccion?.clienteDestinoId === filter
-    );
+  ngOnInit(): void {
+    this.subscription = this.transaccionesService.getTransacciones().subscribe({
+      next: (transacciones) => {
+        this.transacciones = transacciones;
+        // this.transacciones = this.transaccionesService.formatTransacciones(this.transacciones)
+        this.transaccionesFilter = this.filterTransaccionesByCliente(
+          this.filterTransaccion
+        );
+        console.log(transacciones);
+      },
+      error: (error) => console.error('Error fetching transactions:', error)
+    });
   }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  filterTransaccionesByCliente(filter: number): ITransaccion[] {
+    if (!filter) {
+      return this.transacciones;  // Si no hay filtro, retorna todas las transacciones
+    }
+    return this.transacciones.filter(
+      (transaccion: ITransaccion) =>
+        transaccion?.clienteOrigenId === filter ||
+        transaccion?.clienteDestinoId === filter
+    );
+}
+
 
   columnOrder: string = '';
   directionOrder: boolean = true;
@@ -76,17 +86,17 @@ export class TableComponent implements OnInit, OnDestroy {
           valorA = a.clienteDestinoId;
           valorB = b.clienteDestinoId;
           break;
-        case 'importeOrigen':
-          valorA = a.importeRecibido;
-          valorB = b.importeRecibido;
+        case 'importeEnviado':
+          valorA = a.importeEnviado;
+          valorB = b.importeEnviado;
           break;
         case 'importeRecibido':
           valorA = a.importeRecibido;
           valorB = b.importeRecibido;
           break;
         case 'fecha':
-          valorA = a.fecha;
-          valorB = b.fecha;
+          valorA = new Date(a.fecha).getTime();
+          valorB = new Date(b.fecha).getTime();
           break;
       }
 

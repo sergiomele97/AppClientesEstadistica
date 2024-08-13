@@ -55,7 +55,7 @@ public class EstadisticasController : Controller
         }
 
         // Mapea a DTOs si es necesario, o devuelve la entidad directamente
-        return Ok(mapper.Map<ClienteDto>(cliente));
+        return Ok(mapper.Map<Cliente>(cliente));
     }
 
 

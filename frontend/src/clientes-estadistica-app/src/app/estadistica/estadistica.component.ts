@@ -6,12 +6,23 @@ import { SpaghettiComponent } from '../estadisticas/spaghetti/spaghetti.componen
 import { Usuario } from '../clases/usuario';
 import { PruebaConexionService } from '../servicios/pruebaConexion.service';
 
+// Decorador 
 @Component({
   selector: 'app-estadistica',
   templateUrl: './estadistica.component.html',
   styleUrls: ['./estadistica.component.css']
 })
+
 export class EstadisticaComponent implements OnInit, AfterViewInit {
+
+  // Método para dropdown
+  isDropdownOpen = false;
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  // Declarar contenedores
   @ViewChildren('contenedor1', { read: ViewContainerRef }) containers1!: QueryList<ViewContainerRef>;
   @ViewChildren('contenedor2', { read: ViewContainerRef }) containers2!: QueryList<ViewContainerRef>;
   @ViewChildren('contenedor3', { read: ViewContainerRef }) containers3!: QueryList<ViewContainerRef>;
@@ -25,10 +36,10 @@ export class EstadisticaComponent implements OnInit, AfterViewInit {
   @ViewChildren('contenedor2', { read: ElementRef }) elements2!: QueryList<ElementRef>;
   @ViewChildren('contenedor3', { read: ElementRef }) elements3!: QueryList<ElementRef>;
   @ViewChildren('contenedor4', { read: ElementRef }) elements4!: QueryList<ElementRef>;
-  @ViewChildren('contenedor5', { read: ElementRef }) elements5!: QueryList<ElementRef>;
+  @ViewChildren('contenedor5', { read: ElementRef }) elements5!: QueryList<ElementRef>; 
   @ViewChildren('contenedor6', { read: ElementRef }) elements6!: QueryList<ElementRef>;
   @ViewChildren('contenedor7', { read: ElementRef }) elements7!: QueryList<ElementRef>;
-  @ViewChildren('contenedor8', { read: ElementRef }) elements8!: QueryList<ElementRef>;
+  @ViewChildren('contenedor8', { read: ElementRef }) elements8!: QueryList<ElementRef>; 
 
   // Declarar las listas
   private containers: ViewContainerRef[] = [];
@@ -114,3 +125,6 @@ export class EstadisticaComponent implements OnInit, AfterViewInit {
     }
   }
 }
+
+
+  
