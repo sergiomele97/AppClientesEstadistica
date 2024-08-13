@@ -2,7 +2,7 @@ import { IConversion } from './conversion';
 import { ITransaccion } from './transaccion';
 
 export interface ICliente {
-  id: number;
+  clienteId: number;
   nombre?: string;
   contraseña?: string;
   correo?: string;
