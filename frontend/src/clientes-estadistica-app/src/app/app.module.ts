@@ -32,7 +32,7 @@ import { HomeComponent } from './home/home.component';
 import { PruebaConexionService } from './servicios/pruebaConexion.service';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';
 import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
-import { GraficasComponent } from './estadistica/graficas/graficas.component';
+import { GraficasComponent } from './estadistica/graficas/Graficas.component';
 
 @NgModule({
   declarations: [	
