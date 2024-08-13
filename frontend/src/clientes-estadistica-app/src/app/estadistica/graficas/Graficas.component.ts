@@ -5,9 +5,9 @@ import { SpaghettiComponent } from 'src/app/estadisticas/spaghetti/spaghetti.com
 import { VolumetryComponent } from 'src/app/estadisticas/volumetry/volumetry.component';
 
 @Component({
-  selector: 'app-Graficas',
-  templateUrl: './Graficas.component.html',
-  styleUrls: ['./Graficas.component.css']
+  selector: 'app-graficas',
+  templateUrl: './graficas.component.html',
+  styleUrls: ['./graficas.component.css']
 })
 export class GraficasComponent implements OnInit {
 
@@ -34,6 +34,8 @@ export class GraficasComponent implements OnInit {
   @ViewChildren('contenedor6', { read: ElementRef }) elements6!: QueryList<ElementRef>;
   @ViewChildren('contenedor7', { read: ElementRef }) elements7!: QueryList<ElementRef>;
   @ViewChildren('contenedor8', { read: ElementRef }) elements8!: QueryList<ElementRef>; 
+
+  
 
   // Declarar las listas
   private containers: ViewContainerRef[] = [];
@@ -104,4 +106,17 @@ export class GraficasComponent implements OnInit {
       }
     }
   }
+
+   // Método para dropdown
+   isDropdownOpen = false;
+
+   toggleDropdown() {
+    const svg = document.getElementById("miSVG") as unknown as SVGElement;
+    if (svg) {
+      if(svg.style.visibility == "hidden"){
+        svg.style.visibility = "visible"
+      } else {svg.style.visibility = "hidden"}
+    }
+    this.isDropdownOpen = !this.isDropdownOpen;
+   }
 }

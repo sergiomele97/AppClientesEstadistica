@@ -18,7 +18,8 @@ import { EstadisticaComponent } from './estadistica/estadistica.component';
 import { HomeComponent } from './home/home.component';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';
 import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
-import { GraficasComponent } from './estadistica/graficas/Graficas.component';
+import { GraficasComponent } from './estadistica/graficas/graficas.component';
+
 
 const routes: Routes = [
   { path: "login", component: LoginComponent},

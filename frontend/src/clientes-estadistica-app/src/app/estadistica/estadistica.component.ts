@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../clases/usuario';
 import { PruebaConexionService } from '../servicios/pruebaConexion.service';
 
@@ -9,10 +9,8 @@ import { PruebaConexionService } from '../servicios/pruebaConexion.service';
   styleUrls: ['./estadistica.component.css']
 })
 
-export class EstadisticaComponent implements OnInit, AfterViewInit {
+export class EstadisticaComponent implements OnInit {
   usuarios: Usuario[];
-  private usuarioService: PruebaConexionService;
-  
 
   // Método para dropdown
   isDropdownOpen = false;
@@ -22,9 +20,7 @@ export class EstadisticaComponent implements OnInit, AfterViewInit {
   }
 
   constructor(private pruebaConexionService: PruebaConexionService) { }
-  ngAfterViewInit(): void {
-    throw new Error('Method not implemented.');
-  }
+  
 
   // -------------------- Método Sergio para Debuggear en Azure, no borrar:
   ngOnInit(): void {
