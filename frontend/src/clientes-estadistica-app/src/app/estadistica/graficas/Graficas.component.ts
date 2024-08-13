@@ -6,8 +6,8 @@ import { VolumetryComponent } from 'src/app/estadisticas/volumetry/volumetry.com
 
 @Component({
   selector: 'app-graficas',
-  templateUrl: './graficas.component.html',
-  styleUrls: ['./graficas.component.css']
+  templateUrl: './Graficas.component.html',
+  styleUrls: ['./Graficas.component.css']
 })
 export class GraficasComponent implements OnInit {
 
