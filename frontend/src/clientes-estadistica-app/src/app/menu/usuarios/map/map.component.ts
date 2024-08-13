@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 import Highcharts from "highcharts/highmaps";
 import worldMap from "@highcharts/map-collection/custom/world.geo.json";
 
