@@ -28,7 +28,7 @@ export class EstadisticaComponent implements OnInit, AfterViewInit {
   @ViewChildren('contenedor5', { read: ElementRef }) elements5!: QueryList<ElementRef>;
   @ViewChildren('contenedor6', { read: ElementRef }) elements6!: QueryList<ElementRef>;
   @ViewChildren('contenedor7', { read: ElementRef }) elements7!: QueryList<ElementRef>;
-  @ViewChildren('contenedor8', { read: ElementRef }) elements8!: QueryList<ElementRef>;
+  @ViewChildren('contenedor8', { read: ElementRef }) elements8!: QueryList<ElementRef>; 
 
   // Declarar las listas
   private containers: ViewContainerRef[] = [];
