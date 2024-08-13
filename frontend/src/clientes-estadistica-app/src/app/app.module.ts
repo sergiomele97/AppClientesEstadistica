@@ -34,6 +34,7 @@ import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.compon
 import { ClustersDataService } from './servicios/clusters-data.service';
 import { HomeComponent } from './home/home.component';
 import { PruebaConexionService } from './servicios/pruebaConexion.service';
+import { GraficasComponent } from './estadistica/graficas/Graficas.component';
 
 @NgModule({
   declarations: [	
@@ -60,7 +61,8 @@ import { PruebaConexionService } from './servicios/pruebaConexion.service';
     EstadisticaComponent,
     ClientesComponent,
     DivisasComponent,
-    UsersInfoComponent
+    UsersInfoComponent,
+    GraficasComponent
   ],
   imports: [
     BrowserModule,
