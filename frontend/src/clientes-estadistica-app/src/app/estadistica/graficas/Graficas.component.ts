@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChildren, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, ElementRef, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GraphComponent } from 'src/app/estadisticas/graph/graph.component';
 import { MapComponent } from 'src/app/estadisticas/map/map.component';
@@ -15,6 +15,8 @@ export class GraficasComponent implements OnInit {
 
   // Esto es para que escuche cuando se cierra una grafica
   private subscription: Subscription;
+
+  
   constructor(private graficasServicio: GraficasService) { }
 
   ngOnInit() {
@@ -23,134 +25,48 @@ export class GraficasComponent implements OnInit {
     });
   }
 
+
+  // Declarar contenedor
+  @ViewChild('contenedor1', { read: ViewContainerRef }) container!: ViewContainerRef;
+
   // Ejecutar cuando se cierra una grafica
   onGraphClose() {
-    
+    console.log("Hola")
     
   }
 
-  // Declarar contenedores
-  @ViewChildren('contenedor1', { read: ViewContainerRef }) containers1!: QueryList<ViewContainerRef>;
-  @ViewChildren('contenedor2', { read: ViewContainerRef }) containers2!: QueryList<ViewContainerRef>;
-  @ViewChildren('contenedor3', { read: ViewContainerRef }) containers3!: QueryList<ViewContainerRef>;
-  @ViewChildren('contenedor4', { read: ViewContainerRef }) containers4!: QueryList<ViewContainerRef>;
-  @ViewChildren('contenedor5', { read: ViewContainerRef }) containers5!: QueryList<ViewContainerRef>;
-  @ViewChildren('contenedor6', { read: ViewContainerRef }) containers6!: QueryList<ViewContainerRef>;
-  @ViewChildren('contenedor7', { read: ViewContainerRef }) containers7!: QueryList<ViewContainerRef>;
-  @ViewChildren('contenedor8', { read: ViewContainerRef }) containers8!: QueryList<ViewContainerRef>;
-  @ViewChildren('contenedor9', { read: ViewContainerRef }) containers9!: QueryList<ViewContainerRef>;
-
-  @ViewChildren('contenedor1', { read: ElementRef }) elements1!: QueryList<ElementRef>;
-  @ViewChildren('contenedor2', { read: ElementRef }) elements2!: QueryList<ElementRef>;
-  @ViewChildren('contenedor3', { read: ElementRef }) elements3!: QueryList<ElementRef>;
-  @ViewChildren('contenedor4', { read: ElementRef }) elements4!: QueryList<ElementRef>;
-  @ViewChildren('contenedor5', { read: ElementRef }) elements5!: QueryList<ElementRef>; 
-  @ViewChildren('contenedor6', { read: ElementRef }) elements6!: QueryList<ElementRef>;
-  @ViewChildren('contenedor7', { read: ElementRef }) elements7!: QueryList<ElementRef>;
-  @ViewChildren('contenedor8', { read: ElementRef }) elements8!: QueryList<ElementRef>;
-  @ViewChildren('contenedor9', { read: ElementRef }) elements9!: QueryList<ElementRef>; 
-
-  
-
-  // Declarar las listas
-  private containers: ViewContainerRef[] = [];
-  private elements: ElementRef[] = [];
-  private ContenedoresLibres: Boolean[] = [true,true,true,true,true,true,true,true];   // Si el contenedor esta libre es True
-
-  // Inicializa la lista de contenedores y elementos después de que se haya renderizado el HTML
-  ngAfterViewInit() {
-    
-    this.containers = [
-      this.containers1.first,
-      this.containers2.first,
-      this.containers3.first,
-      this.containers4.first,
-      this.containers5.first,
-      this.containers6.first,
-      this.containers7.first,
-      this.containers8.first,
-      this.containers9.first
-    ];
-    
-    this.elements = [
-      this.elements1.first,
-      this.elements2.first,
-      this.elements3.first,
-      this.elements4.first,
-      this.elements5.first,
-      this.elements6.first,
-      this.elements7.first,
-      this.elements8.first,
-      this.elements9.first
-    ];
+  isComponentVisible(viewRef: any): boolean {
+    const element = viewRef.rootNodes[0] as HTMLElement;
+    return element && window.getComputedStyle(element).display !== 'none';
   }
 
-  // Seleccionar siguiente contenedor libre
-  nextFreeContainer(){
-    for (let i = 0; i < this.ContenedoresLibres.length; i++) {
-
-      if (this.ContenedoresLibres[i]) {
-        return i
-      }
-    } return 9
-
-  }
   // Añadir componente al contenedor
   addComponent(componente: string) {
-    for (let i = 0; i < this.ContenedoresLibres.length - 1; i++) {
-
-      if (this.ContenedoresLibres[i]) {
-
-        this.ContenedoresLibres[i] = false;
-
-        // Define contenedor y elemento
-        const container = this.containers[i];
-        const element = this.elements[i];
-
-        // Select next
-        const nextElement = this.elements[this.nextFreeContainer()];
-
-        // Mover contenido a next
-        const source = this.elements[8].nativeElement;
-        const destination = nextElement.nativeElement;
-        
-        while (source.firstChild) {
-          destination.appendChild(source.firstChild);
-        }
-
-        // Boramos lo que había
-        container.clear();  
-        element.nativeElement.innerHTML = '';
-        
-
-        // Crea y añade el nuevo componente
-        switch (componente) {
-          case 'Volumetria':
-            container.createComponent(VolumetryComponent);
-            break
-          case 'Map':
-            container.createComponent(MapComponent);
-            break
-          case 'Graph':
-            container.createComponent(GraphComponent);
-            break
-          case 'Spaghetti':
-            container.createComponent(SpaghettiComponent);
-            break
-          default:
-            break
-        }
-
-        this.ContenedoresLibres[i] = false
-        return;
+    if (this.container) {
+      // Crea y añade el nuevo componente
+      switch (componente) {
+        case 'Volumetria':
+          this.container.createComponent(VolumetryComponent);
+          break;
+        case 'Map':
+          this.container.createComponent(MapComponent);
+          break;
+        case 'Graph':
+          this.container.createComponent(GraphComponent);
+          break;
+        case 'Spaghetti':
+          this.container.createComponent(SpaghettiComponent);
+          break;
+        default:
+          break;
       }
     }
   }
+  
+  // Método para dropdown
+  isDropdownOpen = false;
 
-   // Método para dropdown
-   isDropdownOpen = false;
-
-   toggleDropdown() {
+  toggleDropdown() {
     const svg = document.getElementById("miSVG") as unknown as SVGElement;
     if (svg) {
       if(svg.style.visibility == "hidden"){
