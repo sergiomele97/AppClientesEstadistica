@@ -38,10 +38,6 @@ export class VolumetryComponent implements OnInit, OnDestroy {
   public chartOptions: Partial<ChartOptions>;
 
   public dataType: string = 'usuarios';
-  public data = {
-    usuarios: [7, 10, 1, 13, 8, 45, 39],
-    transacciones: [10, 41, 49, 62, 69, 91, 148]
-  };
 
   constructor(
     private transaccionesService: TransaccionService,
@@ -79,15 +75,14 @@ export class VolumetryComponent implements OnInit, OnDestroy {
 
   updateChart() {
     const data = this.dataType === 'transacciones' ? this.transacciones : this.conversiones;
-    const esConversion = this.dataType === 'conversiones';
-
+  
     // Agrupar datos por fecha
-    const agruparPorFecha = (data: any[], esConversion: boolean) => {
+    const agruparPorFecha = (data: any[]) => {
       const resultado: Record<string, number> = {};
       data.forEach(item => {
         const fecha = new Date(item.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
         const cantidad = 1; // Conteo por día
-
+  
         if (resultado[fecha]) {
           resultado[fecha] += cantidad;
         } else {
@@ -96,10 +91,13 @@ export class VolumetryComponent implements OnInit, OnDestroy {
       });
       return resultado;
     };
-
-    const datosAgrupados = agruparPorFecha(data, esConversion);
-
-    const fechas = Object.keys(datosAgrupados);
+  
+    const datosAgrupados = agruparPorFecha(data);
+  
+    // Ordenar fechas
+    const fechas = Object.keys(datosAgrupados).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+  
+    // Obtener conteo por fecha en el orden de fechas ordenadas
     const conteoPorFecha = fechas.map(fecha => datosAgrupados[fecha]);
 
     this.chartOptions = {
