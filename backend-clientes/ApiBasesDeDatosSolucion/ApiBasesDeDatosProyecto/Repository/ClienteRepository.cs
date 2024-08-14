@@ -14,9 +14,16 @@ namespace ApiBasesDeDatosProyecto.Repository
         {
             contexto.Clientes.Update(cliente);
         }
+
         public async Task AddClienteAsync(Cliente cliente)
         {
             contexto.Clientes.Add(cliente);
+            await contexto.SaveChangesAsync();
+        }
+
+        public async Task EditClienteAsync(Cliente cliente)
+        {
+            contexto.Clientes.Update(cliente);
             await contexto.SaveChangesAsync();
         }
 
@@ -67,6 +74,9 @@ namespace ApiBasesDeDatosProyecto.Repository
             return await contexto.Clientes.ToListAsync();
         }
 
-
+        public async Task<Cliente?> ObtenerPorEmail(string email)
+        {
+            return await contexto.Clientes.FirstOrDefaultAsync(x => x.Email == email);
+        }
     }
 }

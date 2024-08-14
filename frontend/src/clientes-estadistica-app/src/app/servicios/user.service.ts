@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { Usuario } from '../clases/usuario';
 import { environment } from '../../environments/environment';
+import { Cliente } from '../clases/cliente';
 
 @Injectable({
   providedIn: 'root'
@@ -11,14 +12,10 @@ export class UserService {
 
   // IMPORTANTE:
   //    1 URL ESTADISTICA Y OTRA PARA CLIENTES
-  private url_estadistica = environment.apiUrl;
-
-
-  private readonly url_prueba = "https://localhost:7144/api/usuarios";
+  private readonly url_estadistica = environment.apiUrl;
 
   //URL AMIN
   private readonly URL = "https://localhost:7107/api/";
-
 
   constructor(private http: HttpClient) { }
 
@@ -36,6 +33,11 @@ export class UserService {
     return this.http.post<any>(`${this.URL}Account/register`, usuario);
   }
 
+  añadirRolUsuario(usuario: any): Observable<any> {
+    console.log(usuario); // Asegúrate de que los campos estén presentes y correctos DEBUG
+    return this.http.post<any>(`${this.URL}Account/cambiarRolPorEmail`, usuario);
+  }
+
   obtenerPaisIdPorNombre(nombre: string): Observable<{ id: number }> {
     // Construir la URL con el nombre del país
     const url = `${this.URL}Paises/nombre/${nombre}`;
@@ -43,9 +45,15 @@ export class UserService {
     return this.http.get<{ id: number }>(url);
   }
 
+  editarCliente(cliente: Cliente): Observable<any>{
+    console.log('Enviando PUT para cliente:', cliente);
+    const url = `${this.URL}Cliente/${cliente.email}`;
+    cliente.fechaNacimiento = new Date(cliente.fechaNacimiento).getTime();
+    return this.http.put(url, cliente);
+  }
 
   getEnvios(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.url_prueba}/getEnvios`).pipe(
+    return this.http.get<any[]>(`${this.url_estadistica}/getEnvios`).pipe(
       map(envios => envios.map(envio => ({
         ...envio,
         fecha: this.formatearFecha(envio.fecha),

@@ -35,6 +35,10 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Empleo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -61,6 +65,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         {
                             Id = 1,
                             Apellido = "Perez",
+                            Email = "amin1@gmail.com",
                             Empleo = "Delincuente",
                             FechaNacimiento = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nombre = "Juan",
@@ -70,6 +75,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         {
                             Id = 2,
                             Apellido = "Lopez",
+                            Email = "amin1@gmail.com",
                             Empleo = "Profesor",
                             FechaNacimiento = new DateTime(1985, 5, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nombre = "Maria",
@@ -79,6 +85,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         {
                             Id = 3,
                             Apellido = "Gomez",
+                            Email = "amin1@gmail.com",
                             Empleo = "Abogado",
                             FechaNacimiento = new DateTime(1978, 11, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Nombre = "Carlos",
@@ -180,7 +187,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ApiBasesDeDatosProyecto.IDentity.ApplicationUser", b =>
+            modelBuilder.Entity("ApiBasesDeDatosProyecto.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -235,7 +242,6 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Rol")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
@@ -247,9 +253,6 @@ namespace ApiBasesDeDatosProyecto.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<int?>("paisId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -419,7 +422,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("ApiBasesDeDatosProyecto.IDentity.ApplicationUser", null)
+                    b.HasOne("ApiBasesDeDatosProyecto.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -428,7 +431,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("ApiBasesDeDatosProyecto.IDentity.ApplicationUser", null)
+                    b.HasOne("ApiBasesDeDatosProyecto.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -443,7 +446,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ApiBasesDeDatosProyecto.IDentity.ApplicationUser", null)
+                    b.HasOne("ApiBasesDeDatosProyecto.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -452,7 +455,7 @@ namespace ApiBasesDeDatosProyecto.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("ApiBasesDeDatosProyecto.IDentity.ApplicationUser", null)
+                    b.HasOne("ApiBasesDeDatosProyecto.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

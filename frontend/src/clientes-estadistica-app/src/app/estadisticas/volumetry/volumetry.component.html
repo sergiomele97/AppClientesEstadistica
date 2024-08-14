@@ -1,0 +1,24 @@
+<div class="center">    <!-- Para inyección en página principal.-->
+
+  <div class="dropdown-container">
+    <label for="data-type">Seleccione el tipo de dato:</label>
+    <select id="data-type" (change)="onSelectionChange($event)">
+      <option value="usuarios">Usuarios</option>
+      <option value="transacciones">Transacciones</option>
+    </select>
+  </div>
+
+  <!--The content below is only a placeholder and can be replaced.-->
+  <div id="chart">
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis"
+      [dataLabels]="chartOptions.dataLabels"
+      [grid]="chartOptions.grid"
+      [stroke]="chartOptions.stroke"
+      [title]="chartOptions.title"
+    ></apx-chart>
+  </div>
+
+</div>

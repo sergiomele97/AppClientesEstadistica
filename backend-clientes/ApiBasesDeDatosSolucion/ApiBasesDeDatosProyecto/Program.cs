@@ -1,7 +1,3 @@
-using ApiBasesDeDatosProyecto.IDentity.Serivicios;
-using ApiBasesDeDatosProyecto.Repository;
-using Serilog;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Agregar servicios a la aplicaci?n
@@ -30,8 +26,12 @@ builder.Services.AddAuthentication(x =>
     {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = false,
-        ValidateAudience = false
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
     };
 });
 
@@ -52,7 +52,7 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
     .Filter.ByExcluding(logEvent => logEvent.Level == Serilog.Events.LogEventLevel.Debug) // Excluir eventos de nivel Debug
     .WriteTo.Console()
-    .WriteTo.File("logs/myapp.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.File("Logs/logClientes.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
 builder.Host.UseSerilog(); // Usa Serilog como el logger
@@ -69,6 +69,7 @@ builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddTransient<ClienteService>();
 
 
 // Agregar swagger

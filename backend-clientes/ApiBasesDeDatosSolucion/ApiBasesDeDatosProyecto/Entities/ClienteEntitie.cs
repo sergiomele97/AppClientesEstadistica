@@ -30,11 +30,15 @@
 
         //public Usuario? Usuario { get; set; }  // Navegación a la entidad Usuario
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        [Required]
+
+        public string Email { get; set; }
+
+        public IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(ValidationContext validationContext)
         {
             if (FechaNacimiento > DateTime.Now)
             {
-                yield return new ValidationResult(
+                yield return new System.ComponentModel.DataAnnotations.ValidationResult(
                     "La fecha de nacimiento no puede ser en el futuro.",
                     new[] { nameof(FechaNacimiento) }
                 );
@@ -42,7 +46,7 @@
 
             if (Nombre.Equals(Apellido, StringComparison.OrdinalIgnoreCase))
             {
-                yield return new ValidationResult(
+                yield return new System.ComponentModel.DataAnnotations.ValidationResult(
                     "El nombre y el apellido no pueden ser iguales.",
                     new[] { nameof(Nombre), nameof(Apellido) }
                 );

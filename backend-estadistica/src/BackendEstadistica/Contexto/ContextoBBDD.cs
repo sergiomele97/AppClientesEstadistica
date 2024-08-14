@@ -16,9 +16,38 @@ public class ContextoBBDD : DbContext
     }
 
     // DEFINIR LAS TABLAS AQUÍ:
-    public DbSet<Usuario> Usuario { get; set; }     // 1º Tabla
+    public DbSet<Usuario> Usuario { get; set; } // 1º Tabla
 
-    public DbSet<EnvioEjemplo> EnvioEjemplo { get; set; } // 2ª Tabla
+    public DbSet<Cliente> Clientes { get; set; } // 2ª Tabla
+
+    public DbSet<Pais> Paises { get; set; } // 3ª Tabla
+
+    public DbSet<Transaccion> Transacciones { get; set; } // 4ª Tabla
+
+    public DbSet<Conversion> Conversion { get; set; } // 5ª Tabla
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+
+        modelBuilder.Entity<Transaccion>()
+            .HasOne(t => t.ClienteOrigen)
+            .WithMany(c => c.TransaccionesOrigen)
+            .HasForeignKey(t => t.ClienteOrigenId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Transaccion>()
+            .HasOne(t => t.ClienteDestino)
+            .WithMany(c => c.TransaccionesDestino)
+            .HasForeignKey(t => t.ClienteDestinoId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Cliente>()
+            .HasOne(c => c.Pais)
+            .WithMany(p => p.Clientes)
+            .HasForeignKey(c => c.PaisId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+    }
 
 
 }

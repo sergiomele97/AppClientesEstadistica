@@ -10,27 +10,29 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { RegistroComponent } from './registro/registro.component';
+import { RegistroAdminComponent } from './registroAdmin/registroAdmin.component';
 import { LoginComponent } from './login/login.component';
 import { UserService } from './servicios/user.service';
-import { MenuComponent } from './menu/menu.component';
-import { ClientesComponent } from './menu/clientes/clientes.component';
-import { UsuariosComponent } from './menu/usuarios/usuarios.component';
-import { VolumetryComponent } from './menu/usuarios/volumetry/volumetry.component';
-import { ClustersComponent } from './menu/usuarios/clusters/clusters.component';
-import { GraphComponent } from './menu/usuarios/graph/graph.component';
-import { MapComponent } from './menu/usuarios/map/map.component';
-import { OutliersComponent } from './menu/usuarios/outliers/outliers.component';
-import { SpaghettiComponent } from './menu/usuarios/spaghetti/spaghetti.component';
-import { TableComponent } from './menu/usuarios/table/table.component';
-import { BalanceComponent } from './menu/clientes/balance/balance.component';
-import { DivisePredictionComponent } from './menu/clientes/divise-prediction/divise-prediction.component';
-import { OutliersDetailComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail.component';
-import { ClustersGraphComponent } from './menu/usuarios/clusters/clusters-graph/clusters-graph.component';
-import { ClustersTableComponent } from './menu/usuarios/clusters/clusters-table/clusters-table.component';
-import { OutliersDetailTableComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail-table/outliers-detail-table.component';
-import { OutliersDetailGraphComponent } from './menu/usuarios/outliers/outliers-detail/outliers-detail-graph/outliers-detail-graph.component';
+import { VolumetryComponent } from './estadisticas/volumetry/volumetry.component';
+import { ClustersComponent } from './estadisticas/clusters/clusters.component';
+import { GraphComponent } from './estadisticas/graph/graph.component';
+import { MapComponent } from './estadisticas/map/map.component';
+import { SpaghettiComponent } from './estadisticas/spaghetti/spaghetti.component';
+import { TableComponent } from './estadisticas/table/table.component';
+import { ClustersGraphComponent } from './estadisticas/clusters/clusters-graph/clusters-graph.component';
+import { ClustersTableComponent } from './estadisticas/clusters/clusters-table/clusters-table.component';
+import { EstadisticaComponent } from './estadistica/estadistica.component';
+import { EstadisticasComponent } from './estadisticas/estadisticas.component';
+import { ClientesComponent } from './estadisticas/clientes/clientes.component';
+import { DivisasComponent } from './estadisticas/divisas/divisas.component';
+import { AuthGuard } from './auth.guard';
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 import { ClustersDataService } from './servicios/clusters-data.service';
+import { HomeComponent } from './home/home.component';
+import { PruebaConexionService } from './servicios/pruebaConexion.service';
+import { OutlierComponent } from './estadistica/outlier/outlier.component';
+import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
+import { GraficasComponent } from './estadistica/graficas/Graficas.component';
 
 
 
@@ -38,29 +40,29 @@ import { ClustersDataService } from './servicios/clusters-data.service';
 
 
 @NgModule({
-  declarations: [
+  declarations: [	
     AppComponent,
     LoginComponent,
     RegistroComponent,
+    EstadisticasComponent,
+    RegistroAdminComponent,
     ClientesComponent,
-    UsuariosComponent,
-    MenuComponent,
     VolumetryComponent,
     ClustersComponent,
+    ClustersGraphComponent,      
+    ClustersTableComponent,
     GraphComponent,
     MapComponent,
-    OutliersComponent,
     SpaghettiComponent,
     TableComponent,
-    DivisePredictionComponent,
-    BalanceComponent,
-    OutliersComponent,
-    OutliersDetailComponent,
+    HomeComponent ,
+    EstadisticaComponent,
+    ClientesComponent,
+    DivisasComponent,
     UsersInfoComponent,
-    ClustersGraphComponent,      
-    ClustersTableComponent,    
-    OutliersDetailTableComponent, 
-    OutliersDetailGraphComponent  
+    OutlierComponent,
+    ShowOutlierComponent,
+    GraficasComponent
   ],
   imports: [
     BrowserModule,
@@ -76,6 +78,7 @@ import { ClustersDataService } from './servicios/clusters-data.service';
   ],
   providers: [
     UserService,
+    PruebaConexionService,
     ClustersDataService
   ],
   bootstrap: [AppComponent],

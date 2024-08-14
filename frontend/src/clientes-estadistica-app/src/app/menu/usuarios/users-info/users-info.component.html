@@ -15,6 +15,59 @@
     </div>
   </header>
 
+  <!-- Modal de Edición -->
+<div *ngIf="isModalOpen" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-6">
+    <div class="p-4 border-b">
+      <h2 id="modal-title" class="text-lg font-semibold text-gray-900">Editar {{ editMode === 'user' ? 'Usuario' : 'Cliente' }}</h2>
+    </div>
+    <div class="p-6">
+      <form (ngSubmit)="onSave()" #editForm="ngForm">
+        <!-- Campos del formulario basados en el tipo de edición -->
+        <div *ngIf="editMode === 'user'">
+          <!-- Campos de usuario -->
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Nombre de usuario</label>
+            <input type="text" [(ngModel)]="selectedUsuario.userName" name="userName" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" />
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Correo electrónico</label>
+            <input type="email" [(ngModel)]="selectedUsuario.email" name="email" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" />
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Rol</label>
+            <input type="text" [(ngModel)]="selectedUsuario.rol" name="rol" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" />
+          </div>
+        </div>
+        <div *ngIf="editMode === 'client'">
+          <!-- Campos de cliente -->
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Nombre</label>
+            <input type="text" [(ngModel)]="selectedCliente.nombre" name="nombre" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" />
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Apellido</label>
+            <input type="text" [(ngModel)]="selectedCliente.apellido" name="apellido" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" />
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
+            <input type="date" [(ngModel)]="selectedCliente.fechaNacimiento" name="fechaNacimiento" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" />
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Empleo</label>
+            <input type="text" [(ngModel)]="selectedCliente.empleo" name="empleo" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" />
+          </div>
+        </div>
+        <div class="flex justify-end gap-2 mt-6">
+          <button type="button" (click)="closeModal()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">Cancelar</button>
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
   <!-- Buscador -->
   <div class="p-4 bg-white">
     <input
@@ -79,7 +132,7 @@
                   </svg>
                 </a>
                 <!-- Botón Eliminar -->
-                <a (click)="selectedUsuario(usuario)" x-data="{ tooltip: 'Eliminar' }">
+                <a  x-data="{ tooltip: 'Eliminar' }">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6" x-tooltip="tooltip">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 6L18 18M6 18L18 6" />
                   </svg>
@@ -118,7 +171,7 @@
                   </svg>
                 </a>
                 <!-- Botón Eliminar -->
-                <a (click)="selectedCliente(cliente)" x-data="{ tooltip: 'Eliminar' }">
+                <a  x-data="{ tooltip: 'Eliminar' }">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6" x-tooltip="tooltip">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 6L18 18M6 18L18 6" />
                   </svg>

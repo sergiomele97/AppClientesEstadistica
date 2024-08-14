@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../servicios/user.service';
+import { Usuario } from '../interfaces/usuario.interface';
+import { CambioRolModel } from '../interfaces/cambioRol.interface';
 
 @Component({
   selector: 'app-registro',
@@ -10,75 +12,147 @@ import { UserService } from '../servicios/user.service';
 export class RegistroComponent implements OnInit {
 
   registroForm: FormGroup;
-  paisId: number | null = null; // Para almacenar el ID del país
+  errorMessage: string | null = null; // Mensaje de error general
 
   constructor(private fb: FormBuilder, private miServicio: UserService) { }
 
   ngOnInit(): void {
     this.registroForm = this.fb.group({
-      Nombre: ['', Validators.required],
-      Apellido: ['', Validators.required],
+      Nombre: ['', [Validators.required, Validators.minLength(3)]],
+      Apellido: ['', [Validators.required, Validators.minLength(3)]],
       Correo: ['', [Validators.required, Validators.email]],
-      Contraseña: ['', Validators.required],
-      Contraseña2: ['', Validators.required],
-      Rol: ['Client', Validators.required],  // Puede ser un campo oculto si siempre es 'Client'
-      PaisNombre: ['', ], // Campo para el nombre del país
-      Empleo: ['',]
+      Contraseña: ['', [Validators.required, Validators.minLength(6)]],
+      Contraseña2: ['', [Validators.required]],
+      Rol: ['Client', Validators.required],
+      PaisNombre: ['', Validators.required],
+      Empleo: [''],
+      FechaNac: ['', Validators.required]
+    }, {
+      validator: this.passwordMatchValidator('Contraseña', 'Contraseña2')
     });
   }
 
-  onSubmit(): void {
-    if (this.registroForm.valid) {
-      if (this.registroForm.value.Contraseña !== this.registroForm.value.Contraseña2) {
-        console.error('Las contraseñas no coinciden');
+  passwordMatchValidator(password: string, confirmPassword: string) {
+    return (formGroup: FormGroup) => {
+      const passwordControl = formGroup.get(password);
+      const confirmPasswordControl = formGroup.get(confirmPassword);
+
+      if (confirmPasswordControl?.errors && !confirmPasswordControl.errors['passwordMismatch']) {
         return;
       }
-      
-      // Obtener el ID del país por nombre
-       this.miServicio.obtenerPaisIdPorNombre(this.registroForm.value.PaisNombre).subscribe(
-        response => {
-          this.paisId = response.id;
-          if (this.paisId !== null) {
-            // Crear el objeto usuario con el PaisId obtenido
-            const usuario = {
-              Email: this.registroForm.value.Correo,
-              Password: this.registroForm.value.Contraseña,
-              ConfirmPassword: this.registroForm.value.Contraseña2,
-              Nombre: this.registroForm.value.Nombre,
-              Apellido: this.registroForm.value.Apellido,
-              Rol: this.registroForm.value.Rol,
-              PaisId: this.paisId, // Asignar el ID del país al usuario
-              Empleo: this.registroForm.value.Empleo
-              
-            };
-            // Registrar el usuario
-            this.miServicio.registrarUsuario(usuario).subscribe(
-              response => {
-                console.log('Usuario registrado exitosamente', response);
-              },
-              error => {
-                if (error.status === 400) {
-                  console.error('Error de validación', error.error);
-                  alert('Error al registrar usuario: ' + error.error);
-                } else if (error.status === 0) {
-                  console.error('No se pudo conectar al servidor.');
-                  alert('No se pudo conectar al servidor.');
-                } else {
-                  console.error(`Error ${error.status}: ${error.message}`);
-                  alert('Error al registrar usuario: ' + error.message);
-                }
-              }
-            );
-          } else {
-            console.error('ID del país no encontrado.');
-            alert('No se encontró el país especificado.');
-          }
-        },
-        error => {
-          console.error('Error al obtener el ID del país', error);
-          alert('Error al obtener el ID del país.');
-        }
-      );
+
+      if (passwordControl?.value !== confirmPasswordControl?.value) {
+        confirmPasswordControl?.setErrors({ passwordMismatch: true });
+      } else {
+        confirmPasswordControl?.setErrors(null);
+      }
+    };
+  }
+
+  onSubmit(): void {
+    if (this.registroForm.invalid) {
+      this.showValidationErrors();
+      return;
     }
+  
+    if (this.registroForm.value.Contraseña !== this.registroForm.value.Contraseña2) {
+      alert('Las contraseñas no coinciden.');
+      return;
+    }
+  
+    const fechaNacTimestamp = new Date(this.registroForm.value.FechaNac).getTime();
+  
+    const usuario: Usuario = {
+      Email: this.registroForm.value.Correo,
+      Password: this.registroForm.value.Contraseña,
+      ConfirmPassword: this.registroForm.value.Contraseña2,
+      Nombre: this.registroForm.value.Nombre,
+      Apellido: this.registroForm.value.Apellido,
+      PaisNombre: this.registroForm.value.PaisNombre,
+      FechaNacimiento: fechaNacTimestamp
+    };
+  
+    // Registrar usuario
+    this.miServicio.registrarUsuario(usuario).subscribe(
+      response => {
+        console.log('Usuario registrado exitosamente', response);
+  
+        // Solo después de que el usuario ha sido registrado exitosamente, agregar el rol
+        const datosCambioRol: CambioRolModel = {
+          Email: this.registroForm.value.Correo,
+          NuevoRol: "Client",
+          Nombre: this.registroForm.value.Nombre,
+          Apellido: this.registroForm.value.Apellido,
+          Pais: this.registroForm.value.PaisNombre,
+          Empleo: this.registroForm.value.Empleo,
+          FechaNacimiento: fechaNacTimestamp
+        };
+  
+        this.miServicio.añadirRolUsuario(datosCambioRol).subscribe(
+          response => {
+            console.log('Rol añadido exitosamente', response);
+          },
+          error => {
+            if (error.status === 400) {
+              console.error('Error de validación al añadir rol', error.error);
+              alert('Error al añadir rol: ' + error.error);
+            } else if (error.status === 0) {
+              console.error('No se pudo conectar al servidor al añadir rol.');
+              alert('No se pudo conectar al servidor al añadir rol.');
+            } else {
+              console.error(`Error ${error.status}: ${error.message}`);
+              alert('Error al añadir rol: ' + error.message);
+            }
+          }
+        );
+  
+      },
+      error => {
+        if (error.status === 400) {
+          console.error('Error de validación al registrar usuario', error.error);
+          alert('Error al registrar usuario: ' + error.error);
+        } else if (error.status === 0) {
+          console.error('No se pudo conectar al servidor al registrar usuario.');
+          alert('No se pudo conectar al servidor al registrar usuario.');
+        } else {
+          console.error(`Error ${error.status}: ${error.message}`);
+          alert('Error al registrar usuario: ' + error.message);
+        }
+      }
+    );
+  }
+  
+
+  private showValidationErrors(): void {
+    let errorMessage = 'Por favor corrige los siguientes errores:\n';
+    const controls = this.registroForm.controls;
+
+    for (const key in controls) {
+      if (controls.hasOwnProperty(key)) {
+        const control = controls[key];
+        if (control.invalid) {
+          if (control.errors) {
+            if (control.errors['required']) {
+              errorMessage += `- El campo ${key} es requerido.\n`;
+            }
+            if (control.errors['minlength']) {
+              errorMessage += `- El campo ${key} debe tener al menos ${control.errors['minlength'].requiredLength} caracteres.\n`;
+            }
+            if (control.errors['email']) {
+              errorMessage += `- El campo ${key} debe ser un email válido.\n`;
+            }
+            if (control.errors['passwordMismatch']) {
+              errorMessage += `- Las contraseñas no coinciden.\n`;
+            }
+          }
+        }
+      }
+    }
+
+    if (errorMessage === 'Por favor corrige los siguientes errores:\n') {
+      errorMessage = 'Hay errores en el formulario. Por favor, corrígelos antes de enviar.';
+    }
+
+    alert(errorMessage);
   }
 }

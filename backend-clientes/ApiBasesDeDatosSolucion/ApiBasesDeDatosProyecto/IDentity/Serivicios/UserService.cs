@@ -28,5 +28,13 @@ public class UserService : IUserService
         var result = await _userManager.DeleteAsync(user);
         return result.Succeeded;
     }
+
+    public async Task<ApplicationUser?> GetUserByEmailAsync(string mail)
+    {
+        // Utiliza el UserManager para encontrar el usuario por su correo electrónico.
+        return await _userManager.FindByEmailAsync(mail);
+    }
+
+    
 }
 
