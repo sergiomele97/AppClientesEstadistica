@@ -14,6 +14,7 @@ import {
 import { ICliente } from 'src/app/interfaces/cliente';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
 import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
+import { TransaccionService } from 'src/app/servicios/transaccion.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -39,13 +40,16 @@ export class ClientesComponent {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private clienteService: ClienteEstService
+    private clienteService: ClienteEstService,
+    private transaccionService: TransaccionService
   ) {}
 
   cliente: ICliente | undefined;
   clientes: ICliente[] = [];
+  transacciones: ITransaccion[];
   subscription!: Subscription;
   routeSubscription!: Subscription;
+  balance: number = 0;
 
   ngOnInit(): void {
 
@@ -62,18 +66,36 @@ export class ClientesComponent {
     // Obtener el ID del cliente desde la ruta actual
     const clienteId = Number(this.route.snapshot.paramMap.get('id'));
 
-    // Llamar a getCliente con el ID del cliente
-    this.subscription = this.clienteService.getCliente(clienteId).subscribe({
-      next: (cliente) => {
-        // Asignar el cliente obtenido a la propiedad del componente
-        this.cliente = cliente;
-        // Actualizar gráfico
-        this.actualizarGrafico();
-      },
-      error: (err) => {
-        console.error('Error al obtener el cliente:', err);
-      },
-    });
+  // Llamar a getCliente con el ID del cliente
+  this.subscription = this.clienteService.getCliente(clienteId).subscribe({
+    next: (cliente) => {
+      // Asignar el cliente obtenido a la propiedad del componente
+      this.cliente = cliente;
+
+      // Obtener las transacciones relacionadas con el cliente
+      this.subscription = this.transaccionService.getTransacciones().subscribe({
+        next: (transacciones) => {
+          // Filtrar las transacciones relacionadas con el cliente
+          this.transacciones = transacciones.filter(
+            t => t.clienteOrigenId === clienteId || t.clienteDestinoId === clienteId
+          );
+
+          // Calcular el balance
+          this.balance = this.calcularBalance(this.transacciones, clienteId);
+
+          // Actualizar gráfico
+          this.actualizarGrafico(this.transacciones);
+        },
+        error: (err) => {
+          console.error('Error al obtener las transacciones:', err);
+        }
+      });
+
+    },
+    error: (err) => {
+      console.error('Error al obtener el cliente:', err);
+    },
+  });
 
     // Suscribirse a los cambios de la ruta
     this.routeSubscription = this.route.paramMap.subscribe((params) => {
@@ -83,20 +105,38 @@ export class ClientesComponent {
   }
 
   loadCliente(clienteId: number): void {
-
     // Llamar a getCliente con el ID del cliente
-    this.clienteService.getCliente(clienteId).subscribe({
+    this.subscription = this.clienteService.getCliente(clienteId).subscribe({
       next: (cliente) => {
         // Asignar el cliente obtenido a la propiedad del componente
         this.cliente = cliente;
-        // Actualizar gráfico
-        this.actualizarGrafico();
+  
+        // Obtener las transacciones relacionadas con el cliente
+        this.subscription = this.transaccionService.getTransacciones().subscribe({
+          next: (transacciones) => {
+            // Filtrar las transacciones relacionadas con el cliente
+            const transaccionesFiltradas = transacciones.filter(
+              t => t.clienteOrigenId === clienteId || t.clienteDestinoId === clienteId
+            );
+  
+            // Calcular el balance
+            this.balance = this.calcularBalance(transaccionesFiltradas, clienteId);
+  
+            // Actualizar gráfico con las transacciones filtradas
+            this.actualizarGrafico(transaccionesFiltradas);
+          },
+          error: (err) => {
+            console.error('Error al obtener las transacciones:', err);
+          }
+        });
+  
       },
       error: (err) => {
         console.error('Error al obtener el cliente:', err);
       },
     });
   }
+  
 
   onSelectCliente(event: Event): void {
     const selectElement = event.target as HTMLSelectElement; // Asegurarte de que es un HTMLSelectElement
@@ -104,38 +144,52 @@ export class ClientesComponent {
     this.router.navigate(['/estadisticas/clientes', clienteId]);
   }
 
-  private actualizarGrafico(): void {
-    if (!this.cliente) return;
+  private calcularBalance(transacciones: ITransaccion[], clienteId: number) {
+    const ingresos = transacciones
+      .filter(transaccion => transaccion.clienteDestinoId === clienteId)
+      .reduce((total, transaccion) => total + (transaccion.importeRecibido || 0), 0);
+    const gastos = transacciones
+    .filter(transaccion => transaccion.clienteOrigenId === clienteId)
+    .reduce((total, transaccion) => total + (transaccion.importeRecibido || 0), 0);
+    return ingresos - gastos
+  }
 
+  private actualizarGrafico(transacciones: ITransaccion[]): void {
+    if (!transacciones || transacciones.length === 0) return;
+  
     // Función para agrupar transacciones por fecha
     const agruparPorFecha = (transacciones: ITransaccion[], esIngreso: boolean) => {
       const resultado: Record<string, number> = {};
-
+  
       transacciones.forEach(transaccion => {
         const fecha = new Date(transaccion.fecha || '').toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
         const cantidad = esIngreso ? transaccion.importeRecibido || 0 : transaccion.importeEnviado || 0;
-
+  
         if (resultado[fecha]) {
           resultado[fecha] += cantidad;
         } else {
           resultado[fecha] = cantidad;
         }
       });
-
+  
       return resultado;
     };
-
+  
+    // Filtrar transacciones de ingreso y pérdida
+    const transaccionesIngreso = transacciones.filter(t => t.clienteDestinoId === this.cliente?.clienteId);
+    const transaccionesPerdida = transacciones.filter(t => t.clienteOrigenId === this.cliente?.clienteId);
+  
     // Obtener transacciones de ingreso y pérdida agrupadas por fecha
-    const ingresosPorFecha = agruparPorFecha(this.cliente.transaccionesDestino || [], true);
-    const perdidasPorFecha = agruparPorFecha(this.cliente.transaccionesOrigen || [], false);
-
+    const ingresosPorFecha = agruparPorFecha(transaccionesIngreso, true);
+    const perdidasPorFecha = agruparPorFecha(transaccionesPerdida, false);
+  
     // Obtener todas las fechas únicas
     const fechas = Array.from(new Set([...Object.keys(ingresosPorFecha), ...Object.keys(perdidasPorFecha)]));
-
+  
     // Crear datos para el gráfico
     const dataIngresos = fechas.map(fecha => ingresosPorFecha[fecha] || 0);
     const dataPerdidas = fechas.map(fecha => perdidasPorFecha[fecha] || 0);
-
+  
     this.chartOptions = {
       series: [
         {
@@ -195,6 +249,7 @@ export class ClientesComponent {
       },
     };
   }
+  
 
   ngOnDestroy(): void {
     // Cancelar la suscripción cuando el componente se destruya

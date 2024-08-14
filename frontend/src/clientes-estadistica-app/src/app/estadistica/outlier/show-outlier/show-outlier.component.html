@@ -1,18 +1,27 @@
-<div class="grid grid-cols-2">
+<div class="grid grid-rows-2">
 
-  <div class="mt-40 mr-10">
-    hola
+  <div id="chart" class="mt-10 ml-96 w-2/3">
+    <apx-chart 
+      [series]="chartOptions.series" 
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis"
+      [yaxis]="chartOptions.yaxis"
+      [title]="chartOptions.title"
+      [plotOptions]="chartOptions.plotOptions"
+      [dataLabels]="chartOptions.dataLabels"
+      [fill]="chartOptions.fill">
+    </apx-chart>
   </div>
 
-  <div class="mt-40 ml-10">
-    <table class="w-full text-sm text-left text-gray-500">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+  <div class="mt-10 ml-96 w-2/3">
+    <table class="w-full text-sm text-left text-gray-500 border">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-200">
             <tr>
                 <th scope="col" class="px-6 py-3">
-                    ID Moneda
+                    Usuario Envia
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Divisa
+                    Usuario Recibe
                 </th>
                 <th scope="col" class="px-6 py-3">
                     Cantidad
@@ -23,18 +32,18 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="bg-white border-b">
+            <tr *ngFor="let transaccion of transacciones" class="bg-white border-b">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                    id
+                    {{ transaccion.usuarioEnvia }}
                 </th>
                 <td class="px-6 py-4">
-                    divisa
+                    {{ transaccion.usuarioRecibe }}
                 </td>
                 <td class="px-6 py-4">
-                    cantidad
+                    {{ transaccion.cantidad }}€
                 </td>
                 <td class="px-6 py-4">
-                    fecha
+                    {{ transaccion.fecha }}
                 </td>
               </tr>
         </tbody>
