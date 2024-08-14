@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import {
   ChartComponent,
@@ -10,6 +10,9 @@ import {
   ApexStroke,
   ApexTitleSubtitle
 } from "ng-apexcharts";
+import { Subscription } from 'rxjs';
+import { ICliente } from 'src/app/interfaces/cliente';
+import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -27,103 +30,85 @@ export type ChartOptions = {
   styleUrls: ['./graph.component.css']
 })
 
-export class GraphComponent {
+export class GraphComponent implements OnInit, OnDestroy {
 
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
+  
+  public dataType: string = 'sexo'; // Valor por defecto
 
-  public dataType: string = 'sex';
-  private data = {
-    sex: {
-      series: [
-        {
-          name: "male",
-          data: [31, 40, 28, 51, 42, 109, 100]
-        },
-        {
-          name: "female",
-          data: [11, 32, 45, 32, 34, 52, 41]
-        }
-      ],
-      title: "Accesses by Sex"
-    },
-    age: {
-      series: [
-        {
-          name: "<30",
-          data: [20, 30, 25, 40, 33, 80, 70]
-        },
-        {
-          name: "30-50",
-          data: [15, 22, 34, 29, 20, 60, 50]
-        },
-        {
-          name: ">50",
-          data: [5, 10, 8, 12, 15, 20, 30]
-        }
-      ],
-      title: "Accesses by Age"
-    },
-    job: {
-      series: [
-        {
-          name: "administrativo",
-          data: [20, 30, 25, 35, 40, 50, 60]
-        },
-        {
-          name: "sanitario",
-          data: [10, 15, 20, 25, 30, 40, 50]
-        },
-        {
-          name: "economista",
-          data: [5, 10, 15, 20, 25, 30, 35]
-        },
-        {
-          name: "informatico",
-          data: [30, 40, 35, 45, 50, 60, 70]
-        }
-      ],
-      title: "Accesses by Job"
-    }
-  };
+  clientes: ICliente[] = [];
+  subscription: Subscription;
 
-  constructor() {
-    this.updateChart();
+  constructor(
+    private clienteService: ClienteEstService
+  ) {}
+
+  ngOnInit(): void {
+    // Obtener los clientes
+    this.subscription = this.clienteService.getClientes().subscribe({
+      next: (clientes) => {
+        this.clientes = clientes;
+        this.updateChart(); // Actualizar el gráfico después de obtener los datos
+      },
+      error: (err) => {
+        console.error('Error al obtener los clientes: ', err);
+      },
+    });
+  }
+
+  // Agrupa los datos según el tipo de dato seleccionado (sexo, edad, trabajo)
+  private agruparDatos(): { categories: string[], series: number[] } {
+    const resultado: Record<string, number> = {};
+
+    this.clientes.forEach(cliente => {
+      const clave = cliente[this.dataType as keyof ICliente]?.toString() || 'Desconocido';
+      if (resultado[clave]) {
+        resultado[clave] += 1;
+      } else {
+        resultado[clave] = 1;
+      }
+    });
+
+    const categories = Object.keys(resultado);
+    const series = Object.values(resultado);
+
+    return { categories, series };
   }
 
   updateChart() {
-    const selectedData = this.data[this.dataType];
+    const { categories, series } = this.agruparDatos();
+
     this.chartOptions = {
-      series: selectedData.series,
+      series: [
+        {
+          name: this.dataType === 'sexo' ? 'Sexo' : this.dataType === 'edad' ? 'Edad' : 'Trabajo',
+          data: series
+        }
+      ],
       chart: {
         height: 350,
-        type: "area"
+        type: "bar"
       },
       dataLabels: {
         enabled: false
       },
       title: {
-        text: selectedData.title,
+        text: this.dataType === 'sexo' ? 'Número de Clientes por Sexo' : this.dataType === 'edad' ? 'Número de Clientes por Edad' : 'Número de Clientes por Trabajo',
         align: "center"
       },
       stroke: {
         curve: "smooth"
       },
       xaxis: {
-        type: "datetime",
-        categories: [
-          "2018-09-19T00:00:00.000Z",
-          "2018-09-19T01:30:00.000Z",
-          "2018-09-19T02:30:00.000Z",
-          "2018-09-19T03:30:00.000Z",
-          "2018-09-19T04:30:00.000Z",
-          "2018-09-19T05:30:00.000Z",
-          "2018-09-19T06:30:00.000Z"
-        ]
+        categories: categories, // Las categorías para el eje X
+        title: {
+          text: this.dataType === 'sexo' ? 'Sexo' : this.dataType === 'edad' ? 'Edad' : 'Trabajo'
+        }
       },
       tooltip: {
         x: {
-          format: "dd/MM/yy HH:mm"
+          format: "dd/MM/yy" // Puedes ajustar el formato si es necesario
         }
       }
     };
@@ -135,19 +120,8 @@ export class GraphComponent {
     this.updateChart();
   }
 
-  public generateData(baseval, count, yrange) {
-    var i = 0;
-    var series = [];
-    while (i < count) {
-      var x = Math.floor(Math.random() * (750 - 1 + 1)) + 1;
-      var y =
-        Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-      var z = Math.floor(Math.random() * (75 - 15 + 1)) + 15;
-
-      series.push([x, y, z]);
-      baseval += 86400000;
-      i++;
-    }
-    return series;
+  ngOnDestroy(): void {
+    // Cancelar la suscripción cuando el componente se destruya
+    this.subscription.unsubscribe();
   }
 }
