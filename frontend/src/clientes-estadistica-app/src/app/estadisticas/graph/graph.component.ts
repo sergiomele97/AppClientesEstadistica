@@ -14,6 +14,7 @@ import {
 import { Subscription } from 'rxjs';
 import { ICliente } from 'src/app/interfaces/cliente';
 import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
+import { GraficasService } from 'src/app/servicios/graficas.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -58,10 +59,10 @@ export class GraphComponent implements OnInit, OnDestroy {
   clientes: ICliente[] = [];
   subscription: Subscription;
 
-  constructor(
-    private clienteService: ClienteEstService
-  ) {}
-
+  constructor(private graficasService: GraficasService, private clienteService: ClienteEstService) {
+    this.updateChart();
+  }
+ 
   ngOnInit(): void {
     // Obtener los clientes
     this.subscription = this.clienteService.getClientes().subscribe({
@@ -133,6 +134,8 @@ export class GraphComponent implements OnInit, OnDestroy {
     return { categories, series };
   }
 
+  
+
   updateChart() {
     const { categories, series } = this.agruparDatos();
 
@@ -187,4 +190,11 @@ export class GraphComponent implements OnInit, OnDestroy {
     // Cancelar la suscripción cuando el componente se destruya
     this.subscription.unsubscribe();
   }
+
+  // Cerrado grafica
+  close(): void {
+    this.graficasService.triggerScript(); // Comunicar a graficas
+    this.visible = false;
+  }
+
 }
