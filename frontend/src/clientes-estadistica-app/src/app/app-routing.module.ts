@@ -6,12 +6,12 @@ import { LoginComponent } from './login/login.component';
 import { SpaghettiComponent } from './estadisticas/spaghetti/spaghetti.component';
 import { GraphComponent } from './estadisticas/graph/graph.component';
 import { MapComponent } from './estadisticas/map/map.component';
-import { ClustersComponent } from './estadisticas/clusters/clusters.component';
+
 import { VolumetryComponent } from './estadisticas/volumetry/volumetry.component';
 import { TableComponent } from './estadisticas/table/table.component';
 import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 import { ClientesComponent } from './estadisticas/clientes/clientes.component';
-import { DivisasComponent } from './estadisticas/divisas/divisas.component';
+import { DivisasComponent } from './estadistica/divisas/show-divisas.component';
 import { AuthGuard } from './auth.guard';
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 import { EstadisticaComponent } from './estadistica/estadistica.component';
@@ -19,6 +19,7 @@ import { HomeComponent } from './home/home.component';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';
 import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
 import { GraficasComponent } from './estadistica/graficas/Graficas.component';
+import { ClustersComponent } from './estadistica/clusters/clusters.component';
 
 
 const routes: Routes = [
@@ -34,7 +35,8 @@ const routes: Routes = [
       { path: 'outliers', component: OutlierComponent },
       { path: 'outliers/:id', component: ShowOutlierComponent  },
       { path: 'divisas', component: DivisasComponent },
-      {path: 'graficas', component: GraficasComponent}
+      { path: 'clusters', component: ClustersComponent },
+      { path: 'graficas', component: GraficasComponent }
     ]
    },
       

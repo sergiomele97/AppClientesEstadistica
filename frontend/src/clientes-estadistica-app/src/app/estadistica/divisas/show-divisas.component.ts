@@ -66,6 +66,7 @@ export class DivisasComponent {
         const historicalDates = this.fechas[currency];
         const predictionDates = ["2000-01-19", "2000-01-20", "2000-01-21", "2000-01-22", "2000-01-23", "2000-01-24", "2000-01-25", "2000-01-26", "2000-01-27", "2000-01-28"];
 
+        
         this.chartOptions = {
           series: [
             {
