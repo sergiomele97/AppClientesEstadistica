@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import {
@@ -32,7 +32,7 @@ export type ChartOptions = {
   styleUrls: ['./clientes.component.css'],
 })
 
-export class ClientesComponent {
+export class ClientesComponent implements OnInit, OnDestroy {
 
   @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
