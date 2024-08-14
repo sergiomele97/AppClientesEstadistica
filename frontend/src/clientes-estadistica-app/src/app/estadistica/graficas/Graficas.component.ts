@@ -1,8 +1,10 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChildren, ViewContainerRef } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { GraphComponent } from 'src/app/estadisticas/graph/graph.component';
 import { MapComponent } from 'src/app/estadisticas/map/map.component';
 import { SpaghettiComponent } from 'src/app/estadisticas/spaghetti/spaghetti.component';
 import { VolumetryComponent } from 'src/app/estadisticas/volumetry/volumetry.component';
+import { GraficasService } from 'src/app/servicios/graficas.service';
 
 @Component({
   selector: 'app-graficas',
@@ -11,9 +13,20 @@ import { VolumetryComponent } from 'src/app/estadisticas/volumetry/volumetry.com
 })
 export class GraficasComponent implements OnInit {
 
-  constructor() { }
+  // Esto es para que escuche cuando se cierra una grafica
+  private subscription: Subscription;
+  constructor(private graficasServicio: GraficasService) { }
 
   ngOnInit() {
+    this.subscription = this.graficasServicio.triggerScript$.subscribe(() => {
+      this.onGraphClose();
+    });
+  }
+
+  // Ejecutar cuando se cierra una grafica
+  onGraphClose() {
+    
+    
   }
 
   // Declarar contenedores
@@ -25,6 +38,7 @@ export class GraficasComponent implements OnInit {
   @ViewChildren('contenedor6', { read: ViewContainerRef }) containers6!: QueryList<ViewContainerRef>;
   @ViewChildren('contenedor7', { read: ViewContainerRef }) containers7!: QueryList<ViewContainerRef>;
   @ViewChildren('contenedor8', { read: ViewContainerRef }) containers8!: QueryList<ViewContainerRef>;
+  @ViewChildren('contenedor9', { read: ViewContainerRef }) containers9!: QueryList<ViewContainerRef>;
 
   @ViewChildren('contenedor1', { read: ElementRef }) elements1!: QueryList<ElementRef>;
   @ViewChildren('contenedor2', { read: ElementRef }) elements2!: QueryList<ElementRef>;
@@ -33,7 +47,8 @@ export class GraficasComponent implements OnInit {
   @ViewChildren('contenedor5', { read: ElementRef }) elements5!: QueryList<ElementRef>; 
   @ViewChildren('contenedor6', { read: ElementRef }) elements6!: QueryList<ElementRef>;
   @ViewChildren('contenedor7', { read: ElementRef }) elements7!: QueryList<ElementRef>;
-  @ViewChildren('contenedor8', { read: ElementRef }) elements8!: QueryList<ElementRef>; 
+  @ViewChildren('contenedor8', { read: ElementRef }) elements8!: QueryList<ElementRef>;
+  @ViewChildren('contenedor9', { read: ElementRef }) elements9!: QueryList<ElementRef>; 
 
   
 
@@ -53,7 +68,8 @@ export class GraficasComponent implements OnInit {
       this.containers5.first,
       this.containers6.first,
       this.containers7.first,
-      this.containers8.first
+      this.containers8.first,
+      this.containers9.first
     ];
     
     this.elements = [
@@ -64,24 +80,48 @@ export class GraficasComponent implements OnInit {
       this.elements5.first,
       this.elements6.first,
       this.elements7.first,
-      this.elements8.first
+      this.elements8.first,
+      this.elements9.first
     ];
   }
 
-  // Añadir componente al contenedor
-  addComponent(componente: string) {
+  // Seleccionar siguiente contenedor libre
+  nextFreeContainer(){
     for (let i = 0; i < this.ContenedoresLibres.length; i++) {
 
       if (this.ContenedoresLibres[i]) {
+        return i
+      }
+    } return 9
+
+  }
+  // Añadir componente al contenedor
+  addComponent(componente: string) {
+    for (let i = 0; i < this.ContenedoresLibres.length - 1; i++) {
+
+      if (this.ContenedoresLibres[i]) {
+
+        this.ContenedoresLibres[i] = false;
 
         // Define contenedor y elemento
         const container = this.containers[i];
         const element = this.elements[i];
 
+        // Select next
+        const nextElement = this.elements[this.nextFreeContainer()];
+
+        // Mover contenido a next
+        const source = this.elements[8].nativeElement;
+        const destination = nextElement.nativeElement;
+        
+        while (source.firstChild) {
+          destination.appendChild(source.firstChild);
+        }
+
         // Boramos lo que había
         container.clear();  
         element.nativeElement.innerHTML = '';
-        element.nativeElement.style.display = 'none'; // Oculta el div
+        
 
         // Crea y añade el nuevo componente
         switch (componente) {

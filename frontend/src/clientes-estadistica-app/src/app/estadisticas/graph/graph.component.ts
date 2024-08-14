@@ -10,6 +10,7 @@ import {
   ApexStroke,
   ApexTitleSubtitle
 } from "ng-apexcharts";
+import { GraficasService } from 'src/app/servicios/graficas.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -89,7 +90,7 @@ export class GraphComponent {
   };
   nativeElement: any;
 
-  constructor() {
+  constructor(private graficasService: GraficasService) {
     this.updateChart();
   }
 
@@ -153,9 +154,9 @@ export class GraphComponent {
     return series;
   }
 
-  
-
+  // Cerrado grafica
   close(): void {
+    this.graficasService.triggerScript(); // Comunicar a graficas
     this.visible = false;
   }
 
