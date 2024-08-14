@@ -141,7 +141,7 @@ export class ClientesComponent implements OnInit, OnDestroy {
   onSelectCliente(event: Event): void {
     const selectElement = event.target as HTMLSelectElement; // Asegurarte de que es un HTMLSelectElement
     const clienteId = Number(selectElement.value);
-    this.router.navigate(['/estadisticas/clientes', clienteId]);
+    this.router.navigate(['/estadistica/clientes', clienteId]);
   }
 
   private calcularBalance(transacciones: ITransaccion[], clienteId: number) {

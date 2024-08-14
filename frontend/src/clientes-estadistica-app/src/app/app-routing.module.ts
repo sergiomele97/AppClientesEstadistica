@@ -10,7 +10,7 @@ import { ClustersComponent } from './estadisticas/clusters/clusters.component';
 import { VolumetryComponent } from './estadisticas/volumetry/volumetry.component';
 import { TableComponent } from './estadisticas/table/table.component';
 import { EstadisticasComponent } from './estadisticas/estadisticas.component';
-import { ClientesComponent } from './estadisticas/clientes/clientes.component';
+import { ClientesComponent } from './estadistica/clientes/clientes.component';
 import { DivisasComponent } from './estadisticas/divisas/divisas.component';
 import { AuthGuard } from './auth.guard';
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
@@ -34,7 +34,9 @@ const routes: Routes = [
       { path: 'outliers', component: OutlierComponent },
       { path: 'outliers/:id', component: ShowOutlierComponent  },
       { path: 'divisas', component: DivisasComponent },
-      {path: 'graficas', component: GraficasComponent}
+      { path: 'graficas', component: GraficasComponent },
+      { path: 'clientes', component: ClientesComponent },
+      { path: 'clientes/:id', component: ClientesComponent },
     ]
    },
       

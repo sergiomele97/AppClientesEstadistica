@@ -23,7 +23,7 @@ import { ClustersGraphComponent } from './estadisticas/clusters/clusters-graph/c
 import { ClustersTableComponent } from './estadisticas/clusters/clusters-table/clusters-table.component';
 import { EstadisticaComponent } from './estadistica/estadistica.component';
 import { EstadisticasComponent } from './estadisticas/estadisticas.component';
-import { ClientesComponent } from './estadisticas/clientes/clientes.component';
+import { ClientesComponent } from './estadistica/clientes/clientes.component';
 import { DivisasComponent } from './estadisticas/divisas/divisas.component';
 import { AuthGuard } from './auth.guard';
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
