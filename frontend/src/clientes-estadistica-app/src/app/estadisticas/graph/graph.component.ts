@@ -30,6 +30,7 @@ export type ChartOptions = {
 export class GraphComponent {
 
   @ViewChild("chart") chart: ChartComponent;
+  visible: boolean = true;
   public chartOptions: Partial<ChartOptions>;
 
   public dataType: string = 'sex';
@@ -86,6 +87,7 @@ export class GraphComponent {
       title: "Accesses by Job"
     }
   };
+  nativeElement: any;
 
   constructor() {
     this.updateChart();
@@ -150,4 +152,11 @@ export class GraphComponent {
     }
     return series;
   }
+
+  
+
+  close(): void {
+    this.visible = false;
+  }
+
 }
