@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import {
   ChartComponent,
@@ -8,8 +8,12 @@ import {
   ApexDataLabels,
   ApexTooltip,
   ApexStroke,
-  ApexTitleSubtitle
+  ApexTitleSubtitle,
+  ApexGrid
 } from "ng-apexcharts";
+import { Subscription } from 'rxjs';
+import { ICliente } from 'src/app/interfaces/cliente';
+import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -19,6 +23,7 @@ export type ChartOptions = {
   tooltip: ApexTooltip;
   dataLabels: ApexDataLabels;
   title: ApexTitleSubtitle;
+  grid: ApexGrid;
 };
 
 @Component({
@@ -27,136 +32,159 @@ export type ChartOptions = {
   styleUrls: ['./graph.component.css']
 })
 
-export class GraphComponent {
+export class GraphComponent implements OnInit, OnDestroy {
 
   @ViewChild("chart") chart: ChartComponent;
   visible: boolean = true;
   public chartOptions: Partial<ChartOptions>;
+  
+  public dataType: string = 'sexo'; // Valor por defecto
 
-  public dataType: string = 'sex';
-  private data = {
-    sex: {
-      series: [
-        {
-          name: "male",
-          data: [31, 40, 28, 51, 42, 109, 100]
-        },
-        {
-          name: "female",
-          data: [11, 32, 45, 32, 34, 52, 41]
+  // Definición de categorías para cada tipo de agrupación
+  private readonly ageCategories = [
+    'Menor', // < 18
+    'Joven', // 18-29
+    'Adulto', // 30-44
+    'Senior', // 45-59
+    'Jubilado' // >= 60
+  ];
+
+  private readonly sexCategories = [
+    'Masculino',
+    'Femenino',
+    'No especificado'
+  ];
+
+  clientes: ICliente[] = [];
+  subscription: Subscription;
+
+  constructor(
+    private clienteService: ClienteEstService
+  ) {}
+
+  ngOnInit(): void {
+    // Obtener los clientes
+    this.subscription = this.clienteService.getClientes().subscribe({
+      next: (clientes) => {
+        this.clientes = clientes;
+        this.updateChart(); // Actualizar el gráfico después de obtener los datos
+      },
+      error: (err) => {
+        console.error('Error al obtener los clientes: ', err);
+      },
+    });
+  }
+
+  // Función para clasificar las edades en tramos
+  private clasificarEdad(edad: number): string {
+    if (edad < 18) return 'Menor';
+    if (edad < 30) return 'Joven';
+    if (edad < 45) return 'Adulto';
+    if (edad < 60) return 'Senior';
+    return 'Jubilado';
+  }
+
+  private agruparDatos(): { categories: string[], series: number[] } {
+    let categories: string[] = [];
+    let series: number[] = [];
+
+    if (this.dataType === 'edad') {
+      categories = this.ageCategories;
+      const resultado: Record<string, number> = {};
+      this.ageCategories.forEach(cat => resultado[cat] = 0);
+
+      this.clientes.forEach(cliente => {
+        const clave = this.clasificarEdad(cliente.edad || 0);
+        if (resultado.hasOwnProperty(clave)) {
+          resultado[clave] += 1;
         }
-      ],
-      title: "Accesses by Sex"
-    },
-    age: {
-      series: [
-        {
-          name: "<30",
-          data: [20, 30, 25, 40, 33, 80, 70]
-        },
-        {
-          name: "30-50",
-          data: [15, 22, 34, 29, 20, 60, 50]
-        },
-        {
-          name: ">50",
-          data: [5, 10, 8, 12, 15, 20, 30]
+      });
+
+      series = categories.map(cat => resultado[cat]);
+
+    } else if (this.dataType === 'sexo') {
+      categories = this.sexCategories;
+      const resultado: Record<string, number> = {};
+      this.sexCategories.forEach(cat => resultado[cat] = 0);
+
+      this.clientes.forEach(cliente => {
+        const clave = cliente.sexo || 'No especificado';
+        if (resultado.hasOwnProperty(clave)) {
+          resultado[clave] += 1;
         }
-      ],
-      title: "Accesses by Age"
-    },
-    job: {
-      series: [
-        {
-          name: "administrativo",
-          data: [20, 30, 25, 35, 40, 50, 60]
-        },
-        {
-          name: "sanitario",
-          data: [10, 15, 20, 25, 30, 40, 50]
-        },
-        {
-          name: "economista",
-          data: [5, 10, 15, 20, 25, 30, 35]
-        },
-        {
-          name: "informatico",
-          data: [30, 40, 35, 45, 50, 60, 70]
+      });
+
+      series = categories.map(cat => resultado[cat]);
+
+    } else if (this.dataType === 'trabajo') {
+      const resultado: Record<string, number> = {};
+      this.clientes.forEach(cliente => {
+        const trabajo = cliente.trabajo || 'No especificado';
+        if (!resultado.hasOwnProperty(trabajo)) {
+          resultado[trabajo] = 0;
+          categories.push(trabajo);
         }
-      ],
-      title: "Accesses by Job"
+        resultado[trabajo] += 1;
+      });
+
+      series = categories.map(cat => resultado[cat]);
     }
-  };
-  nativeElement: any;
 
-  constructor() {
-    this.updateChart();
+    return { categories, series };
   }
 
   updateChart() {
-    const selectedData = this.data[this.dataType];
+    const { categories, series } = this.agruparDatos();
+
     this.chartOptions = {
-      series: selectedData.series,
+      series: [
+        {
+          name: this.dataType === 'edad' ? 'Número de Clientes por Edad' :
+                this.dataType === 'sexo' ? 'Número de Clientes por Sexo' :
+                'Número de Clientes por Trabajo',
+          data: series
+        }
+      ],
       chart: {
         height: 350,
-        type: "area"
+        type: "bar" // Cambiado a bar para una mejor visualización en categorías
       },
       dataLabels: {
-        enabled: false
-      },
-      title: {
-        text: selectedData.title,
-        align: "center"
+        enabled: true
       },
       stroke: {
         curve: "smooth"
       },
-      xaxis: {
-        type: "datetime",
-        categories: [
-          "2018-09-19T00:00:00.000Z",
-          "2018-09-19T01:30:00.000Z",
-          "2018-09-19T02:30:00.000Z",
-          "2018-09-19T03:30:00.000Z",
-          "2018-09-19T04:30:00.000Z",
-          "2018-09-19T05:30:00.000Z",
-          "2018-09-19T06:30:00.000Z"
-        ]
+      title: {
+        text: this.dataType === 'edad' ? 'Número de Clientes por Tramos de Edad' :
+              this.dataType === 'sexo' ? 'Número de Clientes por Sexo' :
+              'Número de Clientes por Trabajo',
+        align: "center"
       },
-      tooltip: {
-        x: {
-          format: "dd/MM/yy HH:mm"
+      grid: {
+        row: {
+          colors: ["#f3f3f3", "transparent"], // Toma un array que se repetirá en columnas
+          opacity: 0.5
+        }
+      },
+      xaxis: {
+        categories: categories,
+        title: {
+          text: this.dataType === 'edad' ? 'Tramos de Edad' :
+                this.dataType === 'sexo' ? 'Sexo' :
+                'Trabajo'
         }
       }
     };
   }
-
   onSelectionChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     this.dataType = selectElement.value;
     this.updateChart();
   }
 
-  public generateData(baseval, count, yrange) {
-    var i = 0;
-    var series = [];
-    while (i < count) {
-      var x = Math.floor(Math.random() * (750 - 1 + 1)) + 1;
-      var y =
-        Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-      var z = Math.floor(Math.random() * (75 - 15 + 1)) + 15;
-
-      series.push([x, y, z]);
-      baseval += 86400000;
-      i++;
-    }
-    return series;
+  ngOnDestroy(): void {
+    // Cancelar la suscripción cuando el componente se destruya
+    this.subscription.unsubscribe();
   }
-
-  
-
-  close(): void {
-    this.visible = false;
-  }
-
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import {
   ChartComponent,
@@ -10,6 +10,11 @@ import {
   ApexStroke,
   ApexGrid
 } from "ng-apexcharts";
+import { Subscription } from 'rxjs';
+import { IConversion } from 'src/app/interfaces/conversion';
+import { ITransaccion } from 'src/app/interfaces/transaccion';
+import { ConversionService } from 'src/app/servicios/conversion.service';
+import { TransaccionService } from 'src/app/servicios/transaccion.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -27,28 +32,79 @@ export type ChartOptions = {
   styleUrls: ['./volumetry.component.css']
 })
 
-export class VolumetryComponent {
+export class VolumetryComponent implements OnInit, OnDestroy {
 
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
   public dataType: string = 'usuarios';
-  public data = {
-    usuarios: [7, 10, 1, 13, 8, 45, 39],
-    transacciones: [10, 41, 49, 62, 69, 91, 148]
-  };
 
-  constructor() {
-    this.updateChart();
+  constructor(
+    private transaccionesService: TransaccionService,
+    private conversionesService: ConversionService
+  ) {}
+
+  transacciones: ITransaccion[] = [];
+  conversiones: IConversion[] = [];
+  subscription: Subscription;
+
+  ngOnInit(): void {
+    // Obtener lista de transacciones y conversiones
+    this.subscription = this.transaccionesService.getTransacciones().subscribe({
+      next: (transacciones) => {
+        this.transacciones = transacciones;
+        this.updateChart(); // Update chart with default data
+      },
+      error: (err) => {
+        console.error('Error al obtener la lista de transacciones', err);
+      },
+    });
+
+    this.subscription.add(
+      this.conversionesService.getConversiones().subscribe({
+        next: (conversiones) => {
+          this.conversiones = conversiones;
+          this.updateChart(); // Update chart with default data
+        },
+        error: (err) => {
+          console.error('Error al obtener la lista de conversiones', err);
+        },
+      })
+    );
   }
 
   updateChart() {
-    
+    const data = this.dataType === 'transacciones' ? this.transacciones : this.conversiones;
+  
+    // Agrupar datos por fecha
+    const agruparPorFecha = (data: any[]) => {
+      const resultado: Record<string, number> = {};
+      data.forEach(item => {
+        const fecha = new Date(item.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const cantidad = 1; // Conteo por día
+  
+        if (resultado[fecha]) {
+          resultado[fecha] += cantidad;
+        } else {
+          resultado[fecha] = cantidad;
+        }
+      });
+      return resultado;
+    };
+  
+    const datosAgrupados = agruparPorFecha(data);
+  
+    // Ordenar fechas
+    const fechas = Object.keys(datosAgrupados).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+  
+    // Obtener conteo por fecha en el orden de fechas ordenadas
+    const conteoPorFecha = fechas.map(fecha => datosAgrupados[fecha]);
+
     this.chartOptions = {
       series: [
         {
-          name: this.dataType,
-          data: this.data[this.dataType]
+          name: this.dataType === 'transacciones' ? 'Transacciones' : 'Conversiones',
+          data: conteoPorFecha
         }
       ],
       chart: {
@@ -62,29 +118,23 @@ export class VolumetryComponent {
         enabled: true
       },
       stroke: {
-        curve: "straight"
+        curve: "smooth"
       },
       title: {
-        text: "Number of Transactions Last Week",
+        text: this.dataType === 'transacciones' ? 'Número de Transacciones por Día' : 'Número de Conversiones por Día',
         align: "center"
       },
       grid: {
         row: {
-          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+          colors: ["#f3f3f3", "transparent"], // Toma un array que se repetirá en columnas
           opacity: 0.5
         }
       },
       xaxis: {
-        // Aquí habrá que hacer un select datetime
-        categories: [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-          "Sunday"
-        ]
+        categories: fechas,
+        title: {
+          text: 'Fecha'
+        }
       }
     };
   }
@@ -93,5 +143,11 @@ export class VolumetryComponent {
     const selectElement = event.target as HTMLSelectElement;
     this.dataType = selectElement.value;
     this.updateChart();
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }
