@@ -33,6 +33,7 @@ const routes: Routes = [
     children: [
       { path: 'outliers', component: OutlierComponent },
       { path: 'outliers/:id', component: ShowOutlierComponent  },
+      { path: 'divisas', component: DivisasComponent },
       {path: 'graficas', component: GraficasComponent}
     ]
    },
