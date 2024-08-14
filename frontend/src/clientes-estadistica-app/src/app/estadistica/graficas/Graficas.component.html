@@ -1,0 +1,70 @@
+<div class="p-4 sm:ml-64">
+  <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+     <div class="grid grid-cols-2 gap-4 mb-4">
+        <!-- Contenedor inicial-->
+        <div #contenedor1>
+          <div (click)="toggleDropdown()" class="cursor-pointer flex items-center justify-center bg-gray-50 h-96 w-full p-2 text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+            <p class="text-2xl text-gray-400 dark:text-gray-500">
+                <svg id="miSVG" class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+                </svg>
+            </p>    
+            <!-- Listado de gráficas desplegable (oculto) --> 
+                <ul [ngClass]="{'hidden': !isDropdownOpen}" >
+                  
+                  <!-- 1.1 Graph --> 
+                  <li class="list-none">
+                    <a (click)="addComponent('Graph')" class="flex justify-center items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg group hover:bg-white dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700">
+                        <span>Graph</span>
+                    </a>
+                  </li>
+
+                  <!-- 1.2 Volumetria --> 
+                  <li>
+                      <a (click)="addComponent('Volumetria')" class="flex justify-center items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg group hover:bg-white dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700">
+                        <span>Volumetria</span>
+                      </a>
+                  </li>
+
+                  <!-- 1.3 Map --> 
+                  <li>
+                      <a (click)="addComponent('Map')" class="flex justify-center items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg group hover:bg-white dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700">
+                        <span>Map</span>
+                      </a>
+                  </li>
+                  
+                  <!-- 1.4 Spaghetti --> 
+                  <li>
+                      <a (click)="addComponent('Spaghetti')" class="flex justify-center items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg group hover:bg-white dark:text-white dark:bg-gray-800 dark:hover:bg-gray-700">
+                        <span>Spaghetti</span>
+                      </a>
+                  </li>
+                </ul>
+        </div>
+
+        <!-- Resto de contenedores -->
+        </div>
+        <div #contenedor2>
+           
+        </div>
+        
+        <div #contenedor3>
+           
+        </div>
+        <div #contenedor4>
+           
+        </div>
+        <div #contenedor5>
+           
+        </div>
+        <div #contenedor6>
+           
+        </div>
+        <div #contenedor7>
+           
+        </div>
+        <div #contenedor8>
+           
+        </div>
+     </div>
+  </div>

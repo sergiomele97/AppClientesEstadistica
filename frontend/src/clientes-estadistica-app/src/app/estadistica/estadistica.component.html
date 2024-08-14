@@ -16,6 +16,8 @@
       <ul class="space-y-2 font-medium">
          <!-- 1. Gráficas #DROPDOWN --> 
          <li>
+            <a [routerLink]="['/estadistica/graficas']" routerLinkActive="active">asdfsf</a>
+
             <button type="button" 
                     class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                     (click)="toggleDropdown()">
@@ -34,25 +36,25 @@
               
                 <!-- 1.1 Graph --> 
                <li>
-                  <a (click)="addComponent('Graph')" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                  <a class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                      <span class="ms-3">Graph</span>
                   </a>
                </li>
                <!-- 1.2 Volumetria --> 
                <li>
-                  <a (click)="addComponent('Volumetria')" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                  <a  class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                      <span class="ms-3">Volumetria</span>
                   </a>
                </li>
                <!-- 1.3 Map --> 
                <li>
-                  <a (click)="addComponent('Map')" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                  <a class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                      <span class="ms-3">Map</span>
                   </a>
                </li>
                <!-- 1.4 Spaghetti --> 
                <li>
-                  <a (click)="addComponent('Spaghetti')" class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                  <a  class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                      <span class="ms-3">Spaghetti</span>
                   </a>
                </li>
@@ -101,54 +103,4 @@
    </div>
 </aside>
 
-<!-- DIV DE LAS GRAFICAS --> 
-<div class="p-4 sm:ml-64">
-   <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
-      <div class="grid grid-cols-2 gap-4 mb-4">
-         <div #contenedor1>
-            <div  class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-               <p class="text-2xl text-gray-400 dark:text-gray-500">
-                  <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                  </svg>
-               </p>
-            </div>
-         </div>
-         <div #contenedor2>
-            <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-               <p class="text-2xl text-gray-400 dark:text-gray-500">
-                  <svg class="w-3.5 h-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
-                  </svg>
-               </p>
-            </div>
-         </div>
-         <div #contenedor3>
-            
-         </div>
-         <div #contenedor4>
-            
-         </div>
-         <div #contenedor5>
-            
-         </div>
-         <div #contenedor6>
-            
-         </div>
-         <div #contenedor7>
-            
-         </div>
-         <div #contenedor8>
-            
-         </div>
-      </div>
-   </div>
-  <!-- DIV DE LAS TABLAS --> 
-  <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
-    
-  </div>
-
-  <router-outlet></router-outlet>
-
-
-</div>
+<router-outlet></router-outlet>

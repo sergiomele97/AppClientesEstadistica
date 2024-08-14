@@ -1,0 +1,24 @@
+/* Asegúrate de que el cursor se muestre como puntero */
+a {
+    cursor: pointer;
+  }
+  
+  /* Opcional: asegúrate de que el botón esté visible y encima de otros elementos */
+  a {
+    position: relative;
+    z-index: 10;
+  }
+  
+  /* Opcional: asegúrate de que el botón no esté cubierto y sea completamente visible */
+  a {
+    opacity: 1;
+  }
+
+  /* Asegúrate de que el contenido no sobresalga del contenedor */
+#contenedor1 * {
+  box-sizing: border-box;
+}
+  /* Asegúrate de que el contenido no sobresalga del contenedor */
+  #contenedor2 * {
+    box-sizing: border-box;
+  }

@@ -18,6 +18,8 @@ import { EstadisticaComponent } from './estadistica/estadistica.component';
 import { HomeComponent } from './home/home.component';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';
 import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
+import { GraficasComponent } from './estadistica/graficas/Graficas.component';
+
 
 const routes: Routes = [
   { path: "login", component: LoginComponent},
@@ -30,9 +32,11 @@ const routes: Routes = [
   { path: "estadistica", component: EstadisticaComponent, 
     children: [
       { path: 'outliers', component: OutlierComponent },
-      { path: 'outliers/:id', component: ShowOutlierComponent  }
+      { path: 'outliers/:id', component: ShowOutlierComponent  },
+      {path: 'graficas', component: GraficasComponent}
     ]
    },
+      
   { path: "estadisticas", component: EstadisticasComponent,
     children: [
       { path: 'volumetry', component: VolumetryComponent },
