@@ -13,7 +13,7 @@
     </apx-chart>
   </div>
 
-  <div class="mt-10 ml-96 w-2/3">
+  <div *ngIf="cliente" class="mt-10 ml-96 w-2/3">
     <table class="w-full text-sm text-left text-gray-500 border">
         <thead class="text-xs text-gray-700 uppercase bg-gray-200">
             <tr>
@@ -32,15 +32,15 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let transaccion of transacciones" class="bg-white border-b">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                    {{ transaccion.usuarioEnvia }}
-                </th>
-                <td class="px-6 py-4">
-                    {{ transaccion.usuarioRecibe }}
+            <tr *ngFor="let transaccion of transacciones" class="bg-white border">
+                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                    {{ transaccion.clienteOrigen.nombre }}
                 </td>
                 <td class="px-6 py-4">
-                    {{ transaccion.cantidad }}€
+                   {{ transaccion.clienteDestino.nombre }}
+                </td>
+                <td class="px-6 py-4">
+                    {{ transaccion.importeEnviado }}
                 </td>
                 <td class="px-6 py-4">
                     {{ transaccion.fecha }}
@@ -49,6 +49,5 @@
         </tbody>
     </table>
   </div>
-  
 
 </div>
