@@ -114,7 +114,6 @@ namespace BackendEstadistica.Migrations
                     b.HasKey("PaisId");
 
                     b.ToTable("Paises");
-<<<<<<< HEAD
 
                     b.HasData(
                         new
@@ -1356,8 +1355,7 @@ namespace BackendEstadistica.Migrations
                             Iso3 = "ZWE",
                             Nombre = "Zimbabue"
                         });
-=======
->>>>>>> Sergio
+
                 });
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Transaccion", b =>
