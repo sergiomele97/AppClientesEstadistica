@@ -25,7 +25,6 @@ import { EstadisticaComponent } from './estadistica/estadistica.component';
 import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 import { ClientesComponent } from './estadistica/clientes/clientes.component';
 import { DivisasComponent } from './estadisticas/divisas/divisas.component';
-import { AuthGuard } from './auth.guard';
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 import { ClustersDataService } from './servicios/clusters-data.service';
 import { HomeComponent } from './home/home.component';
@@ -33,6 +32,8 @@ import { PruebaConexionService } from './servicios/pruebaConexion.service';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';
 import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
 import { GraficasComponent } from './estadistica/graficas/Graficas.component';
+import { DatePipe } from '@angular/common';
+import { FormaterFechaPipe } from './pipes/formaterFecha.pipe';
 
 
 
@@ -62,7 +63,8 @@ import { GraficasComponent } from './estadistica/graficas/Graficas.component';
     UsersInfoComponent,
     OutlierComponent,
     ShowOutlierComponent,
-    GraficasComponent
+    GraficasComponent,
+    FormaterFechaPipe
   ],
   imports: [
     BrowserModule,
@@ -73,13 +75,13 @@ import { GraficasComponent } from './estadistica/graficas/Graficas.component';
     NgApexchartsModule,
     HighchartsChartModule,
     NgxPaginationModule,
-    BrowserModule,
-    FormsModule
+    BrowserModule
   ],
   providers: [
     UserService,
     PruebaConexionService,
-    ClustersDataService
+    ClustersDataService,
+    DatePipe
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA] 

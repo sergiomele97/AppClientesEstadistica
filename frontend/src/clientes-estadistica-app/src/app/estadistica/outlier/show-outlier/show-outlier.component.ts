@@ -15,6 +15,7 @@ import {
 import { Subscription } from 'rxjs';
 import { ICliente } from 'src/app/interfaces/cliente';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
+import { FormaterFechaPipe } from 'src/app/pipes/formaterFecha.pipe';
 import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
 
@@ -32,7 +33,8 @@ export type ChartOptions = {
 @Component({
   selector: 'app-show-outlier',
   templateUrl: './show-outlier.component.html',
-  styleUrls: ['./show-outlier.component.css']
+  styleUrls: ['./show-outlier.component.css'],
+  providers: [FormaterFechaPipe]
 })
 export class ShowOutlierComponent implements OnInit, OnDestroy {
 
@@ -45,7 +47,7 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
     routeSubscription: Subscription = new Subscription();
     
 
-  constructor( private clienteService: ClienteEstService, private transaccionService: TransaccionService, private route: ActivatedRoute,) {}
+  constructor( private clienteService: ClienteEstService, private transaccionService: TransaccionService, private route: ActivatedRoute,  private formaterFechaPipe: FormaterFechaPipe ) {}
 
   
   ngOnInit(): void {
@@ -64,7 +66,7 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
                   t => t.clienteOrigenId === clienteId
                 );
 
-                this.actualizarGrafico(this.transacciones);
+                this.actualizarGrafico();
 
               },
               error: (err) => {
@@ -82,13 +84,13 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
 
   }
 
-  actualizarGrafico(transacciones: ITransaccion[]): void {
+  actualizarGrafico(): void {
 
     if (!this.transacciones || this.transacciones.length === 0) {
       return;
     }
 
-    const fechas = this.transacciones.map(t => t.fecha);
+    const fechas = this.transacciones.map(t => this.formaterFechaPipe.transform(t.fecha));
     const importeEnviado = this.transacciones.map(t => t.importeEnviado);
     const maxCantidad = Math.max(...importeEnviado);
 
@@ -206,69 +208,5 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
 
   }
 
-//     transaccioneas: any[] = [
-//     {
-//         usuarioEnvia: "Pedro",
-//         usuarioRecibe: "Roberto",
-//         cantidad: 130,
-//         fecha: "2024-08-01",
-//     },
-//     {
-//         usuarioEnvia: "Pedro",
-//         usuarioRecibe: "Sergio",
-//         cantidad: 200,
-//         fecha: "2024-08-02",
-//     },
-//     {
-//         usuarioEnvia: "Pedro",
-//         usuarioRecibe: "Carlos",
-//         cantidad: 30,
-//         fecha: "2024-08-03",
-//     },
-//     {
-//         usuarioEnvia: "Pedro",
-//         usuarioRecibe: "Iranzu",
-//         cantidad: 40,
-//         fecha: "2024-08-04",
-//     },
-//     {
-//         usuarioEnvia: "Pedro",
-//         usuarioRecibe: "Wolframio",
-//         cantidad: 1296.32,
-//         fecha: "2024-08-05",
-//     }
-// ];
-
-
-       // Mapeo de las transacciones a los datos de la gráfica
-      //  const fecha = this.transaccioneas.map(t => t.fecha);
-      //  const cantidades = this.transaccioneas.map(t => t.cantidad);
-      //  const usuarioRecibe = this.transaccioneas.map(t => t.usuarioRecibe)
-   
-      //  // Encontrar el índice de la transacción con la mayor cantidad
-      //  const maxCantidad = Math.max(...cantidades);
-   
-      //  // Actualizar chartOptions con las categorías y datos
-      //  this.chartOptions.series = [
-      //    {
-      //      name: `Dinero enviado a ${usuarioRecibe}`,
-      //      data: cantidades
-      //    }
-      //  ];
-      //  this.chartOptions.xaxis = {
-      //    ...this.chartOptions.xaxis,
-      //    categories: fecha
-      //  };
-       
-      //  // Aplicar colores condicionales a las barras
-      //  this.chartOptions.plotOptions.bar.colors.ranges = [
-      //    {
-      //      from: maxCantidad, // valor mínimo que coincide con la cantidad más grande
-      //      to: maxCantidad,   // valor máximo que coincide con la cantidad más grande
-      //      color: '#FF4560'   // rojo para la barra con la cantidad más grande
-      //    }
-      //  ];
-
 
 }
-
