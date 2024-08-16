@@ -1,14 +1,9 @@
-﻿namespace BackendEstadistica.Perfiles
+﻿namespace BackendEstadistica.Perfiles;
+
+public class Conversion : Profile
 {
-    public class Conversion : Profile
+    public Conversion() 
     {
-
-        public Conversion() 
-        { 
-        
-            CreateMap<Conversion, ConversionDto>().ReverseMap();
-
-        }
-
+        CreateMap<Conversion, ConversionDto>().ReverseMap();
     }
 }
