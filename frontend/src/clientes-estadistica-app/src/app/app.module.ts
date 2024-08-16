@@ -24,7 +24,7 @@ import { ClustersTableComponent } from './estadistica/clusters/clusters-table/cl
 import { EstadisticaComponent } from './estadistica/estadistica.component';
 import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 import { ClientesComponent } from './estadisticas/clientes/clientes.component';
-import { DivisasComponent } from './estadistica/divisas/show-divisas.component';
+import { DivisasComponent } from './estadistica/divisas/divisas.component';
 import { AuthGuard } from './auth.guard';
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 import { ClustersDataService } from './servicios/clusters-data.service';
