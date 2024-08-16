@@ -33,6 +33,7 @@ import { PruebaConexionService } from './servicios/pruebaConexion.service';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';
 import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
 import { GraficasComponent } from './estadistica/graficas/Graficas.component';
+import { RegisterComponent } from './register/register.component';
 
 
 
@@ -40,7 +41,7 @@ import { GraficasComponent } from './estadistica/graficas/Graficas.component';
 
 
 @NgModule({
-  declarations: [	
+  declarations: [		
     AppComponent,
     LoginComponent,
     RegistroComponent,
@@ -62,8 +63,9 @@ import { GraficasComponent } from './estadistica/graficas/Graficas.component';
     UsersInfoComponent,
     OutlierComponent,
     ShowOutlierComponent,
-    GraficasComponent
-  ],
+    GraficasComponent,
+    RegisterComponent
+   ],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -19,14 +19,16 @@ import { HomeComponent } from './home/home.component';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';
 import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
 import { GraficasComponent } from './estadistica/graficas/Graficas.component';
+import { RegisterComponent } from './register/register.component';
 
 
 const routes: Routes = [
   { path: "login", component: LoginComponent},
   { path: "users", component: UsersInfoComponent},
   { path: 'home', component: HomeComponent },
+  { path: "registro", component: RegisterComponent }, // Registro definitivo en construcción
 
-  { path: "registro", component: RegistroComponent },
+  // { path: "registro", component: RegistroComponent },
   { path: "registroAdmin", component: RegistroAdminComponent },
   { path: 'users-info', component: UsersInfoComponent, canActivate: [AuthGuard], },
   { path: "estadistica", component: EstadisticaComponent, 
