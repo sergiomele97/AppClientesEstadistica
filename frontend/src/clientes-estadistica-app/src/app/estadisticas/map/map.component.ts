@@ -37,9 +37,6 @@ export class MapComponent implements OnInit, OnDestroy {
         z: clientesPorPais[iso3],
       }));
 
-      // Verificar el contenido de bubbleData
-      console.log(this.bubbleData);
-
       // Inicializar las opciones del gráfico
       this.initializeChartOptions();
 
@@ -51,8 +48,6 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   initializeChartOptions() {
-    console.log(worldMap); // Verifica si el mapa se está cargando
-
     this.chartOptions = {
       chart: {
         borderWidth: 1,
@@ -85,10 +80,10 @@ export class MapComponent implements OnInit, OnDestroy {
           name: 'Número de Clientes',
           joinBy: ['iso-a3', 'code3'],
           data: this.bubbleData,
-          minSize: 1,
-          maxSize: '13%',
+          minSize: 10,
+          maxSize: '10%',
           tooltip: {
-            pointFormat: '{point.properties.hc-a2}: {point.z} clientes',
+            pointFormat: '{point.properties.name}: {point.z} clientes',
           },
         },
       ],
