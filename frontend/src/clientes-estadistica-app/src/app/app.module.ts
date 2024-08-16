@@ -34,14 +34,12 @@ import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-ou
 import { GraficasComponent } from './estadistica/graficas/Graficas.component';
 import { DatePipe } from '@angular/common';
 import { FormaterFechaPipe } from './pipes/formaterFecha.pipe';
-
-
-
+import { RegisterComponent } from './register/register.component';
 
 
 
 @NgModule({
-  declarations: [	
+  declarations: [		
     AppComponent,
     LoginComponent,
     RegistroComponent,
@@ -64,8 +62,10 @@ import { FormaterFechaPipe } from './pipes/formaterFecha.pipe';
     OutlierComponent,
     ShowOutlierComponent,
     GraficasComponent,
-    FormaterFechaPipe
-  ],
+    FormaterFechaPipe,
+    RegisterComponent
+   ],
+   
   imports: [
     BrowserModule,
     AppRoutingModule,
