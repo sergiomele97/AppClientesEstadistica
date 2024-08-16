@@ -1,14 +1,9 @@
-﻿namespace BackendEstadistica.Perfiles
+﻿namespace BackendEstadistica.Perfiles;
+
+public class Transaccion : Profile
 {
-    public class Transaccion : Profile
+    public Transaccion() 
     {
-
-        public Transaccion() 
-        {
-
-            CreateMap<Transaccion, TransaccionDto>().ReverseMap();  
-
-        }
-
+        CreateMap<Transaccion, TransaccionDto>().ReverseMap();
     }
 }

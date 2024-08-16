@@ -1,8 +1,4 @@
-﻿
-using BackendEstadistica.Servicios;
-using Microsoft.AspNetCore.Mvc;
-
-namespace BackendEstadistica.Controllers;
+﻿namespace BackendEstadistica.Controllers;
 
 [Route("api/estadisticas")]
 [ApiController]
@@ -18,12 +14,12 @@ public class EstadisticasController : Controller
         this.mapper = mapper;
     }
 
-
     //Clientes
     [HttpPost("crearCliente")]
     public IActionResult CrearCliente()
     {
-        var clienteFaker = new ClienteFaker();
+        var paises = estadisticasRepositorio.GetPaises(); // Obtener todos los países existentes
+        var clienteFaker = new ClienteFaker(paises);
         var clienteDto = clienteFaker.Generate();
 
         var nuevoCliente = this.mapper.Map<Cliente>(clienteDto);
@@ -58,13 +54,12 @@ public class EstadisticasController : Controller
         return Ok(mapper.Map<Cliente>(cliente));
     }
 
-
-
     //Transacciones
     [HttpPost("crearTransaccion")]
     public IActionResult CrearTransaccion()
     {
-        var transaccionFaker = new TransaccionFaker();
+        var clientes = estadisticasRepositorio.GetClientes();
+        var transaccionFaker = new TransaccionFaker(clientes);
         var transaccionDto = transaccionFaker.Generate();
 
         var nuevaTransaccion = this.mapper.Map<Transaccion>(transaccionDto);
@@ -74,7 +69,7 @@ public class EstadisticasController : Controller
     }
 
     [HttpGet("getTransacciones")]
-    public IActionResult GetTransacciones() 
+    public IActionResult GetTransacciones()
     {
 
         List<Transaccion> transacciones = estadisticasRepositorio.GetTransacciones();
@@ -93,13 +88,12 @@ public class EstadisticasController : Controller
 
     }
 
-
-
     //Conversiones
     [HttpPost("crearConversion")]
     public IActionResult CrearConversion()
     {
-        var conversionFaker = new ConversionFaker();
+        var clientes = estadisticasRepositorio.GetClientes();
+        var conversionFaker = new ConversionFaker(clientes);
         var conversionDto = conversionFaker.Generate();
 
         var nuevaConversion = this.mapper.Map<Conversion>(conversionDto);
@@ -128,35 +122,31 @@ public class EstadisticasController : Controller
 
     }
 
+    ////Paises
+    //[HttpPost("crearPais")]
+    //public IActionResult CrearPais()
+    //{
+    //    var paisFaker = new PaisFaker();
+    //    var paisDto = paisFaker.Generate();
 
-    //Paises
-    [HttpPost("crearPais")]
-    public IActionResult CrearPais()
-    {
-        var paisFaker = new PaisFaker();
-        var paisDto = paisFaker.Generate();
+    //    var nuevoPais = this.mapper.Map<Pais>(paisDto);
+    //    this.estadisticasRepositorio.CrearPais(nuevoPais);
 
-        var nuevoPais = this.mapper.Map<Pais>(paisDto);
-        this.estadisticasRepositorio.CrearPais(nuevoPais);
-
-        return Ok("País creado correctamente");
-    }
+    //    return Ok("País creado correctamente");
+    //}
 
     [HttpGet("getPaises")]
     public IActionResult GetPaises()
     {
         List<Pais> paises = estadisticasRepositorio.GetPaises();
-
         return Ok(mapper.Map<List<Pais>>(paises));
     }
 
     [HttpGet("getPaises/{id}")]
     public IActionResult GetPaisById(int id)
     {
-
         Pais paisId = estadisticasRepositorio.GetPaisById(id);
 
         return Ok(mapper.Map<Pais>(paisId));
-
     }
 }
