@@ -24,6 +24,18 @@ namespace BackendEstadistica
             builder.Services.AddDbContext<ContextoBBDD>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            //Serilog
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .Filter.ByExcluding(logEvent => logEvent.Level == Serilog.Events.LogEventLevel.Debug) // Excluir eventos de nivel Debug
+                .WriteTo.Console()
+                .WriteTo.File("Logs/logClientes.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            builder.Host.UseSerilog(); // Usa Serilog como el logger
+
+            builder.Services.AddControllers();
+
             // Configuración de CORS
             builder.Services.AddCors(options =>
             {
