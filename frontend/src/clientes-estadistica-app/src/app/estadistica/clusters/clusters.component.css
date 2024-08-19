@@ -3,18 +3,20 @@
 .dropdown-container {
   max-width: 650px;
   margin: 35px auto;
-  text-align: center;
+  display: flex; /* Usar flexbox para alinear horizontalmente */
+  align-items: center; /* Centra verticalmente los elementos */
+  gap: 20px; /* Espacio entre los elementos, ajusta según sea necesario */
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan si es necesario */
 }
 
 .dropdown-container label {
-  display: block;
-  margin-bottom: 10px;
+  margin: 0 10px 0 0; /* Espacio a la derecha del label */
   font-size: 16px;
   color: #333;
+  white-space: nowrap; /* Evita que las etiquetas se dividan en varias líneas */
 }
 
 .dropdown-container select {
-  width: 100%;
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
@@ -25,6 +27,7 @@
   appearance: none;
   background-color: #fff;
   cursor: pointer;
+  flex: 1; /* Permite que los selects se expandan para llenar el espacio disponible */
 }
 
 .dropdown-container select:focus {
@@ -36,4 +39,18 @@
 #chart {
   max-width: 650px;
   margin: 35px auto;
+}
+
+/* clusters.component.css */
+
+.davies-bouldin-box {
+  max-width: 650px;
+  margin: 35px auto;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  text-align: center;
+  font-size: 16px;
+  color: #333;
 }

@@ -11,7 +11,7 @@ CORS(app)  # Habilita CORS para todas las rutas
 def predict():
 
     data = request.json
-    series = data['series']
+    series = data['data']
     model = ARIMA(series, order=(5, 0, 3))
     model_fit = model.fit()
     pred_steps = 10
@@ -33,7 +33,13 @@ def cluster():
     kmeans.fit(data)
     labels = kmeans.labels_.tolist()
     labels = [lab + 1 for lab in labels]  # Ajuste de etiquetas
-    response = {"etiqueta": labels}
+       
+    davies_bouldin = davies_bouldin_score(data, kmeans.labels_)
+    response = {
+        "etiqueta": labels,
+        "db": davies_bouldin
+    }
+    
     return jsonify(response)
 
 

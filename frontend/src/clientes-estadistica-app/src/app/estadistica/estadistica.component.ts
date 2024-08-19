@@ -28,7 +28,7 @@ export class EstadisticaComponent implements OnInit {
       this.usuarios = data;
       console.log('Usuarios obtenidos:', this.usuarios)
     }, error => {
-      console.error('Error al obtener los usuarios', error);
+      console.error('Error al obtener los usuarios',error);
     });
   }
   // -------------------- Fin Método Sergio para Debuggear en Azure, no borrar:

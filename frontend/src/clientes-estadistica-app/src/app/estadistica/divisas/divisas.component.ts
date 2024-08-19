@@ -14,6 +14,15 @@ import {
   ApexYAxis
 } from "ng-apexcharts";
 
+import { ICliente } from 'src/app/interfaces/cliente';
+import { ITransaccion } from 'src/app/interfaces/transaccion';
+import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
+import { TransaccionService } from 'src/app/servicios/transaccion.service';
+
+
+
+
+
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -51,12 +60,13 @@ export class DivisasComponent {
 
   constructor(private http: HttpClient) {
     this.updateChart('euros');
+    
   }
 
   updateChart(currency: string) {
     console.log('Requesting data for:', currency);
 
-    this.http.post('http://localhost:5000/predict', { series: this.data[currency] })
+    this.http.post('http://localhost:5000/predict', { data: this.data[currency] })
       .subscribe((response: any) => {
         console.log('Received data:', response);
         const predictions = response.Prediction || [];
