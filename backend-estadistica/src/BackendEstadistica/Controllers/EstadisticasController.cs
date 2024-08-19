@@ -8,10 +8,11 @@ public class EstadisticasController : Controller
     private readonly IEstadisticasRepositorio estadisticasRepositorio;
     private readonly IMapper mapper;
 
-    public EstadisticasController(IEstadisticasRepositorio estadisticasRepositorio, IMapper mapper)
+    public EstadisticasController( ContextoBBDD contextoBBDD ,IEstadisticasRepositorio estadisticasRepositorio, IMapper mapper)
     {
         this.estadisticasRepositorio = estadisticasRepositorio;
         this.mapper = mapper;
+        this.contextoBBDD = contextoBBDD;
     }
 
     //Clientes
@@ -65,6 +66,24 @@ public class EstadisticasController : Controller
         var nuevaTransaccion = this.mapper.Map<Transaccion>(transaccionDto);
         this.estadisticasRepositorio.CrearTransaccion(nuevaTransaccion);
 
+        // Detectar si esta transacción es un outlier
+        estadisticasRepositorio.DetectarOutliers();
+
+        var transaccion = contextoBBDD.Transacciones
+            .Include(t => t.ClienteOrigen)
+            .FirstOrDefault(t => t.TransaccionId == nuevaTransaccion.TransaccionId);
+
+        if (transaccion != null && transaccion.IsOutlier == true)
+        {
+            return Ok(new
+            {
+                Message = "Outlier detectado",
+                Cliente = transaccion.ClienteOrigen.Nombre,
+                ImporteEnviado = transaccion.ImporteEnviado
+            });
+        }
+
+
         return Ok("Transacción creada correctamente");
     }
 
@@ -78,7 +97,7 @@ public class EstadisticasController : Controller
 
     }
 
-    [HttpGet("getTransacciones/{id}")]
+    [HttpGet("getTransacciones/{clienteId}")]
     public IActionResult GetTransaccionesById(int id)
     {
 
@@ -86,6 +105,23 @@ public class EstadisticasController : Controller
 
         return Ok(mapper.Map<Transaccion>(transaccionId));
 
+    }
+
+    [HttpGet("ultimas-transacciones/{clienteId}")]
+    public async Task<IActionResult> ObtenerUltimasTransacciones(int clienteId)
+    {
+        var ultimasTransacciones = await contextoBBDD.Transacciones
+            .Where(t => t.ClienteOrigenId == clienteId)
+            .OrderByDescending(t => t.Fecha)
+            .Take(5)
+            .ToListAsync();
+
+        if (ultimasTransacciones == null || ultimasTransacciones.Count == 0)
+        {
+            return NotFound();
+        }
+
+        return Ok(ultimasTransacciones);
     }
 
     //Conversiones
@@ -112,7 +148,7 @@ public class EstadisticasController : Controller
 
     }
 
-    [HttpGet("getConversion/{id}")]
+    [HttpGet("getConversion/{clienteId}")]
     public IActionResult GetConversionById(int id)
     {
 

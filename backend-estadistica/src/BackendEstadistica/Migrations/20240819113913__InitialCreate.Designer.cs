@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendEstadistica.Migrations
 {
     [DbContext(typeof(ContextoBBDD))]
-    [Migration("20240816115122_Estadisticas")]
-    partial class Estadisticas
+    [Migration("20240819113913__InitialCreate")]
+    partial class _InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1383,6 +1383,9 @@ namespace BackendEstadistica.Migrations
                     b.Property<double?>("ImporteRecibido")
                         .HasColumnType("float");
 
+                    b.Property<bool?>("IsOutlier")
+                        .HasColumnType("bit");
+
                     b.HasKey("TransaccionId");
 
                     b.HasIndex("ClienteDestinoId");
@@ -1406,7 +1409,7 @@ namespace BackendEstadistica.Migrations
                     b.Property<string>("Correo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Rol")
+                    b.Property<string>("Telefono")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

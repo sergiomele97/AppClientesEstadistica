@@ -96,6 +96,48 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
             .FirstOrDefault(t => t.TransaccionId == id);
     }
 
+    public void DetectarOutliers()
+    {
+        var transaccionesByCliente = _contextoBBDD.Transacciones
+            .Include(t => t.ClienteOrigen)
+            .Where(t => t.ImporteEnviado.HasValue) // Filtrar donde ImporteEnviado no es nulo
+            .GroupBy(t => t.ClienteOrigenId)
+            .ToList();
+
+        foreach (var group in transaccionesByCliente)
+        {
+            var amounts = group.Select(t => t.ImporteEnviado.Value).OrderBy(a => a).ToList();
+
+            if (amounts.Count < 4)
+                continue;
+
+            double q1 = GetQuantile(amounts, 0.25);
+            double q3 = GetQuantile(amounts, 0.75);
+            double iqr = q3 - q1;
+
+            double upperBound = q3 + 1.5 * iqr;
+
+            foreach (var transaccion in group)
+            {
+                transaccion.IsOutlier = transaccion.ImporteEnviado > upperBound;
+            }
+        }
+
+        _contextoBBDD.SaveChanges();
+    }
+
+    private double GetQuantile(List<double> sortedValues, double percentile)
+    {
+        int N = sortedValues.Count;
+        double index = percentile * (N - 1);
+        int lowerIndex = (int)Math.Floor(index);
+        int upperIndex = (int)Math.Ceiling(index);
+
+        if (lowerIndex == upperIndex)
+            return sortedValues[lowerIndex];
+        return sortedValues[lowerIndex] * (1 - (index - lowerIndex)) + sortedValues[upperIndex] * (index - lowerIndex);
+    }
+
     //Paises
     public void CrearPais(Pais pais)
     {
