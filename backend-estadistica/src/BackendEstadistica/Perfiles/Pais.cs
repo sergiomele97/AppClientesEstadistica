@@ -1,15 +1,9 @@
-﻿namespace BackendEstadistica.Perfiles
+﻿namespace BackendEstadistica.Perfiles;
+
+public class Pais : Profile
 {
-    public class Pais : Profile
+    public Pais()
     {
-
-
-        public Pais() 
-        { 
-        
-            CreateMap<Pais, PaisDto>().ReverseMap();
-
-        }
-
+        CreateMap<Pais, PaisDto>().ReverseMap();
     }
 }

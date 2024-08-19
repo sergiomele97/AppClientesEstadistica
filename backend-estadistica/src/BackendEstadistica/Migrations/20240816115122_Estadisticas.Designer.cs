@@ -4,6 +4,7 @@ using BackendEstadistica.Contexto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendEstadistica.Migrations
 {
     [DbContext(typeof(ContextoBBDD))]
-    partial class ContextoBBDDModelSnapshot : ModelSnapshot
+    [Migration("20240816115122_Estadisticas")]
+    partial class Estadisticas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1355,7 +1358,6 @@ namespace BackendEstadistica.Migrations
                             Iso3 = "ZWE",
                             Nombre = "Zimbabue"
                         });
-
                 });
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Transaccion", b =>
@@ -1404,7 +1406,7 @@ namespace BackendEstadistica.Migrations
                     b.Property<string>("Correo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Telefono")
+                    b.Property<string>("Rol")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

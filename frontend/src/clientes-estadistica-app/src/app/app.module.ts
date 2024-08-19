@@ -33,14 +33,14 @@ import { PruebaConexionService } from './servicios/pruebaConexion.service';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';
 import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
 import { GraficasComponent } from './estadistica/graficas/Graficas.component';
-
-
-
+import { DatePipe } from '@angular/common';
+import { FormaterFechaPipe } from './pipes/formaterFecha.pipe';
+import { RegisterComponent } from './register/register.component';
 
 
 
 @NgModule({
-  declarations: [	
+  declarations: [		
     AppComponent,
     LoginComponent,
     RegistroComponent,
@@ -62,8 +62,11 @@ import { GraficasComponent } from './estadistica/graficas/Graficas.component';
     UsersInfoComponent,
     OutlierComponent,
     ShowOutlierComponent,
-    GraficasComponent
-  ],
+    GraficasComponent,
+    FormaterFechaPipe,
+    RegisterComponent
+   ],
+   
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -73,13 +76,13 @@ import { GraficasComponent } from './estadistica/graficas/Graficas.component';
     NgApexchartsModule,
     HighchartsChartModule,
     NgxPaginationModule,
-    BrowserModule,
-    FormsModule
+    BrowserModule
   ],
   providers: [
     UserService,
     PruebaConexionService,
-    ClustersDataService
+    ClustersDataService,
+    DatePipe
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA] 

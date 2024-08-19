@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendEstadistica.Migrations
 {
     [DbContext(typeof(ContextoBBDD))]
-    [Migration("20240808115743_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240816104037_UsuariosTlf")]
+    partial class UsuariosTlf
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,8 +59,7 @@ namespace BackendEstadistica.Migrations
 
                     b.HasKey("ClienteId");
 
-                    b.HasIndex("PaisId")
-                        .IsUnique();
+                    b.HasIndex("PaisId");
 
                     b.ToTable("Clientes");
                 });
@@ -163,7 +162,7 @@ namespace BackendEstadistica.Migrations
                     b.Property<string>("Correo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Rol")
+                    b.Property<string>("Telefono")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -174,9 +173,9 @@ namespace BackendEstadistica.Migrations
             modelBuilder.Entity("BackendEstadistica.Entidades.Cliente", b =>
                 {
                     b.HasOne("BackendEstadistica.Entidades.Pais", "Pais")
-                        .WithOne("Cliente")
-                        .HasForeignKey("BackendEstadistica.Entidades.Cliente", "PaisId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("Clientes")
+                        .HasForeignKey("PaisId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Pais");
@@ -223,7 +222,7 @@ namespace BackendEstadistica.Migrations
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Pais", b =>
                 {
-                    b.Navigation("Cliente");
+                    b.Navigation("Clientes");
                 });
 #pragma warning restore 612, 618
         }

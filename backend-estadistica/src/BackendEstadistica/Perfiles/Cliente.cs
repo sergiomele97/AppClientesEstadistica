@@ -1,9 +1,9 @@
-﻿namespace BackendEstadistica.Perfiles
+﻿namespace BackendEstadistica.Perfiles;
+
+public class Cliente : Profile
 {
-    public class Cliente : Profile
+    public Cliente() 
     {
-        public Cliente() 
-        {            CreateMap<Cliente, ClienteDto>().ReverseMap();   
-        }
+        CreateMap<Cliente, ClienteDto>().ReverseMap();   
     }
 }
