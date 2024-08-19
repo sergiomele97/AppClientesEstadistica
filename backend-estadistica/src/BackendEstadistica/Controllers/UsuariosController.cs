@@ -27,58 +27,78 @@ public class UsuariosController : ControllerBase
         _logger = logger;
     }
 
-    // Gestión de registro:
-    
-        // Post en nuestro Repositorio
+    //---------------------------------------------------------------------------------- Gestión de REGISTRO:
+
+    // Post en nuestro Repositorio
 
 
-    [HttpPost("crearUsuario")]
-    public IActionResult AddUsuario([FromBody] Usuario nuevoUsuario)
+    [HttpPost]
+    public async Task<ActionResult> PostUsuario([FromBody] Usuario usuario)
     {
+        // Logger
+        _logger.LogInformation("Creando un nuevo usuario.");
 
-
-        // NotFound() -> El POST está vacio
-        if (nuevoUsuario == null)
+        // Validar si el usuario es nulo
+        if (usuario == null)
         {
+            _logger.LogWarning("El modelo Usuario está vacío.");
             return NotFound();
         }
-        // NotFound() -> Estos campos son obligatorios
-        if (string.IsNullOrEmpty(nuevoUsuario.Telefono) ||
-            string.IsNullOrEmpty(nuevoUsuario.Correo) ||
-            string.IsNullOrEmpty(nuevoUsuario.Contraseña))
+
+        // Validar los campos obligatorios
+        if (string.IsNullOrEmpty(usuario.Telefono) ||
+            string.IsNullOrEmpty(usuario.Correo) ||
+            string.IsNullOrEmpty(usuario.Contraseña))
         {
+            _logger.LogWarning("Faltan campos obligatorios en el modelo Usuario.");
             return BadRequest("Todos los campos del usuario (Nombre, Correo, Contraseña) son obligatorios.");
         }
-        // Si todo OK: Llamamos al método Agregar usuario y devolvemos OK.
-        if (!nuevoUsuario.Correo.IsValidEmail())
+
+        // Validar el formato del correo electrónico
+        if (!usuario.Correo.IsValidEmail())
         {
-
-            return BadRequest("El formato del correo no es válido");
-
+            _logger.LogWarning("El formato del correo electrónico no es válido.");
+            return BadRequest("El formato del correo no es válido.");
         }
 
-        if (usuarioRepositorio.EmailExist(nuevoUsuario.Correo))
+        // Verificar si el correo ya existe en el repositorio
+        if (usuarioRepositorio.EmailExist(usuario.Correo))
         {
-
+            _logger.LogWarning("El correo electrónico ya está en uso.");
             return BadRequest("El email ya está en uso.");
+        }
 
+        // Validar el modelo
+        if (!ModelState.IsValid)
+        {
+            _logger.LogWarning("El modelo Usuario no es válido.");
+            return BadRequest(ModelState);
         }
 
         try
-        {
-            // Agregar el usuario usando el repositorio
-            usuarioRepositorio.AddUsuario(nuevoUsuario);
+        {                      // ADD
+            usuarioRepositorio.AddUsuario(usuario);
 
-            // Devolver un código de estado 201 (Creado) y la ubicación del nuevo recurso
-            return CreatedAtAction(nameof(AddUsuario), new { id = nuevoUsuario.Id }, nuevoUsuario);
+            if (await usuarioRepositorio.GuardarCambios())
+            {
+                _logger.LogInformation($"Usuario con ID {usuario.Id} creado correctamente.");
+                return CreatedAtAction(nameof(GetUsuarioById), new { id = usuario.Id }, usuario);
+            }
+            else
+            {
+                _logger.LogError("No se pudo agregar el usuario.");
+                return BadRequest("No se pudo agregar el usuario.");
+            }
         }
         catch (Exception ex)
         {
-            // Manejar errores, por ejemplo, problemas con la base de datos
+            _logger.LogError($"Error al agregar el usuario: {ex.Message}");
             return StatusCode(500, $"Error al agregar el usuario: {ex.Message}");
         }
-
     }
+
+
+    //---------------------------------------------------------------------------------- Gestión de REGISTRO:
 
 
     //  Otros métodos:
@@ -98,9 +118,11 @@ public class UsuariosController : ControllerBase
     // -------------------- Fin Método Sergio para Debuggear en Azure, no borrar:
 
     //      Get Usuarios By Id
+    
 
 
-
+ 
+    
 
 
     //      Delete Usuario

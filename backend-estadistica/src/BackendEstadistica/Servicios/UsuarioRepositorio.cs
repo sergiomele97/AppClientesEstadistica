@@ -26,7 +26,6 @@ namespace BackendEstadistica.Servicios
             
             // Añadir el usuario al DbSet
             contextoBBDD.Add(usuario);
-            contextoBBDD.SaveChanges();
 
         }
 
@@ -59,10 +58,19 @@ namespace BackendEstadistica.Servicios
             throw new NotImplementedException();
         }
 
-        public bool GuardarCambios()
+        public async Task<bool> GuardarCambios()
         {
+            bool result = false;
+            try
+            {
+                result = await contextoBBDD.SaveChangesAsync() > 0;
+            }
+            catch (Exception e)
+            {
+                result = false;
+            }
 
-            throw new NotImplementedException();
+            return result;
         }
 
         public void UpdateUsuario(Usuario usuario)
