@@ -67,7 +67,7 @@ public class UsuariosController : ControllerBase
             return NotFound();
         }
         // NotFound() -> Estos campos son obligatorios
-        if (string.IsNullOrEmpty(nuevoUsuario.Rol) ||
+        if (string.IsNullOrEmpty(nuevoUsuario.Telefono) ||
             string.IsNullOrEmpty(nuevoUsuario.Correo) ||
             string.IsNullOrEmpty(nuevoUsuario.Contraseña))
         {
