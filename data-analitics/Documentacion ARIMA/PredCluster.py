@@ -28,6 +28,7 @@ def cluster():
 
     recibido = request.json
     data = recibido['data']
+    print("data es ",data)
     n_clusters = recibido['nCluster']
     kmeans = KMeans(n_clusters=n_clusters, random_state=0)
     kmeans.fit(data)
@@ -39,7 +40,7 @@ def cluster():
         "etiqueta": labels,
         "db": davies_bouldin
     }
-    
+    print(response)
     return jsonify(response)
 
 

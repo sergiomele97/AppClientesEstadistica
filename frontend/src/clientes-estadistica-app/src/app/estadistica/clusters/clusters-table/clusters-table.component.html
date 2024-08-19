@@ -1,30 +1,32 @@
 <div class="table-container">
   <input
-  type="text"
-  placeholder="Filtrar por etiqueta"
-  [(ngModel)]="filterText"
-  (ngModelChange)="onFilterChange()"
-  class="mb-4 px-4 py-2 border border-gray-300 rounded"
-/>
-  
+    type="text"
+    placeholder="Filtrar por etiqueta"
+    [(ngModel)]="filterText"
+    (ngModelChange)="onFilterChange()"
+    class="mb-4 px-4 py-2 border border-gray-300 rounded"
+  />
+
   <div class="relative overflow-x-auto" *ngIf="tableData && tableData.length > 0">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
-          <!-- Generar encabezados dinámicos -->
-          <ng-container *ngFor="let header of columnHeaders">
-            <th scope="col" class="px-6 py-3">{{ header }}</th>
-          </ng-container>
+          <!-- Definir encabezados estáticos -->
+          <th scope="col" class="px-6 py-3">Edad</th>
+          <th scope="col" class="px-6 py-3">Balance</th>
+          <th scope="col" class="px-6 py-3">Sexo</th>
+          <th scope="col" class="px-6 py-3">Número de Gastos</th>
+          <th scope="col" class="px-6 py-3">Número de Ingresos</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let row of filteredTableData">
-          <!-- Generar celdas dinámicas -->
-          <ng-container *ngFor="let cell of row; let last = last">
-            <td [ngClass]="{'px-6 py-3': !last, 'px-6 py-3 text-right': last}">
-              {{ cell }}
-            </td>
-          </ng-container>
+          <!-- Definir celdas estáticas -->
+          <td class="px-6 py-3">{{ row[0] }}</td> <!-- Edad -->
+          <td class="px-6 py-3">{{ row[1] }}</td> <!-- Balance -->
+          <td class="px-6 py-3">{{ row[2] }}</td> <!-- Sexo -->
+          <td class="px-6 py-3">{{ row[3] }}</td> <!-- Número de Gastos -->
+          <td class="px-6 py-3">{{ row[4] }}</td> <!-- Número de Ingresos -->
         </tr>
       </tbody>
     </table>

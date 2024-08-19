@@ -17,7 +17,7 @@ export class ClustersTableComponent implements OnInit {
   constructor(private dataService: ClustersDataService) { }
 
   ngOnInit() {
-    combineLatest([this.dataService.selectedData$, this.dataService.selectedLabel$])
+    combineLatest([this.dataService.selectedDataTable$, this.dataService.selectedLabel$])
       .subscribe(([data, label]) => {
        // console.log('Data:', data);
        // console.log('Label:', label);

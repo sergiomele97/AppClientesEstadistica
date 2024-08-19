@@ -62,13 +62,15 @@ export class ClustersComponent implements OnInit, OnDestroy {
     // Recorrer todos los clientes y extraer los datos necesarios junto con el balance calculado
     this.datos = this.clientes.map(cliente => {
       const edad = cliente.edad;
-      const sexo = cliente.sexo === 'M' ? 0 : 1;  // Codificar sexo: 0 para mujeres, 1 para hombres
+      const sexo = cliente.sexo === 'Masculino' ? 0 : 1;  // Codificar sexo: 0 para mujeres, 1 para hombres
       const balance = this.calcularBalance(cliente.clienteId);
-
+      const nGastos = this.numeroGastos(cliente.clienteId);
+      const nIngresos = this.numeroIngresos(cliente.clienteId);
+      const pais = cliente.pais
       // Imprimir los dos primeros valores (edad y sexo) en la consola
       console.log([edad, sexo]);
 
-      return [edad, sexo, balance];
+      return [edad, balance, sexo , nGastos, nIngresos];
     });
   }
 
@@ -82,14 +84,31 @@ export class ClustersComponent implements OnInit, OnDestroy {
     return ingresos - gastos;
   }
 
+  private numeroGastos(clienteId: number): number {
+    const gastos = this.transacciones
+      .filter(transaccion => transaccion.clienteOrigenId === clienteId)
+      .reduce((total) => total + 1, 0);
+    return gastos;
+  }
+  private numeroIngresos(clienteId: number): number {
+    const ingresos = this.transacciones
+    .filter(transaccion => transaccion.clienteDestinoId === clienteId)
+    .reduce((total) => total + 1, 0);
+    return ingresos;
+  }
+
+  
   private async enviarDatosBackend(datos: any[], nCluster: number): Promise<void> {
     try {
       const response = await this.http.post<any>(this.apiUrl, { data: datos, nCluster: nCluster }).toPromise();
       const etiqueta = response.etiqueta || [];
       const db_index = response.db || [];
       this.dataService.setLabel(etiqueta);
-      this.dataService.setIndexDB(db_index);
-      this.daviesBouldinIndex = response.davies_bouldin_index || null;
+      this.dataService.setIndexDB(db_index); 
+      const datosReducidos = datos.map(individuo => individuo.slice(0, 2)); // solo se muestran dos variables
+      this.dataService.setSelectedDataCluster(datosReducidos);//mandamos los datos cortados a la global para visualizar en cluster
+      this.dataService.setSelectedDataTable(datos);//mandamos los datos completos a la global para visualizar en la tabla
+
       console.log(this.daviesBouldinIndex);
     } catch (error) {
       console.error('Error al enviar datos al backend:', error);
