@@ -16,46 +16,22 @@ public class UsuariosController : ControllerBase
 {
     private readonly IUsuarioRepositorio usuarioRepositorio;
     private readonly IMapper mapper;
+    private readonly ILogger<UsuariosController> _logger;
 
 
     //  Constructor de la clase:
-    public UsuariosController( IUsuarioRepositorio usuarioRepositorio, IMapper mapper)
+    public UsuariosController( IUsuarioRepositorio usuarioRepositorio, IMapper mapper, ILogger<UsuariosController> logger)
     {
         this.usuarioRepositorio = usuarioRepositorio;
         this.mapper = mapper;
+        _logger = logger;
     }
 
-
-    //  Métodos:
-
-
-    //      Get Usuarios
-    // -------------------- Método Sergio para Debuggear en Azure, no borrar:
-    [HttpGet]
-    public IActionResult GetUsuarios()
-    {
-
-        List<Usuario> lista = usuarioRepositorio.GetUsuarios();
-
-        return Ok(mapper.Map<List<Usuario>>(lista));  
-        
-
-    }
-    // -------------------- Fin Método Sergio para Debuggear en Azure, no borrar:
-
-    //      Get Usuarios By Id
-    [HttpGet("{id}")]
-    public IActionResult GetUsuarioById(int id)
-    {
-
-        Usuario usarioId = usuarioRepositorio.GetUsuarioById(id);
-
-        return Ok(mapper.Map<Usuario>(usarioId));
-
-    }
+    // Gestión de registro:
+    
+        // Post en nuestro Repositorio
 
 
-    //     Post en nuestro Repositorio
     [HttpPost("crearUsuario")]
     public IActionResult AddUsuario([FromBody] Usuario nuevoUsuario)
     {
@@ -81,10 +57,11 @@ public class UsuariosController : ControllerBase
 
         }
 
-        if(usuarioRepositorio.EmailExist(nuevoUsuario.Correo)) {
+        if (usuarioRepositorio.EmailExist(nuevoUsuario.Correo))
+        {
 
             return BadRequest("El email ya está en uso.");
-            
+
         }
 
         try
@@ -102,6 +79,28 @@ public class UsuariosController : ControllerBase
         }
 
     }
+
+
+    //  Otros métodos:
+
+
+    //      Get Usuarios
+    // -------------------- Método Sergio para Debuggear en Azure, no borrar:
+    [HttpGet("{id}")]
+    public IActionResult GetUsuarioById(int id)
+    {
+
+        Usuario usarioId = usuarioRepositorio.GetUsuarioById(id);
+
+        return Ok(mapper.Map<Usuario>(usarioId));
+
+    }
+    // -------------------- Fin Método Sergio para Debuggear en Azure, no borrar:
+
+    //      Get Usuarios By Id
+
+
+
 
 
     //      Delete Usuario

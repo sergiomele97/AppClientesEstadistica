@@ -11,13 +11,15 @@ export class PruebaConexionService {
 
     // IMPORTANTE:
   //    1 URL ESTADISTICA Y OTRA PARA CLIENTES
-  private readonly url_estadistica = environment.apiUrl;
+  private readonly url_estadistica = environment.apiUsuarios;
 
   constructor(private http: HttpClient) { }
 
   // -------------------- Método Sergio para Debuggear en Azure, no borrar:
-  getUsuariosPrueba(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(this.url_estadistica);
-  }
+  getUsuarioById(id: number): Observable<Usuario> {
+    const url = `${this.url_estadistica}/${id}`;
+    return this.http.get<Usuario>(url);
+}
+
   // -------------------- Fin Método Sergio para Debuggear en Azure, no borrar:
 }

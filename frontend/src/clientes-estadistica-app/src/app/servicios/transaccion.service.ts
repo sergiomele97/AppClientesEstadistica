@@ -13,7 +13,7 @@ export class TransaccionService {
 
   constructor( private http: HttpClient ) {}
 
-  private readonly url_estadistica = environment.apiUrl;
+  private readonly url_estadistica = environment.apiEstadisticas;
 
   getTransacciones(): Observable<ITransaccion[]> {
     return this.http.get<ITransaccion[]>(`${this.url_estadistica}/getTransacciones`).pipe(

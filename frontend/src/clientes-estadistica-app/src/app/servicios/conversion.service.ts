@@ -13,7 +13,7 @@ export class ConversionService {
 
   constructor(private http: HttpClient) {}
 
-  private readonly url_estadistica = environment.apiUrl;
+  private readonly url_estadistica = environment.apiEstadisticas;
 
   getConversiones(): Observable<IConversion[]> {
     return this.http.get<IConversion[]>(

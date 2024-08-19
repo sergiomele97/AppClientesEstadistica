@@ -23,13 +23,20 @@ export class EstadisticaComponent implements OnInit {
   
 
   // -------------------- Método Sergio para Debuggear en Azure, no borrar:
-  ngOnInit(): void {
-    this.pruebaConexionService.getUsuariosPrueba().subscribe((data: Usuario[]) => {
-      this.usuarios = data;
-      console.log('Usuarios obtenidos:', this.usuarios)
-    }, error => {
-      console.error('Error al obtener los usuarios', error);
-    });
+  usuario: Usuario | undefined;
+
+   ngOnInit(): void {
+    const userId = 1; // Cambia esto al ID que deseas buscar
+
+    this.pruebaConexionService.getUsuarioById(userId).subscribe(
+      (data: Usuario) => {
+        this.usuario = data;
+        console.log('Usuario obtenido:', this.usuario);
+      },
+      error => {
+        console.error('Error al obtener el usuario', error);
+      }
+    );
   }
   // -------------------- Fin Método Sergio para Debuggear en Azure, no borrar:
   
