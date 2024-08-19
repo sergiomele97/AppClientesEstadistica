@@ -1355,7 +1355,6 @@ namespace BackendEstadistica.Migrations
                             Iso3 = "ZWE",
                             Nombre = "Zimbabue"
                         });
-
                 });
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Transaccion", b =>
@@ -1380,6 +1379,9 @@ namespace BackendEstadistica.Migrations
 
                     b.Property<double?>("ImporteRecibido")
                         .HasColumnType("float");
+
+                    b.Property<bool?>("IsOutlier")
+                        .HasColumnType("bit");
 
                     b.HasKey("TransaccionId");
 

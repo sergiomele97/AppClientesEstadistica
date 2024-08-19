@@ -16,6 +16,7 @@ public interface IEstadisticasRepositorio
     List<Transaccion> GetTransacciones();
     Transaccion GetTransaccionById(int id);
     void CrearTransaccion(Transaccion transaccion);
+    void DetectarOutliers();
 
     //Pais 
     List<Pais> GetPaises();
