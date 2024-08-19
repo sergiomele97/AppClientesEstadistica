@@ -46,12 +46,12 @@ public class UsuariosController : ControllerBase
         }
 
         // Validar los campos obligatorios
-        if (string.IsNullOrEmpty(usuario.Telefono) ||
-            string.IsNullOrEmpty(usuario.Correo) ||
-            string.IsNullOrEmpty(usuario.Contraseña))
+        if (string.IsNullOrEmpty(usuario.Correo) ||
+            string.IsNullOrEmpty(usuario.Contraseña) ||
+            string.IsNullOrEmpty(usuario.Telefono))
         {
             _logger.LogWarning("Faltan campos obligatorios en el modelo Usuario.");
-            return BadRequest("Todos los campos del usuario (Nombre, Correo, Contraseña) son obligatorios.");
+            return BadRequest("Todos los campos del usuario (Correo, Contraseña) son obligatorios.");
         }
 
         // Validar el formato del correo electrónico

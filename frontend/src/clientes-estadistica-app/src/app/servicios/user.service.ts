@@ -13,6 +13,7 @@ export class UserService {
   // IMPORTANTE:
   //    1 URL ESTADISTICA Y OTRA PARA CLIENTES
   private readonly url_estadistica = environment.apiEstadisticas;
+  private readonly url_usuarios = environment.apiUsuarios;
 
   //URL AMIN
   private readonly URL = "https://localhost:7107/api/";
@@ -30,7 +31,7 @@ export class UserService {
 
   registrarUsuario(usuario: any): Observable<any> {
     console.log(usuario); // Asegúrate de que los campos estén presentes y correctos DEBUG
-    return this.http.post<any>(`${this.URL}Account/register`, usuario);
+    return this.http.post<any>(`${this.url_usuarios}`, usuario);
   }
 
   añadirRolUsuario(usuario: any): Observable<any> {

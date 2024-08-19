@@ -68,10 +68,10 @@ export class RegisterComponent implements OnInit {
 
     // 3. Crear objeto usuario
     const usuario: User = {
-      email: this.registerForm.value.email,
-      password: this.registerForm.value.password,
+      Correo: this.registerForm.value.email,
+      Contraseña: this.registerForm.value.password,
       confirmpassword: this.registerForm.value.confirmpassword,
-      phone: this.registerForm.value.phone,
+      Telefono: this.registerForm.value.phone,
      
     };
 
