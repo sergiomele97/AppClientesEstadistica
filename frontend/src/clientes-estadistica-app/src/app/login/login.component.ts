@@ -22,18 +22,13 @@ export class LoginComponent implements OnInit {
 
   constructor(private usuarioService: UserService, private route: Router) { }
 
-  ngOnInit() {
-    this.getUsuarios();
+  navigateToRegistro() {
+    this.route.navigate(['/registro']);
   }
 
-  getUsuarios() {
 
-    this.usuarioService.getUsuarios().subscribe( datos => {
-      this.usuarios = datos;
-
-      console.log(datos);
-    });
-
+  ngOnInit() {
+    
   }
 
   authentication() {
@@ -51,7 +46,7 @@ export class LoginComponent implements OnInit {
       .subscribe(response => {
         if (response && response.token) {
           localStorage.setItem('token', response.token);
-          this.route.navigate(['/estadisticas']); // Redirige a la ruta protegida
+          this.route.navigate(['/estadistica']); // Redirige a la ruta protegida
         }
       });
   }
