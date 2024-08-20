@@ -67,6 +67,7 @@ export class ClustersComponent implements OnInit, OnDestroy {
       const nGastos = this.numeroGastos(cliente.clienteId);
       const nIngresos = this.numeroIngresos(cliente.clienteId);
       const pais = cliente.pais
+      
       // Imprimir los dos primeros valores (edad y sexo) en la consola
       console.log([edad, sexo]);
 
@@ -102,14 +103,13 @@ export class ClustersComponent implements OnInit, OnDestroy {
     try {
       const response = await this.http.post<any>(this.apiUrl, { data: datos, nCluster: nCluster }).toPromise();
       const etiqueta = response.etiqueta || [];
-      const db_index = response.db || [];
+      this.daviesBouldinIndex= response.db || 0;
       this.dataService.setLabel(etiqueta);
-      this.dataService.setIndexDB(db_index); 
+      
       const datosReducidos = datos.map(individuo => individuo.slice(0, 2)); // solo se muestran dos variables
       this.dataService.setSelectedDataCluster(datosReducidos);//mandamos los datos cortados a la global para visualizar en cluster
       this.dataService.setSelectedDataTable(datos);//mandamos los datos completos a la global para visualizar en la tabla
 
-      console.log(this.daviesBouldinIndex);
     } catch (error) {
       console.error('Error al enviar datos al backend:', error);
       throw new Error('Error al enviar datos al backend');

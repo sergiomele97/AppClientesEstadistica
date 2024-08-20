@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ClustersDataService } from 'src/app/servicios/clusters-data.service';
 import { combineLatest } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-clusters-table',
@@ -11,17 +10,16 @@ import { debounceTime } from 'rxjs/operators';
 export class ClustersTableComponent implements OnInit {
   public tableData: any[] = [];
   public columnHeaders: string[] = [];
-  public filterText: string = ''; // Añadir propiedad para el texto del filtro
-  public filteredTableData: any[] = []; // Añadir propiedad para los datos filtrados
+  public filterText: string = '';
+  public filteredTableData: any[] = [];
+  public sortColumn: number | null = null; // Índice de la columna por la que ordenar
+  public sortDirection: 'asc' | 'desc' = 'asc'; // Dirección de ordenamiento
 
   constructor(private dataService: ClustersDataService) { }
 
   ngOnInit() {
     combineLatest([this.dataService.selectedDataTable$, this.dataService.selectedLabel$])
       .subscribe(([data, label]) => {
-       // console.log('Data:', data);
-       // console.log('Label:', label);
-
         if (!Array.isArray(data) || !Array.isArray(label)) {
           console.error('Data or label is not an array');
           return;
@@ -37,24 +35,40 @@ export class ClustersTableComponent implements OnInit {
           return [...paddedItem, label[index] || 'N/A'];
         });
 
-        this.filteredTableData = this.tableData; // Inicializa los datos filtrados
-
-        // Observa cambios en el texto del filtro y aplica el filtro
+        this.filteredTableData = [...this.tableData]; // Inicializa los datos filtrados
         this.applyFilter();
       });
   }
 
-  // Método para aplicar el filtro
   applyFilter() {
     this.filteredTableData = this.tableData.filter(row => {
-      // Asegurarse de que el valor de la etiqueta sea una cadena
       const label = String(row[row.length - 1]);
       return label.toLowerCase().includes(this.filterText.toLowerCase());
     });
+    this.sortData(); // Ordenar después de filtrar
   }
 
-  // Método para manejar cambios en el filtro
   onFilterChange() {
     this.applyFilter();
+  }
+
+  sortData(columnIndex: number | null = null) {
+    if (this.sortColumn === columnIndex) {
+      // Si ya estamos ordenando por esta columna, alternar la dirección
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      // Si estamos ordenando por una columna diferente, establecer la dirección a ascendente
+      this.sortColumn = columnIndex;
+      this.sortDirection = 'asc';
+    }
+
+    this.filteredTableData.sort((a, b) => {
+      const aValue = a[columnIndex];
+      const bValue = b[columnIndex];
+      
+      if (aValue < bValue) return this.sortDirection === 'asc' ? -1 : 1;
+      if (aValue > bValue) return this.sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
   }
 }

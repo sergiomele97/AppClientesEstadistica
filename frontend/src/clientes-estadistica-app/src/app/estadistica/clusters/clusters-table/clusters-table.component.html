@@ -11,22 +11,22 @@
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
-          <!-- Definir encabezados estáticos -->
-          <th scope="col" class="px-6 py-3">Edad</th>
-          <th scope="col" class="px-6 py-3">Balance</th>
-          <th scope="col" class="px-6 py-3">Sexo</th>
-          <th scope="col" class="px-6 py-3">Número de Gastos</th>
-          <th scope="col" class="px-6 py-3">Número de Ingresos</th>
+          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(0)">Edad</th>
+          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(1)">Balance</th>
+          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(2)">Sexo</th>
+          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(3)">Número de Gastos</th>
+          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(4)">Número de Ingresos</th>
+          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(5)">Etiqueta</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let row of filteredTableData">
-          <!-- Definir celdas estáticas -->
-          <td class="px-6 py-3">{{ row[0] }}</td> <!-- Edad -->
-          <td class="px-6 py-3">{{ row[1] }}</td> <!-- Balance -->
-          <td class="px-6 py-3">{{ row[2] }}</td> <!-- Sexo -->
-          <td class="px-6 py-3">{{ row[3] }}</td> <!-- Número de Gastos -->
-          <td class="px-6 py-3">{{ row[4] }}</td> <!-- Número de Ingresos -->
+          <td class="px-6 py-3">{{ row[0] }}</td>
+          <td class="px-6 py-3">{{ row[1] }}</td>
+          <td class="px-6 py-3">{{ row[2] }}</td>
+          <td class="px-6 py-3">{{ row[3] }}</td>
+          <td class="px-6 py-3">{{ row[4] }}</td>
+          <td class="px-6 py-3">{{ row[5] }}</td>
         </tr>
       </tbody>
     </table>

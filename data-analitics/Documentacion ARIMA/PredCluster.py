@@ -34,8 +34,12 @@ def cluster():
     kmeans.fit(data)
     labels = kmeans.labels_.tolist()
     labels = [lab + 1 for lab in labels]  # Ajuste de etiquetas
-       
-    davies_bouldin = davies_bouldin_score(data, kmeans.labels_)
+
+    if(n_clusters == 1):
+        davies_bouldin = 0.0
+    else:
+        davies_bouldin = davies_bouldin_score(data, kmeans.labels_)
+
     response = {
         "etiqueta": labels,
         "db": davies_bouldin

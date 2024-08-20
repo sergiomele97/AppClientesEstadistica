@@ -8,12 +8,12 @@
     <option value="5">5</option>
   </select>
 </div>
+<!-- Cuadro para mostrar el índice Davies-Bouldin -->
+<div *ngIf="daviesBouldinIndex !== null" class="davies-bouldin-box">
+ <p>Índice de Davies-Bouldin: {{ daviesBouldinIndex }}</p>
+</div> 
 
 <app-clusters-graph></app-clusters-graph>
 
 <app-clusters-table></app-clusters-table>
 
-<!-- Cuadro para mostrar el índice Davies-Bouldin 
-<div *ngIf="daviesBouldinIndex !== null" class="davies-bouldin-box">
- <p>Índice de Davies-Bouldin para este cluster: {{ daviesBouldinIndex }}</p>
-</div> -->
