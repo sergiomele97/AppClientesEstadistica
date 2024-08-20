@@ -157,18 +157,19 @@ export class ClientesComponent implements OnInit, OnDestroy {
   private actualizarGrafico(transacciones: ITransaccion[]): void {
     if (!transacciones || transacciones.length === 0) return;
   
-    // Función para agrupar transacciones por fecha
-    const agruparPorFecha = (transacciones: ITransaccion[], esIngreso: boolean) => {
+    // Función para agrupar transacciones por mes y año
+    const agruparPorMes = (transacciones: ITransaccion[], esIngreso: boolean) => {
       const resultado: Record<string, number> = {};
   
       transacciones.forEach(transaccion => {
-        const fecha = new Date(transaccion.fecha || '').toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const fecha = new Date(transaccion.fecha || '');
+        const mesAnio = `${fecha.getMonth() + 1}-${fecha.getFullYear()}`; // Formato MM-YYYY
         const cantidad = esIngreso ? transaccion.importeRecibido || 0 : transaccion.importeEnviado || 0;
   
-        if (resultado[fecha]) {
-          resultado[fecha] += cantidad;
+        if (resultado[mesAnio]) {
+          resultado[mesAnio] += cantidad;
         } else {
-          resultado[fecha] = cantidad;
+          resultado[mesAnio] = cantidad;
         }
       });
   
@@ -179,16 +180,25 @@ export class ClientesComponent implements OnInit, OnDestroy {
     const transaccionesIngreso = transacciones.filter(t => t.clienteDestinoId === this.cliente?.clienteId);
     const transaccionesPerdida = transacciones.filter(t => t.clienteOrigenId === this.cliente?.clienteId);
   
-    // Obtener transacciones de ingreso y pérdida agrupadas por fecha
-    const ingresosPorFecha = agruparPorFecha(transaccionesIngreso, true);
-    const perdidasPorFecha = agruparPorFecha(transaccionesPerdida, false);
+    // Obtener transacciones de ingreso y pérdida agrupadas por mes y año
+    const ingresosPorMes = agruparPorMes(transaccionesIngreso, true);
+    const perdidasPorMes = agruparPorMes(transaccionesPerdida, false);
   
-    // Obtener todas las fechas únicas
-    const fechas = Array.from(new Set([...Object.keys(ingresosPorFecha), ...Object.keys(perdidasPorFecha)]));
+    // Obtener todos los meses únicos
+    let meses = Array.from(new Set([...Object.keys(ingresosPorMes), ...Object.keys(perdidasPorMes)]));
+  
+    // Ordenar los meses en orden cronológico
+    meses = meses.sort((a, b) => {
+      const [mesA, anioA] = a.split('-').map(Number);
+      const [mesB, anioB] = b.split('-').map(Number);
+      const fechaA = new Date(anioA, mesA - 1);
+      const fechaB = new Date(anioB, mesB - 1);
+      return fechaA.getTime() - fechaB.getTime();
+    });
   
     // Crear datos para el gráfico
-    const dataIngresos = fechas.map(fecha => ingresosPorFecha[fecha] || 0);
-    const dataPerdidas = fechas.map(fecha => perdidasPorFecha[fecha] || 0);
+    const dataIngresos = meses.map(mes => ingresosPorMes[mes] || 0);
+    const dataPerdidas = meses.map(mes => perdidasPorMes[mes] || 0);
   
     this.chartOptions = {
       series: [
@@ -221,17 +231,17 @@ export class ClientesComponent implements OnInit, OnDestroy {
         },
       },
       xaxis: {
-        categories: fechas,
+        categories: meses,
         position: 'bottom',
         labels: {
           offsetY: 0,
-          rotate: -45,  // Rotar las etiquetas de la fecha si son muchas
+          rotate: -45,  // Rotar las etiquetas del mes si son muchas
           style: {
             fontSize: '12px',
           },
         },
         title: {
-          text: 'Fecha',
+          text: 'Mes y Año',
         }
       },
       yaxis: {
@@ -244,7 +254,7 @@ export class ClientesComponent implements OnInit, OnDestroy {
         },
       },
       title: {
-        text: 'Ingresos y Pérdidas del Cliente',
+        text: 'Ingresos y Pérdidas del Cliente por Mes',
         align: 'center',
       },
     };
