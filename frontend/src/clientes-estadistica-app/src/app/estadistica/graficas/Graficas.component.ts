@@ -1,4 +1,11 @@
-import { Component, ComponentRef, ElementRef, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  ComponentFactoryResolver,
+  ComponentRef,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GraphComponent } from 'src/app/estadisticas/graph/graph.component';
 import { MapComponent } from 'src/app/estadisticas/map/map.component';
@@ -9,15 +16,15 @@ import { GraficasService } from 'src/app/servicios/graficas.service';
 @Component({
   selector: 'app-graficas',
   templateUrl: './Graficas.component.html',
-  styleUrls: ['./Graficas.component.css']
+  styleUrls: ['./Graficas.component.css'],
 })
 export class GraficasComponent implements OnInit {
-
   // Esto es para que escuche cuando se cierra una grafica
   private subscription: Subscription;
 
-  
-  constructor(private graficasServicio: GraficasService) { }
+  constructor(private graficasServicio: GraficasService,
+    private componentFactoryResolver: ComponentFactoryResolver
+  ) {}
 
   ngOnInit() {
     this.subscription = this.graficasServicio.triggerScript$.subscribe(() => {
@@ -25,14 +32,13 @@ export class GraficasComponent implements OnInit {
     });
   }
 
-
   // Declarar contenedor
-  @ViewChild('contenedor1', { read: ViewContainerRef }) container!: ViewContainerRef;
+  @ViewChild('contenedor1', { read: ViewContainerRef })
+  container!: ViewContainerRef;
 
   // Ejecutar cuando se cierra una grafica
   onGraphClose() {
-    console.log("Hola")
-    
+    console.log('Hola');
   }
 
   isComponentVisible(viewRef: any): boolean {
@@ -40,39 +46,64 @@ export class GraficasComponent implements OnInit {
     return element && window.getComputedStyle(element).display !== 'none';
   }
 
-  // Añadir componente al contenedor
-  addComponent(componente: string) {
+  // Método para añadir un componente al contenedor
+  addComponent(componentName: string) {
     if (this.container) {
-      // Crea y añade el nuevo componente
-      switch (componente) {
+      let componentRef: ComponentRef<any>;
+      switch (componentName) {
         case 'Volumetria':
-          this.container.createComponent(VolumetryComponent);
+          componentRef = this.container.createComponent(
+            this.componentFactoryResolver.resolveComponentFactory(VolumetryComponent)
+          );
           break;
         case 'Map':
-          this.container.createComponent(MapComponent);
+          componentRef = this.container.createComponent(
+            this.componentFactoryResolver.resolveComponentFactory(MapComponent)
+          );
           break;
         case 'Graph':
-          this.container.createComponent(GraphComponent);
+          componentRef = this.container.createComponent(
+            this.componentFactoryResolver.resolveComponentFactory(GraphComponent)
+          );
           break;
         case 'Spaghetti':
-          this.container.createComponent(SpaghettiComponent);
+          componentRef = this.container.createComponent(
+            this.componentFactoryResolver.resolveComponentFactory(SpaghettiComponent)
+          );
           break;
         default:
-          break;
+          return;
       }
+
+      // Añadir botón de cerrar al componente
+      const closeButton = document.createElement('button');
+      closeButton.innerText = 'X';
+      closeButton.className = 'absolute top-2 right-2 bg-red-500 text-white rounded-full px-3 py-1';
+      closeButton.addEventListener('click', () => this.closeComponent(componentRef));
+
+      const element = componentRef.location.nativeElement;
+      element.style.position = 'relative'; // Para que el botón de cerrar esté posicionado correctamente
+      element.appendChild(closeButton);
     }
   }
-  
+
+    // Método para cerrar un componente
+    closeComponent(componentRef: ComponentRef<any>) {
+      componentRef.destroy();
+    }
+
   // Método para dropdown
   isDropdownOpen = false;
 
   toggleDropdown() {
-    const svg = document.getElementById("miSVG") as unknown as SVGElement;
+    const svg = document.getElementById('miSVG') as unknown as SVGElement;
     if (svg) {
-      if(svg.style.visibility == "hidden"){
-        svg.style.visibility = "visible"
-      } else {svg.style.visibility = "hidden"}
+      if (svg.style.visibility == 'hidden') {
+        svg.style.visibility = 'visible';
+      } else {
+        svg.style.visibility = 'hidden';
+      }
     }
     this.isDropdownOpen = !this.isDropdownOpen;
-   }
+  }
 }
