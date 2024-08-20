@@ -8,7 +8,7 @@ import { GraphComponent } from './estadisticas/graph/graph.component';
 import { MapComponent } from './estadisticas/map/map.component';
 import { ClustersComponent } from './estadisticas/clusters/clusters.component';
 import { VolumetryComponent } from './estadisticas/volumetry/volumetry.component';
-import { TableComponent } from './estadisticas/table/table.component';
+import { TableComponent } from './estadistica/table/table.component';
 import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 import { ClientesComponent } from './estadistica/clientes/clientes.component';
 import { DivisasComponent } from './estadisticas/divisas/divisas.component';
@@ -39,6 +39,7 @@ const routes: Routes = [
       { path: 'graficas', component: GraficasComponent },
       { path: 'clientes', component: ClientesComponent },
       { path: 'clientes/:id', component: ClientesComponent },
+      { path: 'table', component: TableComponent },
     ]
    },
       
@@ -49,9 +50,9 @@ const routes: Routes = [
       { path: 'map', component: MapComponent },
       { path: 'graph', component: GraphComponent },
       { path: 'spaghetti', component: SpaghettiComponent },
-      { path: 'table', component: TableComponent },
       { path: 'clientes', component: ClientesComponent },
       { path: 'clientes/:id', component: ClientesComponent },
+      { path: 'table', component: TableComponent },
       { path: 'divisas', component: DivisasComponent }
     ],
   },
