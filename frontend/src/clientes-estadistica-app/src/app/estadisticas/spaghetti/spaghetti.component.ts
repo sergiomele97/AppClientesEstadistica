@@ -68,7 +68,11 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
     const totalClientes = Object.keys(transaccionesPorMes).length;
     const meses = Array.from(
       new Set(Object.values(transaccionesPorMes).flatMap(clienteData => Object.keys(clienteData)))
-    ).sort();
+    ).sort((a, b) => {
+      const [mesA, anioA] = a.split('-').map(Number);
+      const [mesB, anioB] = b.split('-').map(Number);
+      return anioA !== anioB ? anioA - anioB : mesA - mesB;
+    });
   
     const mediaPorMes: number[] = new Array(meses.length).fill(0);
   
@@ -134,7 +138,7 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
       legend: {
         position: 'top',
         horizontalAlign: 'left',
-        show: true, // Ocultar leyenda
+        show: false, // Ocultar leyenda
       },
       tooltip: {
         enabled: false // Desactivar tooltips
@@ -147,6 +151,7 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
       },
     };
   }
+  
   
   // Función para obtener el mes y año a partir de una fecha
 private obtenerMesYAnio(fecha: Date): string {
