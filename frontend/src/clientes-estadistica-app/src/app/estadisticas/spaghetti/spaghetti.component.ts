@@ -143,7 +143,21 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
         show: false, // Ocultar leyenda
       },
       tooltip: {
-        enabled: false, // Desactivar tooltips
+        enabled: true, // Habilitar tooltips
+        shared: false,
+        custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+          // Obtener el valor de la serie de la media (última serie en el array)
+          const mediaSeriesIndex = series.length - 1;
+          const mediaValue = series[mediaSeriesIndex][dataPointIndex];
+
+          return `
+            <div>
+              <strong>Media de Transacciones</strong><br>
+              Mes: ${w.config.xaxis.categories[dataPointIndex]}<br>
+              Valor: ${mediaValue}
+            </div>
+          `;
+        },
       },
       grid: {
         row: {
