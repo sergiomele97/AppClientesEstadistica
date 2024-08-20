@@ -11,7 +11,7 @@ import { VolumetryComponent } from './estadisticas/volumetry/volumetry.component
 import { TableComponent } from './estadistica/table/table.component';
 import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 import { ClientesComponent } from './estadistica/clientes/clientes.component';
-import { DivisasComponent } from './estadisticas/divisas/divisas.component';
+import { DivisasComponent } from './estadistica/divisas/divisas.component';
 import { AuthGuard } from './auth.guard';
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 import { EstadisticaComponent } from './estadistica/estadistica.component';
