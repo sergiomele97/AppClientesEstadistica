@@ -1,6 +1,8 @@
-﻿namespace BackendEstadistica.Entidades;
+﻿using Microsoft.AspNetCore.Identity;
 
-public class Usuario
+namespace BackendEstadistica.Entidades;
+
+public class Usuario 
 {
     [Key]
     public int Id { get; set; }

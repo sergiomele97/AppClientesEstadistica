@@ -1,4 +1,7 @@
-﻿using System.Runtime.InteropServices;
+﻿using BackendEstadistica.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Identity.Client;
+using System.Runtime.InteropServices;
 
 namespace BackendEstadistica.Controllers;
 
@@ -14,17 +17,39 @@ namespace BackendEstadistica.Controllers;
 [ApiController]
 public class UsuariosController : ControllerBase
 {
+    // UserManager: clase en ASP.NET Core Identity que administra las operaciones relacionadas con los usuarios
+    private readonly UserManager<ApplicationUser> _userManager;
+    // SignInManager: clase en ASP.NET Core Identity que maneja el inicio de sesión del usuario
+    private readonly SignInManager<ApplicationUser> _signInManager;
+    // TokenService: servicio para devolver un token
+    //private readonly ITokenService _tokenService;
+
     private readonly IUsuarioRepositorio usuarioRepositorio;
     private readonly IMapper mapper;
     private readonly ILogger<UsuariosController> _logger;
 
 
     //  Constructor de la clase:
-    public UsuariosController( IUsuarioRepositorio usuarioRepositorio, IMapper mapper, ILogger<UsuariosController> logger)
+    public UsuariosController( 
+        IUsuarioRepositorio usuarioRepositorio, 
+        IMapper mapper, 
+        ILogger<UsuariosController> logger,
+        UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager
+        //ITokenService tokenService 
+
+        )
+
     {
         this.usuarioRepositorio = usuarioRepositorio;
         this.mapper = mapper;
         _logger = logger;
+
+        // Instancias para el login:
+        _userManager = userManager;
+        _signInManager = signInManager;
+        //_tokenService = tokenService;
+
     }
 
     //---------------------------------------------------------------------------------- Gestión de REGISTRO:
@@ -81,6 +106,10 @@ public class UsuariosController : ControllerBase
 
             if (await usuarioRepositorio.GuardarCambios())
             {
+                // Se guarda en el Identity
+                var user = new ApplicationUser { Email = usuario.Correo };
+                var result = await _userManager.CreateAsync(user, usuario.Contraseña);
+
                 _logger.LogInformation($"Usuario con ID {usuario.Id} creado correctamente.");
                 return CreatedAtAction(nameof(GetUsuarioById), new { id = usuario.Id }, usuario);
             }
@@ -99,6 +128,31 @@ public class UsuariosController : ControllerBase
 
 
     //---------------------------------------------------------------------------------- Gestión de REGISTRO:
+
+
+    //---------------------------------------------------------------------------------- Gestión de LOGIN:
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginViewModel model)
+    {
+        var result = await _signInManager.PasswordSignInAsync(
+            model.Email,
+            model.Password,
+            model.RememberMe,
+            lockoutOnFailure: false);
+
+        if (result.Succeeded)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            // var token = _tokenService.GenerateJwtToken(user);
+            // return Ok(new { Token = token });
+            return Ok();
+        }
+
+        return Unauthorized();
+    }
+
+    //---------------------------------------------------------------------------------- Gestión de LOGIN:
 
 
     //  Otros métodos:

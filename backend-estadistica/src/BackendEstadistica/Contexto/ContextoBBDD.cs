@@ -1,4 +1,7 @@
 ﻿using System.Numerics;
+using System.Reflection.Emit;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackendEstadistica.Contexto;
 
@@ -7,7 +10,7 @@ namespace BackendEstadistica.Contexto;
  * Define las colecciones de entidades (DbSet) que representan las tablas de la base de datos.
  */
 
-public class ContextoBBDD : DbContext
+public class ContextoBBDD : IdentityDbContext<ApplicationUser>
 {
 
     // Constructor de la clase:
@@ -15,6 +18,7 @@ public class ContextoBBDD : DbContext
     public ContextoBBDD(DbContextOptions<ContextoBBDD> options)
     : base(options)
     {
+       
     }
 
     // DEFINIR LAS TABLAS AQUÍ:
@@ -30,6 +34,7 @@ public class ContextoBBDD : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder); // Necesario para Identity
 
         modelBuilder.Entity<Transaccion>()
             .HasOne(t => t.ClienteOrigen)

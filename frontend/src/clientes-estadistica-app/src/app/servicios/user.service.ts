@@ -25,9 +25,17 @@ export class UserService {
   }
 
   autenticarUsuario(email: string, password: string, remember: boolean): Observable<any> {
-    remember = false;
-    return this.http.post<any>(`${this.URL}Account/login`, { email, password, remember });
+    // Crea un objeto con las propiedades que el backend espera
+    const loginPayload = {
+      Email: email,
+      Password: password,
+      RememberMe: remember // Mantén este nombre para que coincida con el modelo del backend
+    };
+    
+    // Realiza la solicitud POST al endpoint de login
+    return this.http.post<any>(`${this.url_usuarios}/login`, loginPayload);
   }
+  
 
   registrarUsuario(usuario: any): Observable<any> {
     console.log(usuario); // Asegúrate de que los campos estén presentes y correctos DEBUG
