@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 
 import {
   ChartComponent,
@@ -11,11 +11,11 @@ import {
   ApexFill,
   ApexGrid,
   ApexStroke,
-  ApexTitleSubtitle
-} from "ng-apexcharts";
-import { Subscription } from "rxjs";
-import { ITransaccion } from "src/app/interfaces/transaccion";
-import { TransaccionService } from "src/app/servicios/transaccion.service";
+  ApexTitleSubtitle,
+} from 'ng-apexcharts';
+import { Subscription } from 'rxjs';
+import { ITransaccion } from 'src/app/interfaces/transaccion';
+import { TransaccionService } from 'src/app/servicios/transaccion.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -31,23 +31,19 @@ export type ChartOptions = {
   tooltip?: any; // Agregar propiedad tooltip
 };
 
-
 @Component({
   selector: 'app-spaghetti',
   templateUrl: './spaghetti.component.html',
-  styleUrls: ['./spaghetti.component.css']
+  styleUrls: ['./spaghetti.component.css'],
 })
-
 export class SpaghettiComponent implements OnInit, OnDestroy {
-
-  @ViewChild("chart") chart: ChartComponent;
+  @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
   subscription: Subscription;
   transacciones: ITransaccion[] = [];
 
   constructor(private transaccionesService: TransaccionService) {}
-
 
   ngOnInit(): void {
     this.subscription = this.transaccionesService.getTransacciones().subscribe({
@@ -63,42 +59,46 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
   updateChart(transacciones) {
     // Agrupar transacciones por cliente y mes
     const transaccionesPorMes = this.agruparTransaccionesPorMes(transacciones);
-  
+
     // Calcular la media de transacciones por mes
     const totalClientes = Object.keys(transaccionesPorMes).length;
     const meses = Array.from(
-      new Set(Object.values(transaccionesPorMes).flatMap(clienteData => Object.keys(clienteData)))
+      new Set(
+        Object.values(transaccionesPorMes).flatMap((clienteData) =>
+          Object.keys(clienteData)
+        )
+      )
     ).sort((a, b) => {
       const [mesA, anioA] = a.split('-').map(Number);
       const [mesB, anioB] = b.split('-').map(Number);
       return anioA !== anioB ? anioA - anioB : mesA - mesB;
     });
-  
+
     const mediaPorMes: number[] = new Array(meses.length).fill(0);
-  
+
     Object.values(transaccionesPorMes).forEach((mesData) => {
       meses.forEach((mes, index) => {
         mediaPorMes[index] += mesData[mes] || 0;
       });
     });
-  
+
     // Dividir cada valor entre el número de clientes para obtener la media
     mediaPorMes.forEach((total, index) => {
       mediaPorMes[index] = total / totalClientes;
     });
-  
+
     // Preparar los datos para el gráfico
     const seriesData = Object.keys(transaccionesPorMes).map((clienteId) => ({
       name: `Cliente ${clienteId}`,
-      data: meses.map(mes => transaccionesPorMes[clienteId][mes] || 0),
+      data: meses.map((mes) => transaccionesPorMes[clienteId][mes] || 0),
     }));
-  
+
     // Agregar la serie para la media de transacciones
     seriesData.push({
       name: 'Media de Transacciones',
       data: mediaPorMes,
     });
-  
+
     // Configurar las opciones del gráfico
     this.chartOptions = {
       series: seriesData,
@@ -106,13 +106,15 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
         type: 'line',
         height: 350,
         animations: {
-          enabled: false // Desactivar animaciones para una carga más rápida
-        }
+          enabled: false, // Desactivar animaciones para una carga más rápida
+        },
       },
       colors: [...Array(seriesData.length - 1).fill('#008FFB'), '#FF4560'], // Colores para las series (media en un color diferente)
       stroke: {
         curve: 'smooth',
-        width: seriesData.map((_, index) => index === seriesData.length - 1 ? 5 : 1) // Configura el ancho de las líneas: más gruesa para la última serie (media)
+        width: seriesData.map((_, index) =>
+          index === seriesData.length - 1 ? 5 : 1
+        ), // Configura el ancho de las líneas: más gruesa para la última serie (media)
       },
       xaxis: {
         categories: meses,
@@ -125,8 +127,8 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
           text: 'Número de Transacciones',
         },
         labels: {
-          formatter: (value: number) => Math.floor(value).toString() // Redondea los valores a enteros y los convierte a string
-        }
+          formatter: (value: number) => Math.floor(value).toString(), // Redondea los valores a enteros y los convierte a string
+        },
       },
       dataLabels: {
         enabled: false,
@@ -141,7 +143,21 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
         show: false, // Ocultar leyenda
       },
       tooltip: {
-        enabled: false // Desactivar tooltips
+        enabled: true, // Habilitar tooltips
+        shared: false,
+        custom: ({ series, seriesIndex, dataPointIndex, w }) => {
+          // Obtener el valor de la serie de la media (última serie en el array)
+          const mediaSeriesIndex = series.length - 1;
+          const mediaValue = series[mediaSeriesIndex][dataPointIndex];
+
+          return `
+            <div>
+              <strong>Media de Transacciones</strong><br>
+              Mes: ${w.config.xaxis.categories[dataPointIndex]}<br>
+              Valor: ${mediaValue}
+            </div>
+          `;
+        },
       },
       grid: {
         row: {
@@ -151,37 +167,41 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
       },
     };
   }
-  
-  
+
   // Función para obtener el mes y año a partir de una fecha
-private obtenerMesYAnio(fecha: Date): string {
-  const mes = fecha.getMonth() + 1; // Los meses en JavaScript van de 0 a 11
-  const anio = fecha.getFullYear();
-  return `${mes < 10 ? '0' : ''}${mes}-${anio}`; // Formato MM-YYYY
-}
+  private obtenerMesYAnio(fecha: Date): string {
+    const mes = fecha.getMonth() + 1; // Los meses en JavaScript van de 0 a 11
+    const anio = fecha.getFullYear();
+    return `${mes < 10 ? '0' : ''}${mes}-${anio}`; // Formato MM-YYYY
+  }
 
-// Función para agrupar las transacciones por cliente y mes
-private agruparTransaccionesPorMes(transacciones: ITransaccion[]): Record<string, Record<string, number>> {
-  const transaccionesPorClienteYMes: Record<string, Record<string, number>> = {};
+  // Función para agrupar las transacciones por cliente y mes
+  private agruparTransaccionesPorMes(
+    transacciones: ITransaccion[]
+  ): Record<string, Record<string, number>> {
+    const transaccionesPorClienteYMes: Record<
+      string,
+      Record<string, number>
+    > = {};
 
-  transacciones.forEach((transaccion) => {
-    const clienteId = transaccion.clienteOrigenId;
-    const fechaTransaccion = new Date(transaccion.fecha);
-    const mesAnio = this.obtenerMesYAnio(fechaTransaccion);
+    transacciones.forEach((transaccion) => {
+      const clienteId = transaccion.clienteOrigenId;
+      const fechaTransaccion = new Date(transaccion.fecha);
+      const mesAnio = this.obtenerMesYAnio(fechaTransaccion);
 
-    if (!transaccionesPorClienteYMes[clienteId]) {
-      transaccionesPorClienteYMes[clienteId] = {};
-    }
+      if (!transaccionesPorClienteYMes[clienteId]) {
+        transaccionesPorClienteYMes[clienteId] = {};
+      }
 
-    if (!transaccionesPorClienteYMes[clienteId][mesAnio]) {
-      transaccionesPorClienteYMes[clienteId][mesAnio] = 0;
-    }
+      if (!transaccionesPorClienteYMes[clienteId][mesAnio]) {
+        transaccionesPorClienteYMes[clienteId][mesAnio] = 0;
+      }
 
-    transaccionesPorClienteYMes[clienteId][mesAnio]++;
-  });
+      transaccionesPorClienteYMes[clienteId][mesAnio]++;
+    });
 
-  return transaccionesPorClienteYMes;
-}
+    return transaccionesPorClienteYMes;
+  }
 
   ngOnDestroy(): void {
     if (this.subscription) {

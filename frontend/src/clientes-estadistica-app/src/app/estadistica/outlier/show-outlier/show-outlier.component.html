@@ -1,53 +1,51 @@
-<div class="grid grid-rows-2">
-
-  <div id="chart" class="mt-10 ml-96 w-2/3">
-    <apx-chart 
-      [series]="chartOptions.series" 
+<div class="p-4 flex flex-col items-center w-full min-h-screen bg-gray-100">
+  <!-- Gráfico -->
+  <div id="chart" class="w-full max-w-4xl mb-6">
+    <apx-chart
+      [series]="chartOptions.series"
       [chart]="chartOptions.chart"
       [xaxis]="chartOptions.xaxis"
       [yaxis]="chartOptions.yaxis"
       [title]="chartOptions.title"
       [plotOptions]="chartOptions.plotOptions"
       [dataLabels]="chartOptions.dataLabels"
-      [fill]="chartOptions.fill">
+      [fill]="chartOptions.fill"
+    >
     </apx-chart>
   </div>
 
-  <div *ngIf="cliente" class="mt-10 ml-96 w-2/3">
-    <table class="w-full text-sm text-left text-gray-500 border">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-200">
-            <tr>
-                <th scope="col" class="px-6 py-3">
-                    Usuario Envia
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Usuario Recibe
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Cantidad
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Fecha
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let transaccion of transacciones" class="bg-white border">
-                <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                    {{ transaccion.clienteOrigen.nombre }}
-                </td>
-                <td class="px-6 py-4">
-                   {{ transaccion.clienteDestino.nombre }}
-                </td>
-                <td class="px-6 py-4">
-                    {{ transaccion.importeEnviado }}
-                </td>
-                <td class="px-6 py-4">
-                    {{ transaccion.fecha | formaterFecha }}
-                </td>
-              </tr>
-        </tbody>
+  <!-- Tabla -->
+  <div *ngIf="cliente" class="w-full max-w-4xl">
+    <table
+      class="w-full text-sm text-left text-gray-500 border border-gray-300 rounded-md bg-white shadow-md"
+    >
+      <thead class="text-xs text-gray-700 uppercase bg-gray-200">
+        <tr>
+          <th scope="col" class="px-4 py-2 border-b">Usuario Envia</th>
+          <th scope="col" class="px-4 py-2 border-b">Usuario Recibe</th>
+          <th scope="col" class="px-4 py-2 border-b">Cantidad</th>
+          <th scope="col" class="px-4 py-2 border-b">Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let transaccion of transacciones" class="bg-white border-b">
+          <td
+            scope="row"
+            class="px-4 py-2 font-medium text-gray-900 whitespace-nowrap"
+          >
+            {{ transaccion.clienteOrigen.nombre }}
+          </td>
+          <td class="px-4 py-2">
+            {{ transaccion.clienteDestino.nombre }}
+          </td>
+          <td class="px-4 py-2">
+            {{ transaccion.importeEnviado }}
+          </td>
+          <td class="px-4 py-2">
+            {{ transaccion.fecha | formaterFecha }}
+          </td>
+        </tr>
+      </tbody>
     </table>
   </div>
-
 </div>

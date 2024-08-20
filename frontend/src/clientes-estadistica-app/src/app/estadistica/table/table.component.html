@@ -1,90 +1,113 @@
-<div class="filter-container" *ngIf="transacciones.length">
-  <input type="text" [(ngModel)]="filterTransaccion" placeholder="Filtro" />
-</div>
-
-<div class="table-container">
-  <div class="pagination-controls" *ngIf="transaccionesFilter.length > 20">
-    <pagination-controls
-      (pageChange)="currentPage = $event"
-      previousLabel="Anterior"
-      nextLabel="Siguiente"
-    ></pagination-controls>
+<div class="p-4 flex flex-col items-center w-full min-h-screen bg-gray-100">
+  <!-- Filtro -->
+  <div class="w-full max-w-4xl mb-4">
+    <input
+      type="text"
+      [(ngModel)]="filterTransaccion"
+      placeholder="Filtro"
+      class="w-full p-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    />
   </div>
-  <table
-    class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
-    *ngIf="transacciones.length"
-  >
-    <thead
-      class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+
+  <!-- Contenedor de tabla y paginación -->
+  <div class="w-full max-w-4xl">
+    <!-- Controles de paginación -->
+    <div class="mb-4" *ngIf="transaccionesFilter.length > 20">
+      <pagination-controls
+        (pageChange)="currentPage = $event"
+        previousLabel="Anterior"
+        nextLabel="Siguiente"
+      ></pagination-controls>
+    </div>
+
+    <!-- Tabla -->
+    <table
+      class="w-full text-sm text-left text-gray-500 border border-gray-300 rounded-md bg-white shadow-md"
     >
-      <tr>
-        <th (click)="order('transaccionId')" scope="col" class="px-6 py-3">
-          Id Transaccion
-        </th>
-        <th (click)="order('clienteOrigenId')" scope="col" class="px-6 py-3">
-          Cliente Origen
-        </th>
-        <th (click)="order('clienteDestinoId')" scope="col" class="px-6 py-3">
-          Cliente Destino
-        </th>
-        <th (click)="order('fecha')" scope="col" class="px-6 py-3">Fecha</th>
-        <th (click)="order('importeEnviado')" scope="col" class="px-6 py-3">
-          Importe Enviado
-        </th>
-        <th (click)="order('importeRecibido')" scope="col" class="px-6 py-3">
-          Importe Recibido
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        *ngFor="
-          let transaccion of transaccionesFilter
-            | paginate : { itemsPerPage: 20, currentPage: currentPage }
-        "
-        class="bg-white border-b"
-      >
-        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-          {{ transaccion.transaccionId }}
-        </td>
-        <th
-          scope="row"
-          class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-        >
-          <a
-            [routerLink]="[
-              '/estadisticas/clientes/',
-              transaccion.clienteOrigenId
-            ]"
-            class="block w-full h-full"
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <tr>
+          <th
+            (click)="order('transaccionId')"
+            class="px-4 py-2 cursor-pointer hover:bg-gray-100"
           >
-            {{ transaccion.clienteOrigenId }}
-          </a>
-        </th>
-        <th
-          scope="row"
-          class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-        >
-          <a
-            [routerLink]="[
-              '/estadisticas/clientes/',
-              transaccion.clienteDestinoId
-            ]"
-            class="block w-full h-full"
+            Id Transaccion
+          </th>
+          <th
+            (click)="order('clienteOrigenId')"
+            class="px-4 py-2 cursor-pointer hover:bg-gray-100"
           >
-            {{ transaccion.clienteDestinoId }}
-          </a>
-        </th>
-        <td class="px-6 py-4">
-          {{ transaccion.fecha }}
-        </td>
-        <td class="px-6 py-4">
-          {{ transaccion.importeEnviado }}
-        </td>
-        <td class="px-6 py-4">
-          {{ transaccion.importeRecibido }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+            Cliente Origen
+          </th>
+          <th
+            (click)="order('clienteDestinoId')"
+            class="px-4 py-2 cursor-pointer hover:bg-gray-100"
+          >
+            Cliente Destino
+          </th>
+          <th
+            (click)="order('fecha')"
+            class="px-4 py-2 cursor-pointer hover:bg-gray-100"
+          >
+            Fecha
+          </th>
+          <th
+            (click)="order('importeEnviado')"
+            class="px-4 py-2 cursor-pointer hover:bg-gray-100"
+          >
+            Importe Enviado
+          </th>
+          <th
+            (click)="order('importeRecibido')"
+            class="px-4 py-2 cursor-pointer hover:bg-gray-100"
+          >
+            Importe Recibido
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let transaccion of transaccionesFilter
+              | paginate : { itemsPerPage: 20, currentPage: currentPage }
+          "
+          class="bg-white border-b hover:bg-gray-50"
+        >
+          <td class="px-4 py-2 font-medium text-gray-900">
+            {{ transaccion.transaccionId }}
+          </td>
+          <td class="px-4 py-2">
+            <a
+              [routerLink]="[
+                '/estadistica/clientes/',
+                transaccion.clienteOrigenId
+              ]"
+              class="text-blue-600 hover:underline"
+            >
+              {{ transaccion.clienteOrigenId }}
+            </a>
+          </td>
+          <td class="px-4 py-2">
+            <a
+              [routerLink]="[
+                '/estadistica/clientes/',
+                transaccion.clienteDestinoId
+              ]"
+              class="text-blue-600 hover:underline"
+            >
+              {{ transaccion.clienteDestinoId }}
+            </a>
+          </td>
+          <td class="px-4 py-2">
+            {{ transaccion.fecha }}
+          </td>
+          <td class="px-4 py-2">
+            {{ transaccion.importeEnviado }}
+          </td>
+          <td class="px-4 py-2">
+            {{ transaccion.importeRecibido }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
