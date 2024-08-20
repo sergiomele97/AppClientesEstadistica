@@ -18,7 +18,7 @@ import { ClustersComponent } from './estadisticas/clusters/clusters.component';
 import { GraphComponent } from './estadisticas/graph/graph.component';
 import { MapComponent } from './estadisticas/map/map.component';
 import { SpaghettiComponent } from './estadisticas/spaghetti/spaghetti.component';
-import { TableComponent } from './estadisticas/table/table.component';
+import { TableComponent } from './estadistica/table/table.component';
 import { ClustersGraphComponent } from './estadisticas/clusters/clusters-graph/clusters-graph.component';
 import { ClustersTableComponent } from './estadisticas/clusters/clusters-table/clusters-table.component';
 import { EstadisticaComponent } from './estadistica/estadistica.component';
