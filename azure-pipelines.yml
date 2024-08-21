@@ -10,7 +10,7 @@ pool:
   vmImage: 'windows-latest'
 
 variables:
-  solution: '**/*.sln'
+  solution: 'backend-estadistica/src/BackendEstadistica.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
