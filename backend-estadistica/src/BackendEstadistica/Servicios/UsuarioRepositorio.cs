@@ -1,5 +1,6 @@
 ﻿
 using BackendEstadistica.Contexto;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackendEstadistica.Servicios
 {
@@ -23,9 +24,10 @@ namespace BackendEstadistica.Servicios
 
         public void AddUsuario(Usuario usuario)
         {
-            
+
             // Añadir el usuario al DbSet
             contextoBBDD.Add(usuario);
+            contextoBBDD.SaveChanges();
 
         }
 
