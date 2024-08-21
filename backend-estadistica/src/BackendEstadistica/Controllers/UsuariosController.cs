@@ -86,44 +86,22 @@ public class UsuariosController : ControllerBase
             return BadRequest("El formato del correo no es válido.");
         }
 
-        // Verificar si el correo ya existe en el repositorio
-        if (usuarioRepositorio.EmailExist(usuario.Correo))
+        //----------------------------- Identity
+
+        // Se guarda en el Identity
+        var user = new ApplicationUser { UserName = usuario.Correo, Email = usuario.Correo };
+        var result = await _userManager.CreateAsync(user, usuario.Contraseña);
+
+        if (!result.Succeeded) 
         {
-            _logger.LogWarning("El correo electrónico ya está en uso.");
-            return BadRequest("El email ya está en uso.");
+            _logger.LogError("No se pudo agregar el usuario.");
+            return BadRequest(result.Errors); 
         }
 
-        // Validar el modelo
-        if (!ModelState.IsValid)
-        {
-            _logger.LogWarning("El modelo Usuario no es válido.");
-            return BadRequest(ModelState);
-        }
+        //Aquí habria que devolver el token en el OK en vez del user
 
-        try
-        {            // ADD
-            usuarioRepositorio.AddUsuario(usuario);
-
-            if (await usuarioRepositorio.GuardarCambios())
-            {
-                // Se guarda en el Identity
-                var user = new ApplicationUser { Email = usuario.Correo };
-                var result = await _userManager.CreateAsync(user, usuario.Contraseña);
-
-                _logger.LogInformation($"Usuario con ID {usuario.Id} creado correctamente.");
-                return CreatedAtAction(nameof(GetUsuarioById), new { id = usuario.Id }, usuario);
-            }
-            else
-            {
-                _logger.LogError("No se pudo agregar el usuario.");
-                return BadRequest("No se pudo agregar el usuario.");
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError($"Error al agregar el usuario: {ex.Message}");
-            return StatusCode(500, $"Error al agregar el usuario: {ex.Message}");
-        }
+        return Ok(user);
+        
     }
 
 

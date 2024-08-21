@@ -3,6 +3,7 @@ using BackendEstadistica.Contexto;
 using BackendEstadistica.Mappings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Text;
 
 namespace BackendEstadistica
@@ -39,9 +40,13 @@ namespace BackendEstadistica
             builder.Services.AddControllers();
 
             // Configurar Identity
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ContextoBBDD>()
-                .AddDefaultTokenProviders();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                // Configuración de las opciones de usuario
+                options.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<ContextoBBDD>()
+            .AddDefaultTokenProviders();
 
             // Configurar JWT
             //var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
