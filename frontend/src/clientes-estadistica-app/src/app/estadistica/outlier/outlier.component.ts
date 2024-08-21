@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ITransaccion } from 'src/app/interfaces/transaccion';
+import { TransaccionService } from 'src/app/servicios/transaccion.service';
 
 @Component({
   selector: 'app-outlier',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OutlierComponent implements OnInit {
 
-  constructor() { }
+  outliers: ITransaccion[];
+
+  constructor( private transaccionService: TransaccionService ) { }
 
   ngOnInit() {
+
+    this.transaccionService.obtenerOutlier().subscribe( datos => {
+      this.outliers = datos;
+    });
+
   }
 
 }

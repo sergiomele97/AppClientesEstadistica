@@ -27,6 +27,30 @@ export class TransaccionService {
     );
   }
 
+  obtenerOutlier(): Observable<ITransaccion[]> {
+    return this.http.get<ITransaccion[]>(`${this.url_estadistica}/outliers`).pipe(
+      map(transacciones => 
+        transacciones.map(transaccion => ({
+          ...transaccion,
+          importeEnviado: this.formatearDecimal( transaccion.importeEnviado),
+          importeRecibido: this.formatearDecimal(transaccion.importeRecibido )
+        }))
+      )
+    );
+  }
+  
+  ultimasTransacciones(clienteId: number): Observable<ITransaccion[]> {
+    return this.http.get<ITransaccion[]>(`${this.url_estadistica}/ultimas-transacciones/${clienteId}`).pipe(
+      map(transacciones => 
+        transacciones.map(transaccion => ({
+          ...transaccion,
+          importeEnviado: this.formatearDecimal( transaccion.importeEnviado),
+          importeRecibido: this.formatearDecimal(transaccion.importeRecibido )
+        }))
+      )
+    );
+  }
+
   formatearDecimal(value: number | null): number {
     if (value === null || value === undefined) {
       return 0;
