@@ -12,13 +12,14 @@
   <!-- Contenedor de tabla y paginación -->
   <div class="w-full max-w-4xl">
     <!-- Controles de paginación -->
-    <div class="mb-4" *ngIf="transaccionesFilter.length > 20">
+    <div class="flex justify-center mb-4" *ngIf="transaccionesFilter.length > 20">
       <pagination-controls
         (pageChange)="currentPage = $event"
         previousLabel="Anterior"
         nextLabel="Siguiente"
       ></pagination-controls>
     </div>
+    
 
     <!-- Tabla -->
     <table
