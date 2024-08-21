@@ -44,10 +44,10 @@ export class LoginComponent implements OnInit {
         })
       )
       .subscribe(response => {
-        if (response && response.token) {
-          localStorage.setItem('token', response.token);
+        //if (response && response.token) {
+          //localStorage.setItem('token', response.token);
+          console.log("respuesta")      
           this.route.navigate(['/estadistica']); // Redirige a la ruta protegida
-        }
       });
   }
   
