@@ -92,6 +92,10 @@ namespace BackendEstadistica
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddScoped<IEstadisticasRepositorio, EstadisticasRepositorio>();
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.AddHostedService<BackgroundDataGenerator>();
+
             var app = builder.Build();
 
             // Apply migrations at startup
