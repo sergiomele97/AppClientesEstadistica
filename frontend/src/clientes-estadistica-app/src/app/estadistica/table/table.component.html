@@ -12,13 +12,14 @@
   <!-- Contenedor de tabla y paginación -->
   <div class="w-full max-w-4xl">
     <!-- Controles de paginación -->
-    <div class="mb-4" *ngIf="transaccionesFilter.length > 20">
+    <div class="flex justify-center mb-4" *ngIf="transaccionesFilter.length > 20">
       <pagination-controls
         (pageChange)="currentPage = $event"
         previousLabel="Anterior"
         nextLabel="Siguiente"
       ></pagination-controls>
     </div>
+    
 
     <!-- Tabla -->
     <table
@@ -75,7 +76,12 @@
           <td class="px-4 py-2 font-medium text-gray-900">
             {{ transaccion.transaccionId }}
           </td>
-          <td class="px-4 py-2">
+
+          <td
+            class="px-4 py-2"
+            (mouseenter)="showTooltip(transaccion.clienteOrigen, $event)"
+            (mouseleave)="hideTooltip()"
+          >
             <a
               [routerLink]="[
                 '/estadistica/clientes/',
@@ -85,8 +91,24 @@
             >
               {{ transaccion.clienteOrigenId }}
             </a>
+            <ng-container *ngIf="hoveredCliente === transaccion.clienteOrigen">
+              <div
+              class="tooltip-container"
+              *ngIf="hoveredCliente"
+              [ngStyle]="tooltipPosition"
+            >
+              <strong>{{ hoveredCliente.nombre }}</strong><br />
+              Correo: {{ hoveredCliente.correo }}<br />
+              Teléfono: {{ hoveredCliente.telefono }}<br />
+            </div>
+            </ng-container>
           </td>
-          <td class="px-4 py-2">
+
+          <td
+            class="px-4 py-2"
+            (mouseenter)="showTooltip(transaccion.clienteDestino, $event)"
+            (mouseleave)="hideTooltip()"
+          >
             <a
               [routerLink]="[
                 '/estadistica/clientes/',
@@ -96,10 +118,21 @@
             >
               {{ transaccion.clienteDestinoId }}
             </a>
+            <ng-container *ngIf="hoveredCliente === transaccion.clienteDestino">
+              <div
+              class="tooltip-container"
+              *ngIf="hoveredCliente"
+              [ngStyle]="tooltipPosition"
+            >
+              <strong>{{ hoveredCliente.nombre }}</strong><br />
+              Correo: {{ hoveredCliente.correo }}<br />
+              Teléfono: {{ hoveredCliente.telefono }}<br />
+            </div>
+            </ng-container>
           </td>
           <td class="px-4 py-2">
-            {{ transaccion.fecha }}
-          </td>
+            {{ transaccion.fecha | date:'d MMM yyyy, h:mm a' }}
+          </td>          
           <td class="px-4 py-2">
             {{ transaccion.importeEnviado }}
           </td>

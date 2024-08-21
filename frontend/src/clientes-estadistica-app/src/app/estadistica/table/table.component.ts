@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { ICliente } from 'src/app/interfaces/cliente';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
 
@@ -8,9 +9,7 @@ import { TransaccionService } from 'src/app/servicios/transaccion.service';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
 })
-
 export class TableComponent implements OnInit, OnDestroy {
-
   constructor(private transaccionesService: TransaccionService) {}
 
   subscription!: Subscription;
@@ -18,6 +17,11 @@ export class TableComponent implements OnInit, OnDestroy {
   transaccionesFilter: ITransaccion[] = [];
   currentPage: number = 1; // Página actual
   _filterTransaccion: number;
+
+  // Variables para el tooltip
+  hoveredCliente: ICliente | null = null;
+  tooltipPosition: { top: string; left: string } = { top: '0px', left: '0px' };
+  private tooltipTimeoutId: any;
 
   get filterTransaccion(): number {
     return this._filterTransaccion;
@@ -39,7 +43,7 @@ export class TableComponent implements OnInit, OnDestroy {
         );
         console.log(transacciones);
       },
-      error: (error) => console.error('Error fetching transactions:', error)
+      error: (error) => console.error('Error fetching transactions:', error),
     });
   }
 
@@ -49,15 +53,14 @@ export class TableComponent implements OnInit, OnDestroy {
 
   filterTransaccionesByCliente(filter: number): ITransaccion[] {
     if (!filter) {
-      return this.transacciones;  // Si no hay filtro, retorna todas las transacciones
+      return this.transacciones; // Si no hay filtro, retorna todas las transacciones
     }
     return this.transacciones.filter(
       (transaccion: ITransaccion) =>
         transaccion?.clienteOrigenId === filter ||
         transaccion?.clienteDestinoId === filter
     );
-}
-
+  }
 
   columnOrder: string = '';
   directionOrder: boolean = true;
@@ -109,5 +112,42 @@ export class TableComponent implements OnInit, OnDestroy {
 
       return this.directionOrder ? comparacion : -comparacion;
     });
+  }
+
+  showTooltip(cliente: ICliente, event: MouseEvent): void {
+    this.tooltipTimeoutId = setTimeout(() => {
+      this.hoveredCliente = cliente;
+      const mouseX = event.clientX;
+      const mouseY = event.clientY;
+
+      const tooltipWidth = 200;
+      const tooltipHeight = 100;
+
+      let tooltipX = mouseX + 15;
+      let tooltipY = mouseY + 15;
+
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      if (tooltipX + tooltipWidth > viewportWidth) {
+        tooltipX = mouseX - tooltipWidth - 15;
+      }
+
+      if (tooltipY + tooltipHeight > viewportHeight) {
+        tooltipY = mouseY - tooltipHeight - 15;
+      }
+
+      this.tooltipPosition = {
+        top: `${tooltipY}px`,
+        left: `${tooltipX}px`,
+      };
+    }, 500); // Retraso de 500 ms
+  }
+
+  hideTooltip(): void {
+    if (this.tooltipTimeoutId) {
+      clearTimeout(this.tooltipTimeoutId); // Cancelar el temporizador si el ratón sale antes de que aparezca el tooltip
+    }
+    this.hoveredCliente = null;
   }
 }
