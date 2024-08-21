@@ -2,5 +2,6 @@
 {
     public class ApplicationUser : IdentityUser
     {
+    // Agregar fecha e ide pais
     }
 }

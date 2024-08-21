@@ -147,18 +147,33 @@ public class UsuariosController : ControllerBase
         return Ok(mapper.Map<Usuario>(usarioId));
 
     }
-    // -------------------- Fin Método Sergio para Debuggear en Azure, no borrar:
 
-    //      Get Usuarios By Id
-    
+    //      Get Usuarios
+    // -------------------- Método Sergio para Debuggear en Azure, no borrar:
+    [HttpPost("fake")]
+    public IActionResult GuardarUsuario([FromBody] UsuarioDto usuarioDto)
+    {
+        if (usuarioDto == null)
+        {
+            return BadRequest("El usuario no puede ser nulo.");
+        }
+
+        // Mapear el DTO a la entidad de dominio
+        Usuario usuario = mapper.Map<Usuario>(usuarioDto);
+
+        // Guardar el usuario en el repositorio
+        usuarioRepositorio.AddUsuario(usuario);
+
+        // Devolver el usuario guardado con su nuevo ID
+        return CreatedAtAction(nameof(GetUsuarioById), new { id = usuario.Id }, mapper.Map<UsuarioDto>(usuario));
+    }
+
+// -------------------- Fin Método Sergio para Debuggear en Azure, no borrar:
 
 
- 
-    
 
-
-    //      Delete Usuario
-    [HttpDelete("borrarUsuario/{id}")]
+//      Delete Usuario
+[HttpDelete("borrarUsuario/{id}")]
     public IActionResult DeleteUsuario(int id)
     {
 

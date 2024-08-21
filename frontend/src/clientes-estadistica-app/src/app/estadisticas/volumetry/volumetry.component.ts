@@ -30,7 +30,8 @@ export type ChartOptions = {
   templateUrl: './volumetry.component.html',
   styleUrls: ['./volumetry.component.css']
 })
-export class VolumetryComponent implements OnInit, OnDestroy {
+export class 
+VolumetryComponent implements OnInit, OnDestroy {
 
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
