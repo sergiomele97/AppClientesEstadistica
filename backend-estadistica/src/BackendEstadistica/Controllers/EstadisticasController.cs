@@ -107,10 +107,29 @@ public class EstadisticasController : Controller
 
     }
 
+    [HttpGet("outliers")]
+    public async Task<IActionResult> ObtenerTransaccionesOutliers()
+    {
+        var transaccionesOutliers = await contextoBBDD.Transacciones
+            .Include(t => t.ClienteOrigen)
+            .Include(t => t.ClienteDestino)
+            .Where(t => t.IsOutlier == true)
+            .ToListAsync();
+
+        if (transaccionesOutliers == null || transaccionesOutliers.Count == 0)
+        {
+            return NotFound();
+        }
+
+        return Ok(transaccionesOutliers);
+    }
+
     [HttpGet("ultimas-transacciones/{clienteId}")]
     public async Task<IActionResult> ObtenerUltimasTransacciones(int clienteId)
     {
         var ultimasTransacciones = await contextoBBDD.Transacciones
+            .Include(t => t.ClienteOrigen)
+            .Include(t => t.ClienteDestino)
             .Where(t => t.ClienteOrigenId == clienteId)
             .OrderByDescending(t => t.Fecha)
             .Take(5)
