@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../clases/usuario';
 import { PruebaConexionService } from '../servicios/pruebaConexion.service';
+import { TransaccionService } from '../servicios/transaccion.service';
+import { ITransaccion } from '../interfaces/transaccion';
+import { FormaterFechaPipe } from '../pipes/formaterFecha.pipe';
 
 // Decorador 
 @Component({
@@ -12,6 +15,8 @@ import { PruebaConexionService } from '../servicios/pruebaConexion.service';
 export class EstadisticaComponent implements OnInit {
   usuarios: Usuario[];
 
+  outliers: number;
+
   // Método para dropdown
   isDropdownOpen = false;
 
@@ -19,7 +24,7 @@ export class EstadisticaComponent implements OnInit {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  constructor(private pruebaConexionService: PruebaConexionService) { }
+  constructor(private pruebaConexionService: PruebaConexionService, private transaccionService: TransaccionService) { }
   
 
   // -------------------- Método Sergio para Debuggear en Azure, no borrar:
@@ -37,6 +42,11 @@ export class EstadisticaComponent implements OnInit {
         console.error('Error al obtener el usuario', error);
       }
     );
+
+    this.transaccionService.obtenerOutlier().subscribe( datos => {
+      this.outliers = datos.length;
+    })
+
   }
   // -------------------- Fin Método Sergio para Debuggear en Azure, no borrar:
   
