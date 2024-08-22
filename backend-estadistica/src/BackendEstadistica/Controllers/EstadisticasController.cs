@@ -60,8 +60,11 @@ public class EstadisticasController : Controller
     [HttpPost("crearTransaccion")]
     public IActionResult CrearTransaccion()
     {
-        var clientes = estadisticasRepositorio.GetClientes();
-        var transaccionFaker = new TransaccionFaker(clientes);
+        // Seleccionamos dos clientes random y se los pasamos en una lista
+        var cliente_origen = estadisticasRepositorio.GetRandomClient();
+        var cliente_destino = estadisticasRepositorio.GetRandomClient();
+
+        var transaccionFaker = new TransaccionFaker(cliente_origen, cliente_destino);
         var transaccionDto = transaccionFaker.Generate();
 
         var nuevaTransaccion = this.mapper.Map<Transaccion>(transaccionDto);
@@ -134,12 +137,12 @@ public class EstadisticasController : Controller
         return Ok(ultimasTransacciones);
     }
 
-    //Conversiones
+    // Conversiones
     [HttpPost("crearConversion")]
     public IActionResult CrearConversion()
     {
-        var clientes = estadisticasRepositorio.GetClientes();
-        var conversionFaker = new ConversionFaker(clientes);
+        Cliente cliente = estadisticasRepositorio.GetRandomClient();
+        var conversionFaker = new ConversionFaker(cliente);
         var conversionDto = conversionFaker.Generate();
 
         var nuevaConversion = this.mapper.Map<Conversion>(conversionDto);

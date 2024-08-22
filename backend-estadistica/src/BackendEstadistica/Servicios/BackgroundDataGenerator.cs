@@ -10,11 +10,21 @@ using Microsoft.Extensions.Logging;
 
 namespace BackendEstadistica.Servicios
 {
+
     public class BackgroundDataGenerator : BackgroundService
     {
         private readonly ILogger<BackgroundDataGenerator> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
+        //------------------Configurar-volumenes-de-creación-----------------------------
+
+        int frecuenciaMinutos = 20;
+        int volumenClientes = 1;
+        int volumenTransacciones = 10;
+        int volumenConversiones = 5;
+
+
+        //------------------Fin-de-configurar-volumenes-de-creación----------------------
         public BackgroundDataGenerator(
             ILogger<BackgroundDataGenerator> logger,
             IServiceScopeFactory serviceScopeFactory)
@@ -23,7 +33,7 @@ namespace BackendEstadistica.Servicios
             _serviceScopeFactory = serviceScopeFactory;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken) 
         {
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -38,16 +48,54 @@ namespace BackendEstadistica.Servicios
                         var paises = estadisticasRepositorio.GetPaises();
                         var clienteFaker = new ClienteFaker(paises);
 
-                        // Lógica para crear el cliente
-                        var clienteDto = clienteFaker.Generate();
-                        var nuevoCliente = mapper.Map<Cliente>(clienteDto);
-                        estadisticasRepositorio.CrearCliente(nuevoCliente);
+                        // 1. Lógica para crear el cliente
 
-                        _logger.LogInformation("Cliente creado correctamente");
+                        for (int i = 0; i < volumenClientes; i++)
+                        {
+                            var clienteDto = clienteFaker.Generate();
+                            var nuevoCliente = mapper.Map<Cliente>(clienteDto);
+                            estadisticasRepositorio.CrearCliente(nuevoCliente);
+
+                            _logger.LogInformation("Cliente creado correctamente");
+                        }
+
+
+                        // 2. Lógica para crear transaccion
+
+                        // Seleccionamos dos clientes random y se los pasamos en una lista
+                        for (int i = 0; i < volumenTransacciones; i++)
+                        {
+                            var cliente_origen = estadisticasRepositorio.GetRandomClient();
+                            var cliente_destino = estadisticasRepositorio.GetRandomClient();
+
+                            var transaccionFaker = new TransaccionFaker(cliente_origen, cliente_destino);
+                            var transaccionDto = transaccionFaker.Generate();
+
+                            var nuevaTransaccion = mapper.Map<Transaccion>(transaccionDto);
+                            estadisticasRepositorio.CrearTransaccion(nuevaTransaccion);
+
+                            // Detectar si esta transacción es un outlier
+                            estadisticasRepositorio.DetectarOutliers();
+                        }
+
+
+                        // 3. Lógica para crear conversion
+                        for (int i = 0; i < volumenConversiones; i++)
+                        {
+                            Cliente cliente = estadisticasRepositorio.GetRandomClient();
+                            var conversionFaker = new ConversionFaker(cliente);
+
+                            var conversionDto = conversionFaker.Generate();
+                            var nuevaConversion = mapper.Map<Conversion>(conversionDto);
+                            estadisticasRepositorio.CrearConversion(nuevaConversion);
+
+                            _logger.LogInformation("Conversión creada correctamente");
+                        }
+
                     }
 
                     // Esperar 5 segundos antes de la siguiente ejecución
-                    await Task.Delay(TimeSpan.FromMinutes(20), stoppingToken);
+                    await Task.Delay(TimeSpan.FromMinutes(frecuenciaMinutos), stoppingToken);
                 }
                 catch (Exception ex)
                 {
