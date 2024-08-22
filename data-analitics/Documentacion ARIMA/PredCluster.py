@@ -4,6 +4,7 @@ from statsmodels.tsa.arima.model import ARIMA
 from sklearn.cluster import KMeans
 from sklearn.metrics import davies_bouldin_score
 import warnings
+import numpy as np
 warnings.filterwarnings("ignore", category=UserWarning, module='statsmodels')
 app = Flask(__name__)
 CORS(app)  # Habilita CORS para todas las rutas
@@ -38,7 +39,7 @@ def cluster():
     if(n_clusters == 1):
         davies_bouldin = 0.0
     else:
-        davies_bouldin = davies_bouldin_score(data, kmeans.labels_)
+        davies_bouldin = np.round(davies_bouldin_score(data, kmeans.labels_),2)
 
     response = {
         "etiqueta": labels,
