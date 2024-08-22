@@ -33,7 +33,7 @@ namespace BackendEstadistica.Servicios
             _serviceScopeFactory = serviceScopeFactory;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken) 
         {
             while (!stoppingToken.IsCancellationRequested)
             {
