@@ -21,11 +21,36 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
 
     // Obtener todos los clientes con sus transacciones, conversiones y país
 
-    public int GetRandomClient()
+    public Cliente GetRandomClient()
     {
+        // Obtener el número total de clientes en la base de datos
+        int totalClientes = _contextoBBDD.Clientes.Count();
 
-        return 0;
+        // Si no hay clientes, lanzar una excepción o manejarlo según tu lógica
+        if (totalClientes == 0)
+        {
+            throw new InvalidOperationException("No hay clientes disponibles.");
+        }
+
+        // Generar un número aleatorio entre 0 y totalClientes - 1
+        Random random = new Random();
+        int clienteAleatorioIndex = random.Next(0, totalClientes);
+
+        // Obtener el cliente correspondiente al índice aleatorio
+        var clienteAleatorio = _contextoBBDD.Clientes
+                                    .OrderBy(c => c.ClienteId) // Asegura el orden de los IDs
+                                    .Skip(clienteAleatorioIndex) // Salta hasta el índice aleatorio
+                                    .FirstOrDefault(); // Obtiene el cliente o null si no existe
+
+        // Si no se encuentra un cliente, lanzar una excepción o manejarlo según tu lógica
+        if (clienteAleatorio == null)
+        {
+            throw new InvalidOperationException("No se pudo seleccionar un cliente.");
+        }
+
+        return clienteAleatorio;
     }
+
 
     // ¡!Este metodo de abajo no deberia existir
     public List<Cliente> GetClientes()
