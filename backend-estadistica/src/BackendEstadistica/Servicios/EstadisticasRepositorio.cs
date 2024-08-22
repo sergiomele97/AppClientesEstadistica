@@ -20,6 +20,14 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
     }
 
     // Obtener todos los clientes con sus transacciones, conversiones y país
+
+    public int GetRandomClient()
+    {
+
+        return 0;
+    }
+
+    // ¡!Este metodo de abajo no deberia existir
     public List<Cliente> GetClientes()
     {
         return _contextoBBDD.Clientes

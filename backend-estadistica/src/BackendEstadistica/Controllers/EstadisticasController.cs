@@ -29,6 +29,7 @@ public class EstadisticasController : Controller
         return Ok("Cliente creado correctamente");
     }
 
+    // Este no deberia existir
     [HttpGet("getClientes")]
     public IActionResult GetClientes()
     {
