@@ -19,6 +19,8 @@ export class EstadisticaComponent implements OnInit {
   // Método para dropdown
   isDropdownOpen = false;
 
+  menuOpen: boolean = false;
+
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }

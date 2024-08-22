@@ -16,12 +16,10 @@ export class OutlierComponent implements OnInit {
   constructor(private transaccionService: TransaccionService) { }
 
   ngOnInit() {
-    this.transaccionService.obtenerOutlier().subscribe({
-      next: (datos) => {
-        this.outliers = datos;
-        this.vacio = this.outliers.length === 0;
-        this.loading = false;
-      }
+    this.transaccionService.obtenerOutlier().subscribe(datos => {
+      this.outliers = datos;
+      this.vacio = this.outliers.length === 0;
+      this.loading = false;
     });
   }
 
