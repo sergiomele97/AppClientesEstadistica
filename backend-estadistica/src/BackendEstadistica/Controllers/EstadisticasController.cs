@@ -147,12 +147,12 @@ public class EstadisticasController : Controller
         return Ok(ultimasTransacciones);
     }
 
-    //Conversiones
+    // Conversiones
     [HttpPost("crearConversion")]
     public IActionResult CrearConversion()
     {
-        var clientes = estadisticasRepositorio.GetClientes();
-        var conversionFaker = new ConversionFaker(clientes);
+        Cliente cliente = estadisticasRepositorio.GetRandomClient();
+        var conversionFaker = new ConversionFaker(cliente);
         var conversionDto = conversionFaker.Generate();
 
         var nuevaConversion = this.mapper.Map<Conversion>(conversionDto);
