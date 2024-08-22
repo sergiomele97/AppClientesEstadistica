@@ -3,6 +3,7 @@
 public interface IEstadisticasRepositorio
 {
     //Clientes
+    Cliente GetRandomClient();
     List<Cliente> GetClientes();
     Cliente GetClienteById(int id);
     void CrearCliente(Cliente cliente);
