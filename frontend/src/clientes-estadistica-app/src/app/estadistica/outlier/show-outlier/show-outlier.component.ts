@@ -59,7 +59,7 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
       this.clienteService.getCliente(clienteId).subscribe({
         next: (datos) => {
           this.cliente = datos;
-
+ 
           this.subscription.add(
             this.transaccionService.ultimasTransacciones(clienteId).subscribe({
               next: (datos) => {
