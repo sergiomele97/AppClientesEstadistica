@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../clases/usuario';
 import { PruebaConexionService } from '../servicios/pruebaConexion.service';
 import { TransaccionService } from '../servicios/transaccion.service';
-import { ITransaccion } from '../interfaces/transaccion';
-import { FormaterFechaPipe } from '../pipes/formaterFecha.pipe';
+import { interval } from 'rxjs';
 
 // Decorador 
 @Component({
@@ -19,6 +18,8 @@ export class EstadisticaComponent implements OnInit {
 
   // Método para dropdown
   isDropdownOpen = false;
+
+  menuOpen: boolean = false;
 
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
@@ -43,13 +44,21 @@ export class EstadisticaComponent implements OnInit {
       }
     );
 
-    this.transaccionService.obtenerOutlier().subscribe( datos => {
-      this.outliers = datos.length;
-    })
+    this.actualizarOutliers();
+
+    interval(30000).subscribe(() => {
+      this.actualizarOutliers()
+    });
 
   }
   // -------------------- Fin Método Sergio para Debuggear en Azure, no borrar:
   
+    actualizarOutliers() {
+      this.transaccionService.obtenerOutlier().subscribe( datos => {
+        this.outliers = datos.length;
+      });
+    }
+
   
 }
 

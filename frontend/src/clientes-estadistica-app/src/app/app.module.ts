@@ -36,6 +36,7 @@ import { GraficasComponent } from './estadistica/graficas/Graficas.component';
 import { DatePipe } from '@angular/common';
 import { FormaterFechaPipe } from './pipes/formaterFecha.pipe';
 import { RegisterComponent } from './register/register.component';
+import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-outlier.component';
 
 
 
@@ -64,7 +65,8 @@ import { RegisterComponent } from './register/register.component';
     ShowOutlierComponent,
     GraficasComponent,
     FormaterFechaPipe,
-    RegisterComponent
+    RegisterComponent,
+    LogsOutlierComponent
    ],
    
   imports: [
