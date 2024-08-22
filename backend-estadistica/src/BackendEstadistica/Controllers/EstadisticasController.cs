@@ -131,11 +131,6 @@ public class EstadisticasController : Controller
             .Take(5)
             .ToListAsync();
 
-        if (ultimasTransacciones == null || ultimasTransacciones.Count == 0)
-        {
-            return NotFound();
-        }
-
         return Ok(ultimasTransacciones);
     }
 
