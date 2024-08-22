@@ -47,7 +47,7 @@ namespace BackendEstadistica.Servicios
                     }
 
                     // Esperar 5 segundos antes de la siguiente ejecución
-                    await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+                    await Task.Delay(TimeSpan.FromMinutes(20), stoppingToken);
                 }
                 catch (Exception ex)
                 {
