@@ -116,11 +116,6 @@ public class EstadisticasController : Controller
             .Where(t => t.IsOutlier == true)
             .ToListAsync();
 
-        if (transaccionesOutliers == null || transaccionesOutliers.Count == 0)
-        {
-            return NotFound();
-        }
-
         return Ok(transaccionesOutliers);
     }
 
