@@ -105,8 +105,9 @@ public class EstadisticasController : Controller
                     "PGK", "PYG", "PEN", "PLN", "RON", "RUB", "RSD", "SCR", "SLL", "SGD", "SYP", "SOS", "LKR",
                     "SDG", "SEK", "STN", "RWF"
                 };
+        var fecha = DateTime.Now;
         foreach (var divisa in divisas) {
-            var divisaFaker = new DivisaFaker(divisa, DateTime.Now);
+            var divisaFaker = new DivisaFaker(divisa, fecha);
             var divisaDto = divisaFaker.Generate();
             var nuevaDivisa = this.mapper.Map<Divisa>(divisaDto);
             this.estadisticasRepositorio.CrearDivisa(nuevaDivisa); }

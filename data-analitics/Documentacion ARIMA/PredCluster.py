@@ -5,6 +5,7 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import davies_bouldin_score
 import warnings
 import numpy as np
+
 warnings.filterwarnings("ignore", category=UserWarning, module='statsmodels')
 app = Flask(__name__)
 CORS(app)  # Habilita CORS para todas las rutas
