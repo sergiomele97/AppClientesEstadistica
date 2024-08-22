@@ -17,6 +17,8 @@ export class ClustersDataService {
 
   private selectedLabelSubject = new Subject<any[]>();
   selectedLabel$ = this.selectedLabelSubject.asObservable();
+  private selectedIndexDB = new Subject<any[]>();
+  selectedDB$ = this.selectedIndexDB.asObservable();
 
   constructor() { }
 
@@ -31,6 +33,10 @@ export class ClustersDataService {
   setLabel(data: any[]) {
     this.selectedLabelSubject.next(data);
   }
+  setIndexDB(data: any[]) {
+    this.selectedIndexDB.next(data);
+  }
+  
   async sendDataToBackend(){
  
   }

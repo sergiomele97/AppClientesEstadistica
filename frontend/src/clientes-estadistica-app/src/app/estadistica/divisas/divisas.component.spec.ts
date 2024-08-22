@@ -2,6 +2,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DivisasComponent } from './divisas.component';
 
+
+
 describe('DivisePredictionComponent', () => {
   let component: DivisasComponent;
   let fixture: ComponentFixture<DivisasComponent>;

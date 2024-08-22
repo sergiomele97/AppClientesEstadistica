@@ -1,10 +1,4 @@
 <div class="dropdown-container">
-  <label for="data-type">Seleccione el sample:</label>
-  <select id="data-type" (change)="onSelectionChange($event)">
-    <option value="sample a">Sample A</option>
-    <option value="sample b">Sample B</option>
-    <option value="sample c">Sample C</option>
-  </select>
   <label for="n_cluster">Seleccione el número de clusters:</label>
   <select id="n_cluster" (change)="onSelectionCluster($event)">
     <option value="1">1</option>
@@ -18,3 +12,8 @@
 <app-clusters-graph></app-clusters-graph>
 
 <app-clusters-table></app-clusters-table>
+
+<!-- Cuadro para mostrar el índice Davies-Bouldin -->
+<div *ngIf="daviesBouldinIndex !== null" class="davies-bouldin-box">
+  <p>Índice de Davies-Bouldin para este cluster: {{ daviesBouldinIndex }}</p>
+</div>

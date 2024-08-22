@@ -1,0 +1,56 @@
+/* clusters.component.css */
+
+.dropdown-container {
+  max-width: 650px;
+  margin: 35px auto;
+  display: flex; /* Usar flexbox para alinear horizontalmente */
+  align-items: center; /* Centra verticalmente los elementos */
+  gap: 20px; /* Espacio entre los elementos, ajusta según sea necesario */
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan si es necesario */
+}
+
+.dropdown-container label {
+  margin: 0 10px 0 0; /* Espacio a la derecha del label */
+  font-size: 16px;
+  color: #333;
+  white-space: nowrap; /* Evita que las etiquetas se dividan en varias líneas */
+}
+
+.dropdown-container select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  cursor: pointer;
+  flex: 1; /* Permite que los selects se expandan para llenar el espacio disponible */
+}
+
+.dropdown-container select:focus {
+  outline: none;
+  border-color: #999;
+  box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+}
+
+#chart {
+  max-width: 650px;
+  margin: 35px auto;
+}
+
+/* clusters.component.css */
+
+.davies-bouldin-box {
+  max-width: 650px;
+  margin: 35px auto;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  text-align: center;
+  font-size: 16px;
+  color: #333;
+}
