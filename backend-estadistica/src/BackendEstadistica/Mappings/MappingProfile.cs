@@ -33,5 +33,8 @@ public class MappingProfile : Profile
 
         CreateMap<PaisDto, Pais>();
         CreateMap<Pais, PaisDto>();
+
+        CreateMap<DivisaDto, Divisa>();
+        CreateMap<Divisa, DivisaDto>();
     }
 }

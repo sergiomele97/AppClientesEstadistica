@@ -28,6 +28,7 @@ public class ContextoBBDD : DbContext
 
     public DbSet<Conversion> Conversion { get; set; } // 5ª Tabla
 
+    public DbSet<Divisa> Divisa { get; set; } // 6ª Tabla
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
@@ -48,6 +49,11 @@ public class ContextoBBDD : DbContext
             .WithMany(p => p.Clientes)
             .HasForeignKey(c => c.PaisId)
             .OnDelete(DeleteBehavior.Restrict);
+
+
+        modelBuilder.Entity<Divisa>()
+            .Property(d => d.DivisaId)
+            .ValueGeneratedOnAdd(); ;
 
         modelBuilder.Entity<Pais>().HasData(
             new Pais { PaisId = 1, Nombre = "Afganistán", Divisa = "AFN", Iso3 = "AFG" },

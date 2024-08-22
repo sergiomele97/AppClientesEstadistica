@@ -8,11 +8,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BackendEstadistica.Migrations
 {
     /// <inheritdoc />
-    public partial class Estadistica : Migration
+    public partial class Inicio : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Divisa",
+                columns: table => new
+                {
+                    DivisaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Valor = table.Column<double>(type: "float", nullable: true),
+                    Fecha = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Divisa", x => x.DivisaId);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Paises",
                 columns: table => new
@@ -332,6 +347,9 @@ namespace BackendEstadistica.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Conversion");
+
+            migrationBuilder.DropTable(
+                name: "Divisa");
 
             migrationBuilder.DropTable(
                 name: "Transacciones");

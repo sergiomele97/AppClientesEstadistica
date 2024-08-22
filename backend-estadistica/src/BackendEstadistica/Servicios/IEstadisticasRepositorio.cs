@@ -11,6 +11,10 @@ public interface IEstadisticasRepositorio
     List<Conversion> GetConversiones();
     Conversion GetConversionById(int id);
     void CrearConversion(Conversion conversion);
+    // Divisas
+    List<Divisa> GetDivisa();
+    Divisa GetDivisaById(int id);
+    void CrearDivisa(Divisa divisa);
 
     // Transacciones
     List<Transaccion> GetTransacciones();

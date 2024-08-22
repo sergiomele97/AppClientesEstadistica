@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendEstadistica.Migrations
 {
     [DbContext(typeof(ContextoBBDD))]
-    [Migration("20240819114144_Estadistica")]
-    partial class Estadistica
+    [Migration("20240822085212_Inicio")]
+    partial class Inicio
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,6 +95,28 @@ namespace BackendEstadistica.Migrations
                     b.HasIndex("ClienteId");
 
                     b.ToTable("Conversion");
+                });
+
+            modelBuilder.Entity("BackendEstadistica.Entidades.Divisa", b =>
+                {
+                    b.Property<int>("DivisaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DivisaId"));
+
+                    b.Property<DateTime?>("Fecha")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Valor")
+                        .HasColumnType("float");
+
+                    b.HasKey("DivisaId");
+
+                    b.ToTable("Divisa");
                 });
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Pais", b =>

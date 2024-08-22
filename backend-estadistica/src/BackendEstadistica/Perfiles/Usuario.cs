@@ -7,10 +7,10 @@
  * que Usuario se puede mapear a UsuarioDto y viceversa.
  */
 
-public class usuarioperfil : Profile
+public class Usuarioperfil : Profile
 {
 
-    public usuarioperfil()
+    public Usuarioperfil()
     {
         CreateMap<Usuario, UsuarioDto>().ReverseMap();
     }

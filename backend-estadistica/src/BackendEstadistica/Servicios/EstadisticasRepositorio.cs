@@ -41,6 +41,30 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
             .FirstOrDefault(c => c.ClienteId == id);
     }
 
+    //Divisas
+ 
+
+   
+        public void CrearDivisa(Divisa divisa)
+    {
+        var divisaEntity = _mapper.Map<Divisa>(divisa);
+        _contextoBBDD.Divisa.Add(divisaEntity);
+        _contextoBBDD.SaveChanges();
+        
+    }
+
+    public Divisa GetDivisaById(int id)
+    {
+        return _contextoBBDD.Divisa
+            .FirstOrDefault(d => d.DivisaId == id);
+    }
+
+    public List<Divisa> GetDivisa()
+    {
+        return _contextoBBDD.Divisa.ToList();
+    }
+
+
     //Conversiones
     public void CrearConversion(Conversion conversion)
     {
