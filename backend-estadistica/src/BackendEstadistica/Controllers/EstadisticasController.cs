@@ -60,8 +60,11 @@ public class EstadisticasController : Controller
     [HttpPost("crearTransaccion")]
     public IActionResult CrearTransaccion()
     {
-        var clientes = estadisticasRepositorio.GetClientes();
-        var transaccionFaker = new TransaccionFaker(clientes);
+        // Seleccionamos dos clientes random y se los pasamos en una lista
+        var cliente_origen = estadisticasRepositorio.GetRandomClient();
+        var cliente_destino = estadisticasRepositorio.GetRandomClient();
+
+        var transaccionFaker = new TransaccionFaker(cliente_origen, cliente_destino);
         var transaccionDto = transaccionFaker.Generate();
 
         var nuevaTransaccion = this.mapper.Map<Transaccion>(transaccionDto);
