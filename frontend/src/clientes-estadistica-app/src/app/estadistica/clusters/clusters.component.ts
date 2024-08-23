@@ -7,6 +7,7 @@ import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
 import { ClustersDataService } from 'src/app/servicios/clusters-data.service';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-clusters',
@@ -24,7 +25,7 @@ export class ClustersComponent implements OnInit, OnDestroy {
     private transaccionService: TransaccionService
   ) {}
 
-  private apiUrl = 'http://127.0.0.1:5000/cluster';
+  private apiUrl = environment.apiClusters;
   private datos: any[] = [];
   public daviesBouldinIndex: number | null = null;
   cliente: ICliente | undefined;

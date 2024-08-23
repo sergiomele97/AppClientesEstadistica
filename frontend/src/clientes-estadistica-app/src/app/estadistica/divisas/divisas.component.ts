@@ -18,6 +18,7 @@ import { ICliente } from 'src/app/interfaces/cliente';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
 import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
+import { environment } from "src/environments/environment";
 
 
 
@@ -66,7 +67,7 @@ export class DivisasComponent {
   updateChart(currency: string) {
     console.log('Requesting data for:', currency);
 
-    this.http.post('http://localhost:5000/predict', { data: this.data[currency] })
+    this.http.post(environment.apiPrediccion, { data: this.data[currency] })
       .subscribe((response: any) => {
         console.log('Received data:', response);
         const predictions = response.Prediction || [];
