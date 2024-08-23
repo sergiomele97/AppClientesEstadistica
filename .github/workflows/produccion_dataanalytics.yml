@@ -29,14 +29,15 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pwd
+          cd data-analitics
           pip install -r requirements.txt
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
-        cd data-analitics
-        run: zip release.zip ./* -r
+        run: |
+          cd data-analitics
+          zip release.zip ./* -r
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
