@@ -25,7 +25,7 @@ export class ClustersComponent implements OnInit, OnDestroy {
     private transaccionService: TransaccionService
   ) {}
 
-  private apiUrl = environment.apiClusters;
+  private apiUrl = environment.apiClusters;   
   private datos: any[] = [];
   public daviesBouldinIndex: number | null = null;
   cliente: ICliente | undefined;
