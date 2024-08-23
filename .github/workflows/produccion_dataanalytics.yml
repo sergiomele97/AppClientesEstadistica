@@ -35,6 +35,7 @@ jobs:
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
+        cd data-analitics
         run: zip release.zip ./* -r
 
       - name: Upload artifact for deployment jobs
