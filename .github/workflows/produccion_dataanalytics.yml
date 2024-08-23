@@ -37,14 +37,14 @@ jobs:
       - name: Zip artifact for deployment
         run: |
           cd data-analitics
-          zip release.zip ./* -r
+          zip -r ../release.zip . -x "*.git/*" -x "__pycache__/*" -x "venv/*"
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
           name: python-app
           path: |
-            release.zip
+            ../release.zip
             !venv/
 
   deploy:
