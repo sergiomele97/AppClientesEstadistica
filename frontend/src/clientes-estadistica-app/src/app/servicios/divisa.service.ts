@@ -8,7 +8,7 @@ import { IDivisa } from '../interfaces/divisa';
   providedIn: 'root'
 })
 export class DivisaService {
-  private apiUrl = 'http://localhost:5000/divisas';
+  private apiUrl = 'http://localhost:7107/divisas';
 
   constructor(private http: HttpClient) { }
 

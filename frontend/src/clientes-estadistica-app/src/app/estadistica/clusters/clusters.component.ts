@@ -109,8 +109,8 @@ export class ClustersComponent implements OnInit, OnDestroy {
       this.dataService.setSelectedDataTable(datos);//mandamos los datos completos a la global para visualizar en la tabla
 
     } catch (error) {
-      console.error('Error al enviar datos al backend:', error);
-      throw new Error('Error al enviar datos al backend');
+    
+      throw new Error('Error al enviar datos al python');
     }
   }
 
