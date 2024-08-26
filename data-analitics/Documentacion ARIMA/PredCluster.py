@@ -21,7 +21,7 @@ def predict():
     pred_mean = pred.predicted_mean.tolist()
     pred_ci = pred.conf_int().tolist()
     response = {'Prediction': pred_mean, 'ConfidenceInterval': pred_ci}
-    print(response)
+    print(response, flush=True)
     return jsonify(response)
 
 
@@ -30,7 +30,7 @@ def cluster():
 
     recibido = request.json
     data = recibido['data']
-    print("data es ",data)
+    print("data es ",data, flush=True)
     n_clusters = recibido['nCluster']
     kmeans = KMeans(n_clusters=n_clusters, random_state=0)
     kmeans.fit(data)
@@ -46,7 +46,7 @@ def cluster():
         "etiqueta": labels,
         "db": davies_bouldin
     }
-    print(response)
+    print(response, flush=True)
     return jsonify(response)
 
 

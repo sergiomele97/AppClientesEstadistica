@@ -38,7 +38,6 @@ import { FormaterFechaPipe } from './pipes/formaterFecha.pipe';
 import { RegisterComponent } from './register/register.component';
 
 
-
 @NgModule({
   declarations: [		
     AppComponent,
