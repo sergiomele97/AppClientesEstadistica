@@ -31,7 +31,7 @@ def cluster():
     data = recibido['data']
     n_clusters = recibido['nCluster']
     kmeans = KMeans(n_clusters=n_clusters, random_state=0)
-    kmeans.fit(data)
+    kmeans.fit(data) 
     labels = kmeans.labels_.tolist()
     labels = [lab + 1 for lab in labels]  # Ajuste de etiquetas
        
