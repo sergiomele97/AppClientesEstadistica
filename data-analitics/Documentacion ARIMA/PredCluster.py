@@ -34,6 +34,7 @@ def cluster():
     recibido = f.request.json
     data = recibido['data']
     print("data es ",data)
+    print("data es ",data)
     n_clusters = recibido['nCluster']
     kmeans = sc.KMeans(n_clusters=n_clusters, random_state=0)
     kmeans.fit(data)

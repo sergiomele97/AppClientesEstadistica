@@ -40,6 +40,7 @@ import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-ou
 
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
