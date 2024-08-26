@@ -151,7 +151,7 @@ public class EstadisticasController : Controller
         return Ok("Conversión creada correctamente");
     }
 
-    [HttpGet("getConversion")]
+    [HttpGet("getConversiones")]
     public IActionResult GetConversiones()
     {
 

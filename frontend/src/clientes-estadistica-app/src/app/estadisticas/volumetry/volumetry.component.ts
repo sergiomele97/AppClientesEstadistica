@@ -7,8 +7,8 @@ import {
   ApexDataLabels,
   ApexTitleSubtitle,
   ApexStroke,
-  ApexGrid
-} from "ng-apexcharts";
+  ApexGrid,
+} from 'ng-apexcharts';
 import { Subscription } from 'rxjs';
 import { IConversion } from 'src/app/interfaces/conversion';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
@@ -28,15 +28,13 @@ export type ChartOptions = {
 @Component({
   selector: 'app-volumetry',
   templateUrl: './volumetry.component.html',
-  styleUrls: ['./volumetry.component.css']
+  styleUrls: ['./volumetry.component.css'],
 })
-export class 
-VolumetryComponent implements OnInit, OnDestroy {
-
-  @ViewChild("chart") chart: ChartComponent;
+export class VolumetryComponent implements OnInit, OnDestroy {
+  @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
-  public dataType: string = 'transacciones'; // Cambiar valor inicial a 'transacciones'
+  public dataType: string = ''; // Cambiar valor inicial a 'transacciones'
 
   constructor(
     private transaccionesService: TransaccionService,
@@ -73,16 +71,25 @@ VolumetryComponent implements OnInit, OnDestroy {
   }
 
   updateChart() {
-    const data = this.dataType === 'transacciones' ? this.transacciones : this.conversiones;
-  
+    let data = [];
+
+    if (this.dataType === 'transacciones') {
+      data = this.transacciones;
+    } else if (this.dataType === 'conversiones') {
+      data = this.conversiones;
+    } else {
+      console.warn('Tipo de dato no reconocido:', this.dataType);
+      return;
+    }
+
     // Agrupar datos por mes y año
     const agruparPorMes = (data: any[]) => {
       const resultado: Record<string, number> = {};
-      data.forEach(item => {
+      data.forEach((item) => {
         const fecha = new Date(item.fecha);
         const mesAnio = `${fecha.getMonth() + 1}-${fecha.getFullYear()}`; // Formato MM-YYYY
         const cantidad = 1; // Conteo por mes
-  
+
         if (resultado[mesAnio]) {
           resultado[mesAnio] += cantidad;
         } else {
@@ -91,9 +98,9 @@ VolumetryComponent implements OnInit, OnDestroy {
       });
       return resultado;
     };
-  
+
     const datosAgrupados = agruparPorMes(data);
-  
+
     // Ordenar meses
     const meses = Object.keys(datosAgrupados).sort((a, b) => {
       const [mesA, anioA] = a.split('-').map(Number);
@@ -102,51 +109,58 @@ VolumetryComponent implements OnInit, OnDestroy {
       const fechaB = new Date(anioB, mesB - 1);
       return fechaA.getTime() - fechaB.getTime();
     });
-  
+
     // Obtener conteo por mes en el orden de meses ordenados
-    const conteoPorMes = meses.map(mes => datosAgrupados[mes]);
+    const conteoPorMes = meses.map((mes) => datosAgrupados[mes]);
 
     this.chartOptions = {
       series: [
         {
-          name: this.dataType === 'transacciones' ? 'Transacciones' : 'Conversiones',
-          data: conteoPorMes
-        }
+          name:
+            this.dataType === 'transacciones'
+              ? 'Transacciones'
+              : 'Conversiones',
+          data: conteoPorMes,
+        },
       ],
       chart: {
         height: 350,
-        type: "line",
+        type: 'line',
         zoom: {
-          enabled: false
-        }
+          enabled: false,
+        },
       },
       dataLabels: {
-        enabled: true
+        enabled: true,
       },
       stroke: {
-        curve: "smooth"
+        curve: 'smooth',
       },
       title: {
-        text: this.dataType === 'transacciones' ? 'Número de Transacciones por Mes' : 'Número de Conversiones por Mes',
-        align: "center"
+        text:
+          this.dataType === 'transacciones'
+            ? 'Transacciones / Mes'
+            : 'Conversiones / Mes',
+        align: 'center',
       },
       grid: {
         row: {
-          colors: ["#f3f3f3", "transparent"], // Alterna colores de fila
-          opacity: 0.5
-        }
+          colors: ['#f3f3f3', 'transparent'], // Alterna colores de fila
+          opacity: 0.5,
+        },
       },
       xaxis: {
         categories: meses,
-        title: {
-          text: 'Mes y Año'
-        }
-      }
+        // title: {
+        //   text: 'Mes y Año',
+        // },
+      },
     };
   }
 
   onSelectionChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
+    console.log('Selected Option:', selectElement.value);
     this.dataType = selectElement.value;
     this.updateChart();
   }
