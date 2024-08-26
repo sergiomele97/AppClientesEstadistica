@@ -1,9 +1,27 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ViewChild } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
-import { Subscription } from 'rxjs';
-import { ChartComponent, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexDataLabels, ApexTitleSubtitle, ApexStroke, ApexGrid, ApexFill, ApexMarkers, ApexYAxis } from 'ng-apexcharts';
-import { DivisaService } from 'src/app/servicios/divisa.service';
-import { IDivisa } from 'src/app/interfaces/divisa';
+import {
+  ChartComponent,
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexXAxis,
+  ApexDataLabels,
+  ApexTitleSubtitle,
+  ApexStroke,
+  ApexGrid,
+  ApexFill,
+  ApexMarkers,
+  ApexYAxis
+} from "ng-apexcharts";
+
+import { ICliente } from 'src/app/interfaces/cliente';
+import { ITransaccion } from 'src/app/interfaces/transaccion';
+import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
+import { TransaccionService } from 'src/app/servicios/transaccion.service';
+
+
+
+
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -23,154 +41,112 @@ export type ChartOptions = {
   templateUrl: './divisas.component.html',
   styleUrls: ['./divisas.component.css']
 })
-export class DivisasComponent implements OnInit, OnDestroy {
-
-  constructor(
-    private http: HttpClient, 
-    private divisaService: DivisaService
-  ) {}
-
+export class DivisasComponent {
   @ViewChild("chart") chart: ChartComponent;
-  public chartOptions: Partial<ChartOptions> = {};
-  
-  private apiUrl = 'http://127.0.0.1:5000/predict';
-  private divisasData: IDivisa[] = [];
-  private subscription!: Subscription;
-  
-  ngOnInit(): void {
-    this.subscription = this.divisaService.getDivisasData().subscribe({
-      next: (data) => {
-        this.divisasData = data;
-        console.log("Datos de divisas recibidos:", data);
-      },
-      error: (err) => {
-        console.error('Error al obtener datos de divisas:', err);
-      }
-    });
+  public chartOptions: Partial<ChartOptions>;
+
+  private data = {
+    euros: [4, 3, 10, 9, 29, 19, 22, 9, 12, 7, 19, 5, 13, 9, 17, 2, 7, 5],
+    dolares: [5, 2, 15, 14, 20, 25, 20, 10, 14, 8, 22, 6, 16, 11, 19, 4, 9, 7],
+    libras: [6, 3, 13, 12, 18, 22, 17, 8, 10, 6, 25, 7, 14, 10, 20, 3, 8, 6]
+  };
+
+
+  private fechas = {
+    euros: [ "2000-01-01", "2000-01-02", "2000-01-03", "2000-01-04", "2000-01-05", "2000-01-06", "2000-01-07", "2000-01-08", "2000-01-09", "2000-01-10", "2000-01-11", "2000-01-12", "2000-01-13", "2000-01-14", "2000-01-15", "2000-01-16", "2000-01-17", "2000-01-18"],
+    dolares: [ "2000-01-01", "2000-01-02", "2000-01-03", "2000-01-04", "2000-01-05", "2000-01-06", "2000-01-07", "2000-01-08", "2000-01-09", "2000-01-10", "2000-01-11", "2000-01-12", "2000-01-13", "2000-01-14", "2000-01-15", "2000-01-16", "2000-01-17", "2000-01-18"],
+    libras: [ "2000-01-01", "2000-01-02", "2000-01-03", "2000-01-04", "2000-01-05", "2000-01-06", "2000-01-07", "2000-01-08", "2000-01-09", "2000-01-10", "2000-01-11", "2000-01-12", "2000-01-13", "2000-01-14", "2000-01-15", "2000-01-16", "2000-01-17", "2000-01-18"]
   }
 
-  updateChart(currency: string): void {
-    // Verifica que los datos estén disponibles
-    if (!this.divisasData || this.divisasData.length === 0) {
-      console.error('No hay datos de divisas disponibles.');
-      return;
-    }
+  constructor(private http: HttpClient) {
+    this.updateChart('euros');
+    
+  }
 
+  updateChart(currency: string) {
     console.log('Requesting data for:', currency);
 
-    // Filtra los datos por la moneda seleccionada
-    const filteredData = this.divisasData.filter(d => d.nombre === currency);
-    if (filteredData.length === 0) {
-      console.error('No hay datos disponibles para la moneda:', currency);
-      return;
-    }
+    this.http.post('http://localhost:5000/predict', { data: this.data[currency] })
+      .subscribe((response: any) => {
+        console.log('Received data:', response);
+        const predictions = response.Prediction || [];
+        const predictionData = predictions.length ? predictions : new Array(10).fill(0);
+        
+        const historicalData = this.data[currency];
+        const historicalDates = this.fechas[currency];
+        const predictionDates = ["2000-01-19", "2000-01-20", "2000-01-21", "2000-01-22", "2000-01-23", "2000-01-24", "2000-01-25", "2000-01-26", "2000-01-27", "2000-01-28"];
 
-    // Ordena los datos por fecha y toma los 10 más recientes
-    filteredData.sort((a, b) => (a.fecha ?? new Date()).getTime() - (b.fecha ?? new Date()).getTime());
-    const recentData = filteredData.slice(-10);
-    
-    if (recentData.length === 0) {
-      console.error('No hay datos recientes disponibles para la moneda:', currency);
-      return;
-    }
-
-    const recentDates = recentData.map(d => (d.fecha ?? new Date()).toISOString().split('T')[0]);
-    const recentValues = recentData.map(d => d.divisa);
-
-    // Enviar los datos al backend y actualizar el gráfico
-    this.http.post(this.apiUrl, { data: recentValues })
-      .subscribe({
-        next: (response: any) => {
-          console.log('Received data:', response);
-          const predictions = response.Prediction || [];
-          const predictionData = predictions.length ? predictions : new Array(10).fill(0);
-
-          const predictionDates = recentDates.map((date, index) => {
-            const nextDate = new Date(date);
-            nextDate.setDate(nextDate.getDate() + index + 1);
-            return nextDate.toISOString().split('T')[0];
-          });
-
-          this.chartOptions = {
-            series: [
-              {
-                name: 'Datos Históricos',
-                data: recentValues.map((value, index) => [recentDates[index], value]),
-                color: '#0000FF',
-              },
-              {
-                name: 'Predicciones',
-                data: predictionData.map((value, index) => [predictionDates[index], value]),
-                color: '#FF0000',
-              }
-            ],
-            chart: {
-              height: 350,
-              type: 'line'
+        this.chartOptions = {
+          series: [
+            {
+              name: 'Historical Data',
+              data: historicalData.map((value, index) => [historicalDates[index], value]),
+              color: '#0000FF',  // Azul para los datos históricos
             },
-            stroke: {
-              width: [3, 3],
-              curve: 'smooth'
-            },
-            xaxis: {
-              type: 'datetime',
-              categories: [...recentDates, ...predictionDates]
-            },
-            title: {
-              text: 'Evolución del Valor de la Divisa',
-              align: 'left',
-              style: {
-                fontSize: '16px',
-                color: '#666'
-              }
-            },
-            fill: {
-              type: 'gradient',
-              gradient: {
-                shade: 'dark',
-                gradientToColors: ['#FDD835'],
-                shadeIntensity: 1,
-                type: 'horizontal',
-                opacityFrom: 1,
-                opacityTo: 1,
-                stops: [0, 100, 100, 100]
-              }
-            },
-            markers: {
-              size: 4,
-              colors: ['#FFA41B'],
-              strokeColors: '#fff',
-              strokeWidth: 2,
-              hover: {
-                size: 7
-              }
-            },
-            yaxis: {
-              min: Math.min(...recentValues) - 10,
-              max: Math.max(...recentValues) + 10,
-              title: {
-                text: 'Valor'
-              }
+            {
+              name: 'Predictions',
+              data: predictionData.map((value, index) => [predictionDates[index], value]),
+              color: '#FF0000',  // Rojo para las predicciones
             }
-          };
-        },
-        error: (error) => {
-          console.error('Error al obtener los datos:', error);
-        }
+          ],
+          chart: {
+            height: 350,
+            type: 'line'
+          },
+          stroke: {
+            width: [3, 3],
+            curve: 'smooth'
+          },
+          xaxis: {
+            type: 'datetime',
+            categories: [...historicalDates, ...predictionDates]  // Asegura que las fechas correspondan a los datos
+          },
+          title: {
+            text: 'Evolución del Valor de la Divisa',
+            align: 'left',
+            style: {
+              fontSize: '16px',
+              color: '#666'
+            }
+          },
+          fill: {
+            type: 'gradient',
+            gradient: {
+              shade: 'dark',
+              gradientToColors: ['#FDD835'],
+              shadeIntensity: 1,
+              type: 'horizontal',
+              opacityFrom: 1,
+              opacityTo: 1,
+              stops: [0, 100, 100, 100]
+            }
+          },
+          markers: {
+            size: 4,
+            colors: ['#FFA41B'],
+            strokeColors: '#fff',
+            strokeWidth: 2,
+            hover: {
+              size: 7
+            }
+          },
+          yaxis: {
+            min: -10,
+            max: 40,
+            title: {
+              text: 'Valor'
+            }
+          }
+        };
+      }, (error) => {
+        console.error('Error fetching data:', error);
       });
   }
 
-  onCurrencyChange(event: Event): void {
+
+  onCurrencyChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const selectedCurrency = selectElement.value;
-    console.log('Moneda seleccionada:', selectedCurrency);
     this.updateChart(selectedCurrency);
-  }
-
-  ngOnDestroy(): void {
-    // Desuscribirse para prevenir fugas de memoria
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
   }
 }

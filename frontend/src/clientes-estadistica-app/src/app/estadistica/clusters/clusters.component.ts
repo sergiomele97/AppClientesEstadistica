@@ -18,6 +18,8 @@ export class ClustersComponent implements OnInit, OnDestroy {
   constructor(
     private dataService: ClustersDataService, 
     private http: HttpClient,
+    private route: ActivatedRoute,
+    private router: Router,
     private clienteService: ClienteEstService,
     private transaccionService: TransaccionService
   ) {}

@@ -39,6 +39,7 @@ import { RegisterComponent } from './register/register.component';
 import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-outlier.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
