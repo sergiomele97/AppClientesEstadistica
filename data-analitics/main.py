@@ -20,7 +20,7 @@ def predict():
     pred_mean = pred.predicted_mean.tolist()
     pred_ci = pred.conf_int().tolist()
     response = {'Prediction': pred_mean, 'ConfidenceInterval': pred_ci}
-    print(response, flush=True)
+    # print(response, flush=True)
     return jsonify(response)
 
 
