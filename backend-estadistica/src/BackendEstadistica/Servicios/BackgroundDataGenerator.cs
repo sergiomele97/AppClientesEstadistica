@@ -18,7 +18,7 @@ namespace BackendEstadistica.Servicios
 
         //------------------Configurar-volumenes-de-creación-----------------------------
 
-        int frecuenciaMinutos = 20;
+        int frecuenciaMinutos = 2000;
         int volumenClientes = 1;
         int volumenTransacciones = 10;
         int volumenConversiones = 5;
