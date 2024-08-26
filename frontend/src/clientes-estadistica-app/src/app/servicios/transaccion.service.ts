@@ -51,6 +51,10 @@ export class TransaccionService {
     );
   }
 
+  borrarOutlier(idTransaccion: number): Observable<string> {
+    return this.http.put<string>(`${this.url_estadistica}/resolucionOutlier/${idTransaccion}`, {}, { responseType: 'text' as 'json' });
+}
+
   formatearDecimal(value: number | null): number {
     if (value === null || value === undefined) {
       return 0;

@@ -1,17 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-
-import {
-  ApexAxisChartSeries,
-  ApexChart,
-  ChartComponent,
-  ApexDataLabels,
-  ApexPlotOptions,
-  ApexYAxis,
-  ApexTitleSubtitle,
-  ApexXAxis,
-  ApexFill,
-} from 'ng-apexcharts';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ApexAxisChartSeries, ApexChart, ChartComponent, ApexDataLabels, ApexPlotOptions, ApexYAxis, ApexTitleSubtitle, ApexXAxis, ApexFill } from 'ng-apexcharts';
 import { Subscription } from 'rxjs';
 import { ICliente } from 'src/app/interfaces/cliente';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
@@ -42,6 +31,7 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
 
   cliente: ICliente;
   transacciones: ITransaccion[];
+  idTransaccion: number;
   subscription: Subscription = new Subscription();
   routeSubscription: Subscription = new Subscription();
 
@@ -49,6 +39,7 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
     private clienteService: ClienteEstService,
     private transaccionService: TransaccionService,
     private route: ActivatedRoute,
+    private router: Router,
     private formaterFechaPipe: FormaterFechaPipe
   ) {}
 
@@ -64,7 +55,6 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
             this.transaccionService.ultimasTransacciones(clienteId).subscribe({
               next: (datos) => {
                 this.transacciones = datos;
-
                 this.actualizarGrafico();
               },
               error: (err) => {
