@@ -2,7 +2,7 @@
 
 [Route("api/estadisticas")]
 [ApiController]
-public class EstadisticasController : Controller
+public class EstadisticasController : ControllerBase
 {
     private readonly ContextoBBDD contextoBBDD;
     private readonly IEstadisticasRepositorio estadisticasRepositorio;
@@ -136,6 +136,20 @@ public class EstadisticasController : Controller
 
         return Ok(ultimasTransacciones);
     }
+
+    [HttpPut("resolucionOutlier/{idTransaccion}")]
+    public async Task<IActionResult> EliminarOutlier([FromRoute] int idTransaccion)
+    {
+        bool resultado = await estadisticasRepositorio.EliminarOutlier(idTransaccion);
+
+        if (!resultado)
+        {
+            return NotFound("Transacción no encontrada o no es un outlier.");
+        }
+
+        return Ok("El outlier se elimino con exito.");
+    }
+
 
     // Conversiones
     [HttpPost("crearConversion")]
