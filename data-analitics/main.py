@@ -7,6 +7,7 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module='statsmodels')
 app = Flask(__name__)
 CORS(app)  # Habilita CORS para todas las rutas
+
 @app.route('/predict', methods=['POST'])
 def predict():
 
