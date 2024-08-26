@@ -1,0 +1,23 @@
+<div class="bg-white">
+    <table class="min-w-full bg-white border border-gray-200">
+      <thead>
+        <tr>
+            <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">Id Transacción</th>
+            <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">Cliente Origen</th>
+            <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">Cliente Destino</th>
+            <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">Importe Enviado</th>
+            <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let outlier of outliers" class="border-b hover:bg-gray-100">
+            <td class="px-6 py-4 text-md">{{ outlier.transaccionId }}</td>
+            <td class="px-6 py-4 text-md">{{ outlier.clienteOrigen.nombre }}</td>
+            <td class="px-6 py-4 text-md">{{ outlier.clienteDestino.nombre }}</td>
+            <td class="px-6 py-4 text-md">{{ outlier.importeEnviado }}</td>
+            <td class="px-6 py-4 text-md">{{ outlier.fecha | formaterFecha }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

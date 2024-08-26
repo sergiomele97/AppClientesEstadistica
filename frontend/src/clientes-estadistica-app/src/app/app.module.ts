@@ -18,7 +18,7 @@ import { ClustersComponent } from './estadistica/clusters/clusters.component';
 import { GraphComponent } from './estadisticas/graph/graph.component';
 import { MapComponent } from './estadisticas/map/map.component';
 import { SpaghettiComponent } from './estadisticas/spaghetti/spaghetti.component';
-import { TableComponent } from './estadisticas/table/table.component';
+import { TableComponent } from './estadistica/table/table.component';
 import { ClustersGraphComponent } from './estadistica/clusters/clusters-graph/clusters-graph.component';
 import { ClustersTableComponent } from './estadistica/clusters/clusters-table/clusters-table.component';
 import { EstadisticaComponent } from './estadistica/estadistica.component';
@@ -36,10 +36,11 @@ import { GraficasComponent } from './estadistica/graficas/Graficas.component';
 import { DatePipe } from '@angular/common';
 import { FormaterFechaPipe } from './pipes/formaterFecha.pipe';
 import { RegisterComponent } from './register/register.component';
+import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-outlier.component';
 
 
 @NgModule({
-  declarations: [		
+  declarations: [
     AppComponent,
     LoginComponent,
     RegistroComponent,
@@ -48,7 +49,7 @@ import { RegisterComponent } from './register/register.component';
     ClientesComponent,
     VolumetryComponent,
     ClustersComponent,
-    ClustersGraphComponent,      
+    ClustersGraphComponent,
     ClustersTableComponent,
     GraphComponent,
     MapComponent,
@@ -63,7 +64,8 @@ import { RegisterComponent } from './register/register.component';
     ShowOutlierComponent,
     GraficasComponent,
     FormaterFechaPipe,
-    RegisterComponent
+    RegisterComponent,
+    LogsOutlierComponent
    ],
    
   imports: [

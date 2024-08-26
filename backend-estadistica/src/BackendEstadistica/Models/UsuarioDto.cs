@@ -4,9 +4,12 @@
     public class UsuarioDto
     {
         public int Id { get; set; }
-        public string? Rol { get; set; }
         public string? Correo { get; set; }
         public string? Contraseña { get; set; }
+        public string? Telefono { get; set; }
 
+    
+    
     }
+
 }

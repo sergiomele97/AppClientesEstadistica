@@ -12,7 +12,8 @@ export class UserService {
 
   // IMPORTANTE:
   //    1 URL ESTADISTICA Y OTRA PARA CLIENTES
-  private readonly url_estadistica = environment.apiUrl;
+  private readonly url_estadistica = environment.apiEstadisticas;
+  private readonly url_usuarios = environment.apiUsuarios;
 
   //URL AMIN
   private readonly URL = "https://localhost:7107/api/";
@@ -24,13 +25,21 @@ export class UserService {
   }
 
   autenticarUsuario(email: string, password: string, remember: boolean): Observable<any> {
-    remember = false;
-    return this.http.post<any>(`${this.URL}Account/login`, { email, password, remember });
+    // Crea un objeto con las propiedades que el backend espera
+    const loginPayload = {
+      Email: email,
+      Password: password,
+      RememberMe: remember // Mantén este nombre para que coincida con el modelo del backend
+    };
+    
+    // Realiza la solicitud POST al endpoint de login
+    return this.http.post<any>(`${this.url_usuarios}/login`, loginPayload);
   }
+  
 
   registrarUsuario(usuario: any): Observable<any> {
     console.log(usuario); // Asegúrate de que los campos estén presentes y correctos DEBUG
-    return this.http.post<any>(`${this.URL}Account/register`, usuario);
+    return this.http.post<any>(`${this.url_usuarios}`, usuario);
   }
 
   añadirRolUsuario(usuario: any): Observable<any> {

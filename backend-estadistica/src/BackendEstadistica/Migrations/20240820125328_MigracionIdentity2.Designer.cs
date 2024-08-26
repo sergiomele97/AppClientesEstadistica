@@ -12,13 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendEstadistica.Migrations
 {
     [DbContext(typeof(ContextoBBDD))]
-<<<<<<<< HEAD:backend-estadistica/src/BackendEstadistica/Migrations/20240822085212_Inicio.Designer.cs
-    [Migration("20240822085212_Inicio")]
-    partial class Inicio
-========
-    [Migration("20240820121714_MigracionIdentity")]
-    partial class MigracionIdentity
->>>>>>>> main:backend-estadistica/src/BackendEstadistica/Migrations/20240820121714_MigracionIdentity.Designer.cs
+    [Migration("20240820125328_MigracionIdentity2")]
+    partial class MigracionIdentity2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -100,28 +95,6 @@ namespace BackendEstadistica.Migrations
                     b.HasIndex("ClienteId");
 
                     b.ToTable("Conversion");
-                });
-
-            modelBuilder.Entity("BackendEstadistica.Entidades.Divisa", b =>
-                {
-                    b.Property<int>("DivisaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DivisaId"));
-
-                    b.Property<DateTime?>("Fecha")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Nombre")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("Valor")
-                        .HasColumnType("float");
-
-                    b.HasKey("DivisaId");
-
-                    b.ToTable("Divisa");
                 });
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Pais", b =>
@@ -1424,6 +1397,28 @@ namespace BackendEstadistica.Migrations
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Usuario", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Contraseña")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Correo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telefono")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuario");
+                });
+
+            modelBuilder.Entity("BackendEstadistica.Models.ApplicationUser", b =>
+                {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
@@ -1434,15 +1429,6 @@ namespace BackendEstadistica.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Contraseña")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Correo")
-                        .HasColumnType("nvarchar(max)");
-
-<<<<<<<< HEAD:backend-estadistica/src/BackendEstadistica/Migrations/20240822085212_Inicio.Designer.cs
-                    b.Property<string>("Telefono")
-========
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -1465,7 +1451,6 @@ namespace BackendEstadistica.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
->>>>>>>> main:backend-estadistica/src/BackendEstadistica/Migrations/20240820121714_MigracionIdentity.Designer.cs
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
@@ -1475,9 +1460,6 @@ namespace BackendEstadistica.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Telefono")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -1685,7 +1667,7 @@ namespace BackendEstadistica.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("BackendEstadistica.Entidades.Usuario", null)
+                    b.HasOne("BackendEstadistica.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1694,7 +1676,7 @@ namespace BackendEstadistica.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("BackendEstadistica.Entidades.Usuario", null)
+                    b.HasOne("BackendEstadistica.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1709,7 +1691,7 @@ namespace BackendEstadistica.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BackendEstadistica.Entidades.Usuario", null)
+                    b.HasOne("BackendEstadistica.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1718,7 +1700,7 @@ namespace BackendEstadistica.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("BackendEstadistica.Entidades.Usuario", null)
+                    b.HasOne("BackendEstadistica.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

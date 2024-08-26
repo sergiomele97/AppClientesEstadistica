@@ -1,3 +1,17 @@
+<div class="min-h-screen flex flex-col items-center p-6 bg-gray-100">
+  <!-- Contenedor del dropdown centrado en la parte superior -->
+  <div class="w-full max-w-lg mb-6">
+    <label for="currency-select" class="block text-gray-700 text-lg font-medium mb-2">Seleccione la divisa:</label>
+    <select
+      id="currency-select"
+      (change)="onCurrencyChange($event)"
+      class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      <option value="euros">Euros</option>
+      <option value="dolares">Dólares</option>
+      <option value="libras">Libras</option>
+    </select>
+  </div>
 <div class="dropdown-container">
   <label for="currency-select">Seleccione la divisa:</label>
   <select id="currency-select" (change)="onCurrencyChange($event)">
@@ -112,6 +126,23 @@
   </select>
 </div>
 
+  <!-- Contenedor del gráfico ajustado al espacio restante -->
+  <div id="chart" class="flex-grow w-full max-w-4xl">
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis"
+      [dataLabels]="chartOptions.dataLabels"
+      [grid]="chartOptions.grid"
+      [stroke]="chartOptions.stroke"
+      [title]="chartOptions.title"
+      [markers]="chartOptions.markers"
+      [yaxis]="chartOptions.yaxis"
+      [fill]="chartOptions.fill"
+      class="w-full h-96"
+    ></apx-chart>
+  </div>
+</div>
 
 <apx-chart
   #chart

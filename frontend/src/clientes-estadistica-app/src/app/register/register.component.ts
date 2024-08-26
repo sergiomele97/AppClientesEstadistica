@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../servicios/user.service';
 import { UsuarioAdmin } from '../interfaces/usuarioAdmin.interface';
 import { User } from '../interfaces/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +15,7 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   isFormBlocked = false;
 
-  constructor(private fb: FormBuilder, private miServicio: UserService) { }
+  constructor(private fb: FormBuilder, private miServicio: UserService, private route: Router) { }
 
 
   ngOnInit(): void {
@@ -68,10 +69,10 @@ export class RegisterComponent implements OnInit {
 
     // 3. Crear objeto usuario
     const usuario: User = {
-      email: this.registerForm.value.email,
-      password: this.registerForm.value.password,
+      Correo: this.registerForm.value.email,
+      Contraseña: this.registerForm.value.password,
       confirmpassword: this.registerForm.value.confirmpassword,
-      phone: this.registerForm.value.phone,
+      Telefono: this.registerForm.value.phone,
      
     };
 
@@ -79,6 +80,7 @@ export class RegisterComponent implements OnInit {
     this.miServicio.registrarUsuario(usuario).subscribe(
       response => {
         console.log('Usuario registrado exitosamente', response);
+        this.onRegistroOK()
       },
       error => {
         if (error.status === 400) {
@@ -93,6 +95,16 @@ export class RegisterComponent implements OnInit {
         }
       }
     );
+
+  }
+
+  onRegistroOK(): void{
+    this.route.navigate(['/login']);
+    
+  }
+
+  navigateToLogin() {
+    this.route.navigate(['/login']);
   }
 
   private checkFormErrors(): void {

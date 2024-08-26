@@ -1,0 +1,25 @@
+.tooltip-container {
+  position: absolute;
+  background-color: #4a5568; /* Color de fondo del tooltip (gris oscuro) */
+  color: #edf2f7; /* Color del texto del tooltip (gris claro) */
+  border-radius: 4px; /* Bordes redondeados */
+  padding: 10px; /* Espaciado interno */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Sombra para mejor visibilidad */
+  z-index: 1000; /* Asegurarse de que esté sobre otros elementos */
+  white-space: nowrap; /* Evita que el contenido se rompa en múltiples líneas */
+  pointer-events: none; /* Evita que el tooltip interfiera con eventos del ratón */
+  font-size: 14px; /* Tamaño de fuente */
+  max-width: 300px; /* Ancho máximo del tooltip */
+  line-height: 1.5; /* Espaciado entre líneas */
+}
+
+.tooltip-container::after {
+  content: ''; /* Pseudo-elemento para crear una flecha en el tooltip */
+  position: absolute;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent #4a5568 transparent; /* Flecha hacia arriba con color de fondo del tooltip */
+  top: 100%;
+  left: 50%;
+  margin-left: -6px;
+}

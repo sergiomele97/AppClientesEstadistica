@@ -1,7 +1,10 @@
 
 using BackendEstadistica.Contexto;
 using BackendEstadistica.Mappings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.Text;
 
 namespace BackendEstadistica
 {
@@ -24,6 +27,51 @@ namespace BackendEstadistica
             builder.Services.AddDbContext<ContextoBBDD>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            //Serilog
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .Filter.ByExcluding(logEvent => logEvent.Level == Serilog.Events.LogEventLevel.Debug) // Excluir eventos de nivel Debug
+                .WriteTo.Console()
+                .WriteTo.File("Logs/logClientes.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            builder.Host.UseSerilog(); // Usa Serilog como el logger
+
+            builder.Services.AddControllers();
+
+            // Configurar Identity
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                // Configuración de las opciones de usuario
+                options.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<ContextoBBDD>()
+            .AddDefaultTokenProviders();
+
+            // Configurar JWT
+            //var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
+            //builder.Services.AddAuthentication(x =>
+            //{
+            //    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //})
+            //.AddJwtBearer(x =>
+            //{
+            //    x.RequireHttpsMetadata = false;
+            //    x.SaveToken = true;
+            //    x.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateIssuerSigningKey = true,
+            //        IssuerSigningKey = new SymmetricSecurityKey(key),
+            //        ValidateIssuer = true,
+            //        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            //        ValidateAudience = true,
+            //        ValidAudience = builder.Configuration["Jwt:Audience"],
+            //        ValidateLifetime = true,
+            //        ClockSkew = TimeSpan.Zero
+            //    };
+            //});
+
             // Configuración de CORS
             builder.Services.AddCors(options =>
             {
@@ -43,6 +91,10 @@ namespace BackendEstadistica
             // Build
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddScoped<IEstadisticasRepositorio, EstadisticasRepositorio>();
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.AddHostedService<BackgroundDataGenerator>();
 
             var app = builder.Build();
 

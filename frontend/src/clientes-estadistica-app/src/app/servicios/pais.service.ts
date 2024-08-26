@@ -12,7 +12,7 @@ export class PaisService {
 
 constructor(private http: HttpClient) {}
 
-private readonly url_estadistica = environment.apiUrl;
+private readonly url_estadistica = environment.apiEstadisticas;
 
 getPaises(): Observable<IPais[]> {
   return this.http.get<IPais[]>(

@@ -12,7 +12,7 @@ export class EnviosService {
   
   constructor(private http: HttpClient) {}
 
-  private readonly url_estadistica = environment.apiUrl;
+  private readonly url_estadistica = environment.apiEstadisticas;
 
   private readonly url_prueba = 'https://localhost:7144/api/usuarios';
 

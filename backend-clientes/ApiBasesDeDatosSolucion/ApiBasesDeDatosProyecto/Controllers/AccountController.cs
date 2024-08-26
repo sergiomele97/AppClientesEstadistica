@@ -7,7 +7,7 @@ public class AccountController : ControllerBase
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly ITokenService _tokenService;
+    //private readonly ITokenService _tokenService;
     private readonly IClienteService _clienteService;
     private readonly ApiBasesDeDatosProyecto.IDentity.Serivicios.IUserService _userService;
     private readonly IPaisRepository _paisRepository; // Añadido
@@ -16,7 +16,7 @@ public class AccountController : ControllerBase
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         RoleManager<IdentityRole> roleManager,
-        ITokenService tokenService,
+       //ITokenService tokenService,
         IClienteService clienteService,
         ApiBasesDeDatosProyecto.IDentity.Serivicios.IUserService userService,
         IPaisRepository paisRepository) // Añadido
@@ -24,7 +24,7 @@ public class AccountController : ControllerBase
         _userManager = userManager;
         _signInManager = signInManager;
         _roleManager = roleManager;
-        _tokenService = tokenService;
+        //_tokenService = tokenService;
         _clienteService = clienteService;
         _userService = userService;
         _paisRepository = paisRepository; // Añadido
@@ -109,8 +109,9 @@ public class AccountController : ControllerBase
         }
 
         // Generar el token y devolverlo
-        var token = _tokenService.GenerateJwtToken(user);
-        return Ok(new { Token = token });
+        //var token = _tokenService.GenerateJwtToken(user);
+        //return Ok(new { Token = token });
+        return Ok();
     }
 
 
@@ -126,8 +127,9 @@ public class AccountController : ControllerBase
         if (result.Succeeded)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
-            var token = _tokenService.GenerateJwtToken(user);
-            return Ok(new { Token = token });
+            //var token = _tokenService.GenerateJwtToken(user);
+            //return Ok(new { Token = token });
+            return Ok();
         }
 
         return Unauthorized();

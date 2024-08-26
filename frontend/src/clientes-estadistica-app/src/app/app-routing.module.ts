@@ -8,12 +8,11 @@ import { GraphComponent } from './estadisticas/graph/graph.component';
 import { MapComponent } from './estadisticas/map/map.component';
 
 import { VolumetryComponent } from './estadisticas/volumetry/volumetry.component';
-import { TableComponent } from './estadisticas/table/table.component';
+import { TableComponent } from './estadistica/table/table.component';
 import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 
 import { ClientesComponent } from './estadistica/clientes/clientes.component';
 import { DivisasComponent } from './estadistica/divisas/divisas.component';
-
 import { AuthGuard } from './auth.guard';
 import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 import { EstadisticaComponent } from './estadistica/estadistica.component';
@@ -22,6 +21,7 @@ import { OutlierComponent } from './estadistica/outlier/outlier.component';
 import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
 import { GraficasComponent } from './estadistica/graficas/Graficas.component';
 import { RegisterComponent } from './register/register.component';
+import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-outlier.component';
 import { ClustersComponent } from './estadistica/clusters/clusters.component';
 
 
@@ -38,11 +38,13 @@ const routes: Routes = [
     children: [
       { path: 'outliers', component: OutlierComponent },
       { path: 'outliers/:id', component: ShowOutlierComponent  },
+      { path: 'outliers-logs', component: LogsOutlierComponent  },
       { path: 'divisas', component: DivisasComponent },
 
       { path: 'graficas', component: GraficasComponent },
       { path: 'clientes', component: ClientesComponent },
       { path: 'clientes/:id', component: ClientesComponent },
+      { path: 'table', component: TableComponent },
       { path: 'clusters', component: ClustersComponent },
 
 
@@ -56,9 +58,9 @@ const routes: Routes = [
       { path: 'map', component: MapComponent },
       { path: 'graph', component: GraphComponent },
       { path: 'spaghetti', component: SpaghettiComponent },
-      { path: 'table', component: TableComponent },
       { path: 'clientes', component: ClientesComponent },
       { path: 'clientes/:id', component: ClientesComponent },
+      { path: 'table', component: TableComponent },
       { path: 'divisas', component: DivisasComponent }
     ],
   },

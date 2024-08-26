@@ -8,10 +8,11 @@ public class EstadisticasController : Controller
     private readonly IEstadisticasRepositorio estadisticasRepositorio;
     private readonly IMapper mapper;
 
-    public EstadisticasController(IEstadisticasRepositorio estadisticasRepositorio, IMapper mapper)
+    public EstadisticasController( ContextoBBDD contextoBBDD ,IEstadisticasRepositorio estadisticasRepositorio, IMapper mapper)
     {
         this.estadisticasRepositorio = estadisticasRepositorio;
         this.mapper = mapper;
+        this.contextoBBDD = contextoBBDD;
     }
 
     //Clientes
@@ -28,6 +29,7 @@ public class EstadisticasController : Controller
         return Ok("Cliente creado correctamente");
     }
 
+    // Este no deberia existir
     [HttpGet("getClientes")]
     public IActionResult GetClientes()
     {
@@ -58,12 +60,33 @@ public class EstadisticasController : Controller
     [HttpPost("crearTransaccion")]
     public IActionResult CrearTransaccion()
     {
-        var clientes = estadisticasRepositorio.GetClientes();
-        var transaccionFaker = new TransaccionFaker(clientes);
+        // Seleccionamos dos clientes random y se los pasamos en una lista
+        var cliente_origen = estadisticasRepositorio.GetRandomClient();
+        var cliente_destino = estadisticasRepositorio.GetRandomClient();
+
+        var transaccionFaker = new TransaccionFaker(cliente_origen, cliente_destino);
         var transaccionDto = transaccionFaker.Generate();
 
         var nuevaTransaccion = this.mapper.Map<Transaccion>(transaccionDto);
         this.estadisticasRepositorio.CrearTransaccion(nuevaTransaccion);
+
+        // Detectar si esta transacción es un outlier
+        estadisticasRepositorio.DetectarOutliers();
+
+        var transaccion = contextoBBDD.Transacciones
+            .Include(t => t.ClienteOrigen)
+            .FirstOrDefault(t => t.TransaccionId == nuevaTransaccion.TransaccionId);
+
+        if (transaccion != null && transaccion.IsOutlier == true)
+        {
+            return Ok(new
+            {
+                Message = "Outlier detectado",
+                Cliente = transaccion.ClienteOrigen.Nombre,
+                ImporteEnviado = transaccion.ImporteEnviado
+            });
+        }
+
 
         return Ok("Transacción creada correctamente");
     }
@@ -78,7 +101,7 @@ public class EstadisticasController : Controller
 
     }
 
-    [HttpGet("getTransacciones/{id}")]
+    [HttpGet("getTransacciones/{clienteId}")]
     public IActionResult GetTransaccionesById(int id)
     {
 
@@ -134,12 +157,38 @@ public class EstadisticasController : Controller
     }
 
 
-    //Conversiones
+    [HttpGet("outliers")]
+    public async Task<IActionResult> ObtenerTransaccionesOutliers()
+    {
+        var transaccionesOutliers = await contextoBBDD.Transacciones
+            .Include(t => t.ClienteOrigen)
+            .Include(t => t.ClienteDestino)
+            .Where(t => t.IsOutlier == true)
+            .ToListAsync();
+
+        return Ok(transaccionesOutliers);
+    }
+
+    [HttpGet("ultimas-transacciones/{clienteId}")]
+    public async Task<IActionResult> ObtenerUltimasTransacciones(int clienteId)
+    {
+        var ultimasTransacciones = await contextoBBDD.Transacciones
+            .Include(t => t.ClienteOrigen)
+            .Include(t => t.ClienteDestino)
+            .Where(t => t.ClienteOrigenId == clienteId)
+            .OrderByDescending(t => t.Fecha)
+            .Take(5)
+            .ToListAsync();
+
+        return Ok(ultimasTransacciones);
+    }
+
+    // Conversiones
     [HttpPost("crearConversion")]
     public IActionResult CrearConversion()
     {
-        var clientes = estadisticasRepositorio.GetClientes();
-        var conversionFaker = new ConversionFaker(clientes);
+        Cliente cliente = estadisticasRepositorio.GetRandomClient();
+        var conversionFaker = new ConversionFaker(cliente);
         var conversionDto = conversionFaker.Generate();
 
         var nuevaConversion = this.mapper.Map<Conversion>(conversionDto);
@@ -158,7 +207,7 @@ public class EstadisticasController : Controller
 
     }
 
-    [HttpGet("getConversion/{id}")]
+    [HttpGet("getConversion/{clienteId}")]
     public IActionResult GetConversionById(int id)
     {
 

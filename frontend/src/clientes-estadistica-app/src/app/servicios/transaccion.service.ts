@@ -13,10 +13,34 @@ export class TransaccionService {
 
   constructor( private http: HttpClient ) {}
 
-  private readonly url_estadistica = environment.apiUrl;
+  private readonly url_estadistica = environment.apiEstadisticas;
 
   getTransacciones(): Observable<ITransaccion[]> {
     return this.http.get<ITransaccion[]>(`${this.url_estadistica}/getTransacciones`).pipe(
+      map(transacciones => 
+        transacciones.map(transaccion => ({
+          ...transaccion,
+          importeEnviado: this.formatearDecimal( transaccion.importeEnviado),
+          importeRecibido: this.formatearDecimal(transaccion.importeRecibido )
+        }))
+      )
+    );
+  }
+
+  obtenerOutlier(): Observable<ITransaccion[]> {
+    return this.http.get<ITransaccion[]>(`${this.url_estadistica}/outliers`).pipe(
+      map(transacciones => 
+        transacciones.map(transaccion => ({
+          ...transaccion,
+          importeEnviado: this.formatearDecimal( transaccion.importeEnviado),
+          importeRecibido: this.formatearDecimal(transaccion.importeRecibido )
+        }))
+      )
+    );
+  }
+  
+  ultimasTransacciones(clienteId: number): Observable<ITransaccion[]> {
+    return this.http.get<ITransaccion[]>(`${this.url_estadistica}/ultimas-transacciones/${clienteId}`).pipe(
       map(transacciones => 
         transacciones.map(transaccion => ({
           ...transaccion,

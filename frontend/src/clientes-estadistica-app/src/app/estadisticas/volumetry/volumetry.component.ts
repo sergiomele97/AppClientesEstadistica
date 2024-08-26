@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -31,13 +30,13 @@ export type ChartOptions = {
   templateUrl: './volumetry.component.html',
   styleUrls: ['./volumetry.component.css']
 })
-
-export class VolumetryComponent implements OnInit, OnDestroy {
+export class 
+VolumetryComponent implements OnInit, OnDestroy {
 
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
-  public dataType: string = 'usuarios';
+  public dataType: string = 'transacciones'; // Cambiar valor inicial a 'transacciones'
 
   constructor(
     private transaccionesService: TransaccionService,
@@ -76,35 +75,42 @@ export class VolumetryComponent implements OnInit, OnDestroy {
   updateChart() {
     const data = this.dataType === 'transacciones' ? this.transacciones : this.conversiones;
   
-    // Agrupar datos por fecha
-    const agruparPorFecha = (data: any[]) => {
+    // Agrupar datos por mes y año
+    const agruparPorMes = (data: any[]) => {
       const resultado: Record<string, number> = {};
       data.forEach(item => {
-        const fecha = new Date(item.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        const cantidad = 1; // Conteo por día
+        const fecha = new Date(item.fecha);
+        const mesAnio = `${fecha.getMonth() + 1}-${fecha.getFullYear()}`; // Formato MM-YYYY
+        const cantidad = 1; // Conteo por mes
   
-        if (resultado[fecha]) {
-          resultado[fecha] += cantidad;
+        if (resultado[mesAnio]) {
+          resultado[mesAnio] += cantidad;
         } else {
-          resultado[fecha] = cantidad;
+          resultado[mesAnio] = cantidad;
         }
       });
       return resultado;
     };
   
-    const datosAgrupados = agruparPorFecha(data);
+    const datosAgrupados = agruparPorMes(data);
   
-    // Ordenar fechas
-    const fechas = Object.keys(datosAgrupados).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+    // Ordenar meses
+    const meses = Object.keys(datosAgrupados).sort((a, b) => {
+      const [mesA, anioA] = a.split('-').map(Number);
+      const [mesB, anioB] = b.split('-').map(Number);
+      const fechaA = new Date(anioA, mesA - 1);
+      const fechaB = new Date(anioB, mesB - 1);
+      return fechaA.getTime() - fechaB.getTime();
+    });
   
-    // Obtener conteo por fecha en el orden de fechas ordenadas
-    const conteoPorFecha = fechas.map(fecha => datosAgrupados[fecha]);
+    // Obtener conteo por mes en el orden de meses ordenados
+    const conteoPorMes = meses.map(mes => datosAgrupados[mes]);
 
     this.chartOptions = {
       series: [
         {
           name: this.dataType === 'transacciones' ? 'Transacciones' : 'Conversiones',
-          data: conteoPorFecha
+          data: conteoPorMes
         }
       ],
       chart: {
@@ -121,19 +127,19 @@ export class VolumetryComponent implements OnInit, OnDestroy {
         curve: "smooth"
       },
       title: {
-        text: this.dataType === 'transacciones' ? 'Número de Transacciones por Día' : 'Número de Conversiones por Día',
+        text: this.dataType === 'transacciones' ? 'Número de Transacciones por Mes' : 'Número de Conversiones por Mes',
         align: "center"
       },
       grid: {
         row: {
-          colors: ["#f3f3f3", "transparent"], // Toma un array que se repetirá en columnas
+          colors: ["#f3f3f3", "transparent"], // Alterna colores de fila
           opacity: 0.5
         }
       },
       xaxis: {
-        categories: fechas,
+        categories: meses,
         title: {
-          text: 'Fecha'
+          text: 'Mes y Año'
         }
       }
     };

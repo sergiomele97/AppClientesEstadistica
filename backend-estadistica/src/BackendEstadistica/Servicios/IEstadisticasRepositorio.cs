@@ -3,6 +3,7 @@
 public interface IEstadisticasRepositorio
 {
     //Clientes
+    Cliente GetRandomClient();
     List<Cliente> GetClientes();
     Cliente GetClienteById(int id);
     void CrearCliente(Cliente cliente);
@@ -20,6 +21,7 @@ public interface IEstadisticasRepositorio
     List<Transaccion> GetTransacciones();
     Transaccion GetTransaccionById(int id);
     void CrearTransaccion(Transaccion transaccion);
+    void DetectarOutliers();
 
     //Pais 
     List<Pais> GetPaises();

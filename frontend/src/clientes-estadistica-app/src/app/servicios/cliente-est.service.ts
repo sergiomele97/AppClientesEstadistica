@@ -12,7 +12,7 @@ export class ClienteEstService {
 
   constructor(private http: HttpClient) {}
 
-  private readonly url_estadistica = environment.apiUrl;
+  private readonly url_estadistica = environment.apiEstadisticas;
 
   getClientes(): Observable<ICliente[]> {
     return this.http.get<ICliente[]>(`${this.url_estadistica}/getclientes`);
