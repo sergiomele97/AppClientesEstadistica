@@ -401,4 +401,12 @@ FodyWeavers.xsd
 *.sln.iml
 
 # Migrations
-backend-estadistica/src/BackendEstadistica/Migrations/
+backend-estadistica/src/BackendEstadistica/Migrations/*¡
+/backend-estadistica/src/BackendEstadistica/Migrations/20240819113611_Add Migation 1.Designer.cs
+/backend-estadistica/src/BackendEstadistica/Migrations/20240820121714_MigracionIdentity.cs
+/backend-estadistica/src/BackendEstadistica/Migrations/20240820121714_MigracionIdentity.Designer.cs
+/backend-estadistica/src/BackendEstadistica/Migrations/20240820125328_MigracionIdentity2.cs
+/backend-estadistica/src/BackendEstadistica/Migrations/20240820125328_MigracionIdentity2.Designer.cs
+/backend-estadistica/src/BackendEstadistica/Migrations/20240826085309_Estadisticas.cs
+/backend-estadistica/src/BackendEstadistica/Migrations/20240826085309_Estadisticas.Designer.cs
+/backend-estadistica/src/BackendEstadistica/Migrations/ContextoBBDDModelSnapshot.cs
