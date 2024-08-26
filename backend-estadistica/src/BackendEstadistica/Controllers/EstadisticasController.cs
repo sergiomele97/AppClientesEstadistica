@@ -126,15 +126,15 @@ public class EstadisticasController : ControllerBase
     [HttpGet("ultimas-transacciones/{clienteId}")]
     public async Task<IActionResult> ObtenerUltimasTransacciones(int clienteId)
     {
-        var ultimasTransacciones = await contextoBBDD.Transacciones
-            .Include(t => t.ClienteOrigen)
-            .Include(t => t.ClienteDestino)
-            .Where(t => t.ClienteOrigenId == clienteId)
-            .OrderByDescending(t => t.Fecha)
-            .Take(5)
-            .ToListAsync();
+        var transaccionesMayores = await contextoBBDD.Transacciones
+       .Include(t => t.ClienteOrigen)
+       .Include(t => t.ClienteDestino)
+       .Where(t => t.ClienteOrigenId == clienteId)
+       .OrderByDescending(t => t.ImporteEnviado)
+       .Take(5) 
+       .ToListAsync();
 
-        return Ok(ultimasTransacciones);
+        return Ok(transaccionesMayores);
     }
 
     [HttpPut("resolucionOutlier/{idTransaccion}")]

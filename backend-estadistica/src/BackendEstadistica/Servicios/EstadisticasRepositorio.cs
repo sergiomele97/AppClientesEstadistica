@@ -190,7 +190,7 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
         }
         catch (Exception ex)
         {
-            // Loguea la excepción
+            
             Console.WriteLine(ex.Message);
             return false;
         }
