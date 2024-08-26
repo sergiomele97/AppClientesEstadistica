@@ -122,7 +122,7 @@ public class EstadisticasController : ControllerBase
 
         return Ok(transaccionesOutliers);
     }
-
+        
     [HttpGet("ultimas-transacciones/{clienteId}")]
     public async Task<IActionResult> ObtenerUltimasTransacciones(int clienteId)
     {
