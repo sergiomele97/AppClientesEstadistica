@@ -27,6 +27,7 @@ public class ContextoBBDD : IdentityDbContext<ApplicationUser>
 
     public DbSet<Conversion> Conversion { get; set; } // 5ª Tabla
 
+    public DbSet<Divisa> Divisa { get; set; } // 6ª Tabla
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder); // Necesario para Identity
@@ -50,6 +51,10 @@ public class ContextoBBDD : IdentityDbContext<ApplicationUser>
             .HasForeignKey(c => c.PaisId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        modelBuilder.Entity<Divisa>()
+            .Property(d => d.DivisaId)
+            .ValueGeneratedOnAdd(); ;
+            
         // Cargar los datos de países desde el archivo JSON
         var paises = LoadPaisesJson("./data/listaPaises.json");
 

@@ -94,6 +94,28 @@ namespace BackendEstadistica.Migrations
                     b.ToTable("Conversion");
                 });
 
+            modelBuilder.Entity("BackendEstadistica.Entidades.Divisa", b =>
+                {
+                    b.Property<int>("DivisaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DivisaId"));
+
+                    b.Property<DateTime?>("Fecha")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Valor")
+                        .HasColumnType("float");
+
+                    b.HasKey("DivisaId");
+
+                    b.ToTable("Divisa");
+                });
+
             modelBuilder.Entity("BackendEstadistica.Entidades.Pais", b =>
                 {
                     b.Property<int>("PaisId")
@@ -1390,12 +1412,15 @@ namespace BackendEstadistica.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Contraseña")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Correo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefono")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

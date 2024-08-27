@@ -7,6 +7,7 @@ import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
 import { ClustersDataService } from 'src/app/servicios/clusters-data.service';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-clusters',
@@ -24,7 +25,7 @@ export class ClustersComponent implements OnInit, OnDestroy {
     private transaccionService: TransaccionService
   ) {}
 
-  private apiUrl = 'http://127.0.0.1:5000/cluster';
+  private apiUrl = environment.apiClusters;   
   private datos: any[] = [];
   public daviesBouldinIndex: number | null = null;
   cliente: ICliente | undefined;
@@ -62,13 +63,16 @@ export class ClustersComponent implements OnInit, OnDestroy {
     // Recorrer todos los clientes y extraer los datos necesarios junto con el balance calculado
     this.datos = this.clientes.map(cliente => {
       const edad = cliente.edad;
-      const sexo = cliente.sexo === 'M' ? 0 : 1;  // Codificar sexo: 0 para mujeres, 1 para hombres
+      const sexo = cliente.sexo === 'Masculino' ? 0 : 1;  // Codificar sexo: 0 para mujeres, 1 para hombres
       const balance = this.calcularBalance(cliente.clienteId);
-
+      const nGastos = this.numeroGastos(cliente.clienteId);
+      const nIngresos = this.numeroIngresos(cliente.clienteId);
+      const pais = cliente.pais
+      
       // Imprimir los dos primeros valores (edad y sexo) en la consola
       console.log([edad, sexo]);
 
-      return [edad, sexo, balance];
+      return [edad, balance, sexo , nGastos, nIngresos];
     });
   }
 
@@ -82,18 +86,34 @@ export class ClustersComponent implements OnInit, OnDestroy {
     return ingresos - gastos;
   }
 
+  private numeroGastos(clienteId: number): number {
+    const gastos = this.transacciones
+      .filter(transaccion => transaccion.clienteOrigenId === clienteId)
+      .reduce((total) => total + 1, 0);
+    return gastos;
+  }
+  private numeroIngresos(clienteId: number): number {
+    const ingresos = this.transacciones
+    .filter(transaccion => transaccion.clienteDestinoId === clienteId)
+    .reduce((total) => total + 1, 0);
+    return ingresos;
+  }
+
+  
   private async enviarDatosBackend(datos: any[], nCluster: number): Promise<void> {
     try {
       const response = await this.http.post<any>(this.apiUrl, { data: datos, nCluster: nCluster }).toPromise();
       const etiqueta = response.etiqueta || [];
-      const db_index = response.db || [];
+      this.daviesBouldinIndex= response.db || 0;
       this.dataService.setLabel(etiqueta);
-      this.dataService.setIndexDB(db_index);
-      this.daviesBouldinIndex = response.davies_bouldin_index || null;
-      console.log(this.daviesBouldinIndex);
+      
+      const datosReducidos = datos.map(individuo => individuo.slice(0, 2)); // solo se muestran dos variables
+      this.dataService.setSelectedDataCluster(datosReducidos);//mandamos los datos cortados a la global para visualizar en cluster
+      this.dataService.setSelectedDataTable(datos);//mandamos los datos completos a la global para visualizar en la tabla
+
     } catch (error) {
-      console.error('Error al enviar datos al backend:', error);
-      throw new Error('Error al enviar datos al backend');
+    
+      throw new Error('Error al enviar datos al python');
     }
   }
 
