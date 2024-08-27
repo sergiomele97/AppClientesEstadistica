@@ -1,0 +1,49 @@
+(antenv) kudu_ssh_user@dataanalyt_kudu_e90901dbe8:~/LogFiles/kudu/trace$ history    1  curl -X POST https://dataanalytics-azdxd7cmdbh0hmab.spaincentral-01.azurewebsites.net/predict      -H "Content-Type: application/json"      -d '{"data": [1, 2, 3, 4, 5]}'
+    2  dir
+    3  cd site
+    4  dir
+    5  cd wwwroot
+    6  dir
+    7  antenv/Scripts/activate
+    8  source antenv/bin/activate
+    9  gunicorn -c gunicorn.conf.py main:app
+   10  pip install gunicorn
+   11  curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+   12  python get-pip.py
+   13  python3
+   14  python get-pip.py
+   15  python3 get-pip.py
+   16  pip install gunicorn
+   17  nano ~/.bashrc
+   18  vi ~/.bashrc
+   19  source ~/.bashrc
+   20  sed -i '$ a export PATH="$HOME/.local/bin:$PATH"' ~/.bashrc
+   21  pip --version
+   22  pip install gunicorn
+   23  gunicorn -c gunicorn.conf.py main:app
+   24  pip install flask
+   25  gunicorn -c gunicorn.conf.py main:app
+   26  pip install -r requirements.txt
+   27  df -h
+   28  pip install -r requirements.txt
+   29  df -h /tmp
+   30  dir
+   31  rm output.tar.gz
+   32  df -h
+   33  pip install -r requirements.txt
+   34  gunicorn -c gunicorn.conf.py main:app
+   35  cd D:\home\LogFiles
+   36  ~cd D:\home\LogFiles
+   37  cd D:\home\LogFiles
+   38  cd ..
+   39  cd ..
+   40  dir
+   41  cat LogFiles
+   42  cd LogFiles
+   43  dir
+   44  cat kudu
+   45  cd kudu
+   46  dir
+   47  cd trace
+   48  dir
+   49  history
