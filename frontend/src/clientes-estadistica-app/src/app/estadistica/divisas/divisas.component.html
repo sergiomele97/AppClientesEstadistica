@@ -12,6 +12,14 @@
       <option value="libras">Libras</option>
     </select>
   </div>
+<div class="dropdown-container">
+  <label for="currency-select">Seleccione la divisa:</label>
+  <select id="currency-select" (change)="onCurrencyChange($event)">
+    <option value="euros">Euros</option>
+    <option value="dolares">Dólares</option>
+    <option value="libras">Libras</option>
+  </select>
+</div>
 
   <!-- Contenedor del gráfico ajustado al espacio restante -->
   <div id="chart" class="flex-grow w-full max-w-4xl">
@@ -29,4 +37,20 @@
       class="w-full h-96"
     ></apx-chart>
   </div>
+</div>
+
+<!--The content below is only a placeholder and can be replaced.-->
+<div id="chart">
+  <apx-chart
+    [series]="chartOptions.series"
+    [chart]="chartOptions.chart"
+    [xaxis]="chartOptions.xaxis"
+    [dataLabels]="chartOptions.dataLabels"
+    [grid]="chartOptions.grid"
+    [stroke]="chartOptions.stroke"
+    [title]="chartOptions.title"
+    [markers]="chartOptions.markers"
+    [yaxis]="chartOptions.yaxis"
+    [fill]="chartOptions.fill"
+  ></apx-chart>
 </div>
