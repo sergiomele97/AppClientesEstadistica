@@ -18,7 +18,7 @@ namespace BackendEstadistica.Servicios
 
         //------------------Configurar-volumenes-de-creación-----------------------------
 
-        int frecuenciaMinutos = 2000;
+        int frecuenciaMinutos = 5;
         int volumenClientes = 5;
         int volumenTransacciones = 10;
         int volumenConversiones = 3;
@@ -95,7 +95,7 @@ namespace BackendEstadistica.Servicios
                     }
 
                     // Esperar 5 segundos antes de la siguiente ejecución
-                    await Task.Delay(TimeSpan.FromMinutes(frecuenciaMinutos), stoppingToken);
+                    await Task.Delay(TimeSpan.FromSeconds(frecuenciaMinutos), stoppingToken);
                 }
                 catch (Exception ex)
                 {
