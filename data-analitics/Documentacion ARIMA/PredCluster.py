@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from statsmodels.tsa.arima.model import ARIMA
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans # pip install scikit-learn
 from sklearn.metrics import davies_bouldin_score
 import warnings
 
@@ -29,8 +29,7 @@ def cluster():
 
     recibido = request.json
     data = recibido['data']
-    print("data es ",data)
-    print("data es ",data)
+    print("data es ",data, flush=True)
     n_clusters = recibido['nCluster']
     kmeans = KMeans(n_clusters=n_clusters, random_state=0)
     kmeans.fit(data)

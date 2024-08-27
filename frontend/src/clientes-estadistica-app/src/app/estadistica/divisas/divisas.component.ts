@@ -1,27 +1,8 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, OnInit } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
-import {
-  ChartComponent,
-  ApexAxisChartSeries,
-  ApexChart,
-  ApexXAxis,
-  ApexDataLabels,
-  ApexTitleSubtitle,
-  ApexStroke,
-  ApexGrid,
-  ApexFill,
-  ApexMarkers,
-  ApexYAxis
-} from "ng-apexcharts";
-
-import { ICliente } from 'src/app/interfaces/cliente';
-import { ITransaccion } from 'src/app/interfaces/transaccion';
-import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
-import { TransaccionService } from 'src/app/servicios/transaccion.service';
-
-
-
-
+import { ChartComponent, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexDataLabels, ApexTitleSubtitle, ApexStroke, ApexGrid, ApexFill, ApexMarkers, ApexYAxis } from "ng-apexcharts";
+import { DivisaService } from 'src/app/servicios/divisa.service';
+import { IDivisa } from 'src/app/interfaces/divisa';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -41,52 +22,84 @@ export type ChartOptions = {
   templateUrl: './divisas.component.html',
   styleUrls: ['./divisas.component.css']
 })
-export class DivisasComponent {
+export class DivisasComponent implements OnInit {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
-  private data = {
-    euros: [4, 3, 10, 9, 29, 19, 22, 9, 12, 7, 19, 5, 13, 9, 17, 2, 7, 5],
-    dolares: [5, 2, 15, 14, 20, 25, 20, 10, 14, 8, 22, 6, 16, 11, 19, 4, 9, 7],
-    libras: [6, 3, 13, 12, 18, 22, 17, 8, 10, 6, 25, 7, 14, 10, 20, 3, 8, 6]
-  };
+  private apiUrl = 'http://localhost:5000/predict';
+  private divisasData: IDivisa[] = []; // Datos de divisas obtenidos del backend
+  
+  constructor(private http: HttpClient, private divisaService: DivisaService) { }
 
-
-  private fechas = {
-    euros: [ "2000-01-01", "2000-01-02", "2000-01-03", "2000-01-04", "2000-01-05", "2000-01-06", "2000-01-07", "2000-01-08", "2000-01-09", "2000-01-10", "2000-01-11", "2000-01-12", "2000-01-13", "2000-01-14", "2000-01-15", "2000-01-16", "2000-01-17", "2000-01-18"],
-    dolares: [ "2000-01-01", "2000-01-02", "2000-01-03", "2000-01-04", "2000-01-05", "2000-01-06", "2000-01-07", "2000-01-08", "2000-01-09", "2000-01-10", "2000-01-11", "2000-01-12", "2000-01-13", "2000-01-14", "2000-01-15", "2000-01-16", "2000-01-17", "2000-01-18"],
-    libras: [ "2000-01-01", "2000-01-02", "2000-01-03", "2000-01-04", "2000-01-05", "2000-01-06", "2000-01-07", "2000-01-08", "2000-01-09", "2000-01-10", "2000-01-11", "2000-01-12", "2000-01-13", "2000-01-14", "2000-01-15", "2000-01-16", "2000-01-17", "2000-01-18"]
+  ngOnInit(): void {
+    this.obtenerDatosDivisas();
+    console.log(this.divisasData);
   }
 
-  constructor(private http: HttpClient) {
-    this.updateChart('euros');
-    
+  obtenerDatosDivisas() {
+    this.divisaService.getDivisasData().subscribe({
+      next: (data) => {
+        this.divisasData = data;
+        console.log("los datos son: ",data);
+        this.updateChart('EUR'); // Actualizar el gráfico con la primera divisa como ejemplo
+      },
+      error: (err) => {
+        console.error('Error al obtener datos de divisas:', err);
+      }
+    });
   }
 
   updateChart(currency: string) {
+    if (!this.divisasData || this.divisasData.length === 0) {
+      console.error('No divisasData available.');
+      return;
+    }
+
     console.log('Requesting data for:', currency);
 
-    this.http.post('http://localhost:5000/predict', { data: this.data[currency] })
+    // Filtrar los datos de la divisa seleccionada
+    const filteredData = this.divisasData.filter(d => d.nombre === currency);
+    
+    if (filteredData.length === 0) {
+      console.error('No data available for currency:', currency);
+      return;
+    }
+
+    // Ordenar por fecha y tomar los últimos 10 registros
+    filteredData.sort((a, b) => (a.fecha ?? new Date()).getTime() - (b.fecha ?? new Date()).getTime());
+    const recentData = filteredData.slice(-10);
+    
+    if (recentData.length === 0) {
+      console.error('No recent data available for currency:', currency);
+      return;
+    }
+
+    const recentDates = recentData.map(d => (d.fecha ?? new Date()).toISOString().split('T')[0]);
+    const recentValues = recentData.map(d => d.divisa);
+
+    this.http.post(this.apiUrl, { data: recentValues })
       .subscribe((response: any) => {
         console.log('Received data:', response);
         const predictions = response.Prediction || [];
         const predictionData = predictions.length ? predictions : new Array(10).fill(0);
-        
-        const historicalData = this.data[currency];
-        const historicalDates = this.fechas[currency];
-        const predictionDates = ["2000-01-19", "2000-01-20", "2000-01-21", "2000-01-22", "2000-01-23", "2000-01-24", "2000-01-25", "2000-01-26", "2000-01-27", "2000-01-28"];
+
+        const predictionDates = recentDates.map((date, index) => {
+          const nextDate = new Date(date);
+          nextDate.setDate(nextDate.getDate() + index + 1);
+          return nextDate.toISOString().split('T')[0];
+        });
 
         this.chartOptions = {
           series: [
             {
               name: 'Historical Data',
-              data: historicalData.map((value, index) => [historicalDates[index], value]),
-              color: '#0000FF',  // Azul para los datos históricos
+              data: recentValues.map((value, index) => [recentDates[index], value]),
+              color: '#0000FF',
             },
             {
               name: 'Predictions',
               data: predictionData.map((value, index) => [predictionDates[index], value]),
-              color: '#FF0000',  // Rojo para las predicciones
+              color: '#FF0000',
             }
           ],
           chart: {
@@ -99,7 +112,7 @@ export class DivisasComponent {
           },
           xaxis: {
             type: 'datetime',
-            categories: [...historicalDates, ...predictionDates]  // Asegura que las fechas correspondan a los datos
+            categories: [...recentDates, ...predictionDates]
           },
           title: {
             text: 'Evolución del Valor de la Divisa',
@@ -143,10 +156,10 @@ export class DivisasComponent {
       });
   }
 
-
   onCurrencyChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const selectedCurrency = selectElement.value;
+    console.log('Currency selected:', selectedCurrency);
     this.updateChart(selectedCurrency);
   }
 }

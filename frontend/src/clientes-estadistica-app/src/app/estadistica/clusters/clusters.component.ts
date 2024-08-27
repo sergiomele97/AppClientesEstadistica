@@ -66,7 +66,6 @@ export class ClustersComponent implements OnInit, OnDestroy {
       const balance = this.calcularBalance(cliente.clienteId);
       const nGastos = this.numeroGastos(cliente.clienteId);
       const nIngresos = this.numeroIngresos(cliente.clienteId);
-      const pais = cliente.pais
       
       // Imprimir los dos primeros valores (edad y sexo) en la consola
       console.log([edad, sexo]);
