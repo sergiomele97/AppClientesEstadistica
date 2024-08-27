@@ -38,6 +38,18 @@ export class TransaccionService {
       )
     );
   }
+
+  outliersVistos():Observable<ITransaccion[]> {
+    return this.http.get<ITransaccion[]>(`${this.url_estadistica}/outliers-vistos`).pipe(
+      map(transacciones => 
+        transacciones.map(transaccion => ({
+          ...transaccion,
+          importeEnviado: this.formatearDecimal( transaccion.importeEnviado),
+          importeRecibido: this.formatearDecimal(transaccion.importeRecibido )
+        }))
+      )
+    );
+  }
   
   ultimasTransacciones(clienteId: number): Observable<ITransaccion[]> {
     return this.http.get<ITransaccion[]>(`${this.url_estadistica}/ultimas-transacciones/${clienteId}`).pipe(
