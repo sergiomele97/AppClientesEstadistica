@@ -2,6 +2,6 @@ export const environment = {
     production: true,
     apiEstadisticas: 'https://backend-estadistica-g6afbvbagbe3d6gr.spaincentral-01.azurewebsites.net/api/estadisticas',
     apiUsuarios: 'https://backend-estadistica-g6afbvbagbe3d6gr.spaincentral-01.azurewebsites.net/api/usuarios',
-    apiClusters: 'https://dataanalytics-azdxd7cmdbh0hmab.spaincentral-01.azurewebsites.net/cluster',
-    apiPrediccion: 'https://dataanalytics-azdxd7cmdbh0hmab.spaincentral-01.azurewebsites.net/predict'
+    apiClusters: 'https://datapython-ene3fsaxg4hne9cn.westeurope-01.azurewebsites.net/cluster',
+    apiPrediccion: 'https://datapython-ene3fsaxg4hne9cn.westeurope-01.azurewebsites.net/predict'
   };
