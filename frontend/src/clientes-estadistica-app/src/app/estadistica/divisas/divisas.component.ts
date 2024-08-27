@@ -32,24 +32,25 @@ export class DivisasComponent implements OnInit {
   constructor(private http: HttpClient, private divisaService: DivisaService) { }
 
   ngOnInit(): void {
-    console.log(this.divisasData);
+    //console.log(this.divisasData);
   }
 
   obtenerDatosDivisas(divisa: string) {
+    console.log("Divisa ", divisa);
     this.divisaService.getDivisasData(divisa).subscribe({//obtenemos los datos de la divisa seleccionada
       next: (data) => {
         this.divisasData = data;
-        console.log("los datos son: ", data);
+        console.log("los datos son: ", this.divisasData[0]);
         this.updateChart(); // Ahora actualiza el gráfico después de recibir los datos
       },
       error: (err) => {
-        console.error('Error al obtener datos de divisas:', err);
+        console.error('Error al obtener datos de divisas:', err.status, err.message, err);
       }
     });
   }
 
   updateChart() {//para graficar los datos
-    console.log('Los datos de :', this.divisasData);
+
     if (this.divisasData.length === 0) {
       console.error('No data available:',this.divisasData);
       return;
