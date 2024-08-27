@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RegistroComponent } from './registro/registro.component';
-import { RegistroAdminComponent } from './registroAdmin/registroAdmin.component';
 import { LoginComponent } from './login/login.component';
 import { SpaghettiComponent } from './estadisticas/spaghetti/spaghetti.component';
 import { GraphComponent } from './estadisticas/graph/graph.component';
@@ -14,7 +12,6 @@ import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 import { ClientesComponent } from './estadistica/clientes/clientes.component';
 import { DivisasComponent } from './estadistica/divisas/divisas.component';
 import { AuthGuard } from './auth.guard';
-import { UsersInfoComponent } from './menu/usuarios/users-info/users-info.component';
 import { EstadisticaComponent } from './estadistica/estadistica.component';
 import { HomeComponent } from './home/home.component';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';
@@ -27,13 +24,8 @@ import { ClustersComponent } from './estadistica/clusters/clusters.component';
 
 const routes: Routes = [
   { path: "login", component: LoginComponent},
-  { path: "users", component: UsersInfoComponent},
   { path: 'home', component: HomeComponent },
-  { path: "registro", component: RegisterComponent }, // Registro definitivo en construcción
-
-  // { path: "registro", component: RegistroComponent },
-  { path: "registroAdmin", component: RegistroAdminComponent },
-  { path: 'users-info', component: UsersInfoComponent, canActivate: [AuthGuard], },
+  { path: "registro", component: RegisterComponent },
   { path: "estadistica", component: EstadisticaComponent, 
     children: [
       { path: 'outliers', component: OutlierComponent },
