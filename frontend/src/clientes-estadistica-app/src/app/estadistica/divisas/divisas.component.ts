@@ -32,16 +32,15 @@ export class DivisasComponent implements OnInit {
   constructor(private http: HttpClient, private divisaService: DivisaService) { }
 
   ngOnInit(): void {
-    this.obtenerDatosDivisas();
     console.log(this.divisasData);
   }
 
-  obtenerDatosDivisas() {
-    this.divisaService.getDivisasData().subscribe({
+  obtenerDatosDivisas(divisa: string) {
+    this.divisaService.getDivisasData(divisa).subscribe({//obtenemos los datos de la divisa seleccionada
       next: (data) => {
         this.divisasData = data;
-        console.log("los datos son: ",data);
-        this.updateChart('EUR'); // Actualizar el gráfico con la primera divisa como ejemplo
+        console.log("los datos son: ", data);
+        this.updateChart(); // Ahora actualiza el gráfico después de recibir los datos
       },
       error: (err) => {
         console.error('Error al obtener datos de divisas:', err);
@@ -49,28 +48,19 @@ export class DivisasComponent implements OnInit {
     });
   }
 
-  updateChart(currency: string) {
-    if (!this.divisasData || this.divisasData.length === 0) {
-      console.error('No divisasData available.');
-      return;
-    }
-
-    console.log('Requesting data for:', currency);
-
-    // Filtrar los datos de la divisa seleccionada
-    const filteredData = this.divisasData.filter(d => d.nombre === currency);
-    
-    if (filteredData.length === 0) {
-      console.error('No data available for currency:', currency);
+  updateChart() {//para graficar los datos
+    console.log('Los datos de :', this.divisasData);
+    if (this.divisasData.length === 0) {
+      console.error('No data available:',this.divisasData);
       return;
     }
 
     // Ordenar por fecha y tomar los últimos 10 registros
-    filteredData.sort((a, b) => (a.fecha ?? new Date()).getTime() - (b.fecha ?? new Date()).getTime());
-    const recentData = filteredData.slice(-10);
+    this.divisasData.sort((a, b) => (a.fecha ?? new Date()).getTime() - (b.fecha ?? new Date()).getTime());
+    const recentData = this.divisasData.slice(-10);
     
     if (recentData.length === 0) {
-      console.error('No recent data available for currency:', currency);
+      console.error('No data available:',this.divisasData);
       return;
     }
 
@@ -159,7 +149,7 @@ export class DivisasComponent implements OnInit {
   onCurrencyChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const selectedCurrency = selectElement.value;
-    console.log('Currency selected:', selectedCurrency);
-    this.updateChart(selectedCurrency);
+    console.log('Se ha seleccionado en el Front:', selectedCurrency);
+    this.obtenerDatosDivisas(selectedCurrency); // Actualiza el gráfico cuando se selecciona una nueva divisa
   }
 }

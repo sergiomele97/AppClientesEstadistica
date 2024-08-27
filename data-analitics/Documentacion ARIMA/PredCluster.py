@@ -13,6 +13,7 @@ def predict():
 
     data = request.json
     series = data['data']
+    print("data prediction: ", series, flush=True)
     model = ARIMA(series, order=(5, 0, 3))
     model_fit = model.fit()
     pred_steps = 10
@@ -29,7 +30,7 @@ def cluster():
 
     recibido = request.json
     data = recibido['data']
-    print("data es ",data, flush=True)
+    print("data cluster: ",data, flush=True)
     n_clusters = recibido['nCluster']
     kmeans = KMeans(n_clusters=n_clusters, random_state=0)
     kmeans.fit(data)
