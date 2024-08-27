@@ -15,7 +15,7 @@ export class DivisaService {
   private readonly url_estadistica = environment.apiEstadisticas;
 
   getDivisasData(nombre: string): Observable<IDivisa[]> {
-    return this.http.get<IDivisa[]>(`${this.url_estadistica}/getdivisas/`);
+    return this.http.get<IDivisa[]>(`${this.url_estadistica}/getdivisa/${nombre}`);
   }
 
 

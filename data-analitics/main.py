@@ -30,7 +30,7 @@ def cluster():
 
     recibido = request.json
     data = recibido['data']
-    print("data cluster: ",data, flush=True)
+    #print("data cluster: ",data, flush=True)
     n_clusters = recibido['nCluster']
     kmeans = KMeans(n_clusters=n_clusters, random_state=0)
     kmeans.fit(data)
@@ -53,4 +53,4 @@ def cluster():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8000) 

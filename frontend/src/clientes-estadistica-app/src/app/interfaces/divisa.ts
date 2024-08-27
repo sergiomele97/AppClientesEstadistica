@@ -2,6 +2,6 @@
 export interface IDivisa {
     divisaId: number;
     nombre: string;
-    divisa: number;
+    valor: number;
     fecha?: Date;
 }

@@ -8,11 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BackendEstadistica.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:backend-estadistica/src/BackendEstadistica/Migrations/20240827075029_Estadistica.cs
-    public partial class Estadistica : Migration
-========
-    public partial class InitialCreate : Migration
->>>>>>>> 1b875f4d396f514937399389d75fb7db986c49e8:backend-estadistica/src/BackendEstadistica/Migrations/20240827102031_InitialCreate.cs
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -92,15 +88,9 @@ namespace BackendEstadistica.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-<<<<<<<< HEAD:backend-estadistica/src/BackendEstadistica/Migrations/20240827075029_Estadistica.cs
-                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Contraseña = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Telefono = table.Column<string>(type: "nvarchar(max)", nullable: true)
-========
                     Correo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Contraseña = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Telefono = table.Column<string>(type: "nvarchar(max)", nullable: false)
->>>>>>>> 1b875f4d396f514937399389d75fb7db986c49e8:backend-estadistica/src/BackendEstadistica/Migrations/20240827102031_InitialCreate.cs
                 },
                 constraints: table =>
                 {

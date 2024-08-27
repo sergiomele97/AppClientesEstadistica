@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ChartComponent, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexDataLabels, ApexTitleSubtitle, ApexStroke, ApexGrid, ApexFill, ApexMarkers, ApexYAxis } from "ng-apexcharts";
 import { DivisaService } from 'src/app/servicios/divisa.service';
 import { IDivisa } from 'src/app/interfaces/divisa';
-
+import { environment } from 'src/environments/environment';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -27,7 +27,7 @@ export class DivisasComponent implements OnInit {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
-  private apiUrl = 'http://localhost:5000/predict';
+  private apiUrl = environment.apiPrediccion;   
   private divisasData: IDivisa[] = []; // Datos de divisas obtenidos del backend
   
   constructor(private http: HttpClient, private divisaService: DivisaService) { }
@@ -41,7 +41,7 @@ export class DivisasComponent implements OnInit {
     this.divisaService.getDivisasData(divisa).subscribe({//obtenemos los datos de la divisa seleccionada
       next: (data) => {
         this.divisasData = data;
-        console.log("los datos son: ", this.divisasData[0]);
+        //console.log("los datos son: ", this.divisasData);
         this.updateChart(); // Ahora actualiza el gráfico después de recibir los datos
       },
       error: (err) => {
@@ -58,7 +58,6 @@ export class DivisasComponent implements OnInit {
     }
 
     // Ordenar por fecha y tomar los últimos 10 registros
-    this.divisasData.sort((a, b) => (a.fecha ?? new Date()).getTime() - (b.fecha ?? new Date()).getTime());
     const recentData = this.divisasData.slice(-10);
     
     if (recentData.length === 0) {
@@ -66,8 +65,15 @@ export class DivisasComponent implements OnInit {
       return;
     }
 
-    const recentDates = recentData.map(d => (d.fecha ?? new Date()).toISOString().split('T')[0]);
-    const recentValues = recentData.map(d => d.divisa);
+    const recentDates = recentData.map(d => {
+      const fecha = new Date(d.fecha);
+      return !isNaN(fecha.getTime()) ? fecha.toISOString().split('T')[0] : null;
+    }).filter(date => date !== null); // obtenemos las fechas de las divisas
+    
+    const recentValues = recentData.map(d => d.valor);//obtenemos los valores de las divisas
+    //console.log(recentData)
+    console.log(recentDates)
+    console.log(recentValues)
 
     this.http.post(this.apiUrl, { data: recentValues })
       .subscribe((response: any) => {
@@ -80,7 +86,7 @@ export class DivisasComponent implements OnInit {
           nextDate.setDate(nextDate.getDate() + index + 1);
           return nextDate.toISOString().split('T')[0];
         });
-
+        console.log(predictionDates)
         this.chartOptions = {
           series: [
             {
