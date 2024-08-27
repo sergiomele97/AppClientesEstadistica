@@ -1,8 +1,6 @@
-﻿namespace BackendEstadistica.Servicios
-{
-    public interface ITokenService
-    {
-        string GenerateJwtToken(Usuario user);
-    }
+﻿namespace BackendEstadistica.Servicios;
 
+public interface ITokenService
+{
+    string GenerateJwtToken(ApplicationUser user);
 }

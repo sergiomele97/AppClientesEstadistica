@@ -1,33 +1,28 @@
-
-using BackendEstadistica.Contexto;
-using BackendEstadistica.Mappings;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System.Text;
-
 namespace BackendEstadistica
 {
     public class Program
     {
         public static void Main(string[] args)
         {
+            // Crea un nuevo builder para configurar los servicios y la aplicación.
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Añade servicios al contenedor.
+            // Registra repositorios y servicios específicos
             builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
             builder.Services.AddScoped<IEstadisticasRepositorio, EstadisticasRepositorio>();
 
-
+            // Añade soporte para controladores
             builder.Services.AddControllers();
 
-            // Servicio para el mapeado
+            // Configura AutoMapper para el mapeo de objetos
             builder.Services.AddAutoMapper(typeof(MappingProfile));
 
+            // Configura el contexto de la base de datos usando SQL Server
             builder.Services.AddDbContext<ContextoBBDD>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            //Serilog
+            // Configura Serilog para el registro de eventos
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .Filter.ByExcluding(logEvent => logEvent.Level == Serilog.Events.LogEventLevel.Debug) // Excluir eventos de nivel Debug
@@ -35,99 +30,100 @@ namespace BackendEstadistica
                 .WriteTo.File("Logs/logClientes.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 
-            builder.Host.UseSerilog(); // Usa Serilog como el logger
+            // Configura el host para usar Serilog como el logger
+            builder.Host.UseSerilog();
 
-            builder.Services.AddControllers();
-
-            // Configurar Identity
+            // Configura Identity para manejar la autenticación y autorización de usuarios
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                // Configuración de las opciones de usuario
+                // Asegura que cada usuario tenga un correo electrónico único
                 options.User.RequireUniqueEmail = true;
             })
-            .AddEntityFrameworkStores<ContextoBBDD>()
-            .AddDefaultTokenProviders();
+            .AddEntityFrameworkStores<ContextoBBDD>() // Usa el contexto de EF Core para almacenar los usuarios
+            .AddDefaultTokenProviders(); // Proveedores de token predeterminados
 
-            // Configurar JWT
-            //var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
-            //builder.Services.AddAuthentication(x =>
-            //{
-            //    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //})
-            //.AddJwtBearer(x =>
-            //{
-            //    x.RequireHttpsMetadata = false;
-            //    x.SaveToken = true;
-            //    x.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateIssuerSigningKey = true,
-            //        IssuerSigningKey = new SymmetricSecurityKey(key),
-            //        ValidateIssuer = true,
-            //        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            //        ValidateAudience = true,
-            //        ValidAudience = builder.Configuration["Jwt:Audience"],
-            //        ValidateLifetime = true,
-            //        ClockSkew = TimeSpan.Zero
-            //    };
-            //});
+            // Configura JWT (JSON Web Token) para la autenticación
+            var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]); // Obtiene la clave de firma desde la configuración
+            builder.Services.AddAuthentication(x =>
+            {
+                // Configura el esquema de autenticación predeterminado y el esquema de desafío
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                // Configura el middleware JWT
+                x.RequireHttpsMetadata = false; // Si no usas HTTPS en desarrollo
+                x.SaveToken = true; // Guarda el token en el contexto de la solicitud
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true, // Valida la clave de firma del token
+                    IssuerSigningKey = new SymmetricSecurityKey(key), // Usa la clave de firma configurada
+                    ValidateIssuer = true, // Valida el emisor del token
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"], // Emisor válido
+                    ValidateAudience = true, // Valida el receptor del token
+                    ValidAudience = builder.Configuration["Jwt:Audience"], // Receptor válido
+                    ValidateLifetime = true, // Valida la fecha de expiración del token
+                    ClockSkew = TimeSpan.Zero // Permite que la fecha de expiración no tenga margen de error
+                };
+            });
 
-            // Configuración de CORS
+            // Configura el servicio para generar JWT tokens
+            builder.Services.AddScoped<ITokenService, TokenService>();
+
+            // Configuración de CORS (Cross-Origin Resource Sharing)
             builder.Services.AddCors(options =>
             {
+                // Política para permitir solicitudes desde el front-end en desarrollo
                 options.AddPolicy("AllowLocalhost",
                     builder => builder
-                        .WithOrigins("http://localhost:4200")                                               // URL FRONT-END LOCAL
+                        .WithOrigins("http://localhost:4200") // URL del front-end local
                         .AllowAnyHeader()
                         .AllowAnyMethod());
 
+                // Política para permitir solicitudes desde el front-end en producción
                 options.AddPolicy("AllowAzureHost",
                     builder => builder
-                        .WithOrigins("https://salmon-hill-0d0baa503.5.azurestaticapps.net")                 // URL FRONT-END PRODUCCIÓN
+                        .WithOrigins("https://salmon-hill-0d0baa503.5.azurestaticapps.net") // URL del front-end en producción
                         .AllowAnyHeader()
                         .AllowAnyMethod());
             });
 
-            // Build
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            // Agrega Swagger para documentación de la API
+            builder.Services.AddEndpointsApiExplorer(); // Agrega el explorador de puntos finales para Swagger
+            builder.Services.AddSwaggerGen(); // Agrega Swagger para documentación de la API
 
-            builder.Services.AddScoped<IEstadisticasRepositorio, EstadisticasRepositorio>();
-            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            builder.Services.AddHostedService<BackgroundDataGenerator>();
+            // Agrega servicio en segundo plano
+            builder.Services.AddHostedService<BackgroundDataGenerator>(); // Servicio en segundo plano para generar datos
 
-            var app = builder.Build();
+            var app = builder.Build(); // Construye la aplicación
 
-            // Apply migrations at startup
+            // Aplica migraciones automáticamente al iniciar la aplicación
             ApplyMigrations(app);
 
-            // Configure the HTTP request pipeline.
+            // Configura el pipeline de solicitudes HTTP
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-                // Allow Development
-                app.UseCors("AllowLocalhost");
-            } else
+                app.UseSwagger(); // Usa Swagger en desarrollo
+                app.UseSwaggerUI(); // Interfaz de usuario de Swagger
+                app.UseCors("AllowLocalhost"); // Usa la política CORS para desarrollo
+            }
+            else
             {
-                // Allow Production
-                app.UseCors("AllowAzureHost");
+                app.UseCors("AllowAzureHost"); // Usa la política CORS para producción
             }
 
-            app.UseHttpsRedirection();
+            app.UseHttpsRedirection(); // Redirige HTTP a HTTPS
 
-            // Habilita CORS
-            app.UseCors("AllowLocalhost");
+            app.UseAuthentication(); // Habilita el middleware de autenticación
+            app.UseAuthorization(); // Habilita el middleware de autorización
 
-            app.UseAuthorization();
+            app.MapControllers(); // Mapea los controladores a las rutas
 
-            app.MapControllers();
-
-            app.Run();
+            app.Run(); // Ejecuta la aplicación
         }
 
-
-        // Aplicar migraciones automaticamente en la BBDD Azure
+        // Aplicar migraciones automáticamente al iniciar la aplicación
         private static void ApplyMigrations(WebApplication app)
         {
             using (var scope = app.Services.CreateScope())
@@ -136,12 +132,12 @@ namespace BackendEstadistica
                 try
                 {
                     var context = services.GetRequiredService<ContextoBBDD>();
-                    context.Database.Migrate();
+                    context.Database.Migrate(); // Aplica las migraciones pendientes a la base de datos
                 }
                 catch (Exception ex)
                 {
                     var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred while migrating the database.");
+                    logger.LogError(ex, "An error occurred while migrating the database."); // Registra el error si ocurre uno
                 }
             }
         }

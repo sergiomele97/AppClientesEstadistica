@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendEstadistica.Migrations
 {
     [DbContext(typeof(ContextoBBDD))]
-    [Migration("20240826085309_Estadisticas")]
+    [Migration("20240826121031_Estadisticas")]
     partial class Estadisticas
     {
         /// <inheritdoc />
