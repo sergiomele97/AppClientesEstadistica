@@ -7,6 +7,7 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning, module='statsmodels')
 app = Flask(__name__)
 CORS(app)  # Habilita CORS para todas las rutas
+
 @app.route('/predict', methods=['POST'])
 def predict():
 
@@ -19,7 +20,7 @@ def predict():
     pred_mean = pred.predicted_mean.tolist()
     pred_ci = pred.conf_int().tolist()
     response = {'Prediction': pred_mean, 'ConfidenceInterval': pred_ci}
-    print(response, flush=True)
+    # print(response, flush=True)
     return jsonify(response)
 
 
@@ -30,7 +31,7 @@ def cluster():
     data = recibido['data']
     n_clusters = recibido['nCluster']
     kmeans = KMeans(n_clusters=n_clusters, random_state=0)
-    kmeans.fit(data)
+    kmeans.fit(data) 
     labels = kmeans.labels_.tolist()
     labels = [lab + 1 for lab in labels]  # Ajuste de etiquetas
        
@@ -46,4 +47,4 @@ def cluster():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False, host="0.0.0.0", port=8000)
