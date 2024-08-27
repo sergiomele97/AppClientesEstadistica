@@ -103,55 +103,64 @@ namespace BackendEstadistica.Controllers
         {
             var transaccion = await _estadisticasRepositorio.GetTransaccionByIdAsync(id);
 
-        return Ok(mapper.Map<Transaccion>(transaccionId));
+            if (transaccion == null)
+            {
+                return NotFound("Transacción no encontrada.");
+            }
 
-    }
+            return Ok(_mapper.Map<Transaccion>(transaccion));
+        }
 
-    //Divisas
-    [HttpPost("crearDivisas")]
-    public IActionResult CrearDivisas()
-    {
-        // Lista de nombres de divisas
-        var divisas = new List<string>
-                {
-                    "AFN", "ALL", "EUR", "AOA", "XCD", "SAR", "DZD", "ARS", "AMD", "AUD", "AZN", "BSD", "BHD",
-                    "BDT", "BBD", "BZD", "XOF", "BYN", "MMK", "BOB", "BAM", "BWP", "BRL", "BND", "BGN", "BIF",
-                    "INR", "CVE", "KHR", "XAF", "CAD", "QAR", "CLP", "CNY", "COP", "KMF", "KPW", "KRW", "CRC",
-                    "HRK", "CUP", "CZK", "DKK", "EGP", "USD", "AED", "ERN", "GBP", "SZL", "GTQ", "GNF", "GYD",
-                    "HTG", "HNL", "HUF", "IDR", "IRR", "IQD", "ISK", "JMD", "JPY", "JOD", "KZT", "KES", "KGS",
-                    "KWD", "LAK", "LVL", "LBP", "LRD", "LYD", "CHF", "MGA", "MYR", "MWK", "MVR", "MDL", "MNT",
-                    "MAD", "MUR", "MRU", "MXN", "NAD", "NPR", "NIO", "NGN", "NOK", "NZD", "OMR", "PKR", "PAB",
-                    "PGK", "PYG", "PEN", "PLN", "RON", "RUB", "RSD", "SCR", "SLL", "SGD", "SYP", "SOS", "LKR",
-                    "SDG", "SEK", "STN", "RWF"
-                };
-        var fecha = DateTime.Now;
-        foreach (var divisa in divisas) {
-            var divisaFaker = new DivisaFaker(divisa, fecha);
-            var divisaDto = divisaFaker.Generate();
-            var nuevaDivisa = this.mapper.Map<Divisa>(divisaDto);
-            this.estadisticasRepositorio.CrearDivisa(nuevaDivisa); }
+        // Divisas
+        [HttpPost("crearDivisas")]
+        public async Task<IActionResult> CrearDivisas()
+        {
+            // Lista de nombres de divisas
+            var divisas = new List<string>
+            {
+                "AFN", "ALL", "EUR", "AOA", "XCD", "SAR", "DZD", "ARS", "AMD", "AUD", "AZN", "BSD", "BHD",
+                "BDT", "BBD", "BZD", "XOF", "BYN", "MMK", "BOB", "BAM", "BWP", "BRL", "BND", "BGN", "BIF",
+                "INR", "CVE", "KHR", "XAF", "CAD", "QAR", "CLP", "CNY", "COP", "KMF", "KPW", "KRW", "CRC",
+                "HRK", "CUP", "CZK", "DKK", "EGP", "USD", "AED", "ERN", "GBP", "SZL", "GTQ", "GNF", "GYD",
+                "HTG", "HNL", "HUF", "IDR", "IRR", "IQD", "ISK", "JMD", "JPY", "JOD", "KZT", "KES", "KGS",
+                "KWD", "LAK", "LVL", "LBP", "LRD", "LYD", "CHF", "MGA", "MYR", "MWK", "MVR", "MDL", "MNT",
+                "MAD", "MUR", "MRU", "MXN", "NAD", "NPR", "NIO", "NGN", "NOK", "NZD", "OMR", "PKR", "PAB",
+                "PGK", "PYG", "PEN", "PLN", "RON", "RUB", "RSD", "SCR", "SLL", "SGD", "SYP", "SOS", "LKR",
+                "SDG", "SEK", "STN", "RWF"
+            };
 
-        return Ok("Divisa creada correctamente");
-    }
-    [HttpGet("getDivisa/{id}")]
-    public IActionResult GetDivisaById(int id)
-    {
+            var fecha = DateTime.Now;
 
-        Divisa divisaId = estadisticasRepositorio.GetDivisaById(id);
+            foreach (var divisa in divisas)
+            {
+                var divisaFaker = new DivisaFaker(divisa, fecha);
+                var divisaDto = divisaFaker.Generate();
+                var nuevaDivisa = _mapper.Map<Divisa>(divisaDto);
+                await _estadisticasRepositorio.CrearDivisaAsync(nuevaDivisa);
+            }
 
-        return Ok(mapper.Map<Cliente>(divisaId));
+            return Ok("Divisas creadas correctamente");
+        }
 
-    }
+        [HttpGet("getDivisa/{id}")]
+        public async Task<IActionResult> GetDivisaById(int id)
+        {
+            var divisa = await _estadisticasRepositorio.GetDivisaByIdAsync(id);
 
-    [HttpGet("getDivisas")]
-    public IActionResult GetDivisas()
-    {
-        List<Divisa> divisas = estadisticasRepositorio.GetDivisa();
+            if (divisa == null)
+            {
+                return NotFound("Divisa no encontrada.");
+            }
 
-        return Ok(mapper.Map<List<Divisa>>(divisas));
+            return Ok(_mapper.Map<Divisa>(divisa));
+        }
 
-    }
-
+        [HttpGet("getDivisas")]
+        public async Task<IActionResult> GetDivisas()
+        {
+            var divisas = await _estadisticasRepositorio.GetDivisasAsync();
+            return Ok(_mapper.Map<List<Divisa>>(divisas));
+        }
 
         [HttpGet("outliers")]
         public async Task<IActionResult> ObtenerTransaccionesOutliers()
@@ -218,45 +227,6 @@ namespace BackendEstadistica.Controllers
             return Ok("Conversión creada correctamente");
         }
 
-        [HttpGet("getConversiones")]
-        public async Task<IActionResult> GetConversiones()
-        {
-            var conversiones = await _estadisticasRepositorio.GetConversionesAsync();
-            return Ok(_mapper.Map<List<Conversion>>(conversiones));
-        }
-
-        [HttpGet("getConversion/{id}")]
-        public async Task<IActionResult> GetConversionById(int id)
-        {
-            var conversion = await _estadisticasRepositorio.GetConversionByIdAsync(id);
-
-            if (conversion == null)
-            {
-                return NotFound("Conversión no encontrada.");
-            }
-
-            return Ok(_mapper.Map<Conversion>(conversion));
-        }
-
-        // Paises
-        [HttpGet("getPaises")]
-        public async Task<IActionResult> GetPaises()
-        {
-            var paises = await _estadisticasRepositorio.GetPaisesAsync();
-            return Ok(_mapper.Map<List<Pais>>(paises));
-        }
-
-        [HttpGet("getPaises/{id}")]
-        public async Task<IActionResult> GetPaisById(int id)
-        {
-            var pais = await _estadisticasRepositorio.GetPaisByIdAsync(id);
-
-            if (pais == null)
-            {
-                return NotFound("País no encontrado.");
-            }
-
-            return Ok(_mapper.Map<Pais>(pais));
-        }
     }
 }
+
