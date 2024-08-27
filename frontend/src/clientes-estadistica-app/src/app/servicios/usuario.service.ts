@@ -27,8 +27,8 @@ export class UsuarioService {
   }
 
   // Método para iniciar sesión
-  login(credenciales: { Correo: string, Contraseña: string }): Observable<any> {
+  login(email: string, password: string): Observable<any> {
     // El método POST envía las credenciales al backend para autenticar al usuario
-    return this.http.post<any>(`${this.apiUrl}/login`, credenciales);
+    return this.http.post<any>(`${this.apiUrl}/login`, {email, password});
   }
 }

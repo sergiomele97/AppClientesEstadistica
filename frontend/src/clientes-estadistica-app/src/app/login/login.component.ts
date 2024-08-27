@@ -1,59 +1,72 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../servicios/user.service';
-import { Usuario } from '../clases/usuario';
+import { UsuarioService } from '../servicios/usuario.service';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  errorMessage: string;
-  isErrorVisible = false;
-  usuarios: Usuario[];
+  errorMessage: string; // Variable para almacenar el mensaje de error
+  isErrorVisible = false; // Bandera para controlar la visibilidad del mensaje de error
 
-  email: string = '';
+  email: string = ''; // Variable para almacenar el email del usuario
+  password: string = ''; // Variable para almacenar la contraseña del usuario
 
-  contrase: string = '';
-  password: any;
-  username: any;
-
-  constructor(private usuarioService: UserService, private route: Router) { }
-
-  navigateToRegistro() {
-    this.route.navigate(['/registro']);
-  }
-
+  constructor(
+    private usuarioService: UsuarioService, // Servicio para manejar la autenticación de usuarios
+    private route: Router // Router para redirigir al usuario después del login
+  ) {}
 
   ngOnInit() {
-    
+    // Aquí puedes inicializar cualquier cosa si es necesario al cargar el componente
   }
 
+  // Método para autenticar al usuario
   authentication() {
-    this.usuarioService.autenticarUsuario(this.email, this.contrase, true)
+    // Llama al método login del servicio con el email y la contraseña
+    this.usuarioService
+      .login(this.email, this.password)
       .pipe(
-        catchError(error => {
+        catchError((error) => {
+          // Manejo de errores
           if (error.status === 401) {
+            // Si el error es 401, significa que las credenciales son incorrectas
             this.showError('Credenciales incorrectas');
           } else {
-            this.showError('Ocurrió un error al intentar autenticarse. Por favor, intente de nuevo.');
+            // Otros errores
+            this.showError(
+              'Ocurrió un error al intentar autenticarse. Por favor, intente de nuevo.'
+            );
           }
+          // Propaga el error para manejo adicional si es necesario
           return throwError(error);
         })
       )
-      .subscribe(response => {
-        //if (response && response.token) {
-          //localStorage.setItem('token', response.token);
-          console.log("respuesta")      
-          this.route.navigate(['/estadistica']); // Redirige a la ruta protegida
+      .subscribe((response) => {
+        // Si la autenticación es exitosa
+        if (response && response.token) {
+          // Guarda el token en el localStorage para uso futuro (ej. autenticación de solicitudes)
+          localStorage.setItem('token', response.token);
+          // Redirige al usuario a la página de estadísticas
+          this.route.navigate(['/estadistica']);
+        }
       });
   }
-  
+
+  // Método para mostrar el mensaje de error
   showError(message: string) {
+    // Asigna el mensaje de error y hace visible el mensaje
     this.errorMessage = message;
     this.isErrorVisible = true;
-    setTimeout(() => this.isErrorVisible = false, 3000); // Ocultar el mensaje después de 5 segundos
+    // Oculta el mensaje después de 3 segundos
+    setTimeout(() => (this.isErrorVisible = false), 3000);
+  }
+
+  // Método para redirigir a la página de registro
+  navigateToRegistro() {
+    this.route.navigate(['/registro']);
   }
 }
