@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit {
   }
 
   // Método para autenticar al usuario
-  authentication() {
+  onSubmit() {
     // Llama al método login del AuthService con el email y la contraseña
     this.authService
       .login(this.email, this.password)

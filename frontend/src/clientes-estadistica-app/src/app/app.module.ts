@@ -2,7 +2,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgxPaginationModule } from 'ngx-pagination'; 
+import { NgxPaginationModule } from 'ngx-pagination';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 
@@ -23,7 +23,6 @@ import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 import { ClientesComponent } from './estadistica/clientes/clientes.component';
 import { DivisasComponent } from './estadistica/divisas/divisas.component';
 import { ClustersDataService } from './servicios/clusters-data.service';
-import { HomeComponent } from './home/home.component';
 import { PruebaConexionService } from './servicios/pruebaConexion.service';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';
 import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
@@ -33,8 +32,6 @@ import { FormaterFechaPipe } from './pipes/formaterFecha.pipe';
 import { RegisterComponent } from './register/register.component';
 import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-outlier.component';
 import { UsuarioService } from './servicios/usuario.service';
-
-
 
 @NgModule({
   declarations: [
@@ -50,7 +47,6 @@ import { UsuarioService } from './servicios/usuario.service';
     MapComponent,
     SpaghettiComponent,
     TableComponent,
-    HomeComponent ,
     EstadisticaComponent,
     ClientesComponent,
     DivisasComponent,
@@ -59,9 +55,9 @@ import { UsuarioService } from './servicios/usuario.service';
     GraficasComponent,
     FormaterFechaPipe,
     RegisterComponent,
-    LogsOutlierComponent
-   ],
-   
+    LogsOutlierComponent,
+  ],
+
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -71,16 +67,15 @@ import { UsuarioService } from './servicios/usuario.service';
     NgApexchartsModule,
     HighchartsChartModule,
     NgxPaginationModule,
-    BrowserModule
+    BrowserModule,
   ],
   providers: [
     UsuarioService,
     PruebaConexionService,
     ClustersDataService,
-    DatePipe
+    DatePipe,
   ],
   bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA] 
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-
-export class AppModule { }
+export class AppModule {}
