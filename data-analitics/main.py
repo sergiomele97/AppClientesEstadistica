@@ -1,5 +1,5 @@
-#from flask import Flask, request, jsonify
-#from flask_cors import CORS
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 import flask_cors as fc
 from statsmodels.tsa.arima.model import ARIMA
 #from sklearn.cluster import KMeans
@@ -8,7 +8,7 @@ import sklearn.cluster as sc
 import sklearn.metrics as sm
 import warnings
 import numpy as np
-import flask as f
+import flask
 warnings.filterwarnings("ignore", category=UserWarning, module='statsmodels')
 app = Flask(__name__)
 CORS(app)  # Habilita CORS para todas las rutas
@@ -26,7 +26,7 @@ def predict():
     pred_ci = pred.conf_int().tolist()
     response = {'Prediction': pred_mean, 'ConfidenceInterval': pred_ci}
     print(response, flush=True)
-    return f.jsonify(response)
+    return flask.jsonify(response)
 
 
 @app.route('/cluster', methods=['POST'])
@@ -34,8 +34,8 @@ def cluster():
 
     recibido = request.json
     data = recibido['data']
-    print("data es ",data)
-    print("data es ",data)
+    print("data es ",data, flush=True)
+    print("data es ",data, flush=True)
     n_clusters = recibido['nCluster']
     kmeans = KMeans(n_clusters=n_clusters, random_state=0)
     kmeans.fit(data) 
@@ -53,8 +53,6 @@ def cluster():
     }
     print(response, flush=True)
     return jsonify(response)
-
-
 
 
 if __name__ == "__main__":
