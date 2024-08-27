@@ -21,8 +21,8 @@ import { ClustersComponent } from './estadistica/clusters/clusters.component';
 import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent, canActivate: [AuthGuard] },
-  { path: 'registro', component: RegisterComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent },
+  { path: 'registro', component: RegisterComponent },
   {
     path: 'estadistica',
     component: EstadisticaComponent,

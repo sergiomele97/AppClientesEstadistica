@@ -14,18 +14,11 @@ export class AuthGuard implements CanActivate {
 
     // Si el usuario está autenticado
     if (isLoggedIn) {
-      // Bloquear acceso a las rutas de login y registro
-      if (this.router.url === '/login' || this.router.url === '/register') {
-        this.router.navigate(['/estadistica']); // Redirige a la página principal o a cualquier otra ruta autorizada
-        return false;
-      }
+      // Permitir acceso a todas las rutas protegidas
       return true;
     } else {
-      // Si el usuario no está autenticado
-      if (this.router.url === '/login' || this.router.url === '/register') {
-        return true; // Permitir el acceso a login y registro
-      }
-      this.router.navigate(['/login']); // Redirige a la página de login
+      // Redirigir a la página de login si el usuario no está autenticado
+      this.router.navigate(['/login']);
       return false;
     }
   }

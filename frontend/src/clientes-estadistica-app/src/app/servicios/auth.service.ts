@@ -73,9 +73,10 @@ register(usuario: IUsuario): Observable<any> {
     this.router.navigate(['/login']); // Redirige al usuario a la página de inicio de sesión
   }
 
-  // Método para verificar si hay un usuario autenticado
+  // Verifica si el usuario está autenticado
   isAuthenticated(): boolean {
-    return this.userSubject.value !== null;
+    // Comprueba si hay un token en el localStorage
+    return !!localStorage.getItem('token');
   }
 
   // Método para establecer el nombre de usuario en el BehaviorSubject

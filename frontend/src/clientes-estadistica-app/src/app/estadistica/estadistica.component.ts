@@ -4,6 +4,7 @@ import { PruebaConexionService } from '../servicios/pruebaConexion.service';
 import { TransaccionService } from '../servicios/transaccion.service';
 import { interval } from 'rxjs';
 import { AuthService } from '../servicios/auth.service';
+import { Router } from '@angular/router';
 
 // Decorador
 @Component({
@@ -12,26 +13,27 @@ import { AuthService } from '../servicios/auth.service';
   styleUrls: ['./estadistica.component.css'],
 })
 export class EstadisticaComponent implements OnInit {
-  usuarios: Usuario[];
-
-  outliers: number;
-
-  // Método para dropdown
-  isDropdownOpen = false;
-
-  menuOpen: boolean = false;
-
-  toggleDropdown() {
-    this.isDropdownOpen = !this.isDropdownOpen;
-  }
+  outliers: number = 0;
+  isDropdownOpen: boolean = false;
+  username: string | null = null;
 
   constructor(
     private pruebaConexionService: PruebaConexionService,
     private transaccionService: TransaccionService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
-  username: string | null = null;
+  // Método para abrir/cerrar el menú desplegable
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  // Método para cerrar sesión
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 
   // -------------------- Método Sergio para Debuggear en Azure, no borrar:
   usuario: Usuario | undefined;
