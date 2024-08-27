@@ -62,7 +62,7 @@ jobs:
           name: python-app
 
       - name: Unzip artifact for deployment
-        run: unzip release.zip
+        run: unzip release.zip -d /home/site/wwwroot # Unzip the artifact to the target directory
 
       
       - name: Login to Azure
@@ -78,4 +78,5 @@ jobs:
         with:
           app-name: 'DataPython'
           slot-name: 'Production'
+          # package: 'release.zip'
           
