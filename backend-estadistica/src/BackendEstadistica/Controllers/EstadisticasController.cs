@@ -227,6 +227,45 @@ namespace BackendEstadistica.Controllers
             return Ok("Conversión creada correctamente");
         }
 
+        [HttpGet("getConversiones")]
+        public async Task<IActionResult> GetConversiones()
+        {
+            var conversiones = await _estadisticasRepositorio.GetConversionesAsync();
+            return Ok(_mapper.Map<List<Conversion>>(conversiones));
+        }
+
+        [HttpGet("getConversion/{id}")]
+        public async Task<IActionResult> GetConversionById(int id)
+        {
+            var conversion = await _estadisticasRepositorio.GetConversionByIdAsync(id);
+
+            if (conversion == null)
+            {
+                return NotFound("Conversión no encontrada.");
+            }
+
+            return Ok(_mapper.Map<Conversion>(conversion));
+        }
+
+        // Paises
+        [HttpGet("getPaises")]
+        public async Task<IActionResult> GetPaises()
+        {
+            var paises = await _estadisticasRepositorio.GetPaisesAsync();
+            return Ok(_mapper.Map<List<Pais>>(paises));
+        }
+
+        [HttpGet("getPaises/{id}")]
+        public async Task<IActionResult> GetPaisById(int id)
+        {
+            var pais = await _estadisticasRepositorio.GetPaisByIdAsync(id);
+
+            if (pais == null)
+            {
+                return NotFound("País no encontrado.");
+            }
+
+            return Ok(_mapper.Map<Pais>(pais));
+        }
     }
 }
-
