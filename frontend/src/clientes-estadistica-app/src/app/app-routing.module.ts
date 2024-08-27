@@ -11,7 +11,6 @@ import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 
 import { ClientesComponent } from './estadistica/clientes/clientes.component';
 import { DivisasComponent } from './estadistica/divisas/divisas.component';
-import { AuthGuard } from './auth.guard';
 import { EstadisticaComponent } from './estadistica/estadistica.component';
 import { HomeComponent } from './home/home.component';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';

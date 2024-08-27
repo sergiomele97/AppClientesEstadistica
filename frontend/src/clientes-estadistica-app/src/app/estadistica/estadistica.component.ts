@@ -3,14 +3,14 @@ import { Usuario } from '../clases/usuario';
 import { PruebaConexionService } from '../servicios/pruebaConexion.service';
 import { TransaccionService } from '../servicios/transaccion.service';
 import { interval } from 'rxjs';
+import { AuthService } from '../servicios/auth.service';
 
-// Decorador 
+// Decorador
 @Component({
   selector: 'app-estadistica',
   templateUrl: './estadistica.component.html',
-  styleUrls: ['./estadistica.component.css']
+  styleUrls: ['./estadistica.component.css'],
 })
-
 export class EstadisticaComponent implements OnInit {
   usuarios: Usuario[];
 
@@ -25,13 +25,18 @@ export class EstadisticaComponent implements OnInit {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  constructor(private pruebaConexionService: PruebaConexionService, private transaccionService: TransaccionService) { }
-  
+  constructor(
+    private pruebaConexionService: PruebaConexionService,
+    private transaccionService: TransaccionService,
+    private authService: AuthService
+  ) {}
+
+  username: string | null = null;
 
   // -------------------- Método Sergio para Debuggear en Azure, no borrar:
   usuario: Usuario | undefined;
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     const userId = 1; // Cambia esto al ID que deseas buscar
 
     this.pruebaConexionService.getUsuarioById(userId).subscribe(
@@ -39,28 +44,27 @@ export class EstadisticaComponent implements OnInit {
         this.usuario = data;
         console.log('Usuario obtenido:', this.usuario);
       },
-      error => {
+      (error) => {
         console.error('Error al obtener el usuario', error);
       }
     );
 
+    // -------------------- Fin Método Sergio para Debuggear en Azure, no borrar:
+
     this.actualizarOutliers();
 
     interval(30000).subscribe(() => {
-      this.actualizarOutliers()
+      this.actualizarOutliers();
     });
 
+    this.authService.user$.subscribe((user) => {
+      this.username = user;
+    });
   }
-  // -------------------- Fin Método Sergio para Debuggear en Azure, no borrar:
-  
-    actualizarOutliers() {
-      this.transaccionService.obtenerOutlier().subscribe( datos => {
-        this.outliers = datos.length;
-      });
-    }
 
-  
+  actualizarOutliers() {
+    this.transaccionService.obtenerOutlier().subscribe((datos) => {
+      this.outliers = datos.length;
+    });
+  }
 }
-
-
-  

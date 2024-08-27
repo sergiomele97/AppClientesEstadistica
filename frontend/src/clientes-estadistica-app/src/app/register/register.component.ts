@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UsuarioService } from '../servicios/usuario.service'; // Importamos el servicio que maneja las operaciones de usuario
+import { AuthService } from '../servicios/auth.service'; // Importa el AuthService en lugar del UsuarioService
 import { IUsuario } from '../interfaces/usuario'; // Importamos la interfaz del usuario
 import { Router } from '@angular/router'; // Importamos Router para la navegación
 
@@ -9,14 +9,13 @@ import { Router } from '@angular/router'; // Importamos Router para la navegaci�
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
-
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup; // Definimos un formulario reactivo de Angular
   isFormBlocked = false; // Flag para indicar si el formulario está bloqueado por errores
 
   constructor(
     private fb: FormBuilder, // Inyectamos FormBuilder para construir el formulario
-    private usuarioService: UsuarioService, // Inyectamos nuestro servicio personalizado de usuario
+    private authService: AuthService, // Inyectamos AuthService en lugar de UsuarioService
     private route: Router // Inyectamos Router para manejar la navegación entre rutas
   ) {}
 
@@ -24,7 +23,6 @@ export class RegisterComponent implements OnInit {
     // Inicializamos el formulario cuando el componente se carga
     this.registerForm = this.fb.group(
       {
-        // Configuramos los campos del formulario con validadores
         email: ['', [Validators.required, Validators.email]], // Campo email con validadores de requerido y formato de email
         password: ['', [Validators.required, Validators.minLength(6)]], // Campo password con validadores de requerido y longitud mínima
         confirmpassword: ['', [Validators.required]], // Campo para confirmar la contraseña, también requerido
@@ -86,7 +84,7 @@ export class RegisterComponent implements OnInit {
     };
 
     // 4. Llamar al servicio para registrar el usuario en el backend
-    this.usuarioService.registro(usuario).subscribe(
+    this.authService.register(usuario).subscribe(
       (response) => {
         // Registro exitoso
         console.log('Usuario registrado exitosamente', response);

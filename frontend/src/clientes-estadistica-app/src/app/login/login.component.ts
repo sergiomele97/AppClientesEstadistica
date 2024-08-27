@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UsuarioService } from '../servicios/usuario.service';
+import { AuthService } from '../servicios/auth.service'; // Importa el AuthService en lugar del UsuarioService
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 
@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   password: string = ''; // Variable para almacenar la contraseña del usuario
 
   constructor(
-    private usuarioService: UsuarioService, // Servicio para manejar la autenticación de usuarios
+    private authService: AuthService, // Cambiado a AuthService para manejar autenticación
     private route: Router // Router para redirigir al usuario después del login
   ) {}
 
@@ -26,8 +26,8 @@ export class LoginComponent implements OnInit {
 
   // Método para autenticar al usuario
   authentication() {
-    // Llama al método login del servicio con el email y la contraseña
-    this.usuarioService
+    // Llama al método login del AuthService con el email y la contraseña
+    this.authService
       .login(this.email, this.password)
       .pipe(
         catchError((error) => {
@@ -50,6 +50,13 @@ export class LoginComponent implements OnInit {
         if (response && response.token) {
           // Guarda el token en el localStorage para uso futuro (ej. autenticación de solicitudes)
           localStorage.setItem('token', response.token);
+
+          // Guarda el nombre de usuario en el localStorage
+          localStorage.setItem('currentUser', response.username);
+
+          // Actualiza el BehaviorSubject del AuthService con el nombre de usuario
+          this.authService.setUser(response.username);
+
           // Redirige al usuario a la página de estadísticas
           this.route.navigate(['/estadistica']);
         }

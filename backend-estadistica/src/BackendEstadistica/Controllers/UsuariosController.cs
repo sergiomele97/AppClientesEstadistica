@@ -121,8 +121,11 @@
                 // Generamos un token JWT para el usuario autenticado.
                 var token = _tokenService.GenerateJwtToken(user);
 
-                // Devolvemos una respuesta HTTP 200 OK con el token JWT.
-                return Ok(new { Token = token });
+                // Devolvemos una respuesta HTTP 200 OK con el token JWT y el UserName.
+                return Ok(new {
+                    Token = token,
+                    Username = user.UserName
+                });
             }
 
             // Si el inicio de sesión falla, devolvemos una respuesta 401 Unauthorized.

@@ -22,7 +22,6 @@ import { EstadisticaComponent } from './estadistica/estadistica.component';
 import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 import { ClientesComponent } from './estadistica/clientes/clientes.component';
 import { DivisasComponent } from './estadistica/divisas/divisas.component';
-import { AuthGuard } from './auth.guard';
 import { ClustersDataService } from './servicios/clusters-data.service';
 import { HomeComponent } from './home/home.component';
 import { PruebaConexionService } from './servicios/pruebaConexion.service';
