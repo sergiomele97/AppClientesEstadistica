@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendEstadistica.Migrations
 {
     [DbContext(typeof(ContextoBBDD))]
-    [Migration("20240826121031_Estadisticas")]
-    partial class Estadisticas
+    [Migration("20240827102031_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,6 +95,28 @@ namespace BackendEstadistica.Migrations
                     b.HasIndex("ClienteId");
 
                     b.ToTable("Conversion");
+                });
+
+            modelBuilder.Entity("BackendEstadistica.Entidades.Divisa", b =>
+                {
+                    b.Property<int>("DivisaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DivisaId"));
+
+                    b.Property<DateTime?>("Fecha")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Valor")
+                        .HasColumnType("float");
+
+                    b.HasKey("DivisaId");
+
+                    b.ToTable("Divisa");
                 });
 
             modelBuilder.Entity("BackendEstadistica.Entidades.Pais", b =>
@@ -1372,6 +1394,9 @@ namespace BackendEstadistica.Migrations
                     b.Property<bool?>("IsOutlier")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("IsOutlierVisto")
+                        .HasColumnType("bit");
+
                     b.HasKey("TransaccionId");
 
                     b.HasIndex("ClienteDestinoId");
@@ -1390,12 +1415,15 @@ namespace BackendEstadistica.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Contraseña")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Correo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefono")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

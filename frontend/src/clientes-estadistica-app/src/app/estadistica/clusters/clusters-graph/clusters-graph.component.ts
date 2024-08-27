@@ -53,7 +53,7 @@ export class ClustersGraphComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataService.selectedData$.subscribe((data) => {
+    this.dataService.selectedDataCluster$.subscribe((data) => {
       this.dataService.selectedLabel$.subscribe((labels) => {
         this.updateChartData(data, labels);
       });

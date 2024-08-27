@@ -11,10 +11,14 @@ namespace BackendEstadistica.Servicios
         Task<Cliente> GetClienteByIdAsync(int id);
         Task CrearClienteAsync(Cliente cliente);
 
-        //Conversiones
-        Task<List<Conversion>> GetConversionesAsync();
-        Task<Conversion> GetConversionByIdAsync(int id);
-        Task CrearConversionAsync(Conversion conversion);
+    //Conversiones
+    List<Conversion> GetConversiones();
+    Conversion GetConversionById(int id);
+    void CrearConversion(Conversion conversion);
+    // Divisas
+    List<Divisa> GetDivisa();
+    Divisa GetDivisaById(int id);
+    void CrearDivisa(Divisa divisa);
 
         // Transacciones
         Task<List<Transaccion>> GetTransaccionesAsync();

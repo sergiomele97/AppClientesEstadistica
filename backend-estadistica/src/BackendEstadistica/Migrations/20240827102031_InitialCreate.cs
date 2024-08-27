@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BackendEstadistica.Migrations
 {
     /// <inheritdoc />
-    public partial class Estadisticas : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -53,6 +53,21 @@ namespace BackendEstadistica.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Divisa",
+                columns: table => new
+                {
+                    DivisaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Valor = table.Column<double>(type: "float", nullable: true),
+                    Fecha = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Divisa", x => x.DivisaId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Paises",
                 columns: table => new
                 {
@@ -73,9 +88,9 @@ namespace BackendEstadistica.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Contraseña = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Telefono = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Correo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Contraseña = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Telefono = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -248,6 +263,7 @@ namespace BackendEstadistica.Migrations
                     ImporteEnviado = table.Column<double>(type: "float", nullable: true),
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsOutlier = table.Column<bool>(type: "bit", nullable: true),
+                    IsOutlierVisto = table.Column<bool>(type: "bit", nullable: true),
                     ClienteOrigenId = table.Column<int>(type: "int", nullable: false),
                     ClienteDestinoId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -530,6 +546,9 @@ namespace BackendEstadistica.Migrations
 
             migrationBuilder.DropTable(
                 name: "Conversion");
+
+            migrationBuilder.DropTable(
+                name: "Divisa");
 
             migrationBuilder.DropTable(
                 name: "Transacciones");

@@ -13,10 +13,13 @@ namespace BackendEstadistica.Servicios
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
         //------------------Configurar-volumenes-de-creación-----------------------------
-        int frecuenciaMinutos = 20;
-        int volumenClientes = 1;
+
+        int frecuenciaMinutos = 2000;
+        int volumenClientes = 5;
         int volumenTransacciones = 10;
-        int volumenConversiones = 5;
+        int volumenConversiones = 3;
+
+
         //------------------Fin-de-configurar-volumenes-de-creación----------------------
 
         public BackgroundDataGenerator(

@@ -9,8 +9,12 @@ import { Subject } from 'rxjs';
 export class ClustersDataService {
   
 
-  private selectedDataSubject = new Subject<any[]>();
-  selectedData$ = this.selectedDataSubject.asObservable();
+  private selectedDataTable = new Subject<any[]>();
+  selectedDataTable$ = this.selectedDataTable.asObservable();
+
+  private selectedDataCluster = new Subject<any[]>();
+  selectedDataCluster$ = this.selectedDataCluster.asObservable();
+
 
   private selectedClusterSubject = new Subject<any>();
   selectedCluster$ = this.selectedClusterSubject.asObservable();
@@ -22,8 +26,12 @@ export class ClustersDataService {
 
   constructor() { }
 
-  setSelectedData(data: any[]) {
-    this.selectedDataSubject.next(data);
+  setSelectedDataTable(data: any[]) {
+    this.selectedDataTable.next(data);
+  }
+
+  setSelectedDataCluster(data: any[]) {
+    this.selectedDataCluster.next(data);
   }
 
   setSelectednCluster(data: any) {

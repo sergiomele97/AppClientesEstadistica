@@ -55,15 +55,40 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
 
     public async Task<Cliente> GetClienteByIdAsync(int id)
     {
-        return await _contextoBBDD.Clientes
-            .Include(c => c.Pais)
-            .Include(c => c.Conversiones)
-            .Include(c => c.TransaccionesOrigen)
-            .Include(c => c.TransaccionesDestino)
-            .FirstOrDefaultAsync(c => c.ClienteId == id);
+        return _contextoBBDD.Clientes
+            .Include(c => c.Pais) // Incluye el país del cliente
+            .Include(c => c.Conversiones) // Incluye las conversiones del cliente
+            .Include(c => c.TransaccionesOrigen) // Incluye las transacciones de origen del cliente
+            .Include(c => c.TransaccionesDestino) // Incluye las transacciones de destino del cliente
+            .FirstOrDefault(c => c.ClienteId == id);
     }
 
-    public async Task CrearConversionAsync(Conversion conversion)
+    //Divisas
+ 
+
+   
+        public void CrearDivisa(Divisa divisa)
+    {
+        var divisaEntity = _mapper.Map<Divisa>(divisa);
+        _contextoBBDD.Divisa.Add(divisaEntity);
+        _contextoBBDD.SaveChanges();
+        
+    }
+
+    public Divisa GetDivisaById(int id)
+    {
+        return _contextoBBDD.Divisa
+            .FirstOrDefault(d => d.DivisaId == id);
+    }
+
+    public List<Divisa> GetDivisa()
+    {
+        return _contextoBBDD.Divisa.ToList();
+    }
+
+
+    //Conversiones
+    public void CrearConversion(Conversion conversion)
     {
         var conversionEntity = _mapper.Map<Conversion>(conversion);
         await _contextoBBDD.Conversion.AddAsync(conversionEntity);

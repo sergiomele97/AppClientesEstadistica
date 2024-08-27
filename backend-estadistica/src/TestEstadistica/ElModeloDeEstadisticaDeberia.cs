@@ -1,5 +1,6 @@
 
 using BackendEstadistica.Entidades;
+using System.ComponentModel.DataAnnotations;
 
 namespace Estadistica.Test
 {
@@ -79,8 +80,33 @@ namespace Estadistica.Test
             // Assert
             Assert.False(resultado);
         }
+
+
+        [Fact]
+        public void CorreoEsObligatorio()
+        {
+            // Arrange
+            var usuario = new Usuario { Correo = null };
+
+            // Act
+            var validationResults = ValidateModel(usuario);
+
+            // Assert
+            Assert.Contains(validationResults, v => v.MemberNames.Contains("Correo") && v.ErrorMessage.Contains("required"));
+        }
+
+        // Validador
+        private IList<ValidationResult> ValidateModel(object model)
+        {
+            var validationResults = new List<ValidationResult>();
+            var validationContext = new ValidationContext(model, null, null);
+            Validator.TryValidateObject(model, validationContext, validationResults, true);
+            return validationResults;
+        }
     }
 
     
+
+
 
 }
