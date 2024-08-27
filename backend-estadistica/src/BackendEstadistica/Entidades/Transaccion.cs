@@ -8,6 +8,7 @@ public class Transaccion
     public double? ImporteEnviado { get; set; }
     public DateTime? Fecha { get; set; }
     public bool? IsOutlier { get; set; }
+    public bool? IsOutlierVisto { get; set; }
     public int ClienteOrigenId { get; set; }
     public int ClienteDestinoId { get; set; }
 

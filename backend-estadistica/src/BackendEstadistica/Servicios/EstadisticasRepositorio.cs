@@ -141,14 +141,14 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
         {
             var amounts = group.Select(t => t.ImporteEnviado.Value).OrderBy(a => a).ToList();
 
-            if (amounts.Count < 4)
+            if (amounts.Count < 10)
                 continue;
 
             double q1 = GetQuantile(amounts, 0.25);
             double q3 = GetQuantile(amounts, 0.75);
             double iqr = q3 - q1;
 
-            double upperBound = q3 + 1.5 * iqr;
+            double upperBound = q3 + 3 * iqr;
 
             foreach (var transaccion in group)
             {
@@ -170,6 +170,33 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
             return sortedValues[lowerIndex];
         return sortedValues[lowerIndex] * (1 - (index - lowerIndex)) + sortedValues[upperIndex] * (index - lowerIndex);
     }
+
+    public async Task<bool> EliminarOutlier(int transaccionId)
+    {
+        try
+        {
+            var transaccion = await _contextoBBDD.Transacciones
+                .FirstOrDefaultAsync(t => t.TransaccionId == transaccionId);
+
+            if (transaccion == null || (bool)!transaccion.IsOutlier)
+            {
+                return false;
+            }
+
+            transaccion.IsOutlier = false;
+            transaccion.IsOutlierVisto = true;
+            await _contextoBBDD.SaveChangesAsync();
+
+            return true; 
+        }
+        catch (Exception ex)
+        {
+            
+            Console.WriteLine(ex.Message);
+            return false;
+        }
+    }
+
 
     //Paises
     public void CrearPais(Pais pais)

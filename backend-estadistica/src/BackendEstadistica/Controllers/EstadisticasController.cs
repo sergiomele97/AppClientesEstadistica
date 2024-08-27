@@ -2,7 +2,7 @@
 
 [Route("api/estadisticas")]
 [ApiController]
-public class EstadisticasController : Controller
+public class EstadisticasController : ControllerBase
 {
     private readonly ContextoBBDD contextoBBDD;
     private readonly IEstadisticasRepositorio estadisticasRepositorio;
@@ -122,20 +122,45 @@ public class EstadisticasController : Controller
 
         return Ok(transaccionesOutliers);
     }
-
+        
     [HttpGet("ultimas-transacciones/{clienteId}")]
     public async Task<IActionResult> ObtenerUltimasTransacciones(int clienteId)
     {
-        var ultimasTransacciones = await contextoBBDD.Transacciones
+        var transaccionesMayores = await contextoBBDD.Transacciones
+       .Include(t => t.ClienteOrigen)
+       .Include(t => t.ClienteDestino)
+       .Where(t => t.ClienteOrigenId == clienteId)
+       .OrderByDescending(t => t.ImporteEnviado)
+       .Take(5) 
+       .ToListAsync();
+
+        return Ok(transaccionesMayores);
+    }
+    [HttpGet("outliers-vistos")]
+    public async Task<IActionResult> ObtenerOutliersVistos()
+    {
+        var outliersVistos = await contextoBBDD.Transacciones
             .Include(t => t.ClienteOrigen)
             .Include(t => t.ClienteDestino)
-            .Where(t => t.ClienteOrigenId == clienteId)
-            .OrderByDescending(t => t.Fecha)
-            .Take(5)
+            .Where(t => t.IsOutlierVisto == true)
             .ToListAsync();
 
-        return Ok(ultimasTransacciones);
+        return Ok(outliersVistos);
     }
+
+    [HttpPut("resolucionOutlier/{idTransaccion}")]
+    public async Task<IActionResult> EliminarOutlier([FromRoute] int idTransaccion)
+    {
+        bool resultado = await estadisticasRepositorio.EliminarOutlier(idTransaccion);
+
+        if (!resultado)
+        {
+            return NotFound("Transacción no encontrada o no es un outlier.");
+        }
+
+        return Ok("El outlier se elimino con exito.");
+    }
+
 
     // Conversiones
     [HttpPost("crearConversion")]
