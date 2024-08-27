@@ -22,7 +22,7 @@ public interface IEstadisticasRepositorio
     Transaccion GetTransaccionById(int id);
     void CrearTransaccion(Transaccion transaccion);
     void DetectarOutliers();
-
+    Task<bool> EliminarOutlier(int transaccionId);
     //Pais 
     List<Pais> GetPaises();
     Pais GetPaisById(int id);

@@ -10,10 +10,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let outlier of outliers" class="border-b hover:bg-gray-100">
+        <tr *ngFor="let outlier of outliers" class="border-b">
             <td class="px-6 py-4 text-md">{{ outlier.transaccionId }}</td>
-            <td class="px-6 py-4 text-md">{{ outlier.clienteOrigen.nombre }}</td>
-            <td class="px-6 py-4 text-md">{{ outlier.clienteDestino.nombre }}</td>
+            <td class="px-6 py-4 text-md"><a href="estadistica/clientes/{{outlier.clienteOrigenId}}">{{ outlier.clienteOrigen.nombre }}</a></td>
+            <td class="px-6 py-4 text-md"><a href="estadistica/clientes/{{outlier.clienteDestinoId}}">{{ outlier.clienteDestino.nombre }}</a></td>
             <td class="px-6 py-4 text-md">{{ outlier.importeEnviado }}</td>
             <td class="px-6 py-4 text-md">{{ outlier.fecha | formaterFecha }}</td>
         </tr>

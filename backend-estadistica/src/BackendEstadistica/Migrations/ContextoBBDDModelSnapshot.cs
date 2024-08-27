@@ -274,1105 +274,1091 @@ namespace BackendEstadistica.Migrations
                         new
                         {
                             PaisId = 20,
-                            Divisa = "BYN",
-                            Iso3 = "BLR",
-                            Nombre = "Bielorrusia"
+                            Divisa = "INR",
+                            Iso3 = "BTN",
+                            Nombre = "Bhután"
                         },
                         new
                         {
                             PaisId = 21,
-                            Divisa = "MMK",
-                            Iso3 = "MMR",
-                            Nombre = "Birmania"
-                        },
-                        new
-                        {
-                            PaisId = 22,
                             Divisa = "BOB",
                             Iso3 = "BOL",
                             Nombre = "Bolivia"
                         },
                         new
                         {
-                            PaisId = 23,
+                            PaisId = 22,
                             Divisa = "BAM",
                             Iso3 = "BIH",
                             Nombre = "Bosnia y Herzegovina"
                         },
                         new
                         {
-                            PaisId = 24,
+                            PaisId = 23,
                             Divisa = "BWP",
                             Iso3 = "BWA",
                             Nombre = "Botswana"
                         },
                         new
                         {
-                            PaisId = 25,
+                            PaisId = 24,
                             Divisa = "BRL",
                             Iso3 = "BRA",
                             Nombre = "Brasil"
                         },
                         new
                         {
-                            PaisId = 26,
+                            PaisId = 25,
                             Divisa = "BND",
                             Iso3 = "BRN",
                             Nombre = "Brunéi"
                         },
                         new
                         {
-                            PaisId = 27,
+                            PaisId = 26,
                             Divisa = "BGN",
                             Iso3 = "BGR",
                             Nombre = "Bulgaria"
                         },
                         new
                         {
-                            PaisId = 28,
+                            PaisId = 27,
                             Divisa = "XOF",
                             Iso3 = "BFA",
                             Nombre = "Burkina Faso"
                         },
                         new
                         {
-                            PaisId = 29,
+                            PaisId = 28,
                             Divisa = "BIF",
                             Iso3 = "BDI",
                             Nombre = "Burundi"
                         },
                         new
                         {
-                            PaisId = 30,
+                            PaisId = 29,
                             Divisa = "INR",
                             Iso3 = "BTN",
                             Nombre = "Bután"
                         },
                         new
                         {
-                            PaisId = 31,
+                            PaisId = 30,
                             Divisa = "CVE",
                             Iso3 = "CPV",
                             Nombre = "Cabo Verde"
                         },
                         new
                         {
-                            PaisId = 32,
+                            PaisId = 31,
                             Divisa = "KHR",
                             Iso3 = "KHM",
                             Nombre = "Camboya"
                         },
                         new
                         {
-                            PaisId = 33,
+                            PaisId = 32,
                             Divisa = "XAF",
                             Iso3 = "CMR",
                             Nombre = "Camerún"
                         },
                         new
                         {
-                            PaisId = 34,
+                            PaisId = 33,
                             Divisa = "CAD",
                             Iso3 = "CAN",
                             Nombre = "Canadá"
                         },
                         new
                         {
-                            PaisId = 35,
-                            Divisa = "QAR",
-                            Iso3 = "QAT",
-                            Nombre = "Catar"
-                        },
-                        new
-                        {
-                            PaisId = 36,
+                            PaisId = 34,
                             Divisa = "XAF",
                             Iso3 = "TCD",
                             Nombre = "Chad"
                         },
                         new
                         {
-                            PaisId = 37,
+                            PaisId = 35,
                             Divisa = "CLP",
                             Iso3 = "CHL",
                             Nombre = "Chile"
                         },
                         new
                         {
-                            PaisId = 38,
+                            PaisId = 36,
                             Divisa = "CNY",
                             Iso3 = "CHN",
                             Nombre = "China"
                         },
                         new
                         {
-                            PaisId = 39,
+                            PaisId = 37,
                             Divisa = "COP",
                             Iso3 = "COL",
                             Nombre = "Colombia"
                         },
                         new
                         {
-                            PaisId = 40,
+                            PaisId = 38,
                             Divisa = "KMF",
                             Iso3 = "COM",
                             Nombre = "Comoras"
                         },
                         new
                         {
-                            PaisId = 41,
+                            PaisId = 39,
                             Divisa = "XAF",
                             Iso3 = "COG",
                             Nombre = "Congo"
                         },
                         new
                         {
-                            PaisId = 42,
-                            Divisa = "KPW",
-                            Iso3 = "PRK",
-                            Nombre = "Corea del Norte"
-                        },
-                        new
-                        {
-                            PaisId = 43,
-                            Divisa = "KRW",
-                            Iso3 = "KOR",
-                            Nombre = "Corea del Sur"
-                        },
-                        new
-                        {
-                            PaisId = 44,
+                            PaisId = 40,
                             Divisa = "CRC",
                             Iso3 = "CRI",
                             Nombre = "Costa Rica"
                         },
                         new
                         {
-                            PaisId = 45,
+                            PaisId = 41,
                             Divisa = "HRK",
                             Iso3 = "HRV",
                             Nombre = "Croacia"
                         },
                         new
                         {
-                            PaisId = 46,
+                            PaisId = 42,
                             Divisa = "CUP",
                             Iso3 = "CUB",
                             Nombre = "Cuba"
                         },
                         new
                         {
-                            PaisId = 47,
+                            PaisId = 43,
                             Divisa = "EUR",
                             Iso3 = "CYP",
                             Nombre = "Chipre"
                         },
                         new
                         {
-                            PaisId = 48,
-                            Divisa = "CZK",
-                            Iso3 = "CZE",
-                            Nombre = "Chequia"
-                        },
-                        new
-                        {
-                            PaisId = 49,
+                            PaisId = 44,
                             Divisa = "DKK",
                             Iso3 = "DNK",
                             Nombre = "Dinamarca"
                         },
                         new
                         {
-                            PaisId = 50,
+                            PaisId = 45,
                             Divisa = "XCD",
                             Iso3 = "DMA",
                             Nombre = "Dominica"
                         },
                         new
                         {
-                            PaisId = 51,
+                            PaisId = 46,
                             Divisa = "EGP",
                             Iso3 = "EGY",
                             Nombre = "Egipto"
                         },
                         new
                         {
-                            PaisId = 52,
+                            PaisId = 47,
                             Divisa = "USD",
                             Iso3 = "SLV",
                             Nombre = "El Salvador"
                         },
                         new
                         {
-                            PaisId = 53,
+                            PaisId = 48,
                             Divisa = "AED",
                             Iso3 = "ARE",
                             Nombre = "Emiratos Árabes Unidos"
                         },
                         new
                         {
-                            PaisId = 54,
+                            PaisId = 49,
                             Divisa = "USD",
                             Iso3 = "ECU",
                             Nombre = "Ecuador"
                         },
                         new
                         {
-                            PaisId = 55,
+                            PaisId = 50,
                             Divisa = "ERN",
                             Iso3 = "ERI",
                             Nombre = "Eritrea"
                         },
                         new
                         {
-                            PaisId = 56,
-                            Divisa = "GBP",
-                            Iso3 = "GBR",
-                            Nombre = "Escocia"
-                        },
-                        new
-                        {
-                            PaisId = 57,
+                            PaisId = 51,
                             Divisa = "EUR",
                             Iso3 = "SVK",
                             Nombre = "Eslovaquia"
                         },
                         new
                         {
-                            PaisId = 58,
+                            PaisId = 52,
                             Divisa = "EUR",
                             Iso3 = "SVN",
                             Nombre = "Eslovenia"
                         },
                         new
                         {
-                            PaisId = 59,
+                            PaisId = 53,
                             Divisa = "EUR",
                             Iso3 = "ESP",
                             Nombre = "España"
                         },
                         new
                         {
-                            PaisId = 60,
+                            PaisId = 54,
                             Divisa = "USD",
                             Iso3 = "USA",
                             Nombre = "Estados Unidos"
                         },
                         new
                         {
-                            PaisId = 61,
+                            PaisId = 55,
                             Divisa = "EUR",
                             Iso3 = "EST",
                             Nombre = "Estonia"
                         },
                         new
                         {
+                            PaisId = 56,
+                            Divisa = "ETB",
+                            Iso3 = "ETH",
+                            Nombre = "Etiopía"
+                        },
+                        new
+                        {
+                            PaisId = 57,
+                            Divisa = "FJD",
+                            Iso3 = "FJI",
+                            Nombre = "Fiji"
+                        },
+                        new
+                        {
+                            PaisId = 58,
+                            Divisa = "PHP",
+                            Iso3 = "PHL",
+                            Nombre = "Filipinas"
+                        },
+                        new
+                        {
+                            PaisId = 59,
+                            Divisa = "EUR",
+                            Iso3 = "FIN",
+                            Nombre = "Finlandia"
+                        },
+                        new
+                        {
+                            PaisId = 60,
+                            Divisa = "EUR",
+                            Iso3 = "FRA",
+                            Nombre = "Francia"
+                        },
+                        new
+                        {
+                            PaisId = 61,
+                            Divisa = "XAF",
+                            Iso3 = "GAB",
+                            Nombre = "Gabón"
+                        },
+                        new
+                        {
                             PaisId = 62,
-                            Divisa = "SZL",
-                            Iso3 = "SWZ",
-                            Nombre = "Eswatini"
+                            Divisa = "GMD",
+                            Iso3 = "GMB",
+                            Nombre = "Gambia"
                         },
                         new
                         {
                             PaisId = 63,
+                            Divisa = "GEL",
+                            Iso3 = "GEO",
+                            Nombre = "Georgia"
+                        },
+                        new
+                        {
+                            PaisId = 64,
+                            Divisa = "GHS",
+                            Iso3 = "GHA",
+                            Nombre = "Ghana"
+                        },
+                        new
+                        {
+                            PaisId = 65,
                             Divisa = "XCD",
                             Iso3 = "GRD",
                             Nombre = "Granada"
                         },
                         new
                         {
-                            PaisId = 64,
+                            PaisId = 66,
                             Divisa = "EUR",
                             Iso3 = "GRC",
                             Nombre = "Grecia"
                         },
                         new
                         {
-                            PaisId = 65,
+                            PaisId = 67,
                             Divisa = "GTQ",
                             Iso3 = "GTM",
                             Nombre = "Guatemala"
                         },
                         new
                         {
-                            PaisId = 66,
+                            PaisId = 68,
                             Divisa = "GNF",
                             Iso3 = "GIN",
                             Nombre = "Guinea"
                         },
                         new
                         {
-                            PaisId = 67,
+                            PaisId = 69,
                             Divisa = "XOF",
                             Iso3 = "GNB",
                             Nombre = "Guinea-Bisáu"
                         },
                         new
                         {
-                            PaisId = 68,
+                            PaisId = 70,
                             Divisa = "GYD",
                             Iso3 = "GUY",
                             Nombre = "Guyana"
                         },
                         new
                         {
-                            PaisId = 69,
+                            PaisId = 71,
                             Divisa = "HTG",
                             Iso3 = "HTI",
                             Nombre = "Haití"
                         },
                         new
                         {
-                            PaisId = 70,
+                            PaisId = 72,
                             Divisa = "HNL",
                             Iso3 = "HND",
                             Nombre = "Honduras"
                         },
                         new
                         {
-                            PaisId = 71,
+                            PaisId = 73,
                             Divisa = "HUF",
                             Iso3 = "HUN",
                             Nombre = "Hungría"
                         },
                         new
                         {
-                            PaisId = 72,
+                            PaisId = 74,
                             Divisa = "INR",
                             Iso3 = "IND",
                             Nombre = "India"
                         },
                         new
                         {
-                            PaisId = 73,
+                            PaisId = 75,
                             Divisa = "IDR",
                             Iso3 = "IDN",
                             Nombre = "Indonesia"
                         },
                         new
                         {
-                            PaisId = 74,
+                            PaisId = 76,
+                            Divisa = "IQD",
+                            Iso3 = "IRQ",
+                            Nombre = "Irak"
+                        },
+                        new
+                        {
+                            PaisId = 77,
                             Divisa = "IRR",
                             Iso3 = "IRN",
                             Nombre = "Irán"
                         },
                         new
                         {
-                            PaisId = 75,
-                            Divisa = "IQD",
-                            Iso3 = "IRQ",
-                            Nombre = "Iraq"
-                        },
-                        new
-                        {
-                            PaisId = 76,
+                            PaisId = 78,
                             Divisa = "EUR",
                             Iso3 = "IRL",
                             Nombre = "Irlanda"
                         },
                         new
                         {
-                            PaisId = 77,
+                            PaisId = 79,
                             Divisa = "ISK",
                             Iso3 = "ISL",
                             Nombre = "Islandia"
                         },
                         new
                         {
-                            PaisId = 78,
+                            PaisId = 80,
                             Divisa = "USD",
                             Iso3 = "MHL",
                             Nombre = "Islas Marshall"
                         },
                         new
                         {
-                            PaisId = 79,
+                            PaisId = 81,
                             Divisa = "SBD",
                             Iso3 = "SLB",
                             Nombre = "Islas Salomón"
                         },
                         new
                         {
-                            PaisId = 80,
+                            PaisId = 82,
                             Divisa = "USD",
                             Iso3 = "VGB",
                             Nombre = "Islas Vírgenes Británicas"
                         },
                         new
                         {
-                            PaisId = 81,
+                            PaisId = 83,
                             Divisa = "USD",
                             Iso3 = "VIR",
-                            Nombre = "Islas Vírgenes de los EE.UU."
+                            Nombre = "Islas Vírgenes de los Estados Unidos"
                         },
                         new
                         {
-                            PaisId = 82,
+                            PaisId = 84,
                             Divisa = "EUR",
                             Iso3 = "ITA",
                             Nombre = "Italia"
                         },
                         new
                         {
-                            PaisId = 83,
+                            PaisId = 85,
                             Divisa = "JMD",
                             Iso3 = "JAM",
                             Nombre = "Jamaica"
                         },
                         new
                         {
-                            PaisId = 84,
+                            PaisId = 86,
                             Divisa = "JPY",
                             Iso3 = "JPN",
                             Nombre = "Japón"
                         },
                         new
                         {
-                            PaisId = 85,
+                            PaisId = 87,
                             Divisa = "JOD",
                             Iso3 = "JOR",
                             Nombre = "Jordania"
                         },
                         new
                         {
-                            PaisId = 86,
+                            PaisId = 88,
                             Divisa = "KZT",
                             Iso3 = "KAZ",
                             Nombre = "Kazajistán"
                         },
                         new
                         {
-                            PaisId = 87,
+                            PaisId = 89,
                             Divisa = "KES",
                             Iso3 = "KEN",
                             Nombre = "Kenia"
                         },
                         new
                         {
-                            PaisId = 88,
+                            PaisId = 90,
                             Divisa = "KGS",
                             Iso3 = "KGZ",
                             Nombre = "Kirguistán"
                         },
                         new
                         {
-                            PaisId = 89,
+                            PaisId = 91,
                             Divisa = "AUD",
                             Iso3 = "KIR",
                             Nombre = "Kiribati"
                         },
                         new
                         {
-                            PaisId = 90,
+                            PaisId = 92,
                             Divisa = "KWD",
                             Iso3 = "KWT",
                             Nombre = "Kuwait"
                         },
                         new
                         {
-                            PaisId = 91,
+                            PaisId = 93,
                             Divisa = "LAK",
                             Iso3 = "LAO",
                             Nombre = "Laos"
                         },
                         new
                         {
-                            PaisId = 92,
-                            Divisa = "LVL",
+                            PaisId = 94,
+                            Divisa = "EUR",
                             Iso3 = "LVA",
                             Nombre = "Latvia"
                         },
                         new
                         {
-                            PaisId = 93,
+                            PaisId = 95,
                             Divisa = "LBP",
                             Iso3 = "LBN",
                             Nombre = "Líbano"
                         },
                         new
                         {
-                            PaisId = 94,
+                            PaisId = 96,
                             Divisa = "LRD",
                             Iso3 = "LBR",
                             Nombre = "Liberia"
                         },
                         new
                         {
-                            PaisId = 95,
+                            PaisId = 97,
                             Divisa = "LYD",
                             Iso3 = "LBY",
                             Nombre = "Libia"
                         },
                         new
                         {
-                            PaisId = 96,
+                            PaisId = 98,
                             Divisa = "CHF",
                             Iso3 = "LIE",
                             Nombre = "Liechtenstein"
                         },
                         new
                         {
-                            PaisId = 97,
+                            PaisId = 99,
                             Divisa = "EUR",
                             Iso3 = "LTU",
                             Nombre = "Lituania"
                         },
                         new
                         {
-                            PaisId = 98,
+                            PaisId = 100,
                             Divisa = "EUR",
                             Iso3 = "LUX",
                             Nombre = "Luxemburgo"
                         },
                         new
                         {
-                            PaisId = 99,
+                            PaisId = 101,
                             Divisa = "MGA",
                             Iso3 = "MDG",
                             Nombre = "Madagascar"
                         },
                         new
                         {
-                            PaisId = 100,
+                            PaisId = 102,
                             Divisa = "MYR",
                             Iso3 = "MYS",
                             Nombre = "Malasia"
                         },
                         new
                         {
-                            PaisId = 101,
+                            PaisId = 103,
                             Divisa = "MWK",
                             Iso3 = "MWI",
                             Nombre = "Malawi"
                         },
                         new
                         {
-                            PaisId = 102,
+                            PaisId = 104,
                             Divisa = "MVR",
                             Iso3 = "MDV",
                             Nombre = "Maldivas"
                         },
                         new
                         {
-                            PaisId = 103,
+                            PaisId = 105,
                             Divisa = "XOF",
                             Iso3 = "MLI",
-                            Nombre = "Mali"
+                            Nombre = "Malí"
                         },
                         new
                         {
-                            PaisId = 104,
+                            PaisId = 106,
                             Divisa = "EUR",
                             Iso3 = "MLT",
                             Nombre = "Malta"
                         },
                         new
                         {
-                            PaisId = 105,
+                            PaisId = 107,
                             Divisa = "MAD",
                             Iso3 = "MAR",
                             Nombre = "Marruecos"
                         },
                         new
                         {
-                            PaisId = 106,
+                            PaisId = 108,
                             Divisa = "MUR",
                             Iso3 = "MUS",
                             Nombre = "Mauricio"
                         },
                         new
                         {
-                            PaisId = 107,
+                            PaisId = 109,
                             Divisa = "MRU",
                             Iso3 = "MRT",
                             Nombre = "Mauritania"
                         },
                         new
                         {
-                            PaisId = 108,
+                            PaisId = 110,
                             Divisa = "MXN",
                             Iso3 = "MEX",
                             Nombre = "México"
                         },
                         new
                         {
-                            PaisId = 109,
+                            PaisId = 111,
                             Divisa = "USD",
                             Iso3 = "FSM",
                             Nombre = "Micronesia"
                         },
                         new
                         {
-                            PaisId = 110,
+                            PaisId = 112,
                             Divisa = "MDL",
                             Iso3 = "MDA",
                             Nombre = "Moldavia"
                         },
                         new
                         {
-                            PaisId = 111,
+                            PaisId = 113,
                             Divisa = "EUR",
                             Iso3 = "MCO",
                             Nombre = "Mónaco"
                         },
                         new
                         {
-                            PaisId = 112,
+                            PaisId = 114,
                             Divisa = "MNT",
                             Iso3 = "MNG",
                             Nombre = "Mongolia"
                         },
                         new
                         {
-                            PaisId = 113,
+                            PaisId = 115,
                             Divisa = "EUR",
                             Iso3 = "MNE",
                             Nombre = "Montenegro"
                         },
                         new
                         {
-                            PaisId = 114,
-                            Divisa = "USD",
-                            Iso3 = "MOZ",
-                            Nombre = "Moratoria"
+                            PaisId = 116,
+                            Divisa = "CZK",
+                            Iso3 = "CZE",
+                            Nombre = "Moravia"
                         },
                         new
                         {
-                            PaisId = 115,
+                            PaisId = 117,
+                            Divisa = "MZN",
+                            Iso3 = "MOZ",
+                            Nombre = "Mozambique"
+                        },
+                        new
+                        {
+                            PaisId = 118,
                             Divisa = "NAD",
                             Iso3 = "NAM",
                             Nombre = "Namibia"
                         },
                         new
                         {
-                            PaisId = 116,
+                            PaisId = 119,
                             Divisa = "AUD",
                             Iso3 = "NRU",
                             Nombre = "Nauru"
                         },
                         new
                         {
-                            PaisId = 117,
+                            PaisId = 120,
                             Divisa = "NPR",
                             Iso3 = "NPL",
                             Nombre = "Nepal"
                         },
                         new
                         {
-                            PaisId = 118,
+                            PaisId = 121,
                             Divisa = "NIO",
                             Iso3 = "NIC",
                             Nombre = "Nicaragua"
                         },
                         new
                         {
-                            PaisId = 119,
+                            PaisId = 122,
                             Divisa = "XOF",
                             Iso3 = "NER",
                             Nombre = "Níger"
                         },
                         new
                         {
-                            PaisId = 120,
+                            PaisId = 123,
                             Divisa = "NGN",
                             Iso3 = "NGA",
                             Nombre = "Nigeria"
                         },
                         new
                         {
-                            PaisId = 121,
+                            PaisId = 124,
                             Divisa = "NOK",
                             Iso3 = "NOR",
                             Nombre = "Noruega"
                         },
                         new
                         {
-                            PaisId = 122,
+                            PaisId = 125,
                             Divisa = "NZD",
                             Iso3 = "NZL",
                             Nombre = "Nueva Zelanda"
                         },
                         new
                         {
-                            PaisId = 123,
+                            PaisId = 126,
                             Divisa = "OMR",
                             Iso3 = "OMN",
                             Nombre = "Omán"
                         },
                         new
                         {
-                            PaisId = 124,
+                            PaisId = 127,
                             Divisa = "EUR",
                             Iso3 = "NLD",
                             Nombre = "Países Bajos"
                         },
                         new
                         {
-                            PaisId = 125,
+                            PaisId = 128,
                             Divisa = "PKR",
                             Iso3 = "PAK",
                             Nombre = "Pakistán"
                         },
                         new
                         {
-                            PaisId = 126,
+                            PaisId = 129,
                             Divisa = "USD",
                             Iso3 = "PLW",
-                            Nombre = "Palaos"
+                            Nombre = "Palau"
                         },
                         new
                         {
-                            PaisId = 127,
+                            PaisId = 130,
                             Divisa = "PAB",
                             Iso3 = "PAN",
                             Nombre = "Panamá"
                         },
                         new
                         {
-                            PaisId = 128,
+                            PaisId = 131,
                             Divisa = "PGK",
                             Iso3 = "PNG",
                             Nombre = "Papúa Nueva Guinea"
                         },
                         new
                         {
-                            PaisId = 129,
+                            PaisId = 132,
                             Divisa = "PYG",
                             Iso3 = "PRY",
                             Nombre = "Paraguay"
                         },
                         new
                         {
-                            PaisId = 130,
+                            PaisId = 133,
                             Divisa = "PEN",
                             Iso3 = "PER",
                             Nombre = "Perú"
                         },
                         new
                         {
-                            PaisId = 131,
+                            PaisId = 134,
                             Divisa = "PLN",
                             Iso3 = "POL",
                             Nombre = "Polonia"
                         },
                         new
                         {
-                            PaisId = 132,
+                            PaisId = 135,
                             Divisa = "EUR",
                             Iso3 = "PRT",
                             Nombre = "Portugal"
                         },
                         new
                         {
-                            PaisId = 133,
+                            PaisId = 136,
                             Divisa = "QAR",
                             Iso3 = "QAT",
                             Nombre = "Qatar"
                         },
                         new
                         {
-                            PaisId = 134,
-                            Divisa = "GBP",
-                            Iso3 = "GBR",
-                            Nombre = "Reino Unido"
-                        },
-                        new
-                        {
-                            PaisId = 135,
-                            Divisa = "XAF",
-                            Iso3 = "CAF",
-                            Nombre = "República Centroafricana"
-                        },
-                        new
-                        {
-                            PaisId = 136,
-                            Divisa = "CZK",
-                            Iso3 = "CZE",
-                            Nombre = "República Checa"
-                        },
-                        new
-                        {
                             PaisId = 137,
-                            Divisa = "DOP",
-                            Iso3 = "DOM",
-                            Nombre = "República Dominicana"
+                            Divisa = "RON",
+                            Iso3 = "ROU",
+                            Nombre = "Rumanía"
                         },
                         new
                         {
                             PaisId = 138,
-                            Divisa = "RWF",
-                            Iso3 = "RWA",
-                            Nombre = "Ruanda"
-                        },
-                        new
-                        {
-                            PaisId = 139,
-                            Divisa = "RON",
-                            Iso3 = "ROU",
-                            Nombre = "Rumania"
-                        },
-                        new
-                        {
-                            PaisId = 140,
                             Divisa = "RUB",
                             Iso3 = "RUS",
                             Nombre = "Rusia"
                         },
                         new
                         {
-                            PaisId = 141,
+                            PaisId = 139,
+                            Divisa = "RWF",
+                            Iso3 = "RWA",
+                            Nombre = "Rwanda"
+                        },
+                        new
+                        {
+                            PaisId = 140,
                             Divisa = "XCD",
                             Iso3 = "KNA",
                             Nombre = "San Cristóbal y Nieves"
                         },
                         new
                         {
-                            PaisId = 142,
+                            PaisId = 141,
                             Divisa = "EUR",
                             Iso3 = "SMR",
                             Nombre = "San Marino"
                         },
                         new
                         {
-                            PaisId = 143,
-                            Divisa = "XCD",
-                            Iso3 = "LCA",
-                            Nombre = "Santa Lucía"
-                        },
-                        new
-                        {
-                            PaisId = 144,
-                            Divisa = "XCD",
-                            Iso3 = "VCT",
-                            Nombre = "San Vicente y las Granadinas"
-                        },
-                        new
-                        {
-                            PaisId = 145,
+                            PaisId = 142,
                             Divisa = "STN",
                             Iso3 = "STP",
                             Nombre = "Santo Tomé y Príncipe"
                         },
                         new
                         {
-                            PaisId = 146,
+                            PaisId = 143,
                             Divisa = "XOF",
                             Iso3 = "SEN",
                             Nombre = "Senegal"
                         },
                         new
                         {
-                            PaisId = 147,
+                            PaisId = 144,
                             Divisa = "RSD",
                             Iso3 = "SRB",
                             Nombre = "Serbia"
                         },
                         new
                         {
-                            PaisId = 148,
+                            PaisId = 145,
                             Divisa = "SCR",
                             Iso3 = "SYC",
                             Nombre = "Seychelles"
                         },
                         new
                         {
-                            PaisId = 149,
+                            PaisId = 146,
                             Divisa = "SLL",
                             Iso3 = "SLE",
                             Nombre = "Sierra Leona"
                         },
                         new
                         {
-                            PaisId = 150,
+                            PaisId = 147,
                             Divisa = "SGD",
                             Iso3 = "SGP",
                             Nombre = "Singapur"
                         },
                         new
                         {
-                            PaisId = 151,
+                            PaisId = 148,
                             Divisa = "SYP",
                             Iso3 = "SYR",
                             Nombre = "Siria"
                         },
                         new
                         {
-                            PaisId = 152,
+                            PaisId = 149,
                             Divisa = "SOS",
                             Iso3 = "SOM",
                             Nombre = "Somalia"
                         },
                         new
                         {
-                            PaisId = 153,
+                            PaisId = 150,
                             Divisa = "LKR",
                             Iso3 = "LKA",
                             Nombre = "Sri Lanka"
                         },
                         new
                         {
-                            PaisId = 154,
+                            PaisId = 151,
                             Divisa = "SDG",
                             Iso3 = "SDN",
                             Nombre = "Sudán"
                         },
                         new
                         {
-                            PaisId = 155,
+                            PaisId = 152,
+                            Divisa = "SSP",
+                            Iso3 = "SSD",
+                            Nombre = "Sudán del Sur"
+                        },
+                        new
+                        {
+                            PaisId = 153,
                             Divisa = "SEK",
                             Iso3 = "SWE",
                             Nombre = "Suecia"
                         },
                         new
                         {
-                            PaisId = 156,
+                            PaisId = 154,
                             Divisa = "CHF",
                             Iso3 = "CHE",
                             Nombre = "Suiza"
                         },
                         new
                         {
-                            PaisId = 157,
-                            Divisa = "SRD",
-                            Iso3 = "SUR",
-                            Nombre = "Surinam"
+                            PaisId = 155,
+                            Divisa = "STN",
+                            Iso3 = "STP",
+                            Nombre = "Santo Tomé y Príncipe"
                         },
                         new
                         {
-                            PaisId = 158,
+                            PaisId = 156,
                             Divisa = "THB",
                             Iso3 = "THA",
                             Nombre = "Tailandia"
                         },
                         new
                         {
-                            PaisId = 159,
+                            PaisId = 157,
+                            Divisa = "TWD",
+                            Iso3 = "TWN",
+                            Nombre = "Taiwán"
+                        },
+                        new
+                        {
+                            PaisId = 158,
                             Divisa = "TZS",
                             Iso3 = "TZA",
                             Nombre = "Tanzania"
                         },
                         new
                         {
-                            PaisId = 160,
-                            Divisa = "USD",
-                            Iso3 = "TLS",
-                            Nombre = "Timor Oriental"
-                        },
-                        new
-                        {
-                            PaisId = 161,
+                            PaisId = 159,
                             Divisa = "XOF",
                             Iso3 = "TGO",
                             Nombre = "Togo"
                         },
                         new
                         {
-                            PaisId = 162,
+                            PaisId = 160,
                             Divisa = "TOP",
                             Iso3 = "TON",
                             Nombre = "Tonga"
                         },
                         new
                         {
-                            PaisId = 163,
+                            PaisId = 161,
                             Divisa = "TTD",
                             Iso3 = "TTO",
                             Nombre = "Trinidad y Tobago"
                         },
                         new
                         {
-                            PaisId = 164,
+                            PaisId = 162,
                             Divisa = "TND",
                             Iso3 = "TUN",
                             Nombre = "Túnez"
                         },
                         new
                         {
-                            PaisId = 165,
+                            PaisId = 163,
                             Divisa = "TMT",
                             Iso3 = "TKM",
                             Nombre = "Turkmenistán"
                         },
                         new
                         {
-                            PaisId = 166,
+                            PaisId = 164,
                             Divisa = "TRY",
                             Iso3 = "TUR",
                             Nombre = "Turquía"
                         },
                         new
                         {
-                            PaisId = 167,
+                            PaisId = 165,
                             Divisa = "AUD",
                             Iso3 = "TUV",
                             Nombre = "Tuvalu"
                         },
                         new
                         {
-                            PaisId = 168,
+                            PaisId = 166,
                             Divisa = "UAH",
                             Iso3 = "UKR",
                             Nombre = "Ucrania"
                         },
                         new
                         {
-                            PaisId = 169,
+                            PaisId = 167,
                             Divisa = "UGX",
                             Iso3 = "UGA",
                             Nombre = "Uganda"
                         },
                         new
                         {
-                            PaisId = 170,
+                            PaisId = 168,
                             Divisa = "UYU",
                             Iso3 = "URY",
                             Nombre = "Uruguay"
                         },
                         new
                         {
-                            PaisId = 171,
+                            PaisId = 169,
                             Divisa = "UZS",
                             Iso3 = "UZB",
                             Nombre = "Uzbekistán"
                         },
                         new
                         {
-                            PaisId = 172,
+                            PaisId = 170,
                             Divisa = "VUV",
                             Iso3 = "VUT",
                             Nombre = "Vanuatu"
                         },
                         new
                         {
-                            PaisId = 173,
+                            PaisId = 171,
                             Divisa = "VES",
                             Iso3 = "VEN",
                             Nombre = "Venezuela"
                         },
                         new
                         {
-                            PaisId = 174,
+                            PaisId = 172,
                             Divisa = "VND",
                             Iso3 = "VNM",
                             Nombre = "Vietnam"
                         },
                         new
                         {
-                            PaisId = 175,
+                            PaisId = 173,
                             Divisa = "YER",
                             Iso3 = "YEM",
                             Nombre = "Yemen"
                         },
                         new
                         {
-                            PaisId = 176,
+                            PaisId = 174,
                             Divisa = "ZMW",
                             Iso3 = "ZMB",
                             Nombre = "Zambia"
                         },
                         new
                         {
-                            PaisId = 177,
+                            PaisId = 175,
                             Divisa = "ZWL",
                             Iso3 = "ZWE",
                             Nombre = "Zimbabue"
@@ -1405,6 +1391,9 @@ namespace BackendEstadistica.Migrations
                     b.Property<bool?>("IsOutlier")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("IsOutlierVisto")
+                        .HasColumnType("bit");
+
                     b.HasKey("TransaccionId");
 
                     b.HasIndex("ClienteDestinoId");
@@ -1423,12 +1412,15 @@ namespace BackendEstadistica.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Contraseña")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Correo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefono")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

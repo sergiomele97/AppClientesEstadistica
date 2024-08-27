@@ -17,7 +17,7 @@ export class ConversionService {
 
   getConversiones(): Observable<IConversion[]> {
     return this.http.get<IConversion[]>(
-      `${this.url_estadistica}/getTransacciones`
+      `${this.url_estadistica}/getConversiones`
     );
   }
 }

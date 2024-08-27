@@ -4,6 +4,7 @@ import { ChartComponent, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexDataLabe
 import { DivisaService } from 'src/app/servicios/divisa.service';
 import { IDivisa } from 'src/app/interfaces/divisa';
 
+
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;

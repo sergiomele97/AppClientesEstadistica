@@ -16,13 +16,11 @@ export class LogsOutlierComponent implements OnInit{
 
   ngOnInit(): void {
 
-    this.transaccionService.obtenerOutlier().subscribe( datos => {
+    this.transaccionService.outliersVistos().subscribe( datos => {
       this.outliers = datos;
-    });
+    })
 
-  
   }
 
- 
 
 }

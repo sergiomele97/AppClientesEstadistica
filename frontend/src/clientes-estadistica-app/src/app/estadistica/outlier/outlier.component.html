@@ -1,4 +1,13 @@
 <div *ngIf="!loading">
+
+  <div *ngIf="successMessage" class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-300" role="alert">
+    <span class="text-lg">{{ successMessage }}</span>
+  </div>
+
+  <div *ngIf="errorMessage" class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-300" role="alert">
+    <span class="text-lg">{{ errorMessage }}</span>
+  </div>
+
   <div *ngIf="!vacio; else noOutliers">
     <div *ngFor="let outlier of outliers.slice().reverse(); let i = index" class="flex justify-center items-center w-full p-4">
       <div class="max-w-sm w-full bg-white border rounded-xl shadow-md">
@@ -11,20 +20,25 @@
             El usuario <b>{{ outlier.clienteOrigen.correo }}</b> ha hecho un envío de <b>{{ outlier.importeEnviado }}€</b>
           </p>
         </div>
-        <div class="p-4">
+        <div class="flex p-4">
           <a
             routerLink="/estadistica/outliers/{{ outlier.clienteOrigenId }}"
             routerLinkActive="active"
-            class="text-white bg-blue-700 hover:bg-blue-800 rounded-lg p-2 block text-center font-semibold"
+            class="text-white bg-blue-700 hover:bg-blue-800 rounded-lg px-4 py-2 block text-center font-semibold mr-20"
           >
             Detalle del outlier
           </a>
+          <button (click)="borrarOutlier(outlier.transaccionId)" class="flex text-white border-2 border-green-700 bg-green-500 rounded-xl py-2 px-2">
+            Resuelto
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 
 <ng-template #noOutliers>
   <div class="flex justify-center items-center w-full mt-80">
