@@ -10,7 +10,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { LoginComponent } from './login/login.component';
-import { UserService } from './servicios/user.service';
 import { VolumetryComponent } from './estadisticas/volumetry/volumetry.component';
 import { ClustersComponent } from './estadistica/clusters/clusters.component';
 import { GraphComponent } from './estadisticas/graph/graph.component';
@@ -34,6 +33,7 @@ import { DatePipe } from '@angular/common';
 import { FormaterFechaPipe } from './pipes/formaterFecha.pipe';
 import { RegisterComponent } from './register/register.component';
 import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-outlier.component';
+import { UsuarioService } from './servicios/usuario.service';
 
 
 
@@ -75,7 +75,7 @@ import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-ou
     BrowserModule
   ],
   providers: [
-    UserService,
+    UsuarioService,
     PruebaConexionService,
     ClustersDataService,
     DatePipe
