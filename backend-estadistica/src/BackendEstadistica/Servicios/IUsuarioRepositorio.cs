@@ -4,12 +4,12 @@ namespace BackendEstadistica.Servicios;
 
 public interface IUsuarioRepositorio
 {
-    List<Usuario> GetUsuarios();
-    List<Usuario> GetUsuariosFiltrando(string email, int numeroPagina, int tamañoPagina);
-    Usuario GetUsuarioById(int id);
-    Task<bool> GuardarCambios();
-    bool EmailExist(string email);
-    void AddUsuario(Usuario usuario);
-    bool DeleteUsuario(int id);
-    void UpdateUsuario(Usuario usuario);
+    Task<List<Usuario>> GetUsuariosAsync();
+    Task<List<Usuario>> GetUsuariosFiltrandoAsync(string email, int numeroPagina, int tamañoPagina);
+    Task<Usuario> GetUsuarioByIdAsync(int id);
+    Task<bool> GuardarCambiosAsync();
+    Task<bool> EmailExistAsync(string email);
+    Task AddUsuarioAsync(Usuario usuario);
+    Task<bool> DeleteUsuarioAsync(int id);
+    Task UpdateUsuarioAsync(Usuario usuario);
 }
