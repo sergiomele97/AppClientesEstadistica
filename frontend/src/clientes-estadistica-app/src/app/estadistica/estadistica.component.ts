@@ -3,35 +3,42 @@ import { Usuario } from '../clases/usuario';
 import { PruebaConexionService } from '../servicios/pruebaConexion.service';
 import { TransaccionService } from '../servicios/transaccion.service';
 import { interval } from 'rxjs';
+import { AuthService } from '../servicios/auth.service';
+import { Router } from '@angular/router';
 
-// Decorador 
+// Decorador
 @Component({
   selector: 'app-estadistica',
   templateUrl: './estadistica.component.html',
-  styleUrls: ['./estadistica.component.css']
+  styleUrls: ['./estadistica.component.css'],
 })
-
 export class EstadisticaComponent implements OnInit {
-  usuarios: Usuario[];
+  outliers: number = 0;
+  isDropdownOpen: boolean = false;
+  username: string | null = null;
 
-  outliers: number;
+  constructor(
+    private pruebaConexionService: PruebaConexionService,
+    private transaccionService: TransaccionService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
-  // Método para dropdown
-  isDropdownOpen = false;
-
-  menuOpen: boolean = false;
-
+  // Método para abrir/cerrar el menú desplegable
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  constructor(private pruebaConexionService: PruebaConexionService, private transaccionService: TransaccionService) { }
-  
+  // Método para cerrar sesión
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 
   // -------------------- Método Sergio para Debuggear en Azure, no borrar:
   usuario: Usuario | undefined;
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     const userId = 1; // Cambia esto al ID que deseas buscar
 
     this.pruebaConexionService.getUsuarioById(userId).subscribe(
@@ -39,28 +46,27 @@ export class EstadisticaComponent implements OnInit {
         this.usuario = data;
         console.log('Usuario obtenido:', this.usuario);
       },
-      error => {
+      (error) => {
         console.error('Error al obtener el usuario', error);
       }
     );
 
+    // -------------------- Fin Método Sergio para Debuggear en Azure, no borrar:
+
     this.actualizarOutliers();
 
     interval(30000).subscribe(() => {
-      this.actualizarOutliers()
+      this.actualizarOutliers();
     });
 
+    this.authService.user$.subscribe((user) => {
+      this.username = user;
+    });
   }
-  // -------------------- Fin Método Sergio para Debuggear en Azure, no borrar:
-  
-    actualizarOutliers() {
-      this.transaccionService.obtenerOutlier().subscribe( datos => {
-        this.outliers = datos.length;
-      });
-    }
 
-  
+  actualizarOutliers() {
+    this.transaccionService.obtenerOutlier().subscribe((datos) => {
+      this.outliers = datos.length;
+    });
+  }
 }
-
-
-  
