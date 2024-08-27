@@ -184,6 +184,7 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
             }
 
             transaccion.IsOutlier = false;
+            transaccion.IsOutlierVisto = true;
             await _contextoBBDD.SaveChangesAsync();
 
             return true; 

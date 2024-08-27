@@ -136,6 +136,17 @@ public class EstadisticasController : ControllerBase
 
         return Ok(transaccionesMayores);
     }
+    [HttpGet("outliers-vistos")]
+    public async Task<IActionResult> ObtenerOutliersVistos()
+    {
+        var outliersVistos = await contextoBBDD.Transacciones
+            .Include(t => t.ClienteOrigen)
+            .Include(t => t.ClienteDestino)
+            .Where(t => t.IsOutlierVisto == true)
+            .ToListAsync();
+
+        return Ok(outliersVistos);
+    }
 
     [HttpPut("resolucionOutlier/{idTransaccion}")]
     public async Task<IActionResult> EliminarOutlier([FromRoute] int idTransaccion)
