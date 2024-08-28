@@ -75,7 +75,7 @@ import { CustomCurrencyPipe } from './pipes/customCurrency.pipe';
     UsuarioService,
     PruebaConexionService,
     ClustersDataService,
-    DatePipe,
+    DatePipe,FormaterFechaPipe,
     CustomCurrencyPipe,
   ],
   bootstrap: [AppComponent],
