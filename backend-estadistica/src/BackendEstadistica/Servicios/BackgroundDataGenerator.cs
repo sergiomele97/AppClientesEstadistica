@@ -42,7 +42,7 @@ namespace BackendEstadistica.Servicios
                         var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
 
                         // Obtener los países para inicializar ClienteFaker
-                        var paises = await estadisticasRepositorio.GetPaisesAsync(); // Cambiar a async
+                        var paises = await estadisticasRepositorio.GetPaisesAsync(); 
                         var clienteFaker = new ClienteFaker(paises);
 
                         // 1. Lógica para crear el cliente
@@ -50,7 +50,7 @@ namespace BackendEstadistica.Servicios
                         {
                             var clienteDto = clienteFaker.Generate();
                             var nuevoCliente = mapper.Map<Cliente>(clienteDto);
-                            await estadisticasRepositorio.CrearClienteAsync(nuevoCliente); // Cambiar a async
+                            await estadisticasRepositorio.CrearClienteAsync(nuevoCliente); 
 
                             _logger.LogInformation("Cliente creado correctamente");
                         }
@@ -58,28 +58,28 @@ namespace BackendEstadistica.Servicios
                         // 2. Lógica para crear transacción
                         for (int i = 0; i < volumenTransacciones; i++)
                         {
-                            var clienteOrigen = await estadisticasRepositorio.GetRandomClientAsync(); // Cambiar a async
-                            var clienteDestino = await estadisticasRepositorio.GetRandomClientAsync(); // Cambiar a async
+                            var clienteOrigen = await estadisticasRepositorio.GetRandomClientAsync();
+                            var clienteDestino = await estadisticasRepositorio.GetRandomClientAsync(); 
 
                             var transaccionFaker = new TransaccionFaker(clienteOrigen, clienteDestino);
                             var transaccionDto = transaccionFaker.Generate();
 
                             var nuevaTransaccion = mapper.Map<Transaccion>(transaccionDto);
-                            await estadisticasRepositorio.CrearTransaccionAsync(nuevaTransaccion); // Cambiar a async
+                            await estadisticasRepositorio.CrearTransaccionAsync(nuevaTransaccion); 
 
                             // Detectar si esta transacción es un outlier
-                            await estadisticasRepositorio.DetectarOutliersAsync(); // Cambiar a async
+                            await estadisticasRepositorio.DetectarOutliersAsync();
                         }
 
                         // 3. Lógica para crear conversión
                         for (int i = 0; i < volumenConversiones; i++)
                         {
-                            var cliente = await estadisticasRepositorio.GetRandomClientAsync(); // Cambiar a async
+                            var cliente = await estadisticasRepositorio.GetRandomClientAsync(); 
                             var conversionFaker = new ConversionFaker(cliente);
 
                             var conversionDto = conversionFaker.Generate();
                             var nuevaConversion = mapper.Map<Conversion>(conversionDto);
-                            await estadisticasRepositorio.CrearConversionAsync(nuevaConversion); // Cambiar a async
+                            await estadisticasRepositorio.CrearConversionAsync(nuevaConversion);
 
                             _logger.LogInformation("Conversión creada correctamente");
                         }

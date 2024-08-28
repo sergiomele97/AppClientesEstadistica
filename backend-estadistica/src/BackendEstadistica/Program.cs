@@ -1,3 +1,5 @@
+using BackendEstadistica.SignalR;
+
 namespace BackendEstadistica;
 
 public class Program
@@ -56,6 +58,8 @@ public class Program
 
         builder.Services.AddScoped<ITokenService, TokenService>();
 
+        builder.Services.AddSignalR();
+
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowLocalhost",
@@ -99,6 +103,8 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
+
+        app.MapHub<NotificationHub>("/notificationHub");
 
         app.Run();
     }
