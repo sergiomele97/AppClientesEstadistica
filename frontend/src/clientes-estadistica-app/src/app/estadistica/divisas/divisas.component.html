@@ -112,7 +112,11 @@
   </select>
 </div>
 
-<div class="chart-container">
+<!-- Loader que se muestra mientras se cargan los datos -->
+<div *ngIf="isLoading" class="loader"></div>
+
+
+<div *ngIf="!isLoading" class="chart-container">
   <apx-chart
     [series]="chartOptions.series"
     [chart]="chartOptions.chart"
