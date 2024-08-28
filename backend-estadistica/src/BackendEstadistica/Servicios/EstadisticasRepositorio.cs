@@ -17,6 +17,7 @@ namespace BackendEstadistica.Servicios
             _mapper = mapper;
         }
 
+        // Método para crear un cliente
         public async Task CrearClienteAsync(Cliente cliente)
         {
             var clienteEntity = _mapper.Map<Cliente>(cliente);
@@ -24,10 +25,10 @@ namespace BackendEstadistica.Servicios
             await _contextoBBDD.SaveChangesAsync();
         }
 
+        // Método para obtener un cliente aleatorio
         public async Task<Cliente> GetRandomClientAsync()
         {
             int totalClientes = await _contextoBBDD.Clientes.CountAsync();
-
             if (totalClientes == 0)
             {
                 throw new InvalidOperationException("No hay clientes disponibles.");
@@ -49,6 +50,7 @@ namespace BackendEstadistica.Servicios
             return clienteAleatorio;
         }
 
+        // Método para obtener todos los clientes
         public async Task<List<Cliente>> GetClientesAsync()
         {
             return await _contextoBBDD.Clientes
@@ -59,6 +61,7 @@ namespace BackendEstadistica.Servicios
                 .ToListAsync();
         }
 
+        // Método para obtener un cliente por ID
         public async Task<Cliente> GetClienteByIdAsync(int id)
         {
             return await _contextoBBDD.Clientes
@@ -69,6 +72,7 @@ namespace BackendEstadistica.Servicios
                 .FirstOrDefaultAsync(c => c.ClienteId == id);
         }
 
+        // Método para crear una divisa
         public async Task CrearDivisaAsync(Divisa divisa)
         {
             var divisaEntity = _mapper.Map<Divisa>(divisa);
@@ -76,17 +80,26 @@ namespace BackendEstadistica.Servicios
             await _contextoBBDD.SaveChangesAsync();
         }
 
-        public async Task<Divisa> GetDivisaByIdAsync(int id)
+        // Método para obtener divisas por nombre
+        public async Task<List<Divisa>> GetDivisaByNameAsync(string nombre)
         {
+            if (string.IsNullOrEmpty(nombre))
+            {
+                return new List<Divisa>();
+            }
+
             return await _contextoBBDD.Divisa
-                .FirstOrDefaultAsync(d => d.DivisaId == id);
+                .Where(d => d.Nombre == nombre)
+                .ToListAsync();
         }
 
+        // Método para obtener todas las divisas
         public async Task<List<Divisa>> GetDivisasAsync()
         {
             return await _contextoBBDD.Divisa.ToListAsync();
         }
 
+        // Método para crear una conversión
         public async Task CrearConversionAsync(Conversion conversion)
         {
             var conversionEntity = _mapper.Map<Conversion>(conversion);
@@ -94,6 +107,7 @@ namespace BackendEstadistica.Servicios
             await _contextoBBDD.SaveChangesAsync();
         }
 
+        // Método para obtener todas las conversiones
         public async Task<List<Conversion>> GetConversionesAsync()
         {
             return await _contextoBBDD.Conversion
@@ -101,6 +115,7 @@ namespace BackendEstadistica.Servicios
                 .ToListAsync();
         }
 
+        // Método para obtener una conversión por ID
         public async Task<Conversion> GetConversionByIdAsync(int id)
         {
             return await _contextoBBDD.Conversion
@@ -108,6 +123,7 @@ namespace BackendEstadistica.Servicios
                 .FirstOrDefaultAsync(c => c.ConversionId == id);
         }
 
+        // Método para crear una transacción
         public async Task CrearTransaccionAsync(Transaccion transaccion)
         {
             var clienteOrigen = await _contextoBBDD.Clientes.FindAsync(transaccion.ClienteOrigenId);
@@ -124,6 +140,7 @@ namespace BackendEstadistica.Servicios
             }
         }
 
+        // Método para obtener todas las transacciones
         public async Task<List<Transaccion>> GetTransaccionesAsync()
         {
             return await _contextoBBDD.Transacciones
@@ -132,6 +149,7 @@ namespace BackendEstadistica.Servicios
                 .ToListAsync();
         }
 
+        // Método para obtener una transacción por ID
         public async Task<Transaccion> GetTransaccionByIdAsync(int id)
         {
             return await _contextoBBDD.Transacciones
@@ -140,6 +158,7 @@ namespace BackendEstadistica.Servicios
                 .FirstOrDefaultAsync(t => t.TransaccionId == id);
         }
 
+        // Método para detectar outliers
         public async Task DetectarOutliersAsync()
         {
             var transaccionesByCliente = await _contextoBBDD.Transacciones
@@ -170,6 +189,7 @@ namespace BackendEstadistica.Servicios
             await _contextoBBDD.SaveChangesAsync();
         }
 
+        // Método auxiliar para calcular los cuantiles
         private double GetQuantile(List<double> sortedValues, double percentile)
         {
             int N = sortedValues.Count;
@@ -182,6 +202,7 @@ namespace BackendEstadistica.Servicios
             return sortedValues[lowerIndex] * (1 - (index - lowerIndex)) + sortedValues[upperIndex] * (index - lowerIndex);
         }
 
+        // Método para eliminar un outlier
         public async Task<bool> EliminarOutlierAsync(int transaccionId)
         {
             try
@@ -207,6 +228,7 @@ namespace BackendEstadistica.Servicios
             }
         }
 
+        // Método para crear un país
         public async Task CrearPaisAsync(Pais pais)
         {
             var paisEntity = _mapper.Map<Pais>(pais);
@@ -214,11 +236,13 @@ namespace BackendEstadistica.Servicios
             await _contextoBBDD.SaveChangesAsync();
         }
 
+        // Método para obtener todos los países
         public async Task<List<Pais>> GetPaisesAsync()
         {
             return await _contextoBBDD.Paises.ToListAsync();
         }
 
+        // Método para obtener un país por ID
         public async Task<Pais> GetPaisByIdAsync(int id)
         {
             return await _contextoBBDD.Paises

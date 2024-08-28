@@ -139,20 +139,14 @@ namespace BackendEstadistica.Controllers
                 await _estadisticasRepositorio.CrearDivisaAsync(nuevaDivisa);
             }
 
-            return Ok("Divisas creadas correctamente");
+            return Ok("Divisa creada correctamente");
         }
 
-        [HttpGet("getDivisa/{id}")]
-        public async Task<IActionResult> GetDivisaById(int id)
+        [HttpGet("getDivisa/{nombre}")]
+        public async Task<IActionResult> GetDivisaByName(string nombre)
         {
-            var divisa = await _estadisticasRepositorio.GetDivisaByIdAsync(id);
-
-            if (divisa == null)
-            {
-                return NotFound("Divisa no encontrada.");
-            }
-
-            return Ok(_mapper.Map<Divisa>(divisa));
+            var divisaNombre = await _estadisticasRepositorio.GetDivisaByNameAsync(nombre);
+            return Ok(_mapper.Map<List<Divisa>>(divisaNombre));
         }
 
         [HttpGet("getDivisas")]
