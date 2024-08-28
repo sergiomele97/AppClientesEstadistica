@@ -35,7 +35,11 @@ export class TableComponent implements OnInit, OnDestroy {
   set filterTransaccion(value: string) {
     this._filterTransaccion = value; // Actualiza el valor del filtro
     this.currentPage = 1; // Reinicia la página actual al aplicar un nuevo filtro
-    this.transaccionesFilter = this.filterTransacciones(this._filterTransaccion, this.startDate, this.endDate); // Aplica el filtro a las transacciones
+    this.transaccionesFilter = this.filterTransacciones(
+      this._filterTransaccion,
+      this.startDate,
+      this.endDate
+    ); // Aplica el filtro a las transacciones
   }
 
   // Método del ciclo de vida que se ejecuta al inicializar el componente
@@ -44,7 +48,11 @@ export class TableComponent implements OnInit, OnDestroy {
     this.subscription = this.transaccionesService.getTransacciones().subscribe({
       next: (transacciones) => {
         this.transacciones = transacciones; // Guarda las transacciones obtenidas
-        this.transaccionesFilter = this.filterTransacciones(this._filterTransaccion, this.startDate, this.endDate); // Filtra las transacciones según el filtro actual
+        this.transaccionesFilter = this.filterTransacciones(
+          this._filterTransaccion,
+          this.startDate,
+          this.endDate
+        ); // Filtra las transacciones según el filtro actual
         console.log(transacciones); // Muestra las transacciones en la consola para depuración
       },
       error: (error) => console.error('Error fetching transactions:', error), // Manejo de errores al obtener las transacciones
@@ -98,15 +106,21 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   // Método para combinar los filtros de cliente y fecha
-  filterTransacciones(filter: string, startDate: string, endDate: string): ITransaccion[] {
+  filterTransacciones(
+    filter: string,
+    startDate: string,
+    endDate: string
+  ): ITransaccion[] {
     // Primero filtramos por cliente
     let filteredByCliente = this.filterByCliente(filter);
-    
+
     // Luego filtramos por fecha usando el resultado anterior
     let filteredByFecha = this.filterByFecha(startDate, endDate);
 
     // Retornamos la intersección de ambos filtros
-    return filteredByCliente.filter(transaccion => filteredByFecha.includes(transaccion));
+    return filteredByCliente.filter((transaccion) =>
+      filteredByFecha.includes(transaccion)
+    );
   }
 
   // Variables para el ordenamiento de columnas
