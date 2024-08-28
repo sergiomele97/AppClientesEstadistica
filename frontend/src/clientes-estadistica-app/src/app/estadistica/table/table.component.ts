@@ -10,23 +10,16 @@ import { TransaccionService } from 'src/app/servicios/transaccion.service'; // S
   styleUrls: ['./table.component.css'], // Ruta al archivo de estilos CSS del componente
 })
 export class TableComponent implements OnInit, OnDestroy {
-  // Constructor que inyecta el servicio de transacciones
   constructor(private transaccionesService: TransaccionService) {}
 
-  // Suscripción para manejar el flujo de datos de transacciones
-  subscription!: Subscription;
+  subscription!: Subscription; // Suscripción para manejar el flujo de datos de transacciones
+  transacciones: ITransaccion[] = []; // Arreglo para almacenar todas las transacciones obtenidas
+  transaccionesFilter: ITransaccion[] = []; // Arreglo para almacenar las transacciones filtradas
+  currentPage: number = 1; // Página actual para la paginación
 
-  // Arreglo para almacenar todas las transacciones obtenidas
-  transacciones: ITransaccion[] = [];
-
-  // Arreglo para almacenar las transacciones filtradas
-  transaccionesFilter: ITransaccion[] = [];
-
-  // Página actual para la paginación
-  currentPage: number = 1;
-
-  // Variable privada para almacenar el filtro de transacciones por cliente
-  private _filterTransaccion: number;
+  private _filterTransaccion: string = ''; // Variable privada para almacenar el filtro de transacciones por cliente
+  startDate: string = ''; // Variable para almacenar la fecha de inicio del filtro por fechas
+  endDate: string = ''; // Variable para almacenar la fecha de fin del filtro por fechas
 
   // Variables para manejar el tooltip
   hoveredCliente: ICliente | null = null; // Cliente sobre el cual se muestra el tooltip
@@ -34,15 +27,15 @@ export class TableComponent implements OnInit, OnDestroy {
   private tooltipTimeoutId: any; // ID del temporizador para controlar la aparición del tooltip
 
   // Getter para obtener el valor actual del filtro de transacción
-  get filterTransaccion(): number {
+  get filterTransaccion(): string {
     return this._filterTransaccion;
   }
 
   // Setter para aplicar un nuevo filtro de transacción
-  set filterTransaccion(value: number) {
+  set filterTransaccion(value: string) {
     this._filterTransaccion = value; // Actualiza el valor del filtro
     this.currentPage = 1; // Reinicia la página actual al aplicar un nuevo filtro
-    this.transaccionesFilter = this.filterTransaccionesByCliente(value); // Aplica el filtro a las transacciones
+    this.transaccionesFilter = this.filterTransacciones(this._filterTransaccion, this.startDate, this.endDate); // Aplica el filtro a las transacciones
   }
 
   // Método del ciclo de vida que se ejecuta al inicializar el componente
@@ -51,9 +44,7 @@ export class TableComponent implements OnInit, OnDestroy {
     this.subscription = this.transaccionesService.getTransacciones().subscribe({
       next: (transacciones) => {
         this.transacciones = transacciones; // Guarda las transacciones obtenidas
-        this.transaccionesFilter = this.filterTransaccionesByCliente(
-          this.filterTransaccion
-        ); // Filtra las transacciones según el filtro actual
+        this.transaccionesFilter = this.filterTransacciones(this._filterTransaccion, this.startDate, this.endDate); // Filtra las transacciones según el filtro actual
         console.log(transacciones); // Muestra las transacciones en la consola para depuración
       },
       error: (error) => console.error('Error fetching transactions:', error), // Manejo de errores al obtener las transacciones
@@ -66,15 +57,56 @@ export class TableComponent implements OnInit, OnDestroy {
   }
 
   // Método para filtrar las transacciones por el ID de cliente
-  filterTransaccionesByCliente(filter: number): ITransaccion[] {
+  filterByCliente(filter: string): ITransaccion[] {
     if (!filter) {
       return this.transacciones; // Si no hay filtro, retorna todas las transacciones
     }
-    return this.transacciones.filter(
-      (transaccion: ITransaccion) =>
-        transaccion?.clienteOrigenId === filter ||
-        transaccion?.clienteDestinoId === filter
-    ); // Retorna las transacciones cuyo cliente de origen o destino coincida con el filtro
+
+    const filterNum = parseInt(filter, 10); // Convierte el filtro a número
+    if (!isNaN(filterNum)) {
+      return this.transacciones.filter(
+        (transaccion: ITransaccion) =>
+          transaccion.clienteOrigenId === filterNum ||
+          transaccion.clienteDestinoId === filterNum
+      ); // Retorna las transacciones cuyo cliente de origen o destino coincida con el filtro
+    }
+
+    return this.transacciones; // Si el filtro no es un número válido, retorna todas las transacciones
+  }
+
+  // Método para filtrar las transacciones por fechas
+  filterByFecha(startDate: string, endDate: string): ITransaccion[] {
+    let filteredTransacciones = this.transacciones;
+
+    if (startDate) {
+      const start = new Date(startDate).getTime(); // Convierte la fecha de inicio a timestamp
+      filteredTransacciones = filteredTransacciones.filter(
+        (transaccion: ITransaccion) =>
+          new Date(transaccion.fecha).getTime() >= start // Filtra transacciones a partir de la fecha de inicio
+      );
+    }
+
+    if (endDate) {
+      const end = new Date(endDate).getTime(); // Convierte la fecha de fin a timestamp
+      filteredTransacciones = filteredTransacciones.filter(
+        (transaccion: ITransaccion) =>
+          new Date(transaccion.fecha).getTime() <= end // Filtra transacciones hasta la fecha de fin
+      );
+    }
+
+    return filteredTransacciones; // Retorna las transacciones dentro del rango de fechas especificado
+  }
+
+  // Método para combinar los filtros de cliente y fecha
+  filterTransacciones(filter: string, startDate: string, endDate: string): ITransaccion[] {
+    // Primero filtramos por cliente
+    let filteredByCliente = this.filterByCliente(filter);
+    
+    // Luego filtramos por fecha usando el resultado anterior
+    let filteredByFecha = this.filterByFecha(startDate, endDate);
+
+    // Retornamos la intersección de ambos filtros
+    return filteredByCliente.filter(transaccion => filteredByFecha.includes(transaccion));
   }
 
   // Variables para el ordenamiento de columnas
