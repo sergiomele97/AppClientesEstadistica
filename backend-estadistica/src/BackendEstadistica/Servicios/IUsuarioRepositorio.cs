@@ -1,6 +1,4 @@
-﻿using BackendEstadistica.Entidades;
-
-namespace BackendEstadistica.Servicios;
+﻿namespace BackendEstadistica.Servicios;
 
 public interface IUsuarioRepositorio
 {
