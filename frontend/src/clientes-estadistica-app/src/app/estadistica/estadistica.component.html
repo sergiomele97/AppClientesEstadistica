@@ -1,4 +1,4 @@
-<!-- header.component.html -->
+<!-- HEADER -->
 <header
   class="fixed top-0 left-0 right-0 z-50 h-16 px-7 py-5 bg-gray-50 dark:bg-gray-800 flex justify-between items-center shadow-md"
 >
@@ -11,40 +11,22 @@
       >ChachiData</a
     >
   </h1>
-  <div class="relative flex items-center space-x-2">
+  <div class="relative flex items-center space-x-3">
     <!-- Username with Dropdown Trigger -->
     <p
       class="text-blue-500 font-bold transition duration-75 dark:text-blue-300 cursor-pointer"
-      (click)="toggleDropdown()"
+      (click)="toggleDropdown($event)"
     >
       {{ username || "Admin" }}
     </p>
-
-    <!-- Dropdown Menu -->
-    <div
-      *ngIf="isDropdownOpen"
-      class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg"
-    >
-      <a
-        routerLink="/profile"
-        class="block px-4 py-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-        >Profile</a
-      >
-      <a
-        (click)="logout()"
-        class="block px-4 py-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
-        >Logout</a
-      >
-    </div>
 
     <!-- Icon -->
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="#1E90FF"
-      class="size-8"
-      width="200"
-      height="200"
+      class="w-8 h-8 cursor-pointer"
+      (click)="toggleDropdown($event)"
     >
       <path
         fill-rule="evenodd"
@@ -52,6 +34,18 @@
         clip-rule="evenodd"
       />
     </svg>
+
+    <!-- Dropdown Menu -->
+    <div
+      *ngIf="isDropdownOpen"
+      class="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 shadow-lg rounded-lg transition-opacity duration-300 ease-in-out opacity-100 z-50"
+    >
+      <a
+        (click)="logout()"
+        class="block px-4 py-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-b-lg transition-colors duration-200 cursor-pointer"
+        >Logout</a
+      >
+    </div>
   </div>
 </header>
 
@@ -218,7 +212,7 @@
         </a>
       </li>
       <li>
-        <a 
+        <a
           routerLink="/estadistica/outliers-logs"
           routerLinkActive="true"
           class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
@@ -242,7 +236,7 @@
         </a>
       </li>
     </ul>
-  </div> 
+  </div>
 </aside>
 
 <!-- CONTENIDO PRINCIPAL -->

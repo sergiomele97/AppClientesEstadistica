@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Usuario } from '../clases/usuario';
 import { PruebaConexionService } from '../servicios/pruebaConexion.service';
 import { TransaccionService } from '../servicios/transaccion.service';
@@ -24,10 +24,19 @@ export class EstadisticaComponent implements OnInit {
     private router: Router
   ) {}
 
-  // Método para abrir/cerrar el menú desplegable
-  toggleDropdown() {
+  // Alternar la apertura del dropdown
+  toggleDropdown(event: Event): void {
+    event.stopPropagation(); // Evitar que el click se propague al document
     this.isDropdownOpen = !this.isDropdownOpen;
   }
+
+    // Detectar clics fuera del dropdown y cerrarlo si está abierto
+    @HostListener('document:click', ['$event'])
+    closeDropdown(event: Event): void {
+      if (this.isDropdownOpen) {
+        this.isDropdownOpen = false;
+      }
+    }
 
   // Método para cerrar sesión
   logout() {
