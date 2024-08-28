@@ -37,7 +37,7 @@ export class EstadisticaComponent implements OnInit {
     this.pruebaConexionService.getUsuarioById(userId).subscribe(
       (data: Usuario) => {
         this.usuario = data;
-        console.log('Usuario obtenido:', this.usuario);
+        //console.log('Usuario obtenido:', this.usuario);
       },
       error => {
         console.error('Error al obtener el usuario', error);

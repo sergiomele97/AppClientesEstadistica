@@ -1,56 +1,126 @@
-<div class="min-h-screen flex flex-col items-center p-6 bg-gray-100">
-  <!-- Contenedor del dropdown centrado en la parte superior -->
-  <div class="w-full max-w-lg mb-6">
-    <label for="currency-select" class="block text-gray-700 text-lg font-medium mb-2">Seleccione la divisa:</label>
-    <select
-      id="currency-select"
-      (change)="onCurrencyChange($event)"
-      class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-    >
-      <option value="euros">Euros</option>
-      <option value="dolares">Dólares</option>
-      <option value="libras">Libras</option>
-    </select>
-  </div>
 <div class="dropdown-container">
   <label for="currency-select">Seleccione la divisa:</label>
   <select id="currency-select" (change)="onCurrencyChange($event)">
-    <option value="euros">Euros</option>
-    <option value="dolares">Dólares</option>
-    <option value="libras">Libras</option>
+    <option value="AFN">Afghani (AFN)</option>
+    <option value="ALL">Lek (ALL)</option>
+    <option value="EUR">Euro (EUR)</option>
+    <option value="AOA">Kwanza (AOA)</option>
+    <option value="XCD">East Caribbean Dollar (XCD)</option>
+    <option value="SAR">Saudi Riyal (SAR)</option>
+    <option value="DZD">Algerian Dinar (DZD)</option>
+    <option value="ARS">Argentine Peso (ARS)</option>
+    <option value="AMD">Armenian Dram (AMD)</option>
+    <option value="AUD">Australian Dollar (AUD)</option>
+    <option value="AZN">Azerbaijani Manat (AZN)</option>
+    <option value="BSD">Bahamian Dollar (BSD)</option>
+    <option value="BHD">Bahraini Dinar (BHD)</option>
+    <option value="BDT">Bangladeshi Taka (BDT)</option>
+    <option value="BBD">Barbadian Dollar (BBD)</option>
+    <option value="BZD">Belize Dollar (BZD)</option>
+    <option value="XOF">CFA Franc BCEAO (XOF)</option>
+    <option value="BYN">Belarusian Ruble (BYN)</option>
+    <option value="MMK">Burmese Kyat (MMK)</option>
+    <option value="BOB">Bolivian Boliviano (BOB)</option>
+    <option value="BAM">Bosnia and Herzegovina Convertible Mark (BAM)</option>
+    <option value="BWP">Botswana Pula (BWP)</option>
+    <option value="BRL">Brazilian Real (BRL)</option>
+    <option value="BND">Brunei Dollar (BND)</option>
+    <option value="BGN">Bulgarian Lev (BGN)</option>
+    <option value="BIF">Burundian Franc (BIF)</option>
+    <option value="INR">Indian Rupee (INR)</option>
+    <option value="CVE">Cape Verdean Escudo (CVE)</option>
+    <option value="KHR">Cambodian Riel (KHR)</option>
+    <option value="XAF">CFA Franc BEAC (XAF)</option>
+    <option value="CAD">Canadian Dollar (CAD)</option>
+    <option value="QAR">Qatari Riyal (QAR)</option>
+    <option value="CLP">Chilean Peso (CLP)</option>
+    <option value="CNY">Chinese Yuan (CNY)</option>
+    <option value="COP">Colombian Peso (COP)</option>
+    <option value="KMF">Comorian Franc (KMF)</option>
+    <option value="KPW">North Korean Won (KPW)</option>
+    <option value="KRW">South Korean Won (KRW)</option>
+    <option value="CRC">Costa Rican Colón (CRC)</option>
+    <option value="HRK">Croatian Kuna (HRK)</option>
+    <option value="CUP">Cuban Peso (CUP)</option>
+    <option value="CZK">Czech Koruna (CZK)</option>
+    <option value="DKK">Danish Krone (DKK)</option>
+    <option value="EGP">Egyptian Pound (EGP)</option>
+    <option value="USD">United States Dollar (USD)</option>
+    <option value="AED">United Arab Emirates Dirham (AED)</option>
+    <option value="ERN">Eritrean Nakfa (ERN)</option>
+    <option value="GBP">British Pound Sterling (GBP)</option>
+    <option value="SZL">Swazi Lilangeni (SZL)</option>
+    <option value="GTQ">Guatemalan Quetzal (GTQ)</option>
+    <option value="GNF">Guinean Franc (GNF)</option>
+    <option value="GYD">Guyanese Dollar (GYD)</option>
+    <option value="HTG">Haitian Gourde (HTG)</option>
+    <option value="HNL">Honduran Lempira (HNL)</option>
+    <option value="HUF">Hungarian Forint (HUF)</option>
+    <option value="IDR">Indonesian Rupiah (IDR)</option>
+    <option value="IRR">Iranian Rial (IRR)</option>
+    <option value="IQD">Iraqi Dinar (IQD)</option>
+    <option value="ISK">Icelandic Króna (ISK)</option>
+    <option value="JMD">Jamaican Dollar (JMD)</option>
+    <option value="JPY">Japanese Yen (JPY)</option>
+    <option value="JOD">Jordanian Dinar (JOD)</option>
+    <option value="KZT">Kazakhstani Tenge (KZT)</option>
+    <option value="KES">Kenyan Shilling (KES)</option>
+    <option value="KGS">Kyrgystani Som (KGS)</option>
+    <option value="KWD">Kuwaiti Dinar (KWD)</option>
+    <option value="LAK">Laotian Kip (LAK)</option>
+    <option value="LVL">Latvian Lats (LVL)</option>
+    <option value="LBP">Lebanese Pound (LBP)</option>
+    <option value="LRD">Liberian Dollar (LRD)</option>
+    <option value="LYD">Libyan Dinar (LYD)</option>
+    <option value="CHF">Swiss Franc (CHF)</option>
+    <option value="MGA">Malagasy Ariary (MGA)</option>
+    <option value="MYR">Malaysian Ringgit (MYR)</option>
+    <option value="MWK">Malawian Kwacha (MWK)</option>
+    <option value="MVR">Maldivian Rufiyaa (MVR)</option>
+    <option value="MDL">Moldovan Leu (MDL)</option>
+    <option value="MNT">Mongolian Tugrik (MNT)</option>
+    <option value="MAD">Moroccan Dirham (MAD)</option>
+    <option value="MUR">Mauritian Rupee (MUR)</option>
+    <option value="MRU">Mauritanian Ouguiya (MRU)</option>
+    <option value="MXN">Mexican Peso (MXN)</option>
+    <option value="NAD">Namibian Dollar (NAD)</option>
+    <option value="NPR">Nepalese Rupee (NPR)</option>
+    <option value="NIO">Nicaraguan Córdoba (NIO)</option>
+    <option value="NGN">Nigerian Naira (NGN)</option>
+    <option value="NOK">Norwegian Krone (NOK)</option>
+    <option value="NZD">New Zealand Dollar (NZD)</option>
+    <option value="OMR">Omani Rial (OMR)</option>
+    <option value="PKR">Pakistani Rupee (PKR)</option>
+    <option value="PAB">Panamanian Balboa (PAB)</option>
+    <option value="PGK">Papua New Guinean Kina (PGK)</option>
+    <option value="PYG">Paraguayan Guarani (PYG)</option>
+    <option value="PEN">Peruvian Nuevo Sol (PEN)</option>
+    <option value="PLN">Polish Zloty (PLN)</option>
+    <option value="RON">Romanian Leu (RON)</option>
+    <option value="RUB">Russian Ruble (RUB)</option>
+    <option value="RSD">Serbian Dinar (RSD)</option>
+    <option value="SCR">Seychellois Rupee (SCR)</option>
+    <option value="SLL">Sierra Leonean Leone (SLL)</option>
+    <option value="SGD">Singapore Dollar (SGD)</option>
+    <option value="SYP">Syrian Pound (SYP)</option>
+    <option value="SOS">Somali Shilling (SOS)</option>
+    <option value="LKR">Sri Lankan Rupee (LKR)</option>
+    <option value="SDG">Sudanese Pound (SDG)</option>
+    <option value="SEK">Swedish Krona (SEK)</option>
+    <option value="STN">São Tomé and Príncipe Dobra (STN)</option>
+    <option value="RWF">Rwandan Franc (RWF)</option>
   </select>
 </div>
 
-  <!-- Contenedor del gráfico ajustado al espacio restante -->
-  <div id="chart" class="flex-grow w-full max-w-4xl">
-    <apx-chart
-      [series]="chartOptions.series"
-      [chart]="chartOptions.chart"
-      [xaxis]="chartOptions.xaxis"
-      [dataLabels]="chartOptions.dataLabels"
-      [grid]="chartOptions.grid"
-      [stroke]="chartOptions.stroke"
-      [title]="chartOptions.title"
-      [markers]="chartOptions.markers"
-      [yaxis]="chartOptions.yaxis"
-      [fill]="chartOptions.fill"
-      class="w-full h-96"
-    ></apx-chart>
-  </div>
-</div>
-
-<!--The content below is only a placeholder and can be replaced.-->
-<div id="chart">
+<div class="chart-container">
   <apx-chart
     [series]="chartOptions.series"
     [chart]="chartOptions.chart"
     [xaxis]="chartOptions.xaxis"
-    [dataLabels]="chartOptions.dataLabels"
-    [grid]="chartOptions.grid"
     [stroke]="chartOptions.stroke"
     [title]="chartOptions.title"
-    [markers]="chartOptions.markers"
-    [yaxis]="chartOptions.yaxis"
     [fill]="chartOptions.fill"
-  ></apx-chart>
+    [markers]="chartOptions.markers"
+    [yaxis]="chartOptions.yaxis">
+  </apx-chart>
 </div>

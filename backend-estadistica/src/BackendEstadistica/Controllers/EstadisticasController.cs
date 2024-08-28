@@ -137,13 +137,13 @@ public class EstadisticasController : ControllerBase
 
         return Ok("Divisa creada correctamente");
     }
-    [HttpGet("getDivisa/{id}")]
-    public IActionResult GetDivisaById(int id)
+    [HttpGet("getDivisa/{nombre}")]
+    public IActionResult GetDivisaByName(string nombre)
     {
 
-        Divisa divisaId = estadisticasRepositorio.GetDivisaById(id);
+        List<Divisa> divisaNombre = estadisticasRepositorio.GetDivisaByName(nombre);
 
-        return Ok(mapper.Map<Cliente>(divisaId));
+        return Ok(mapper.Map<List<Divisa>>(divisaNombre));
 
     }
 

@@ -86,11 +86,18 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
         
     }
 
-    public Divisa GetDivisaById(int id)
+    public List<Divisa> GetDivisaByName(string nombre)
     {
+        if (string.IsNullOrEmpty(nombre))
+        {
+            return new List<Divisa>();
+        }
+
         return _contextoBBDD.Divisa
-            .FirstOrDefault(d => d.DivisaId == id);
+            .Where(d => d.Nombre == nombre)
+            .ToList();
     }
+
 
     public List<Divisa> GetDivisa()
     {
