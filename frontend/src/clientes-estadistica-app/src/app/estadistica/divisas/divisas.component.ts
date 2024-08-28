@@ -58,7 +58,7 @@ export class DivisasComponent implements OnInit {
       }
     });
   }
-
+ 
   updateChart() {//para graficar los datos
 
     if (this.divisasData.length === 0) {
