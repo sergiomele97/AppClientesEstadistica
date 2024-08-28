@@ -3,16 +3,20 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { IDivisa } from '../interfaces/divisa';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DivisaService {
-  private apiUrl = 'http://localhost:7107/divisas';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  getDivisasData(): Observable<IDivisa[]> {
-    return this.http.get<IDivisa[]>(this.apiUrl);
+  private readonly url_estadistica = environment.apiEstadisticas;
+
+  getDivisasData(nombre: string): Observable<IDivisa[]> {
+    return this.http.get<IDivisa[]>(`${this.url_estadistica}/getdivisa/${nombre}`);
   }
+
+
 }

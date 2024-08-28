@@ -8,11 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BackendEstadistica.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:backend-estadistica/src/BackendEstadistica/Migrations/20240828100632_Estadisticas.cs
-    public partial class Estadisticas : Migration
-========
     public partial class Initial : Migration
->>>>>>>> a63ac1e40d0b1ac4c20deb87a0753b88834746a6:backend-estadistica/src/BackendEstadistica/Migrations/20240827105542_Initial.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

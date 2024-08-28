@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ICliente } from 'src/app/interfaces/cliente';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
@@ -19,8 +18,6 @@ export class ClustersComponent implements OnInit, OnDestroy {
   constructor(
     private dataService: ClustersDataService, 
     private http: HttpClient,
-    private route: ActivatedRoute,
-    private router: Router,
     private clienteService: ClienteEstService,
     private transaccionService: TransaccionService
   ) {}
@@ -67,10 +64,9 @@ export class ClustersComponent implements OnInit, OnDestroy {
       const balance = this.calcularBalance(cliente.clienteId);
       const nGastos = this.numeroGastos(cliente.clienteId);
       const nIngresos = this.numeroIngresos(cliente.clienteId);
-      const pais = cliente.pais
       
       // Imprimir los dos primeros valores (edad y sexo) en la consola
-      console.log([edad, sexo]);
+      //console.log([edad, sexo]);
 
       return [edad, balance, sexo , nGastos, nIngresos];
     });

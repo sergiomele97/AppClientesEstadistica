@@ -1,4 +1,7 @@
-﻿namespace BackendEstadistica.Controllers;
+﻿using BackendEstadistica.SignalR;
+using Microsoft.AspNetCore.SignalR;
+
+namespace BackendEstadistica.Controllers;
 
 [Route("api/usuarios")]
 [ApiController]
@@ -18,6 +21,7 @@ public class UsuariosController : ControllerBase
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         ITokenService tokenService
+       
     )
     {
         _usuarioRepositorio = usuarioRepositorio;

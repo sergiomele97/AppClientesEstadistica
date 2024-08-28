@@ -10,7 +10,7 @@
     "test": "ng test"
   },
   "private": true,
-  "engines":{
+  "engines": {
     "node": ">=18.0.0"
   },
   "dependencies": {
@@ -25,6 +25,7 @@
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
     "@highcharts/map-collection": "^2.2.0",
+    "@microsoft/signalr": "^8.0.7",
     "apexcharts": "^3.51.0",
     "highcharts": "^11.4.6",
     "highcharts-angular": "^4.0.1",

@@ -34,45 +34,45 @@ public class BackgroundDataGenerator : BackgroundService
                     var estadisticasRepositorio = scope.ServiceProvider.GetRequiredService<IEstadisticasRepositorio>();
                     var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
 
-                    // Obtener los países para inicializar ClienteFaker
-                    var paises = await estadisticasRepositorio.GetPaisesAsync(); // Cambiar a async
-                    var clienteFaker = new ClienteFaker(paises);
+                        // Obtener los países para inicializar ClienteFaker
+                        var paises = await estadisticasRepositorio.GetPaisesAsync(); 
+                        var clienteFaker = new ClienteFaker(paises);
 
-                    // 1. Lógica para crear el cliente
-                    for (int i = 0; i < volumenClientes; i++)
-                    {
-                        var clienteDto = clienteFaker.Generate();
-                        var nuevoCliente = mapper.Map<Cliente>(clienteDto);
-                        await estadisticasRepositorio.CrearClienteAsync(nuevoCliente); // Cambiar a async
+                        // 1. Lógica para crear el cliente
+                        for (int i = 0; i < volumenClientes; i++)
+                        {
+                            var clienteDto = clienteFaker.Generate();
+                            var nuevoCliente = mapper.Map<Cliente>(clienteDto);
+                            await estadisticasRepositorio.CrearClienteAsync(nuevoCliente); 
 
                         _logger.LogInformation("Cliente creado correctamente");
                     }
 
-                    // 2. Lógica para crear transacción
-                    for (int i = 0; i < volumenTransacciones; i++)
-                    {
-                        var clienteOrigen = await estadisticasRepositorio.GetRandomClientAsync(); // Cambiar a async
-                        var clienteDestino = await estadisticasRepositorio.GetRandomClientAsync(); // Cambiar a async
+                        // 2. Lógica para crear transacción
+                        for (int i = 0; i < volumenTransacciones; i++)
+                        {
+                            var clienteOrigen = await estadisticasRepositorio.GetRandomClientAsync();
+                            var clienteDestino = await estadisticasRepositorio.GetRandomClientAsync(); 
 
                         var transaccionFaker = new TransaccionFaker(clienteOrigen, clienteDestino);
                         var transaccionDto = transaccionFaker.Generate();
 
-                        var nuevaTransaccion = mapper.Map<Transaccion>(transaccionDto);
-                        await estadisticasRepositorio.CrearTransaccionAsync(nuevaTransaccion); // Cambiar a async
+                            var nuevaTransaccion = mapper.Map<Transaccion>(transaccionDto);
+                            await estadisticasRepositorio.CrearTransaccionAsync(nuevaTransaccion); 
 
-                        // Detectar si esta transacción es un outlier
-                        await estadisticasRepositorio.DetectarOutliersAsync(); // Cambiar a async
-                    }
+                            // Detectar si esta transacción es un outlier
+                            await estadisticasRepositorio.DetectarOutliersAsync();
+                        }
 
-                    // 3. Lógica para crear conversión
-                    for (int i = 0; i < volumenConversiones; i++)
-                    {
-                        var cliente = await estadisticasRepositorio.GetRandomClientAsync(); // Cambiar a async
-                        var conversionFaker = new ConversionFaker(cliente);
+                        // 3. Lógica para crear conversión
+                        for (int i = 0; i < volumenConversiones; i++)
+                        {
+                            var cliente = await estadisticasRepositorio.GetRandomClientAsync(); 
+                            var conversionFaker = new ConversionFaker(cliente);
 
-                        var conversionDto = conversionFaker.Generate();
-                        var nuevaConversion = mapper.Map<Conversion>(conversionDto);
-                        await estadisticasRepositorio.CrearConversionAsync(nuevaConversion); // Cambiar a async
+                            var conversionDto = conversionFaker.Generate();
+                            var nuevaConversion = mapper.Map<Conversion>(conversionDto);
+                            await estadisticasRepositorio.CrearConversionAsync(nuevaConversion);
 
                         _logger.LogInformation("Conversión creada correctamente");
                     }

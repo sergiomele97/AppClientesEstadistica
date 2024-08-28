@@ -133,21 +133,15 @@ public class EstadisticasController : ControllerBase
             await _estadisticasRepositorio.CrearDivisaAsync(nuevaDivisa);
         }
 
-        return Ok("Divisas creadas correctamente");
-    }
-
-    [HttpGet("getDivisa/{id}")]
-    public async Task<IActionResult> GetDivisaById(int id)
-    {
-        var divisa = await _estadisticasRepositorio.GetDivisaByIdAsync(id);
-
-        if (divisa == null)
-        {
-            return NotFound("Divisa no encontrada.");
+            return Ok("Divisa creada correctamente");
         }
 
-        return Ok(_mapper.Map<Divisa>(divisa));
-    }
+        [HttpGet("getDivisa/{nombre}")]
+        public async Task<IActionResult> GetDivisaByName(string nombre)
+        {
+            var divisaNombre = await _estadisticasRepositorio.GetDivisaByNameAsync(nombre);
+            return Ok(_mapper.Map<List<Divisa>>(divisaNombre));
+        }
 
     [HttpGet("getDivisas")]
     public async Task<IActionResult> GetDivisas()

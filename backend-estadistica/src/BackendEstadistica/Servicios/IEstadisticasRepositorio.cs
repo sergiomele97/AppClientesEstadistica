@@ -1,22 +1,24 @@
 ﻿namespace BackendEstadistica.Servicios;
 
-public interface IEstadisticasRepositorio
+namespace BackendEstadistica.Servicios
 {
-    //Clientes
-    Task<Cliente> GetRandomClientAsync();
-    Task<List<Cliente>> GetClientesAsync();
-    Task<Cliente> GetClienteByIdAsync(int id);
-    Task CrearClienteAsync(Cliente cliente);
+    public interface IEstadisticasRepositorio
+    {
+        // Clientes
+        Task<Cliente> GetRandomClientAsync();
+        Task<List<Cliente>> GetClientesAsync();
+        Task<Cliente> GetClienteByIdAsync(int id);
+        Task CrearClienteAsync(Cliente cliente);
 
-    //Conversiones
-    Task<List<Conversion>> GetConversionesAsync();
-    Task<Conversion> GetConversionByIdAsync(int id);
-    Task CrearConversionAsync(Conversion conversion);
+        // Conversiones
+        Task<List<Conversion>> GetConversionesAsync();
+        Task<Conversion> GetConversionByIdAsync(int id);
+        Task CrearConversionAsync(Conversion conversion);
 
-    // Divisas
-    Task<List<Divisa>> GetDivisasAsync();
-    Task<Divisa> GetDivisaByIdAsync(int id);
-    Task CrearDivisaAsync(Divisa divisa);
+        // Divisas
+        Task<List<Divisa>> GetDivisasAsync();
+        Task<List<Divisa>> GetDivisaByNameAsync(string nombre);
+        Task CrearDivisaAsync(Divisa divisa);
 
     // Transacciones
     Task<List<Transaccion>> GetTransaccionesAsync();
@@ -25,8 +27,9 @@ public interface IEstadisticasRepositorio
     Task DetectarOutliersAsync();
     Task<bool> EliminarOutlierAsync(int transaccionId);
 
-    //Paises
-    Task<List<Pais>> GetPaisesAsync();
-    Task<Pais> GetPaisByIdAsync(int id);
-    Task CrearPaisAsync(Pais pais);
+        // Paises
+        Task<List<Pais>> GetPaisesAsync();
+        Task<Pais> GetPaisByIdAsync(int id);
+        Task CrearPaisAsync(Pais pais);
+    }
 }
