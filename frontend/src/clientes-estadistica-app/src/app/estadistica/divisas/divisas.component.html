@@ -113,7 +113,9 @@
 </div>
 
 <!-- Loader que se muestra mientras se cargan los datos -->
-<div *ngIf="isLoading" class="loader"></div>
+<div *ngIf="isLoading" class="flex items-center justify-center ">
+  <div  class="loader justify-center "></div>
+</div>
 
 
 <div *ngIf="!isLoading" class="chart-container">
