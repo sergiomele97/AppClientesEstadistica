@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from statsmodels.tsa.arima.model import ARIMA
-from sklearn.cluster import KMeans # pip install scikit-learn
+from sklearn.cluster import KMeans
 from sklearn.metrics import davies_bouldin_score
 import warnings
 
