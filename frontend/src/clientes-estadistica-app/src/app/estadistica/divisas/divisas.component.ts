@@ -110,10 +110,10 @@ export class DivisasComponent implements OnInit {
           },
           xaxis: {
             type: 'datetime',
-            categories: [...recentDates, ...predictionDates]
+            categories: recentDates.concat(predictionDates),
           },
           title: {
-            text: 'Evolución del Valor de la Divisa',
+            text: 'Evolución del Valor de la Divisa respecto al Dolar',
             align: 'left',
             style: {
               fontSize: '16px',
@@ -129,7 +129,7 @@ export class DivisasComponent implements OnInit {
               type: 'horizontal',
               opacityFrom: 1,
               opacityTo: 1,
-              stops: [0, 100, 100, 100]
+              stops: [0, 100]
             }
           },
           markers: {
@@ -142,10 +142,15 @@ export class DivisasComponent implements OnInit {
             }
           },
           yaxis: {
-            min: -10,
-            max: 40,
+            min: Math.min(...recentValues.concat(predictionData)) - 10,
+            max: Math.max(...recentValues.concat(predictionData)) + 10,
             title: {
               text: 'Valor'
+            },
+            labels: {
+              formatter: function (value) {
+                return value.toFixed(4);  // Limita los valores a 4 decimales
+              }
             }
           }
         };
