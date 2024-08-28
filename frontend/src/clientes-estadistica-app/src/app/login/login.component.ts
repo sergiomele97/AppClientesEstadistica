@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../servicios/auth.service'; // Importa el AuthService en lugar del UsuarioService
+import { AuthService } from '../servicios/auth.service';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 

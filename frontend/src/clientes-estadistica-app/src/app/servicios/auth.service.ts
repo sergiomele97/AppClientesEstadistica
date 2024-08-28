@@ -1,10 +1,8 @@
-// src/app/services/auth.service.ts
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http'; // Para realizar solicitudes HTTP
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
-import { Router } from '@angular/router'; // Para redirigir a otras rutas
-import { of } from 'rxjs'; // Para manejar errores
+import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { IUsuario } from '../interfaces/usuario';
 
@@ -28,20 +26,20 @@ export class AuthService {
     }
   }
 
-// Método para registrar un nuevo usuario
-register(usuario: IUsuario): Observable<any> {
-  return this.http
-    .post<any>(`${this.apiUrl}/register`, usuario) // Asume que la ruta es /register y que el backend acepta un objeto IUsuario
-    .pipe(
-      tap((response) => {
-        // Puedes manejar respuestas o configuraciones adicionales aquí si es necesario
-      }),
-      catchError((error) => {
-        console.error('Error during registration', error);
-        return of(null); // Manejar el error y retornar un observable
-      })
-    );
-}
+  // Método para registrar un nuevo usuario
+  register(usuario: IUsuario): Observable<any> {
+    return this.http
+      .post<any>(`${this.apiUrl}/register`, usuario) // Asume que la ruta es /register y que el backend acepta un objeto IUsuario
+      .pipe(
+        tap((response) => {
+          // Puedes manejar respuestas o configuraciones adicionales aquí si es necesario
+        }),
+        catchError((error) => {
+          console.error('Error during registration', error);
+          return of(null); // Manejar el error y retornar un observable
+        })
+      );
+  }
 
   // Método para iniciar sesión con el correo electrónico
   login(email: string, password: string): Observable<any> {
@@ -66,12 +64,14 @@ register(usuario: IUsuario): Observable<any> {
       );
   }
 
-  // Método para cerrar sesión
-  logout(): void {
-    localStorage.removeItem('currentUser'); // Elimina el usuario del localStorage
-    this.userSubject.next(null); // Actualiza el BehaviorSubject
-    this.router.navigate(['/login']); // Redirige al usuario a la página de inicio de sesión
-  }
+// Método para cerrar sesión
+logout(): void {
+  localStorage.removeItem('currentUser'); // Elimina el nombre de usuario del localStorage
+  localStorage.removeItem('token'); // Elimina el token del localStorage
+  this.userSubject.next(null); // Actualiza el BehaviorSubject
+  this.router.navigate(['/login']); // Redirige al usuario a la página de inicio de sesión
+}
+
 
   // Verifica si el usuario está autenticado
   isAuthenticated(): boolean {
