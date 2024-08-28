@@ -1,14 +1,10 @@
-#from flask import Flask, request, jsonify
-#from flask_cors import CORS
-import flask_cors as fc
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 from statsmodels.tsa.arima.model import ARIMA
-#from sklearn.cluster import KMeans
-import sklearn.cluster as sc
-#from sklearn.metrics import davies_bouldin_score
-import sklearn.metrics as sm
+from sklearn.cluster import KMeans
+from sklearn.metrics import davies_bouldin_score
 import warnings
-import numpy as np
-import flask as f
+
 warnings.filterwarnings("ignore", category=UserWarning, module='statsmodels')
 app = Flask(__name__)
 CORS(app)  # Habilita CORS para todas las rutas
@@ -26,7 +22,7 @@ def predict():
     pred_ci = pred.conf_int().tolist()
     response = {'Prediction': pred_mean, 'ConfidenceInterval': pred_ci}
     print(response, flush=True)
-    return f.jsonify(response)
+    return jsonify(response)
 
 
 @app.route('/cluster', methods=['POST'])
