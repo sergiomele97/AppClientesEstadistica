@@ -72,17 +72,26 @@ public class UsuariosController : ControllerBase
             return Unauthorized();
         }
 
-        var result = await _signInManager.PasswordSignInAsync(
-            user.UserName,
-            model.Password,
-            model.RememberMe,
-            lockoutOnFailure: false);
+            // Ahora que hemos encontrado al usuario, usamos su UserName (en lugar del email) para intentar iniciar sesión.
+            // Esto es importante porque 'PasswordSignInAsync' generalmente espera un UserName.
+            var result = await _signInManager.PasswordSignInAsync(
+                user.UserName,  // Usamos el UserName del usuario que acabamos de encontrar.
+                model.Password, // La contraseña proporcionada en el modelo.
+                model.RememberMe, // Si se debe recordar al usuario en futuras sesiones.
+                lockoutOnFailure: false); // No bloquear al usuario en caso de múltiples intentos fallidos.
 
-        if (result.Succeeded)
-        {
-            var token = _tokenService.GenerateJwtToken(user);
-            return Ok(new { Token = token });
-        }
+            // Si el resultado es exitoso, significa que el inicio de sesión fue correcto.
+            if (result.Succeeded)
+            {
+                // Generamos un token JWT para el usuario autenticado.
+                var token = _tokenService.GenerateJwtToken(user);
+
+                // Devolvemos una respuesta HTTP 200 OK con el token JWT y el UserName.
+                return Ok(new {
+                    Token = token,
+                    Username = user.UserName
+                });
+            }
 
         return Unauthorized();
     }

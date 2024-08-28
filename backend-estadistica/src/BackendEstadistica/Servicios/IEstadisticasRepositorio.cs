@@ -5,20 +5,20 @@ namespace BackendEstadistica.Servicios
 {
     public interface IEstadisticasRepositorio
     {
-        //Clientes
+        // Clientes
         Task<Cliente> GetRandomClientAsync();
         Task<List<Cliente>> GetClientesAsync();
         Task<Cliente> GetClienteByIdAsync(int id);
         Task CrearClienteAsync(Cliente cliente);
 
-        //Conversiones
+        // Conversiones
         Task<List<Conversion>> GetConversionesAsync();
         Task<Conversion> GetConversionByIdAsync(int id);
         Task CrearConversionAsync(Conversion conversion);
 
         // Divisas
         Task<List<Divisa>> GetDivisasAsync();
-        Task<Divisa> GetDivisaByIdAsync(int id);
+        Task<List<Divisa>> GetDivisaByNameAsync(string nombre);
         Task CrearDivisaAsync(Divisa divisa);
 
         // Transacciones
@@ -28,7 +28,7 @@ namespace BackendEstadistica.Servicios
         Task DetectarOutliersAsync();
         Task<bool> EliminarOutlierAsync(int transaccionId);
 
-        //Paises
+        // Paises
         Task<List<Pais>> GetPaisesAsync();
         Task<Pais> GetPaisByIdAsync(int id);
         Task CrearPaisAsync(Pais pais);
