@@ -112,15 +112,21 @@
   </select>
 </div>
 
-<div class="chart-container">
-  <apx-chart
-    [series]="chartOptions.series"
-    [chart]="chartOptions.chart"
-    [xaxis]="chartOptions.xaxis"
-    [stroke]="chartOptions.stroke"
-    [title]="chartOptions.title"
-    [fill]="chartOptions.fill"
-    [markers]="chartOptions.markers"
-    [yaxis]="chartOptions.yaxis">
-  </apx-chart>
+  <!-- Contenedor del gráfico ajustado al espacio restante -->
+  <div id="chart" class="flex-grow w-full max-w-4xl">
+    <apx-chart
+      [series]="chartOptions.series" 
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis" 
+      [dataLabels]="chartOptions.dataLabels"
+      [grid]="chartOptions.grid"
+      [stroke]="chartOptions.stroke"
+      [title]="chartOptions.title"
+      [markers]="chartOptions.markers"
+      [yaxis]="chartOptions.yaxis"
+      [fill]="chartOptions.fill"
+      class="w-full h-96"
+    ></apx-chart>
+  </div>
 </div>
+

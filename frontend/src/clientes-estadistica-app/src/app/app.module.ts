@@ -2,7 +2,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgxPaginationModule } from 'ngx-pagination'; 
+import { NgxPaginationModule } from 'ngx-pagination';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 
@@ -10,7 +10,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { LoginComponent } from './login/login.component';
-import { UserService } from './servicios/user.service';
 import { VolumetryComponent } from './estadisticas/volumetry/volumetry.component';
 import { ClustersComponent } from './estadistica/clusters/clusters.component';
 import { GraphComponent } from './estadisticas/graph/graph.component';
@@ -23,9 +22,7 @@ import { EstadisticaComponent } from './estadistica/estadistica.component';
 import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 import { ClientesComponent } from './estadistica/clientes/clientes.component';
 import { DivisasComponent } from './estadistica/divisas/divisas.component';
-import { AuthGuard } from './auth.guard';
 import { ClustersDataService } from './servicios/clusters-data.service';
-import { HomeComponent } from './home/home.component';
 import { PruebaConexionService } from './servicios/pruebaConexion.service';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';
 import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
@@ -34,8 +31,7 @@ import { DatePipe } from '@angular/common';
 import { FormaterFechaPipe } from './pipes/formaterFecha.pipe';
 import { RegisterComponent } from './register/register.component';
 import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-outlier.component';
-
-
+import { UsuarioService } from './servicios/usuario.service';
 
 
 @NgModule({
@@ -52,7 +48,6 @@ import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-ou
     MapComponent,
     SpaghettiComponent,
     TableComponent,
-    HomeComponent ,
     EstadisticaComponent,
     ClientesComponent,
     DivisasComponent,
@@ -61,9 +56,9 @@ import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-ou
     GraficasComponent,
     FormaterFechaPipe,
     RegisterComponent,
-    LogsOutlierComponent
-   ],
-   
+    LogsOutlierComponent,
+  ],
+
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -73,16 +68,15 @@ import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-ou
     NgApexchartsModule,
     HighchartsChartModule,
     NgxPaginationModule,
-    BrowserModule
+    BrowserModule,
   ],
   providers: [
-    UserService,
+    UsuarioService,
     PruebaConexionService,
     ClustersDataService,
-    DatePipe
+    DatePipe,
   ],
   bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA] 
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-
-export class AppModule { }
+export class AppModule {}

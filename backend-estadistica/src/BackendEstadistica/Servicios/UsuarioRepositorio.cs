@@ -1,84 +1,72 @@
-﻿
-using BackendEstadistica.Contexto;
-using Microsoft.EntityFrameworkCore;
+﻿namespace BackendEstadistica.Servicios;
 
-namespace BackendEstadistica.Servicios
+public class UsuarioRepositorio : IUsuarioRepositorio
 {
+    private readonly ContextoBBDD _contextoBBDD;
 
-    // Esta clase gestiona la comunicacón con la base de datos
-    public class UsuarioRepositorio : IUsuarioRepositorio
+    public UsuarioRepositorio(ContextoBBDD contexto)
     {
-        // Propiedad de tipo contexto de base de datos (puerta de entrada a la BBDD)
-        private readonly ContextoBBDD contextoBBDD;
-        
-        // Constructor al que le pasamos el contexto como parámetro
-        public UsuarioRepositorio(ContextoBBDD contexto)
+        _contextoBBDD = contexto;
+    }
+
+    public async Task<bool> EmailExistAsync(string email)
+    {
+        return await _contextoBBDD.Usuario.AnyAsync(u => u.Correo == email);
+    }
+
+    public async Task AddUsuarioAsync(Usuario usuario)
+    {
+        await _contextoBBDD.Usuario.AddAsync(usuario);
+        await GuardarCambiosAsync(); // Utiliza el método asincrónico para guardar cambios
+    }
+
+    public async Task<bool> DeleteUsuarioAsync(int id)
+    {
+        var usuario = await _contextoBBDD.Usuario.FindAsync(id);
+        if (usuario == null)
         {
-            this.contextoBBDD = contexto;
+            return false;
         }
 
-        public bool EmailExist(string email)
+        _contextoBBDD.Usuario.Remove(usuario);
+        return await GuardarCambiosAsync(); // Utiliza el método asincrónico para guardar cambios
+    }
+
+    public async Task<Usuario> GetUsuarioByIdAsync(int id)
+    {
+        return await _contextoBBDD.Usuario.FirstOrDefaultAsync(u => u.Id == id);
+    }
+
+    public async Task<List<Usuario>> GetUsuariosAsync()
+    {
+        return await _contextoBBDD.Usuario.ToListAsync();
+    }
+
+    public async Task<List<Usuario>> GetUsuariosFiltrandoAsync(string nombre, int numeroPagina, int tamañoPagina)
+    {
+     
+        return await _contextoBBDD.Usuario
+            .Where(u => u.Correo.Contains(nombre)) 
+            .Skip((numeroPagina - 1) * tamañoPagina)
+            .Take(tamañoPagina)
+            .ToListAsync();
+    }
+
+    public async Task<bool> GuardarCambiosAsync()
+    {
+        try
         {
-            return contextoBBDD.Usuario.Any(u => u.Correo == email);
+            return await _contextoBBDD.SaveChangesAsync() > 0;
         }
-
-        public void AddUsuario(Usuario usuario)
+        catch
         {
-
-            // Añadir el usuario al DbSet
-            contextoBBDD.Add(usuario);
-            contextoBBDD.SaveChanges();
-
+            return false;
         }
+    }
 
-        public bool DeleteUsuario(int id)
-        {
-            var usuario = contextoBBDD.Usuario.Find(id);
-            if (usuario == null)
-            {
-                return false;
-            }
-
-            contextoBBDD.Usuario.Remove(usuario);
-            contextoBBDD.SaveChanges();
-            return true;
-        }
-
-        public Usuario GetUsuarioById(int id)
-        {
-            return contextoBBDD.Usuario.FirstOrDefault(u => u.Id == id);
-
-        }
-
-        public List<Usuario> GetUsuarios()
-        {
-            return contextoBBDD.Usuario.ToList();
-        }
-
-        public List<Usuario> GetUsuariosFiltrando(string nombre, int numeroPagina, int tamañoPagina)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<bool> GuardarCambios()
-        {
-            bool result = false;
-            try
-            {
-                result = await contextoBBDD.SaveChangesAsync() > 0;
-            }
-            catch (Exception e)
-            {
-                result = false;
-            }
-
-            return result;
-        }
-
-        public void UpdateUsuario(Usuario usuario)
-        {
-            contextoBBDD.Usuario.Update(usuario);
-
-        }
+    public async Task UpdateUsuarioAsync(Usuario usuario)
+    {
+        _contextoBBDD.Usuario.Update(usuario);
+        await GuardarCambiosAsync(); // Utiliza el método asincrónico para guardar cambios
     }
 }

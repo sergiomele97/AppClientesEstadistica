@@ -11,39 +11,38 @@ import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 
 import { ClientesComponent } from './estadistica/clientes/clientes.component';
 import { DivisasComponent } from './estadistica/divisas/divisas.component';
-import { AuthGuard } from './auth.guard';
 import { EstadisticaComponent } from './estadistica/estadistica.component';
-import { HomeComponent } from './home/home.component';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';
 import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
 import { GraficasComponent } from './estadistica/graficas/Graficas.component';
 import { RegisterComponent } from './register/register.component';
 import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-outlier.component';
 import { ClustersComponent } from './estadistica/clusters/clusters.component';
-
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
-  { path: "login", component: LoginComponent},
-  { path: 'home', component: HomeComponent },
-  { path: "registro", component: RegisterComponent },
-  { path: "estadistica", component: EstadisticaComponent, 
+  { path: 'login', component: LoginComponent },
+  { path: 'registro', component: RegisterComponent },
+  {
+    path: 'estadistica',
+    component: EstadisticaComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: 'outliers', component: OutlierComponent },
-      { path: 'outliers/:id', component: ShowOutlierComponent  },
-      { path: 'outliers-logs', component: LogsOutlierComponent  },
+      { path: 'outliers/:id', component: ShowOutlierComponent },
+      { path: 'outliers-logs', component: LogsOutlierComponent },
       { path: 'divisas', component: DivisasComponent },
-
       { path: 'graficas', component: GraficasComponent },
       { path: 'clientes', component: ClientesComponent },
       { path: 'clientes/:id', component: ClientesComponent },
       { path: 'table', component: TableComponent },
       { path: 'clusters', component: ClustersComponent },
+    ],
+  },
 
-
-    ]
-   },
-      
-  { path: "estadisticas", component: EstadisticasComponent,
+  {
+    path: 'estadisticas',
+    component: EstadisticasComponent,
     children: [
       { path: 'volumetry', component: VolumetryComponent },
       { path: 'clusters', component: ClustersComponent },
@@ -53,7 +52,7 @@ const routes: Routes = [
       { path: 'clientes', component: ClientesComponent },
       { path: 'clientes/:id', component: ClientesComponent },
       { path: 'table', component: TableComponent },
-      { path: 'divisas', component: DivisasComponent }
+      { path: 'divisas', component: DivisasComponent },
     ],
   },
   { path: '', redirectTo: '/login', pathMatch: 'full' },

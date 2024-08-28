@@ -1,31 +1,36 @@
-﻿namespace BackendEstadistica.Servicios;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
-public interface IEstadisticasRepositorio
+namespace BackendEstadistica.Servicios
 {
-    //Clientes
-    Cliente GetRandomClient();
-    List<Cliente> GetClientes();
-    Cliente GetClienteById(int id);
-    void CrearCliente(Cliente cliente);
+    public interface IEstadisticasRepositorio
+    {
+        //Clientes
+        Task<Cliente> GetRandomClientAsync();
+        Task<List<Cliente>> GetClientesAsync();
+        Task<Cliente> GetClienteByIdAsync(int id);
+        Task CrearClienteAsync(Cliente cliente);
 
-    //Conversiones
-    List<Conversion> GetConversiones();
-    Conversion GetConversionById(int id);
-    void CrearConversion(Conversion conversion);
-    // Divisas
-    List<Divisa> GetDivisa();
-    List<Divisa> GetDivisaByName(string nombre);
-    void CrearDivisa(Divisa divisa);
+        //Conversiones
+        Task<List<Conversion>> GetConversionesAsync();
+        Task<Conversion> GetConversionByIdAsync(int id);
+        Task CrearConversionAsync(Conversion conversion);
 
-    // Transacciones
-    List<Transaccion> GetTransacciones();
-    Transaccion GetTransaccionById(int id);
-    void CrearTransaccion(Transaccion transaccion);
-    void DetectarOutliers();
-    Task<bool> EliminarOutlier(int transaccionId);
-    //Pais 
-    List<Pais> GetPaises();
-    Pais GetPaisById(int id);
-    void CrearPais(Pais pais);
+        // Divisas
+        Task<List<Divisa>> GetDivisasAsync();
+        Task<Divisa> GetDivisaByIdAsync(int id);
+        Task CrearDivisaAsync(Divisa divisa);
 
+        // Transacciones
+        Task<List<Transaccion>> GetTransaccionesAsync();
+        Task<Transaccion> GetTransaccionByIdAsync(int id);
+        Task CrearTransaccionAsync(Transaccion transaccion);
+        Task DetectarOutliersAsync();
+        Task<bool> EliminarOutlierAsync(int transaccionId);
+
+        //Paises
+        Task<List<Pais>> GetPaisesAsync();
+        Task<Pais> GetPaisByIdAsync(int id);
+        Task CrearPaisAsync(Pais pais);
+    }
 }
