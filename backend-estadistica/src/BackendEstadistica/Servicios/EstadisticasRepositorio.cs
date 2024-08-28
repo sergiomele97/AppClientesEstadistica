@@ -122,9 +122,12 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
     {
         return await _contextoBBDD.Transacciones
             .Include(t => t.ClienteOrigen)
+                .ThenInclude(c => c.Pais) // Incluye el país del cliente origen
             .Include(t => t.ClienteDestino)
+                .ThenInclude(c => c.Pais) // Incluye el país del cliente destino
             .ToListAsync();
     }
+
 
     public async Task<Transaccion> GetTransaccionByIdAsync(int id)
     {

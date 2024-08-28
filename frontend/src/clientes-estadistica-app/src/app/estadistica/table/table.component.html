@@ -163,10 +163,16 @@
             {{ transaccion.fecha | date : "d MMM yyyy, h:mm a" }}
           </td>
           <td class="px-4 py-2">
-            {{ transaccion.importeEnviado }}
+            {{
+              transaccion.importeEnviado
+                | customCurrency : transaccion.clienteOrigen?.pais?.divisa
+            }}
           </td>
           <td class="px-4 py-2">
-            {{ transaccion.importeRecibido }}
+            {{
+              transaccion.importeRecibido
+                | customCurrency : transaccion.clienteDestino?.pais?.divisa
+            }}
           </td>
         </tr>
       </tbody>
