@@ -36,7 +36,7 @@ export class DivisasComponent implements OnInit {
   constructor(private http: HttpClient, private divisaService: DivisaService) { }
 
   ngOnInit(): void {
-    //console.log(this.divisasData);
+    // Inicialmente, no se realiza ninguna solicitud hasta que se seleccione una divisa
   }
 
   obtenerDatosDivisas(divisa: string) {
@@ -44,11 +44,10 @@ export class DivisasComponent implements OnInit {
 
     this.isLoading = true; // Mostrar el loader al iniciar la solicitud
 
-    this.divisaService.getDivisasData(divisa).subscribe({//obtenemos los datos de la divisa seleccionada
+    this.divisaService.getDivisasData(divisa).subscribe({
       next: (data) => {
         this.divisasData = data;
-        //console.log("los datos son: ", this.divisasData);
-        this.updateChart(); // Ahora actualiza el gráfico después de recibir los datos
+        this.updateChart(); // Actualizar el gráfico después de recibir los datos
       },
       error: (err) => {
         console.error('Error al obtener datos de divisas:', err.status, err.message, err);
@@ -59,10 +58,9 @@ export class DivisasComponent implements OnInit {
     });
   }
  
-  updateChart() {//para graficar los datos
-
+  updateChart() {
     if (this.divisasData.length === 0) {
-      console.error('No data available:',this.divisasData);
+      console.error('No data available:', this.divisasData);
       return;
     }
 
@@ -70,19 +68,18 @@ export class DivisasComponent implements OnInit {
     const recentData = this.divisasData.slice(-10);
     
     if (recentData.length === 0) {
-      console.error('No data available:',this.divisasData);
+      console.error('No data available:', this.divisasData);
       return;
     }
 
     const recentDates = recentData.map(d => {
       const fecha = new Date(d.fecha);
       return !isNaN(fecha.getTime()) ? fecha.toISOString().split('T')[0] : null;
-    }).filter(date => date !== null); // obtenemos las fechas de las divisas
+    }).filter(date => date !== null);
     
-    const recentValues = recentData.map(d => d.valor);//obtenemos los valores de las divisas
-    //console.log(recentData)
-    console.log(recentDates)
-    console.log(recentValues)
+    const recentValues = recentData.map(d => d.valor);
+    console.log(recentDates);
+    console.log(recentValues);
 
     this.http.post(this.apiUrl, { data: recentValues })
       .subscribe((response: any) => {
@@ -95,7 +92,7 @@ export class DivisasComponent implements OnInit {
           nextDate.setDate(nextDate.getDate() + index + 1);
           return nextDate.toISOString().split('T')[0];
         });
-        console.log(predictionDates)
+
         this.chartOptions = {
           series: [
             {
@@ -158,7 +155,7 @@ export class DivisasComponent implements OnInit {
             },
             labels: {
               formatter: function (value) {
-                return value.toFixed(4);  // Limita los valores a 4 decimales
+                return value.toFixed(4);
               }
             }
           }
@@ -172,6 +169,6 @@ export class DivisasComponent implements OnInit {
     const selectElement = event.target as HTMLSelectElement;
     const selectedCurrency = selectElement.value;
     console.log('Se ha seleccionado en el Front:', selectedCurrency);
-    this.obtenerDatosDivisas(selectedCurrency); // Actualiza el gráfico cuando se selecciona una nueva divisa
+    this.obtenerDatosDivisas(selectedCurrency);
   }
 }
