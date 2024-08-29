@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ICliente } from 'src/app/interfaces/cliente';
+import { IClienteConBalance } from 'src/app/interfaces/clienteConBalance';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
 import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
@@ -18,8 +19,7 @@ export class ClustersComponent implements OnInit, OnDestroy {
   constructor(
     private dataService: ClustersDataService, 
     private http: HttpClient,
-    private clienteService: ClienteEstService,
-    private transaccionService: TransaccionService
+    private clienteService: ClienteEstService
   ) {}
 
   private apiUrl = environment.apiClusters;   
@@ -30,71 +30,28 @@ export class ClustersComponent implements OnInit, OnDestroy {
   transacciones: ITransaccion[] = [];
   subscription!: Subscription;
   routeSubscription!: Subscription;
+  clientesBalance: IClienteConBalance[] = [];
 
   ngOnInit(): void {
-    // Obtener la lista de clientes
-    this.subscription = this.clienteService.getClientes().subscribe({
-      next: (clientes) => {
-        this.clientes = clientes;
-
-        // Obtener las transacciones de todos los clientes
-        this.subscription = this.transaccionService.getTransacciones().subscribe({
-          next: (transacciones) => {
-            this.transacciones = transacciones;
-
-            // Procesar los datos de los clientes junto con sus balances calculados
-            this.procesarDatosClientes();
-          },
-          error: (err) => {
-            console.error('Error al obtener las transacciones:', err);
-          }
-        });
-      },
-      error: (err) => {
-        console.error('Error al obtener la lista de clientes:', err);
-      },
-    });
+     //obtenemos todos los datos desde la vista del back
+   this.clienteService.getClientesConBalance().subscribe(
+    (data) => {
+      this.clientesBalance = data;
+      console.log("Balance datos: ",this.clientesBalance)
+      this.procesarDatosClientes();
+    },
+    (error) => {
+      console.error('Error al obtener los datos de clientes', error);
+  });
   }
 
   private procesarDatosClientes(): void {
     // Recorrer todos los clientes y extraer los datos necesarios junto con el balance calculado
-    this.datos = this.clientes.map(cliente => {
-      const edad = cliente.edad;
-      const sexo = cliente.sexo === 'Masculino' ? 0 : 1;  // Codificar sexo: 0 para mujeres, 1 para hombres
-      const balance = this.calcularBalance(cliente.clienteId);
-      const nGastos = this.numeroGastos(cliente.clienteId);
-      const nIngresos = this.numeroIngresos(cliente.clienteId);
-      
-      // Imprimir los dos primeros valores (edad y sexo) en la consola
-      //console.log([edad, sexo]);
-
-      return [edad, balance, sexo , nGastos, nIngresos];
+   this.datos = this.clientesBalance.map(cliente => {
+      const sexo = cliente.sexo === 'Masculino' ? 0 : 1;
+      return [cliente.edad, cliente.balance, sexo , cliente.numeroGastos, cliente.numeroIngresos];
     });
   }
-
-  private calcularBalance(clienteId: number): number {
-    const ingresos = this.transacciones
-      .filter(transaccion => transaccion.clienteDestinoId === clienteId)
-      .reduce((total, transaccion) => total + (transaccion.importeRecibido || 0), 0);
-    const gastos = this.transacciones
-      .filter(transaccion => transaccion.clienteOrigenId === clienteId)
-      .reduce((total, transaccion) => total + (transaccion.importeEnviado || 0), 0);
-    return ingresos - gastos;
-  }
-
-  private numeroGastos(clienteId: number): number {
-    const gastos = this.transacciones
-      .filter(transaccion => transaccion.clienteOrigenId === clienteId)
-      .reduce((total) => total + 1, 0);
-    return gastos;
-  }
-  private numeroIngresos(clienteId: number): number {
-    const ingresos = this.transacciones
-    .filter(transaccion => transaccion.clienteDestinoId === clienteId)
-    .reduce((total) => total + 1, 0);
-    return ingresos;
-  }
-
   
   private async enviarDatosBackend(datos: any[], nCluster: number): Promise<void> {
     try {
@@ -118,7 +75,7 @@ export class ClustersComponent implements OnInit, OnDestroy {
     const numerosSelect = selectElement.value;
     const nCluster = parseInt(numerosSelect, 10);
     this.dataService.setSelectednCluster(nCluster);
-
+    console.log(this.datos)
     // Llamar a enviarDatosBackend con los datos procesados y el número de clusters
     await this.enviarDatosBackend(this.datos, nCluster);
   }

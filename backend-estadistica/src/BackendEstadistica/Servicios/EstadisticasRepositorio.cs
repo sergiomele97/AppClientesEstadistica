@@ -76,7 +76,7 @@ namespace BackendEstadistica.Servicios
             await _contextoBBDD.SaveChangesAsync();
         }
 
-    public List<Divisa> GetDivisaByNameAsync(string nombre)
+    public async Task <List<Divisa>> GetDivisaByNameAsync(string nombre)
     {
         if (string.IsNullOrEmpty(nombre))
         {

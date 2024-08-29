@@ -112,6 +112,11 @@ public class Program
             {
                 var context = services.GetRequiredService<ContextoBBDD>();
                 context.Database.Migrate();
+
+                // Crear roles al iniciar la aplicación
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                CreateRoles(roleManager, userManager).Wait();
             }
             catch (Exception ex)
             {
@@ -120,4 +125,37 @@ public class Program
             }
         }
     }
+
+    private static async Task CreateRoles(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+    {
+        // Definir roles
+        string[] roleNames = { "Admin", "User", "Manager" };
+        IdentityResult roleResult;
+
+        foreach (var roleName in roleNames)
+        {
+            var roleExist = await roleManager.RoleExistsAsync(roleName);
+            if (!roleExist)
+            {
+                roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
+            }
+        }
+
+        // Crear un usuario Admin por defecto si no existe
+        var user = await userManager.FindByEmailAsync("admin@example.com");
+        if (user == null)
+        {
+            var adminUser = new ApplicationUser
+            {
+                UserName = "admin@example.com",
+                Email = "admin@example.com"
+            };
+            var result = await userManager.CreateAsync(adminUser, "AdminPassword123!");
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(adminUser, "Admin");
+            }
+        }
+    }
+
 }

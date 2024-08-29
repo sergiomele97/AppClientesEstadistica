@@ -28,6 +28,8 @@ public class ContextoBBDD : IdentityDbContext<ApplicationUser>
     public DbSet<Conversion> Conversion { get; set; } // 5ª Tabla
 
     public DbSet<Divisa> Divisa { get; set; } // 6ª Tabla
+
+    public DbSet<ClienteConBalanceViewModel> ClientesConBalance { get; set; } //Vista de clientes con mas datos
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder); // Necesario para Identity

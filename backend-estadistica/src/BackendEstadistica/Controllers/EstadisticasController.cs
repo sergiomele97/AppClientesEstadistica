@@ -142,10 +142,10 @@ namespace BackendEstadistica.Controllers
             return Ok("Divisas creadas correctamente");
         }
 
-        [HttpGet("getDivisa/{id}")]
-        public async Task<IActionResult> GetDivisaById(int id)
+        [HttpGet("getDivisa/{nombre}")]
+        public async Task<IActionResult> GetDivisaByName(string name)
         {
-            var divisa = await _estadisticasRepositorio.GetDivisaByIdAsync(id);
+            var divisa = await _estadisticasRepositorio.GetDivisaByNameAsync(name);
 
             if (divisa == null)
             {
@@ -267,5 +267,13 @@ namespace BackendEstadistica.Controllers
 
             return Ok(_mapper.Map<Pais>(pais));
         }
+
+        [HttpGet("clientesconbalance")]
+        public async Task<ActionResult<IEnumerable<ClienteConBalanceViewModel>>> GetClientesConBalance()
+        {
+            var clientes = await _contextoBBDD.ClientesConBalance.ToListAsync();
+            return Ok(clientes);
+        }
+
     }
 }

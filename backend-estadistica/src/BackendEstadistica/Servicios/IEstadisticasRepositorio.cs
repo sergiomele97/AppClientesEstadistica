@@ -18,7 +18,7 @@ namespace BackendEstadistica.Servicios
 
         // Divisas
         Task<List<Divisa>> GetDivisasAsync();
-        Task<Divisa> GetDivisaByIdAsync(int id);
+        Task<List<Divisa>> GetDivisaByNameAsync(string name);
         Task CrearDivisaAsync(Divisa divisa);
 
         // Transacciones
