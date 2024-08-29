@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
+import { SignalrService } from 'src/app/servicios/signalr.service';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
 
 @Component({
@@ -15,11 +16,21 @@ export class OutlierComponent implements OnInit {
   successMessage: string;
   errorMessage: string;   
 
-  constructor(private transaccionService: TransaccionService) { }
+
+  constructor(private transaccionService: TransaccionService, private signalrService: SignalrService) { }
 
   ngOnInit() {
     
     this.cargarOutliers();
+    this.setUpSignalRListeners();
+
+  }
+
+  setUpSignalRListeners(){
+    this.signalrService.startConnection();
+    this.signalrService.addOutlierListener(() => {
+      this.cargarOutliers();
+    });
 
   }
 
