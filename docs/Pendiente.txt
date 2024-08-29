@@ -2,3 +2,4 @@
 - Pasar parametros a controlador
 - Implementar roles
 - Modificar migraciones
+- Hacer la aplicacion responsive
