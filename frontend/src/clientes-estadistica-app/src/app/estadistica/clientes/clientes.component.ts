@@ -35,6 +35,7 @@ export type ChartOptions = {
 export class ClientesComponent implements OnInit, OnDestroy {
   @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
+  isLoading: boolean = true; // AGREGADO: variable de estado para el loader
 
   constructor(
     private route: ActivatedRoute,
@@ -52,13 +53,17 @@ export class ClientesComponent implements OnInit, OnDestroy {
   balance: number = 0;
 
   ngOnInit(): void {
+    this.isLoading = true; // AGREGADO: Mostrar loader al iniciar la carga
+
     // Obtener la lista de clientes
     this.subscription = this.clienteService.getClientes().subscribe({
       next: (clientes) => {
         this.clientes = clientes;
+        this.isLoading = false; // AGREGADO: Ocultar loader después de cargar los datos
       },
       error: (err) => {
         console.error('Error al obtener la lista de clientes:', err);
+        this.isLoading = false; // AGREGADO: Ocultar loader después de cargar los datos
       },
     });
 
