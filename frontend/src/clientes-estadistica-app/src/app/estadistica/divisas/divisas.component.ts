@@ -79,13 +79,15 @@ export class DivisasComponent implements OnInit {
       .subscribe((response: any) => {
         console.log('Received data:', response);
         const predictions = response.Prediction || [];
+        const interValConf = response.ConfidenceInterval || [];
         const predictionData = predictions.length ? predictions : new Array(10).fill(0);
 
-        const predictionDates = recentDates.map((date, index) => {
-          const nextDate = new Date(date);
-          nextDate.setDate(nextDate.getDate() + index + 1);
-          return nextDate.toISOString().split('T')[0];
-        });
+        const lastDate = new Date(recentDates[recentDates.length - 1]);
+        const predictionDates = predictionData.map((_, index) => {
+        const nextDate = new Date(lastDate);
+        nextDate.setDate(nextDate.getDate() + index + 1);
+        return nextDate.toISOString().split('T')[0];
+      });
         console.log(predictionDates)
         this.chartOptions = {
           series: [
@@ -98,6 +100,16 @@ export class DivisasComponent implements OnInit {
               name: 'Predictions',
               data: predictionData.map((value, index) => [predictionDates[index], value]),
               color: '#FF0000',
+            },
+            {
+              name: 'Confidence Interval Lower Bound',
+              data: interValConf.map((interval, index) => [predictionDates[index], interval[0]]),
+              color: '#87CEEB'
+            },
+            {
+              name: 'Confidence Interval Upper Bound',
+              data: interValConf.map((interval, index) => [predictionDates[index], interval[1]]),
+              color: '#FF6347'
             }
           ],
           chart: {
@@ -142,8 +154,8 @@ export class DivisasComponent implements OnInit {
             }
           },
           yaxis: {
-            min: Math.min(...recentValues.concat(predictionData)) - 10,
-            max: Math.max(...recentValues.concat(predictionData)) + 10,
+            min: Math.min(...recentValues.concat(predictionData)) - 30,
+            max: Math.max(...recentValues.concat(predictionData)) + 30,
             title: {
               text: 'Valor'
             },

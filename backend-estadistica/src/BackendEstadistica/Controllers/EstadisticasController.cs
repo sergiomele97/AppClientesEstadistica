@@ -143,16 +143,16 @@ namespace BackendEstadistica.Controllers
         }
 
         [HttpGet("getDivisa/{nombre}")]
-        public async Task<IActionResult> GetDivisaByName(string name)
+        public async Task<IActionResult> GetDivisaByName(string nombre)
         {
-            var divisa = await _estadisticasRepositorio.GetDivisaByNameAsync(name);
+            var divisa = await _estadisticasRepositorio.GetDivisaByNameAsync(nombre);
 
             if (divisa == null)
             {
                 return NotFound("Divisa no encontrada.");
             }
 
-            return Ok(_mapper.Map<Divisa>(divisa));
+            return Ok(_mapper.Map<List<Divisa>>(divisa));
         }
 
         [HttpGet("getDivisas")]
