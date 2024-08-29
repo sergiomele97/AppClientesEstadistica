@@ -18,6 +18,8 @@ public class Program
         // Agrega los servicios necesarios para los controladores de API.
         builder.Services.AddControllers();
 
+        builder.Services.AddSignalR();
+
         // Configura AutoMapper con el perfil de mapeo definido.
         builder.Services.AddAutoMapper(typeof(MappingProfile));
 
@@ -120,6 +122,11 @@ public class Program
 
         // Mapea los controladores para manejar las solicitudes HTTP.
         app.MapControllers();
+
+
+        // Configurar el endpoint de SignalR para NotificationHub
+        app.MapHub<NotificationHub>("/notificationHub");
+
 
         // Ejecuta la aplicaci�n.
         app.Run();
