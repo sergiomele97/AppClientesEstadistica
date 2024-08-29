@@ -1,22 +1,33 @@
-﻿namespace BackendEstadistica.Controllers;
+using BackendEstadistica.SignalR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-[Route("api/estadisticas")]
-[ApiController]
-public class EstadisticasController : ControllerBase
+namespace BackendEstadistica.Controllers
 {
-    private readonly ContextoBBDD _contextoBBDD;
-    private readonly IEstadisticasRepositorio _estadisticasRepositorio;
-    private readonly IMapper _mapper;
-
-    public EstadisticasController(
-        ContextoBBDD contextoBBDD,
-        IEstadisticasRepositorio estadisticasRepositorio,
-        IMapper mapper)
+    [Route("api/estadisticas")]
+    [ApiController]
+    public class EstadisticasController : ControllerBase
     {
-        _contextoBBDD = contextoBBDD;
-        _estadisticasRepositorio = estadisticasRepositorio;
-        _mapper = mapper;
-    }
+        private readonly ContextoBBDD _contextoBBDD;
+        private readonly IEstadisticasRepositorio _estadisticasRepositorio;
+        private readonly IMapper _mapper;
+        private readonly IHubContext<NotificationHub> _hubContext;
+
+        public EstadisticasController(
+            ContextoBBDD contextoBBDD,
+            IEstadisticasRepositorio estadisticasRepositorio,
+            IMapper mapper,
+            IHubContext<NotificationHub> hubContext)
+        {
+            _contextoBBDD = contextoBBDD;
+            _estadisticasRepositorio = estadisticasRepositorio;
+            _mapper = mapper;
+            _hubContext = hubContext;
+        }
 
     // Clientes
     [HttpPost("crearCliente")]
@@ -65,25 +76,33 @@ public class EstadisticasController : ControllerBase
         var nuevaTransaccion = _mapper.Map<Transaccion>(transaccionDto);
         await _estadisticasRepositorio.CrearTransaccionAsync(nuevaTransaccion);
 
-        // Detectar si esta transacción es un outlier
-        await _estadisticasRepositorio.DetectarOutliersAsync();
+            await _estadisticasRepositorio.DetectarOutliersAsync();
 
         var transaccion = await _contextoBBDD.Transacciones
             .Include(t => t.ClienteOrigen)
             .FirstOrDefaultAsync(t => t.TransaccionId == nuevaTransaccion.TransaccionId);
 
-        if (transaccion != null && transaccion.IsOutlier == true)
-        {
-            return Ok(new
+            if (transaccion != null && transaccion.IsOutlier == true)
             {
-                Message = "Outlier detectado",
-                Cliente = transaccion.ClienteOrigen.Nombre,
-                ImporteEnviado = transaccion.ImporteEnviado
-            });
+
+                await _hubContext.Clients.All.SendAsync("OutlierDetected", new
+                {
+                    Message = "Outlier detectado",
+                    Cliente = transaccion.ClienteOrigen.Nombre,
+                    ImporteEnviado = transaccion.ImporteEnviado
+                });
+
+                return Ok(new
+                {
+                    Message = "Outlier detectado",
+                    Cliente = transaccion.ClienteOrigen.Nombre,
+                    ImporteEnviado = transaccion.ImporteEnviado
+                });
+            }
+
+            return Ok("Transacción creada correctamente");
         }
 
-        return Ok("Transacción creada correctamente");
-    }
 
     [HttpGet("getTransacciones")]
     public async Task<IActionResult> GetTransacciones()
@@ -253,6 +272,7 @@ public class EstadisticasController : ControllerBase
             return NotFound("País no encontrado.");
         }
 
-        return Ok(_mapper.Map<Pais>(pais));
+            return Ok(_mapper.Map<Pais>(pais));
+        }
     }
 }
