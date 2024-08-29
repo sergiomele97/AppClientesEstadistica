@@ -8,9 +8,10 @@ public class BackgroundDataGenerator : BackgroundService
     //------------------Configurar-volumenes-de-creación-----------------------------
 
     int frecuenciaMinutos = 2000;
-    int volumenClientes = 5;
+    int volumenClientes = 1;
     int volumenTransacciones = 10;
     int volumenConversiones = 3;
+    int volumenOutliers = 1;
 
 
     //------------------Fin-de-configurar-volumenes-de-creación----------------------
@@ -54,8 +55,8 @@ public class BackgroundDataGenerator : BackgroundService
                             var clienteOrigen = await estadisticasRepositorio.GetRandomClientAsync();
                             var clienteDestino = await estadisticasRepositorio.GetRandomClientAsync(); 
 
-                        var transaccionFaker = new TransaccionFaker(clienteOrigen, clienteDestino);
-                        var transaccionDto = transaccionFaker.Generate();
+                            var transaccionFaker = new TransaccionFaker(clienteOrigen, clienteDestino);
+                            var transaccionDto = transaccionFaker.Generate();
 
                             var nuevaTransaccion = mapper.Map<Transaccion>(transaccionDto);
                             await estadisticasRepositorio.CrearTransaccionAsync(nuevaTransaccion); 
@@ -75,6 +76,19 @@ public class BackgroundDataGenerator : BackgroundService
                             await estadisticasRepositorio.CrearConversionAsync(nuevaConversion);
 
                         _logger.LogInformation("Conversión creada correctamente");
+                    }
+                        for (int i = 0; i < volumenOutliers;i++)
+                    {
+                        var clienteOrigen = await estadisticasRepositorio.GetRandomClientAsync();
+                        var clienteDestino = await estadisticasRepositorio.GetRandomClientAsync();
+
+                        var outlierFaker = new OutliersFaker(clienteOrigen, clienteDestino);
+                        var transaccionDto = outlierFaker.Generate();
+
+                        var nuevaTransaccion = mapper.Map<Transaccion>(transaccionDto);
+                        await estadisticasRepositorio.CrearTransaccionAsync(nuevaTransaccion);
+
+                        await estadisticasRepositorio.DetectarOutliersAsync();
                     }
                 }
 

@@ -18,12 +18,12 @@ public interface IEstadisticasRepositorio
     Task<List<Divisa>> GetDivisaByNameAsync(string nombre);
     Task CrearDivisaAsync(Divisa divisa);
 
-// Transacciones
-Task<List<Transaccion>> GetTransaccionesAsync();
-Task<Transaccion> GetTransaccionByIdAsync(int id);
-Task CrearTransaccionAsync(Transaccion transaccion);
-Task DetectarOutliersAsync();
-Task<bool> EliminarOutlierAsync(int transaccionId);
+    // Transacciones
+    Task<List<Transaccion>> GetTransaccionesAsync();
+    Task<Transaccion> GetTransaccionByIdAsync(int id);
+    Task CrearTransaccionAsync(Transaccion transaccion);
+    Task DetectarOutliersAsync();
+    Task<bool> EliminarOutlierAsync(int transaccionId);
 
     // Paises
     Task<List<Pais>> GetPaisesAsync();
