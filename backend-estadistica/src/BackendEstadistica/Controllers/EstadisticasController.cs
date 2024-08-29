@@ -76,11 +76,55 @@ namespace BackendEstadistica.Controllers
         var nuevaTransaccion = _mapper.Map<Transaccion>(transaccionDto);
         await _estadisticasRepositorio.CrearTransaccionAsync(nuevaTransaccion);
 
-            await _estadisticasRepositorio.DetectarOutliersAsync();
+        //await _estadisticasRepositorio.DetectarOutliersAsync();
 
         var transaccion = await _contextoBBDD.Transacciones
             .Include(t => t.ClienteOrigen)
             .FirstOrDefaultAsync(t => t.TransaccionId == nuevaTransaccion.TransaccionId);
+
+            if(transaccion == null)
+            {
+                return BadRequest();
+            }
+
+            //if (transaccion != null && transaccion.IsOutlier == true)
+            //{
+
+            //    await _hubContext.Clients.All.SendAsync("OutlierDetected", new
+            //    {
+            //        Message = "Outlier detectado",
+            //        Cliente = transaccion.ClienteOrigen.Nombre,
+            //        ImporteEnviado = transaccion.ImporteEnviado
+            //    });
+
+            //    return Ok(new
+            //    {
+            //        Message = "Outlier detectado",
+            //        Cliente = transaccion.ClienteOrigen.Nombre,
+            //        ImporteEnviado = transaccion.ImporteEnviado
+            //    });
+            //}
+
+            return Ok("Transacción creada correctamente");
+        }
+
+        [HttpPost("crearOutlier")]
+        public async Task<IActionResult> CrearOutliersAsync()
+        {
+            var clienteOrigen = await _estadisticasRepositorio.GetRandomClientAsync();
+            var clienteDestino = await _estadisticasRepositorio.GetRandomClientAsync();
+
+            var outliersFaker = new OutliersFaker(clienteOrigen, clienteDestino);
+            var transaccionDto = outliersFaker.Generate();
+
+            var nuevaTransaccion = _mapper.Map<Transaccion>(transaccionDto);
+            await _estadisticasRepositorio.CrearTransaccionAsync(nuevaTransaccion);
+
+            await _estadisticasRepositorio.DetectarOutliersAsync();
+
+            var transaccion = await _contextoBBDD.Transacciones
+                .Include(t => t.ClienteOrigen)
+                .FirstOrDefaultAsync(t => t.TransaccionId == nuevaTransaccion.TransaccionId);
 
             if (transaccion != null && transaccion.IsOutlier == true)
             {

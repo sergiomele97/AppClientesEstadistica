@@ -123,19 +123,20 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
             var clienteOrigen = await _contextoBBDD.Clientes.FindAsync(transaccion.ClienteOrigenId);
             var clienteDestino = await _contextoBBDD.Clientes.FindAsync(transaccion.ClienteDestinoId);
 
-        if (clienteOrigen != null && clienteDestino != null)
-        {
-            var transaccionEntity = _mapper.Map<Transaccion>(transaccion);
+            if (clienteOrigen != null && clienteDestino != null)
+            {
+                var transaccionEntity = _mapper.Map<Transaccion>(transaccion);
 
-            clienteOrigen.TransaccionesDestino.Add(transaccionEntity);
-            clienteDestino.TransaccionesOrigen.Add(transaccionEntity);
-            await _contextoBBDD.Transacciones.AddAsync(transaccionEntity);
-            await _contextoBBDD.SaveChangesAsync();
+                clienteOrigen.TransaccionesDestino.Add(transaccionEntity);
+                clienteDestino.TransaccionesOrigen.Add(transaccionEntity);
+                await _contextoBBDD.Transacciones.AddAsync(transaccionEntity);
+                await _contextoBBDD.SaveChangesAsync();
+            }
         }
-    }
+        
 
-        // Método para obtener todas las transacciones
-        public async Task<List<Transaccion>> GetTransaccionesAsync()
+    // Método para obtener todas las transacciones
+    public async Task<List<Transaccion>> GetTransaccionesAsync()
         {
             return await _contextoBBDD.Transacciones
                 .Include(t => t.ClienteOrigen)
@@ -152,8 +153,8 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
                 .FirstOrDefaultAsync(t => t.TransaccionId == id);
         }
 
-        // Método para detectar outliers
-        public async Task DetectarOutliersAsync()
+    // Método para detectar outliers
+    public async Task DetectarOutliersAsync()
         {
             var transaccionesByCliente = await _contextoBBDD.Transacciones
                 .Include(t => t.ClienteOrigen)
@@ -243,4 +244,5 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
                 .Include(p => p.Clientes)
                 .FirstOrDefaultAsync(p => p.PaisId == id);
         }
+
 }
