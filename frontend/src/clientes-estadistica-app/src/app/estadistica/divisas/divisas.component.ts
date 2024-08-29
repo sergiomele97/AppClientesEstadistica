@@ -27,6 +27,9 @@ export class DivisasComponent implements OnInit {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
+  // Nueva variable para controlar la visibilidad del loader
+  public isLoading = false;
+
   private apiUrl = environment.apiPrediccion;   
   private divisasData: IDivisa[] = []; // Datos de divisas obtenidos del backend
   
@@ -38,6 +41,9 @@ export class DivisasComponent implements OnInit {
 
   obtenerDatosDivisas(divisa: string) {
     console.log("Divisa ", divisa);
+
+    this.isLoading = true; // Mostrar el loader al iniciar la solicitud
+
     this.divisaService.getDivisasData(divisa).subscribe({//obtenemos los datos de la divisa seleccionada
       next: (data) => {
         this.divisasData = data;
@@ -46,10 +52,13 @@ export class DivisasComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al obtener datos de divisas:', err.status, err.message, err);
+      },
+      complete: () => {
+        this.isLoading = false; // Ocultar el loader cuando se completa la solicitud
       }
     });
   }
-
+ 
   updateChart() {//para graficar los datos
 
     if (this.divisasData.length === 0) {

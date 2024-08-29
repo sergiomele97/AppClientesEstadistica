@@ -1,9 +1,4 @@
-- Borrar ejemplo provisional (4 archivos en total)
-- Devolver ActionResult en lugar de IAction
-- Poner limite de longitud en atributos
 - Si no se consigue enviar info, guardar cosas pendientes en una tabla.
-- Implementar un procedimiento almacenado
 - Pasar parametros a controlador
-- No hacer gets de TODO
 - Implementar roles
 - Modificar migraciones

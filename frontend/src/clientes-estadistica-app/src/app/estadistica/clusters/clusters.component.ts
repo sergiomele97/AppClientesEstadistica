@@ -22,6 +22,9 @@ export class ClustersComponent implements OnInit, OnDestroy {
     private transaccionService: TransaccionService
   ) {}
 
+  // Nueva variable para controlar la visibilidad del loader
+  public isLoading = false;
+
   private apiUrl = environment.apiClusters;   
   private datos: any[] = [];
   public daviesBouldinIndex: number | null = null;
@@ -114,6 +117,9 @@ export class ClustersComponent implements OnInit, OnDestroy {
   }
 
   async onSelectionCluster(event: Event) {
+
+    this.isLoading = true; // Mostrar el loader al iniciar la solicitud
+
     const selectElement = event.target as HTMLSelectElement;
     const numerosSelect = selectElement.value;
     const nCluster = parseInt(numerosSelect, 10);
@@ -121,6 +127,8 @@ export class ClustersComponent implements OnInit, OnDestroy {
 
     // Llamar a enviarDatosBackend con los datos procesados y el número de clusters
     await this.enviarDatosBackend(this.datos, nCluster);
+
+    this.isLoading = false; // Ocultar loader al acabar
   }
 
   ngOnDestroy(): void {
