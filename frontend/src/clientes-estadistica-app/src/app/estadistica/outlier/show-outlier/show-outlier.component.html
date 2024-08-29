@@ -29,7 +29,7 @@
       <tbody>
         <tr
           *ngFor="let transaccion of transacciones"
-          [ngClass]="{ 'bg-red-100': transaccion.isOutlier }"
+          [ngClass]="{ 'outlier-row': transaccion.isOutlier }"
           class="bg-white border-b"
         >
           <td class="px-4 py-2">
@@ -43,7 +43,10 @@
             </a>
           </td>
           <td class="px-4 py-2">
-            {{ transaccion.importeEnviado | customCurrency }}
+            {{
+              transaccion.importeEnviado
+                | customCurrency : transaccion.clienteOrigen?.pais?.divisa
+            }}
           </td>
           <td class="px-4 py-2">
             {{ transaccion.fecha | formaterFecha }}

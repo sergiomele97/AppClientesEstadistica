@@ -127,25 +127,27 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
             {
                 var transaccionEntity = _mapper.Map<Transaccion>(transaccion);
 
-                clienteOrigen.TransaccionesDestino.Add(transaccionEntity);
-                clienteDestino.TransaccionesOrigen.Add(transaccionEntity);
-                await _contextoBBDD.Transacciones.AddAsync(transaccionEntity);
-                await _contextoBBDD.SaveChangesAsync();
-            }
+            clienteOrigen.TransaccionesDestino.Add(transaccionEntity);
+            clienteDestino.TransaccionesOrigen.Add(transaccionEntity);
+            await _contextoBBDD.Transacciones.AddAsync(transaccionEntity);
+            await _contextoBBDD.SaveChangesAsync();
         }
-        
+    }
 
     // Método para obtener todas las transacciones
     public async Task<List<Transaccion>> GetTransaccionesAsync()
-        {
-            return await _contextoBBDD.Transacciones
-                .Include(t => t.ClienteOrigen)
-                .Include(t => t.ClienteDestino)
-                .ToListAsync();
-        }
+    {
+        return await _contextoBBDD.Transacciones
+            .Include(t => t.ClienteOrigen)
+                .ThenInclude(co => co.Pais)
+            .Include(t => t.ClienteDestino)
+                .ThenInclude(cd => cd.Pais)
+            .ToListAsync();
+    }
 
-        // Método para obtener una transacción por ID
-        public async Task<Transaccion> GetTransaccionByIdAsync(int id)
+
+    // Método para obtener una transacción por ID
+    public async Task<Transaccion> GetTransaccionByIdAsync(int id)
         {
             return await _contextoBBDD.Transacciones
                 .Include(t => t.ClienteOrigen)
@@ -244,5 +246,4 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
                 .Include(p => p.Clientes)
                 .FirstOrDefaultAsync(p => p.PaisId == id);
         }
-
-}
+    }
