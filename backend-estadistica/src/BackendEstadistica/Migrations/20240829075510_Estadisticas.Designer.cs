@@ -12,13 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendEstadistica.Migrations
 {
     [DbContext(typeof(ContextoBBDD))]
-<<<<<<<< HEAD:backend-estadistica/src/BackendEstadistica/Migrations/20240828100632_Estadisticas.Designer.cs
-    [Migration("20240828100632_Estadisticas")]
+    [Migration("20240829075510_Estadisticas")]
     partial class Estadisticas
-========
-    [Migration("20240827105542_Initial")]
-    partial class Initial
->>>>>>>> a63ac1e40d0b1ac4c20deb87a0753b88834746a6:backend-estadistica/src/BackendEstadistica/Migrations/20240827105542_Initial.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

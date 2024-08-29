@@ -244,4 +244,3 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
                 .FirstOrDefaultAsync(p => p.PaisId == id);
         }
     }
-}
