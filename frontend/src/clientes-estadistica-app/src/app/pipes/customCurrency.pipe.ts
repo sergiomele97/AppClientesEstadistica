@@ -165,7 +165,7 @@ export class CustomCurrencyPipe implements PipeTransform {
     'ZWL': '$'
   };
 
-  transform(value: number, currencyCode: string = 'USD'): string {
+  transform(value: number, currencyCode: string = ''): string {
     if (value == null) return '';
 
     // Asegúrate de que el valor sea un número y formatea con dos decimales
