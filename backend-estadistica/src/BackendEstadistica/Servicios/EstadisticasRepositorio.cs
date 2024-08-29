@@ -134,17 +134,20 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
         }
     }
 
-        // Método para obtener todas las transacciones
-        public async Task<List<Transaccion>> GetTransaccionesAsync()
-        {
-            return await _contextoBBDD.Transacciones
-                .Include(t => t.ClienteOrigen)
-                .Include(t => t.ClienteDestino)
-                .ToListAsync();
-        }
+    // Método para obtener todas las transacciones
+    public async Task<List<Transaccion>> GetTransaccionesAsync()
+    {
+        return await _contextoBBDD.Transacciones
+            .Include(t => t.ClienteOrigen)
+                .ThenInclude(co => co.Pais)
+            .Include(t => t.ClienteDestino)
+                .ThenInclude(cd => cd.Pais)
+            .ToListAsync();
+    }
 
-        // Método para obtener una transacción por ID
-        public async Task<Transaccion> GetTransaccionByIdAsync(int id)
+
+    // Método para obtener una transacción por ID
+    public async Task<Transaccion> GetTransaccionByIdAsync(int id)
         {
             return await _contextoBBDD.Transacciones
                 .Include(t => t.ClienteOrigen)
