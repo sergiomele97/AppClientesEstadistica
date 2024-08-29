@@ -123,9 +123,9 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
             var clienteOrigen = await _contextoBBDD.Clientes.FindAsync(transaccion.ClienteOrigenId);
             var clienteDestino = await _contextoBBDD.Clientes.FindAsync(transaccion.ClienteDestinoId);
 
-        if (clienteOrigen != null && clienteDestino != null)
-        {
-            var transaccionEntity = _mapper.Map<Transaccion>(transaccion);
+            if (clienteOrigen != null && clienteDestino != null)
+            {
+                var transaccionEntity = _mapper.Map<Transaccion>(transaccion);
 
             clienteOrigen.TransaccionesDestino.Add(transaccionEntity);
             clienteDestino.TransaccionesOrigen.Add(transaccionEntity);
@@ -155,8 +155,8 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
                 .FirstOrDefaultAsync(t => t.TransaccionId == id);
         }
 
-        // Método para detectar outliers
-        public async Task DetectarOutliersAsync()
+    // Método para detectar outliers
+    public async Task DetectarOutliersAsync()
         {
             var transaccionesByCliente = await _contextoBBDD.Transacciones
                 .Include(t => t.ClienteOrigen)
