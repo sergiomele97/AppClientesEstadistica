@@ -1,10 +1,9 @@
-﻿namespace BackendEstadistica.Perfiles
+﻿namespace BackendEstadistica.Perfiles;
+
+public class Divisa : Profile
 {
-    public class Divisa : Profile
+    public Divisa()
     {
-        public Divisa()
-        {
-            CreateMap<Divisa, DivisaDto>().ReverseMap();
-        }
+        CreateMap<Divisa, DivisaDto>().ReverseMap();
     }
 }

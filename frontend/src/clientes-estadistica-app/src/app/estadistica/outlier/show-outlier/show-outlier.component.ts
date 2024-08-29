@@ -1,11 +1,20 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ApexAxisChartSeries, ApexChart, ChartComponent, ApexDataLabels, ApexPlotOptions, ApexYAxis, ApexTitleSubtitle, ApexXAxis, ApexFill } from 'ng-apexcharts';
+import { ActivatedRoute } from '@angular/router';
+import {
+  ApexAxisChartSeries,
+  ApexChart,
+  ChartComponent,
+  ApexDataLabels,
+  ApexPlotOptions,
+  ApexYAxis,
+  ApexTitleSubtitle,
+  ApexXAxis,
+  ApexFill,
+} from 'ng-apexcharts';
 import { Subscription } from 'rxjs';
 import { ICliente } from 'src/app/interfaces/cliente';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
 import { FormaterFechaPipe } from 'src/app/pipes/formaterFecha.pipe';
-import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
 
 export type ChartOptions = {
@@ -23,7 +32,6 @@ export type ChartOptions = {
   selector: 'app-show-outlier',
   templateUrl: './show-outlier.component.html',
   styleUrls: ['./show-outlier.component.css'],
-  providers: [FormaterFechaPipe],
 })
 export class ShowOutlierComponent implements OnInit, OnDestroy {
   @ViewChild('chart') chart: ChartComponent;
@@ -32,14 +40,14 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
   cliente: ICliente;
   transacciones: ITransaccion[];
   idTransaccion: number;
+  successMessage: string;
+  errorMessage: string;
   subscription: Subscription = new Subscription();
   routeSubscription: Subscription = new Subscription();
 
   constructor(
-    private clienteService: ClienteEstService,
     private transaccionService: TransaccionService,
     private route: ActivatedRoute,
-    private router: Router,
     private formaterFechaPipe: FormaterFechaPipe
   ) {}
 
@@ -47,24 +55,13 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
     const clienteId = Number(this.route.snapshot.paramMap.get('id'));
 
     this.subscription.add(
-      this.clienteService.getCliente(clienteId).subscribe({
+      this.transaccionService.ultimasTransacciones(clienteId).subscribe({
         next: (datos) => {
-          this.cliente = datos;
- 
-          this.subscription.add(
-            this.transaccionService.ultimasTransacciones(clienteId).subscribe({
-              next: (datos) => {
-                this.transacciones = datos;
-                this.actualizarGrafico();
-              },
-              error: (err) => {
-                console.error('Error al obtener las transacciones:', err);
-              },
-            })
-          );
+          this.transacciones = datos;
+          this.actualizarGrafico();
         },
         error: (err) => {
-          console.error('Error al obtener el cliente:', err);
+          console.error('Error al obtener las transacciones:', err);
         },
       })
     );
@@ -110,9 +107,6 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
       },
       dataLabels: {
         enabled: true,
-        formatter: function (val) {
-          return val + '€';
-        },
         offsetY: -20,
         style: {
           fontSize: '12px',
@@ -185,6 +179,48 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
         },
       },
     };
+  }
+
+  // Método para borrar un outlier
+  borrarOutlier(idTransaccion: number): void {
+    this.transaccionService.borrarOutlier(idTransaccion).subscribe({
+      next: (response) => {
+        this.successMessage = 'Outlier resuelto correctamente.';
+        this.errorMessage = null;
+        this.actualizarTransacciones();
+        this.hideMessagesAfterDelay();
+      },
+      error: (err) => {
+        this.errorMessage =
+          'Error al resolver el outlier. Por favor, intentelo de nuevo.';
+        this.successMessage = null;
+        this.hideMessagesAfterDelay();
+        console.error('Error: ', err);
+      },
+    });
+  }
+
+  // Actualiza las transacciones después de resolver un outlier
+  actualizarTransacciones(): void {
+    const clienteId = Number(this.route.snapshot.paramMap.get('id'));
+
+    this.transaccionService.ultimasTransacciones(clienteId).subscribe({
+      next: (datos) => {
+        this.transacciones = datos;
+        this.actualizarGrafico();
+      },
+      error: (err) => {
+        console.error('Error al actualizar las transacciones:', err);
+      },
+    });
+  }
+
+  // Oculta los mensajes de éxito/error después de un retraso
+  hideMessagesAfterDelay(): void {
+    setTimeout(() => {
+      this.successMessage = null;
+      this.errorMessage = null;
+    }, 3000);
   }
 
   ngOnDestroy(): void {

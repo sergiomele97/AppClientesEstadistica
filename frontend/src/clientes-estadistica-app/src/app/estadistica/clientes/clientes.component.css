@@ -1,0 +1,10 @@
+.balance {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .balance::after {
+    content: ' ' attr(data-currency);
+    margin-left: 0.5em;
+  }
+  
