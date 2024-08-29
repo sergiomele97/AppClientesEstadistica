@@ -1,11 +1,20 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ApexAxisChartSeries, ApexChart, ChartComponent, ApexDataLabels, ApexPlotOptions, ApexYAxis, ApexTitleSubtitle, ApexXAxis, ApexFill } from 'ng-apexcharts';
+import { ActivatedRoute } from '@angular/router';
+import {
+  ApexAxisChartSeries,
+  ApexChart,
+  ChartComponent,
+  ApexDataLabels,
+  ApexPlotOptions,
+  ApexYAxis,
+  ApexTitleSubtitle,
+  ApexXAxis,
+  ApexFill,
+} from 'ng-apexcharts';
 import { Subscription } from 'rxjs';
 import { ICliente } from 'src/app/interfaces/cliente';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
 import { FormaterFechaPipe } from 'src/app/pipes/formaterFecha.pipe';
-import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
 
 export type ChartOptions = {
@@ -17,13 +26,13 @@ export type ChartOptions = {
   xaxis: ApexXAxis;
   fill: ApexFill;
   title: ApexTitleSubtitle;
+  colors: string[];
 };
 
 @Component({
   selector: 'app-show-outlier',
   templateUrl: './show-outlier.component.html',
   styleUrls: ['./show-outlier.component.css'],
-  providers: [FormaterFechaPipe],
 })
 export class ShowOutlierComponent implements OnInit, OnDestroy {
   @ViewChild('chart') chart: ChartComponent;
@@ -32,14 +41,13 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
   cliente: ICliente;
   transacciones: ITransaccion[];
   idTransaccion: number;
+  successMessage: string;
+  errorMessage: string;
   subscription: Subscription = new Subscription();
-  routeSubscription: Subscription = new Subscription();
 
   constructor(
-    private clienteService: ClienteEstService,
     private transaccionService: TransaccionService,
     private route: ActivatedRoute,
-    private router: Router,
     private formaterFechaPipe: FormaterFechaPipe
   ) {}
 
@@ -47,27 +55,59 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
     const clienteId = Number(this.route.snapshot.paramMap.get('id'));
 
     this.subscription.add(
-      this.clienteService.getCliente(clienteId).subscribe({
-        next: (datos) => {
-          this.cliente = datos;
- 
-          this.subscription.add(
-            this.transaccionService.ultimasTransacciones(clienteId).subscribe({
-              next: (datos) => {
-                this.transacciones = datos;
-                this.actualizarGrafico();
-              },
-              error: (err) => {
-                console.error('Error al obtener las transacciones:', err);
-              },
-            })
-          );
+      this.transaccionService.ultimasTransacciones(clienteId).subscribe({
+        next: (transaccion) => {
+          this.transacciones = transaccion;
+          this.actualizarGrafico();
         },
         error: (err) => {
-          console.error('Error al obtener el cliente:', err);
+          console.error('Error al obtener las transacciones:', err);
         },
       })
     );
+  }
+
+  borrarOutlier(idTransaccion: number): void {
+    this.subscription.add(
+      this.transaccionService.borrarOutlier(idTransaccion).subscribe({
+        next: (response) => {
+          this.successMessage = 'Outlier resuelto correctamente.';
+          this.errorMessage = null;
+          this.actualizarTransacciones();
+          this.hideMessagesAfterDelay();
+        },
+        error: (err) => {
+          this.errorMessage =
+            'Error al resolver el outlier. Por favor, intentelo de nuevo.';
+          this.successMessage = null;
+          this.hideMessagesAfterDelay();
+          console.error('Error: ', err);
+        },
+      })
+    );
+  }
+
+  actualizarTransacciones(): void {
+    const clienteId = Number(this.route.snapshot.paramMap.get('id'));
+
+    this.subscription.add(
+      this.transaccionService.ultimasTransacciones(clienteId).subscribe({
+        next: (datos) => {
+          this.transacciones = datos;
+          this.actualizarGrafico();
+        },
+        error: (err) => {
+          console.error('Error al actualizar las transacciones:', err);
+        },
+      })
+    );
+  }
+
+  hideMessagesAfterDelay(): void {
+    setTimeout(() => {
+      this.successMessage = null;
+      this.errorMessage = null;
+    }, 3000);
   }
 
   actualizarGrafico(): void {
@@ -75,12 +115,13 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Transforma los datos para el gráfico
     const fechas = this.transacciones.map((t) =>
       this.formaterFechaPipe.transform(t.fecha)
     );
     const importeEnviado = this.transacciones.map((t) => t.importeEnviado);
-    const maxCantidad = Math.max(...importeEnviado);
 
+    // Configura las opciones del gráfico
     this.chartOptions = {
       series: [
         {
@@ -98,21 +139,17 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
             position: 'top',
           },
           colors: {
-            ranges: [
-              {
-                from: maxCantidad,
-                to: maxCantidad,
-                color: '#FF4560',
-              },
-            ],
+            // Utiliza una función para aplicar colores dinámicos
+            ranges: this.transacciones.map((t) => ({
+              from: t.importeEnviado,
+              to: t.importeEnviado,
+              color: t.isOutlier ? '#FF4560' : '#008FFB', // Rojo para outliers, azul para otros
+            })),
           },
         },
       },
       dataLabels: {
         enabled: true,
-        formatter: function (val) {
-          return val + '€';
-        },
         offsetY: -20,
         style: {
           fontSize: '12px',

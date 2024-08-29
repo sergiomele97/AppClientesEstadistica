@@ -1,23 +1,44 @@
 <div class="bg-white">
-    <table class="min-w-full bg-white border border-gray-200">
-      <thead>
-        <tr>
-            <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">Id Transacción</th>
-            <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">Cliente Origen</th>
-            <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">Cliente Destino</th>
-            <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">Importe Enviado</th>
-            <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">Fecha</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let outlier of outliers" class="border-b">
-            <td class="px-6 py-4 text-md">{{ outlier.transaccionId }}</td>
-            <td class="px-6 py-4 text-md"><a href="estadistica/clientes/{{outlier.clienteOrigenId}}">{{ outlier.clienteOrigen.nombre }}</a></td>
-            <td class="px-6 py-4 text-md"><a href="estadistica/clientes/{{outlier.clienteDestinoId}}">{{ outlier.clienteDestino.nombre }}</a></td>
-            <td class="px-6 py-4 text-md">{{ outlier.importeEnviado }}</td>
-            <td class="px-6 py-4 text-md">{{ outlier.fecha | formaterFecha }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
+  <table class="min-w-full bg-white border border-gray-200">
+    <thead>
+      <tr>
+        <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">
+          Id Transacción
+        </th>
+        <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">
+          Cliente Origen
+        </th>
+        <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">
+          Cliente Destino
+        </th>
+        <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">
+          Importe Enviado
+        </th>
+        <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">Fecha</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let outlier of outliers" class="border-b">
+        <td class="px-6 py-4 text-md">{{ outlier.transaccionId }}</td>
+        <td class="px-6 py-4 text-md">
+          <a
+            [routerLink]="['/estadistica/clientes/', outlier.clienteDestinoId]"
+          >
+            {{ outlier.clienteDestino.nombre }}
+          </a>
+        </td>
+        <td class="px-6 py-4 text-md">
+          <a
+            [routerLink]="['/estadistica/clientes/', outlier.clienteDestinoId]"
+          >
+            {{ outlier.clienteDestino.nombre }}
+          </a>
+        </td>
+        <td class="px-6 py-4 text-md">
+          {{ outlier.importeEnviado | customCurrency : outlier.clienteDestino?.pais?.divisa }}
+        </td>
+        <td class="px-6 py-4 text-md">{{ outlier.fecha | formaterFecha }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

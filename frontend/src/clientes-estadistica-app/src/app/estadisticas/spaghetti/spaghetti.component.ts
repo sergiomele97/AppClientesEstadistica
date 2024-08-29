@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -39,19 +38,23 @@ export type ChartOptions = {
 export class SpaghettiComponent implements OnInit, OnDestroy {
   @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
-
   subscription: Subscription;
   transacciones: ITransaccion[] = [];
+  isLoading: boolean = true; // AGREGADO: variable de estado para el loader
 
   constructor(private transaccionesService: TransaccionService) {}
 
   ngOnInit(): void {
+    this.isLoading = true; // AGREGADO: Mostrar loader al iniciar la carga
+
     this.subscription = this.transaccionesService.getTransacciones().subscribe({
       next: (transacciones) => {
         this.updateChart(transacciones);
+        this.isLoading = false; // AGREGADO: Ocultar loader después de cargar los datos
       },
       error: (err) => {
         console.error('Error al obtener la lista de transacciones', err);
+        this.isLoading = false; // AGREGADO: Ocultar loader si hay un error
       },
     });
   }

@@ -15,6 +15,7 @@ import { ICliente } from 'src/app/interfaces/cliente';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
 import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
+import { CustomCurrencyPipe } from 'src/app/pipes/customCurrency.pipe';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -31,9 +32,7 @@ export type ChartOptions = {
   templateUrl: './clientes.component.html',
   styleUrls: ['./clientes.component.css'],
 })
-
 export class ClientesComponent implements OnInit, OnDestroy {
-
   @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
@@ -41,7 +40,8 @@ export class ClientesComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private clienteService: ClienteEstService,
-    private transaccionService: TransaccionService
+    private transaccionService: TransaccionService,
+    private currencyPipe: CustomCurrencyPipe
   ) {}
 
   cliente: ICliente | undefined;
@@ -52,7 +52,6 @@ export class ClientesComponent implements OnInit, OnDestroy {
   balance: number = 0;
 
   ngOnInit(): void {
-
     // Obtener la lista de clientes
     this.subscription = this.clienteService.getClientes().subscribe({
       next: (clientes) => {
@@ -66,36 +65,42 @@ export class ClientesComponent implements OnInit, OnDestroy {
     // Obtener el ID del cliente desde la ruta actual
     const clienteId = Number(this.route.snapshot.paramMap.get('id'));
 
-  // Llamar a getCliente con el ID del cliente
-  this.subscription = this.clienteService.getCliente(clienteId).subscribe({
-    next: (cliente) => {
-      // Asignar el cliente obtenido a la propiedad del componente
-      this.cliente = cliente;
+    // Llamar a getCliente con el ID del cliente
+    this.subscription = this.clienteService.getCliente(clienteId).subscribe({
+      next: (cliente) => {
+        // Asignar el cliente obtenido a la propiedad del componente
+        this.cliente = cliente;
 
-      // Obtener las transacciones relacionadas con el cliente
-      this.subscription = this.transaccionService.getTransacciones().subscribe({
-        next: (transacciones) => {
-          // Filtrar las transacciones relacionadas con el cliente
-          this.transacciones = transacciones.filter(
-            t => t.clienteOrigenId === clienteId || t.clienteDestinoId === clienteId
-          );
+        // Obtener las transacciones relacionadas con el cliente
+        this.subscription = this.transaccionService
+          .getTransacciones()
+          .subscribe({
+            next: (transacciones) => {
+              // Filtrar las transacciones relacionadas con el cliente
+              this.transacciones = transacciones.filter(
+                (t) =>
+                  t.clienteOrigenId === clienteId ||
+                  t.clienteDestinoId === clienteId
+              );
 
-          // Calcular el balance
-          this.balance = this.calcularBalance(this.transacciones, clienteId);
+              // Calcular el balance
+              this.balance = this.calcularBalance(
+                this.transacciones,
+                clienteId
+              );
 
-          // Actualizar gráfico
-          this.actualizarGrafico(this.transacciones);
-        },
-        error: (err) => {
-          console.error('Error al obtener las transacciones:', err);
-        }
-      });
-
-    },
-    error: (err) => {
-      console.error('Error al obtener el cliente:', err);
-    },
-  });
+              // Actualizar gráfico
+              this.actualizarGrafico(this.transacciones);
+            },
+            error: (err) => {
+              console.error('Error al obtener las transacciones:', err);
+            },
+          });
+      },
+      error: (err) => {
+        console.error('Error al obtener el cliente:', err);
+      },
+    });
 
     // Suscribirse a los cambios de la ruta
     this.routeSubscription = this.route.paramMap.subscribe((params) => {
@@ -110,33 +115,38 @@ export class ClientesComponent implements OnInit, OnDestroy {
       next: (cliente) => {
         // Asignar el cliente obtenido a la propiedad del componente
         this.cliente = cliente;
-  
+
         // Obtener las transacciones relacionadas con el cliente
-        this.subscription = this.transaccionService.getTransacciones().subscribe({
-          next: (transacciones) => {
-            // Filtrar las transacciones relacionadas con el cliente
-            const transaccionesFiltradas = transacciones.filter(
-              t => t.clienteOrigenId === clienteId || t.clienteDestinoId === clienteId
-            );
-  
-            // Calcular el balance
-            this.balance = this.calcularBalance(transaccionesFiltradas, clienteId);
-  
-            // Actualizar gráfico con las transacciones filtradas
-            this.actualizarGrafico(transaccionesFiltradas);
-          },
-          error: (err) => {
-            console.error('Error al obtener las transacciones:', err);
-          }
-        });
-  
+        this.subscription = this.transaccionService
+          .getTransacciones()
+          .subscribe({
+            next: (transacciones) => {
+              // Filtrar las transacciones relacionadas con el cliente
+              const transaccionesFiltradas = transacciones.filter(
+                (t) =>
+                  t.clienteOrigenId === clienteId ||
+                  t.clienteDestinoId === clienteId
+              );
+
+              // Calcular el balance
+              this.balance = this.calcularBalance(
+                transaccionesFiltradas,
+                clienteId
+              );
+
+              // Actualizar gráfico con las transacciones filtradas
+              this.actualizarGrafico(transaccionesFiltradas);
+            },
+            error: (err) => {
+              console.error('Error al obtener las transacciones:', err);
+            },
+          });
       },
       error: (err) => {
         console.error('Error al obtener el cliente:', err);
       },
     });
   }
-  
 
   onSelectCliente(event: Event): void {
     const selectElement = event.target as HTMLSelectElement; // Asegurarte de que es un HTMLSelectElement
@@ -146,47 +156,64 @@ export class ClientesComponent implements OnInit, OnDestroy {
 
   private calcularBalance(transacciones: ITransaccion[], clienteId: number) {
     const ingresos = transacciones
-      .filter(transaccion => transaccion.clienteDestinoId === clienteId)
-      .reduce((total, transaccion) => total + (transaccion.importeRecibido || 0), 0);
+      .filter((transaccion) => transaccion.clienteDestinoId === clienteId)
+      .reduce(
+        (total, transaccion) => total + (transaccion.importeRecibido || 0),
+        0
+      );
     const gastos = transacciones
-    .filter(transaccion => transaccion.clienteOrigenId === clienteId)
-    .reduce((total, transaccion) => total + (transaccion.importeRecibido || 0), 0);
-    return ingresos - gastos
+      .filter((transaccion) => transaccion.clienteOrigenId === clienteId)
+      .reduce(
+        (total, transaccion) => total + (transaccion.importeRecibido || 0),
+        0
+      );
+    return ingresos - gastos;
   }
 
   private actualizarGrafico(transacciones: ITransaccion[]): void {
     if (!transacciones || transacciones.length === 0) return;
-  
+
     // Función para agrupar transacciones por mes y año
-    const agruparPorMes = (transacciones: ITransaccion[], esIngreso: boolean) => {
+    const agruparPorMes = (
+      transacciones: ITransaccion[],
+      esIngreso: boolean
+    ) => {
       const resultado: Record<string, number> = {};
-  
-      transacciones.forEach(transaccion => {
+
+      transacciones.forEach((transaccion) => {
         const fecha = new Date(transaccion.fecha || '');
         const mesAnio = `${fecha.getMonth() + 1}-${fecha.getFullYear()}`; // Formato MM-YYYY
-        const cantidad = esIngreso ? transaccion.importeRecibido || 0 : transaccion.importeEnviado || 0;
-  
+        const cantidad = esIngreso
+          ? transaccion.importeRecibido || 0
+          : transaccion.importeEnviado || 0;
+
         if (resultado[mesAnio]) {
           resultado[mesAnio] += cantidad;
         } else {
           resultado[mesAnio] = cantidad;
         }
       });
-  
+
       return resultado;
     };
-  
+
     // Filtrar transacciones de ingreso y pérdida
-    const transaccionesIngreso = transacciones.filter(t => t.clienteDestinoId === this.cliente?.clienteId);
-    const transaccionesPerdida = transacciones.filter(t => t.clienteOrigenId === this.cliente?.clienteId);
-  
+    const transaccionesIngreso = transacciones.filter(
+      (t) => t.clienteDestinoId === this.cliente?.clienteId
+    );
+    const transaccionesPerdida = transacciones.filter(
+      (t) => t.clienteOrigenId === this.cliente?.clienteId
+    );
+
     // Obtener transacciones de ingreso y pérdida agrupadas por mes y año
     const ingresosPorMes = agruparPorMes(transaccionesIngreso, true);
     const perdidasPorMes = agruparPorMes(transaccionesPerdida, false);
-  
+
     // Obtener todos los meses únicos
-    let meses = Array.from(new Set([...Object.keys(ingresosPorMes), ...Object.keys(perdidasPorMes)]));
-  
+    let meses = Array.from(
+      new Set([...Object.keys(ingresosPorMes), ...Object.keys(perdidasPorMes)])
+    );
+
     // Ordenar los meses en orden cronológico
     meses = meses.sort((a, b) => {
       const [mesA, anioA] = a.split('-').map(Number);
@@ -195,11 +222,11 @@ export class ClientesComponent implements OnInit, OnDestroy {
       const fechaB = new Date(anioB, mesB - 1);
       return fechaA.getTime() - fechaB.getTime();
     });
-  
+
     // Crear datos para el gráfico
-    const dataIngresos = meses.map(mes => ingresosPorMes[mes] || 0);
-    const dataPerdidas = meses.map(mes => perdidasPorMes[mes] || 0);
-  
+    const dataIngresos = meses.map((mes) => ingresosPorMes[mes] || 0);
+    const dataPerdidas = meses.map((mes) => perdidasPorMes[mes] || 0);
+
     this.chartOptions = {
       series: [
         {
@@ -224,30 +251,39 @@ export class ClientesComponent implements OnInit, OnDestroy {
       },
       dataLabels: {
         enabled: true,
-        formatter: (val) => `${val}`, // Formato de la etiqueta de datos
+        formatter: (val) => {
+          // Ensure the value is a number and format it to 2 decimal places
+          const formattedValue = typeof val === 'number' ? val.toFixed(2) : val;
+          return `${formattedValue}`;
+        },
         style: {
           fontSize: '12px',
           colors: ['#304758'],
         },
       },
+      
       xaxis: {
         categories: meses,
         position: 'bottom',
         labels: {
           offsetY: 0,
-          rotate: -45,  // Rotar las etiquetas del mes si son muchas
+          rotate: -45, // Rotar las etiquetas del mes si son muchas
           style: {
             fontSize: '12px',
           },
         },
         title: {
           text: 'Mes y Año',
-        }
+        },
       },
       yaxis: {
         labels: {
           show: true,
-          formatter: (val) => `${val}`, // Puedes formatear el valor si es necesario
+          formatter: (val) =>
+            this.currencyPipe.transform(
+              val,
+              this.cliente?.pais.divisa || 'USD'
+            ),
         },
         title: {
           text: 'Montos (Ingresos y Pérdidas)',
@@ -259,7 +295,6 @@ export class ClientesComponent implements OnInit, OnDestroy {
       },
     };
   }
-  
 
   ngOnDestroy(): void {
     // Cancelar la suscripción cuando el componente se destruya

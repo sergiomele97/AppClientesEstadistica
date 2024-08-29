@@ -33,27 +33,32 @@ export type ChartOptions = {
 export class VolumetryComponent implements OnInit, OnDestroy {
   @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
-
   public dataType: string = ''; // Cambiar valor inicial a 'transacciones'
+  public isLoading: boolean = true; // AGREGADO: Estado de carga
+
+  transacciones: ITransaccion[] = [];
+  conversiones: IConversion[] = [];
+  subscription: Subscription;
 
   constructor(
     private transaccionesService: TransaccionService,
     private conversionesService: ConversionService
   ) {}
 
-  transacciones: ITransaccion[] = [];
-  conversiones: IConversion[] = [];
-  subscription: Subscription;
-
   ngOnInit(): void {
+    // Mostrar el loader al iniciar
+    this.isLoading = true;
+
     // Obtener lista de transacciones y conversiones
     this.subscription = this.transaccionesService.getTransacciones().subscribe({
       next: (transacciones) => {
         this.transacciones = transacciones;
-        this.updateChart(); // Update chart with default data
+        this.updateChart(); // Actualizar gráfico con datos predeterminados
+        this.isLoading = false; // Ocultar loader después de cargar los datos
       },
       error: (err) => {
         console.error('Error al obtener la lista de transacciones', err);
+        this.isLoading = false; // Ocultar loader si hay un error
       },
     });
 
@@ -61,10 +66,12 @@ export class VolumetryComponent implements OnInit, OnDestroy {
       this.conversionesService.getConversiones().subscribe({
         next: (conversiones) => {
           this.conversiones = conversiones;
-          this.updateChart(); // Update chart with default data
+          this.updateChart(); // Actualizar gráfico con datos predeterminados
+          this.isLoading = false; // Ocultar loader después de cargar los datos
         },
         error: (err) => {
           console.error('Error al obtener la lista de conversiones', err);
+          this.isLoading = false; // Ocultar loader si hay un error
         },
       })
     );
@@ -151,9 +158,6 @@ export class VolumetryComponent implements OnInit, OnDestroy {
       },
       xaxis: {
         categories: meses,
-        // title: {
-        //   text: 'Mes y Año',
-        // },
       },
     };
   }

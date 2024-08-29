@@ -1,5 +1,9 @@
-<div class="center">    <!-- Para inyección en página principal.-->
-
+<div class="container mx-auto w-full">
+  <!-- Loader que se muestra mientras se cargan los datos -->
+  <!-- AGREGADO: pantalla de carga -->
+  <div *ngIf="isLoading" class="flex items-center justify-center">
+    <div class="loader justify-center"></div>
+  </div>
   <div class="dropdown-container">
     <select id="data-type" (change)="onSelectionChange($event)">
       <option value="" selected disabled>Seleccionar categoría</option>

@@ -1,4 +1,4 @@
-    <div class="min-h-screen p-6 bg-gray-100 flex flex-col items-center">
+    <div class="min-h-screen p-6 flex flex-col items-center">
   <!-- Contenedor del selector de cliente (siempre visible en la parte superior) -->
   <div class="w-full max-w-lg mb-6">
     <select
@@ -30,8 +30,9 @@
       <p><strong>Trabajo:</strong> {{ cliente.trabajo }}</p>
       <p><strong>País:</strong> {{ cliente.pais.nombre }}</p>
       <p>
-        <strong>Balance:</strong> {{ balance | currency : cliente.pais.divisa }}
+        <strong>Balance:</strong> {{ balance | customCurrency: cliente.pais.divisa }}
       </p>
+      
     </div>
 
     <!-- Gráfico -->

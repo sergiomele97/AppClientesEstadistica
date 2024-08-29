@@ -32,7 +32,7 @@ import { FormaterFechaPipe } from './pipes/formaterFecha.pipe';
 import { RegisterComponent } from './register/register.component';
 import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-outlier.component';
 import { UsuarioService } from './servicios/usuario.service';
-
+import { CustomCurrencyPipe } from './pipes/customCurrency.pipe';
 
 @NgModule({
   declarations: [
@@ -57,7 +57,7 @@ import { UsuarioService } from './servicios/usuario.service';
     FormaterFechaPipe,
     RegisterComponent,
     LogsOutlierComponent,
-    
+    CustomCurrencyPipe
   ],
 
   imports: [
@@ -75,7 +75,8 @@ import { UsuarioService } from './servicios/usuario.service';
     UsuarioService,
     PruebaConexionService,
     ClustersDataService,
-    DatePipe,
+    DatePipe,FormaterFechaPipe,
+    CustomCurrencyPipe,
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

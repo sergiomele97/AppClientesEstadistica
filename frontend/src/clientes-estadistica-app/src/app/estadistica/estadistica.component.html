@@ -1,6 +1,6 @@
 <!-- HEADER -->
 <header
-  class="fixed top-0 left-0 right-0 z-50 h-16 px-7 py-5 bg-gray-50 dark:bg-gray-800 flex justify-between items-center shadow-md"
+  class="fixed top-0 left-0 right-0 z-50 h-16 px-7 py-5 flex justify-between items-center shadow-md"
 >
   <h1
     class="text-3xl font-extrabold text-gray-900 dark:text-white md:text-5xl lg:text-4xl"
@@ -42,7 +42,7 @@
     >
       <a
         (click)="logout()"
-        class="block px-4 py-2 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-b-lg transition-colors duration-200 cursor-pointer"
+        class="block px-4 py-2 text-gray-900 rounded-b-lg transition-colors duration-200 cursor-pointer"
         >Logout</a
       >
     </div>
@@ -52,10 +52,10 @@
 <!-- BARRA LATERAL -->
 <aside
   id="sidebar-multi-level-sidebar"
-  class="fixed top-16 left-0 z-40 w-64 h-[calc(100%-4rem)] overflow-y-auto transition-transform bg-gray-50 dark:bg-gray-800"
+  class="fixed top-16 left-0 z-40 w-64 h-[calc(100%-4rem)] overflow-y-auto transition-transform"
   aria-label="Sidebar"
 >
-  <div class="h-full px-3 py-4 overflow-y-auto">
+  <div class="h-full px-3 py-4 overflow-y-auto border border-gray-100">
     <ul class="space-y-2 font-medium">
       <!-- 1. Gráficas -->
       <li>
@@ -236,6 +236,22 @@
         </a>
       </li>
     </ul>
+
+    <!-- ALERTA -->
+
+<div *ngIf="detectado" class="absolute bottom-5 left-2">
+  <div class="text-red-700 bg-red-100 rounded-xl shadow-lg " role="alert">
+    <div class="flex p-5">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-7 mt-1 mr-2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+      </svg>      
+      <h3 class="text-xl font-semibold">
+        Outlier Detectado
+      </h3>
+    </div>
+  </div>
+</div>
+
   </div>
 </aside>
 

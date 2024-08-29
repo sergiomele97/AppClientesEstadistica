@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -38,8 +37,8 @@ export class GraphComponent implements OnInit, OnDestroy {
   @ViewChild("chart") chart: ChartComponent;
   visible: boolean = true;
   public chartOptions: Partial<ChartOptions>;
-  
   public dataType: string = 'sexo'; // Valor por defecto
+  isLoading: boolean = true; // AGREGADO: variable de estado para controlar el loader
 
   // Definición de categorías para cada tipo de agrupación
   private readonly ageCategories = [
@@ -64,14 +63,19 @@ export class GraphComponent implements OnInit, OnDestroy {
   }
  
   ngOnInit(): void {
+    // Iniciar el estado de carga
+    this.isLoading = true; // AGREGADO: Mostrar loader al iniciar la carga
+  
     // Obtener los clientes
     this.subscription = this.clienteService.getClientes().subscribe({
       next: (clientes) => {
         this.clientes = clientes;
         this.updateChart(); // Actualizar el gráfico después de obtener los datos
+        this.isLoading = false; // AGREGADO: Ocultar loader después de cargar los datos
       },
       error: (err) => {
         console.error('Error al obtener los clientes: ', err);
+        this.isLoading = false; // AGREGADO: Ocultar loader si hay un error
       },
     });
   }
@@ -134,8 +138,6 @@ export class GraphComponent implements OnInit, OnDestroy {
     return { categories, series };
   }
 
-  
-
   updateChart() {
     const { categories, series } = this.agruparDatos();
 
@@ -180,6 +182,7 @@ export class GraphComponent implements OnInit, OnDestroy {
       }
     };
   }
+
   onSelectionChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     this.dataType = selectElement.value;
