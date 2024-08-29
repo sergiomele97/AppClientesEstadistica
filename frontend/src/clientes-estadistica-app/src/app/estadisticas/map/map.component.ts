@@ -14,45 +14,49 @@ export class MapComponent implements OnInit, OnDestroy {
   chartConstructor = 'mapChart';
   bubbleData: { code3: string; z: number }[] = [];
   chartOptions: Highcharts.Options;
-  isLoading: boolean = true; // AGREGADO: variable de estado para el loader
+  isLoading: boolean = true; // Variable de estado para el loader
 
   constructor(private clienteService: ClienteEstService) {}
 
   ngOnInit(): void {
-    this.isLoading = true; // AGREGADO: Mostrar loader al iniciar la carga
+    this.isLoading = true; // Mostrar loader al iniciar la carga
 
-    this.clienteService.getClientes().subscribe((clientes: ICliente[]) => {
-      const clientesPorPais: { [key: string]: number } = {};
+    this.clienteService.getClientes().subscribe(
+      (clientes: ICliente[]) => {
+        const clientesPorPais: { [key: string]: number } = {};
 
-      // Contar clientes por país
-      clientes.forEach((cliente) => {
-        const iso3 = cliente.pais.iso3;
-        if (clientesPorPais[iso3]) {
-          clientesPorPais[iso3]++;
-        } else {
-          clientesPorPais[iso3] = 1;
-        }
-      });
+        // Contar clientes por país
+        clientes.forEach((cliente) => {
+          const iso3 = cliente.pais.iso3;
+          if (clientesPorPais[iso3]) {
+            clientesPorPais[iso3]++;
+          } else {
+            clientesPorPais[iso3] = 1;
+          }
+        });
 
-      // Convertir los datos a la estructura requerida por bubbleData
-      this.bubbleData = Object.keys(clientesPorPais).map((iso3) => ({
-        code3: iso3,
-        z: clientesPorPais[iso3],
-      }));
+        // Convertir los datos a la estructura requerida por bubbleData
+        this.bubbleData = Object.keys(clientesPorPais).map((iso3) => ({
+          code3: iso3,
+          z: clientesPorPais[iso3],
+        }));
 
-      // Inicializar las opciones del gráfico
-      this.initializeChartOptions();
+        // Inicializar las opciones del gráfico
+        this.initializeChartOptions();
 
-      // Asegurarse de que el contenedor esté disponible y renderizar el gráfico
-      setTimeout(() => {
-        Highcharts.mapChart('container', this.chartOptions);
-        this.isLoading = false; // AGREGADO: Ocultar loader después de cargar los datos
-      }, 0);
-    }, 
-    error => {
-      console.error('Error al obtener los clientes:', error);
-      this.isLoading = false; // AGREGADO: Ocultar loader si hay un error
-    });
+        // Ocultar loader después de preparar los datos y antes de inicializar el gráfico
+        this.isLoading = false;
+
+        // Asegurarse de que el contenedor esté disponible y renderizar el gráfico
+        setTimeout(() => {
+          Highcharts.mapChart('container', this.chartOptions);
+        }, 0);
+      },
+      (error) => {
+        console.error('Error al obtener los clientes:', error);
+        this.isLoading = false; // Ocultar loader si hay un error
+      }
+    );
   }
 
   initializeChartOptions() {
@@ -82,6 +86,7 @@ export class MapComponent implements OnInit, OnDestroy {
           name: 'Países',
           color: '#E0E0E0',
           enableMouseTracking: false,
+          mapData: worldMap, // Asegurarse de que los datos del mapa están incluidos
         },
         {
           type: 'mapbubble',
