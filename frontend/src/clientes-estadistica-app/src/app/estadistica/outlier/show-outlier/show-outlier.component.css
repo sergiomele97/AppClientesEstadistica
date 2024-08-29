@@ -1,0 +1,8 @@
+.outlier-row {
+    background-color: #FFEBEE; /* Color de fondo rojo claro para outliers */
+  }
+  
+  .outlier-row td {
+    color: #d32f2f; /* Color del texto para contraste, opcional */
+  }
+  
