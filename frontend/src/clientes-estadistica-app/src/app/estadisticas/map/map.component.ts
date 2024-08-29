@@ -14,10 +14,13 @@ export class MapComponent implements OnInit, OnDestroy {
   chartConstructor = 'mapChart';
   bubbleData: { code3: string; z: number }[] = [];
   chartOptions: Highcharts.Options;
+  isLoading: boolean = true; // AGREGADO: variable de estado para el loader
 
   constructor(private clienteService: ClienteEstService) {}
 
   ngOnInit(): void {
+    this.isLoading = true; // AGREGADO: Mostrar loader al iniciar la carga
+
     this.clienteService.getClientes().subscribe((clientes: ICliente[]) => {
       const clientesPorPais: { [key: string]: number } = {};
 
@@ -43,7 +46,12 @@ export class MapComponent implements OnInit, OnDestroy {
       // Asegurarse de que el contenedor esté disponible y renderizar el gráfico
       setTimeout(() => {
         Highcharts.mapChart('container', this.chartOptions);
-      }, 0); // Usar un retraso para garantizar que el DOM esté listo
+        this.isLoading = false; // AGREGADO: Ocultar loader después de cargar los datos
+      }, 0);
+    }, 
+    error => {
+      console.error('Error al obtener los clientes:', error);
+      this.isLoading = false; // AGREGADO: Ocultar loader si hay un error
     });
   }
 
