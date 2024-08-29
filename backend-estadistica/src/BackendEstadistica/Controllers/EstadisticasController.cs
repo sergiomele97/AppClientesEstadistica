@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BackendEstadistica.SignalR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,15 +15,18 @@ namespace BackendEstadistica.Controllers
         private readonly ContextoBBDD _contextoBBDD;
         private readonly IEstadisticasRepositorio _estadisticasRepositorio;
         private readonly IMapper _mapper;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
         public EstadisticasController(
             ContextoBBDD contextoBBDD,
             IEstadisticasRepositorio estadisticasRepositorio,
-            IMapper mapper)
+            IMapper mapper,
+            IHubContext<NotificationHub> hubContext)
         {
             _contextoBBDD = contextoBBDD;
             _estadisticasRepositorio = estadisticasRepositorio;
             _mapper = mapper;
+            _hubContext = hubContext;
         }
 
         // Clientes
@@ -71,7 +76,6 @@ namespace BackendEstadistica.Controllers
             var nuevaTransaccion = _mapper.Map<Transaccion>(transaccionDto);
             await _estadisticasRepositorio.CrearTransaccionAsync(nuevaTransaccion);
 
-            // Detectar si esta transacción es un outlier
             await _estadisticasRepositorio.DetectarOutliersAsync();
 
             var transaccion = await _contextoBBDD.Transacciones
@@ -80,6 +84,14 @@ namespace BackendEstadistica.Controllers
 
             if (transaccion != null && transaccion.IsOutlier == true)
             {
+
+                await _hubContext.Clients.All.SendAsync("OutlierDetected", new
+                {
+                    Message = "Outlier detectado",
+                    Cliente = transaccion.ClienteOrigen.Nombre,
+                    ImporteEnviado = transaccion.ImporteEnviado
+                });
+
                 return Ok(new
                 {
                     Message = "Outlier detectado",
@@ -90,6 +102,7 @@ namespace BackendEstadistica.Controllers
 
             return Ok("Transacción creada correctamente");
         }
+
 
         [HttpGet("getTransacciones")]
         public async Task<IActionResult> GetTransacciones()
