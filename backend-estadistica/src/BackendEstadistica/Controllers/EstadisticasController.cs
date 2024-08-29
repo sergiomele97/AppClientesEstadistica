@@ -271,8 +271,18 @@ namespace BackendEstadistica.Controllers
         [HttpGet("clientesconbalance")]
         public async Task<ActionResult<IEnumerable<ClienteConBalanceViewModel>>> GetClientesConBalance()
         {
-            var clientes = await _contextoBBDD.ClientesConBalance.ToListAsync();
-            return Ok(clientes);
+            try
+            {
+                var clientes = await _contextoBBDD.ClientesConBalance.ToListAsync();
+                return Ok(clientes);
+            }
+            catch (Exception ex)
+            {
+                // Registrar el error
+                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+                return StatusCode(500, "Error interno del servidor. Por favor, inténtelo de nuevo más tarde.");
+            }
         }
 
     }

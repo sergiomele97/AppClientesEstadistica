@@ -13,7 +13,7 @@ def predict():
 
     data = request.json
     series = data['data']
-    print("data prediction: ", series, flush=True)
+    #print("data prediction: ", series, flush=True)
     model = ARIMA(series, order=(5, 0, 3))
     model_fit = model.fit()
     pred_steps = 10
@@ -21,7 +21,7 @@ def predict():
     pred_mean = pred.predicted_mean.tolist()
     pred_ci = pred.conf_int().tolist()
     response = {'Prediction': pred_mean, 'ConfidenceInterval': pred_ci}
-    print(response, flush=True)
+    #print(response, flush=True)
     return jsonify(response)
 
 

@@ -57,6 +57,7 @@ import { UsuarioService } from './servicios/usuario.service';
     FormaterFechaPipe,
     RegisterComponent,
     LogsOutlierComponent,
+    
   ],
 
   imports: [
