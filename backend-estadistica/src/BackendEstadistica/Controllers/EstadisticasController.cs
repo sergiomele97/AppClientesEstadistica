@@ -18,7 +18,7 @@ public class EstadisticasController : ControllerBase
         _mapper = mapper;
     }
 
-    // Clientes
+    // CLIENTES
     [HttpPost("crearCliente")]
     public async Task<IActionResult> CrearCliente()
     {
@@ -52,7 +52,7 @@ public class EstadisticasController : ControllerBase
         return Ok(_mapper.Map<Cliente>(cliente));
     }
 
-    // Transacciones
+    // TRANSACCIONES
     [HttpPost("crearTransaccion")]
     public async Task<IActionResult> CrearTransaccion()
     {
@@ -105,7 +105,65 @@ public class EstadisticasController : ControllerBase
         return Ok(_mapper.Map<Transaccion>(transaccion));
     }
 
-    // Divisas
+    // OUTLIERS
+    [HttpGet("getOutliers")]
+    public async Task<IActionResult> ObtenerTransaccionesOutliers()
+    {
+        var transaccionesOutliers = await _contextoBBDD.Transacciones
+            .Include(t => t.ClienteOrigen)
+                .ThenInclude(co => co.Pais)
+            .Include(t => t.ClienteDestino)
+                .ThenInclude(cd => cd.Pais)
+            .Where(t => t.IsOutlier == true)
+            .ToListAsync();
+
+        return Ok(transaccionesOutliers);
+    }
+
+    [HttpGet("outliers-vistos")]
+    public async Task<IActionResult> ObtenerOutliersVistos()
+    {
+        var outliersVistos = await _contextoBBDD.Transacciones
+            .Include(t => t.ClienteOrigen)
+                .ThenInclude(co => co.Pais)
+            .Include(t => t.ClienteDestino)
+                .ThenInclude(cd => cd.Pais)
+            .Where(t => t.IsOutlierVisto == true)
+            .ToListAsync();
+
+        return Ok(outliersVistos);
+    }
+
+    [HttpPut("resolucionOutlier/{idTransaccion}")]
+    public async Task<IActionResult> EliminarOutlier([FromRoute] int idTransaccion)
+    {
+        var resultado = await _estadisticasRepositorio.EliminarOutlierAsync(idTransaccion);
+
+        if (!resultado)
+        {
+            return NotFound("Transacción no encontrada o no es un outlier.");
+        }
+
+        return Ok("El outlier se eliminó con éxito.");
+    }
+
+    [HttpGet("ultimas-transacciones/{clienteId}")]
+    public async Task<IActionResult> ObtenerUltimasTransacciones(int clienteId)
+    {
+        var transaccionesMayores = await _contextoBBDD.Transacciones
+            .Include(t => t.ClienteOrigen)
+                .ThenInclude(co => co.Pais)
+            .Include(t => t.ClienteDestino)
+                .ThenInclude(cd => cd.Pais)
+            .Where(t => t.ClienteOrigenId == clienteId)
+            .OrderByDescending(t => t.ImporteEnviado)
+            .Take(5)
+            .ToListAsync();
+
+        return Ok(transaccionesMayores);
+    }
+
+    // DIVISAS
     [HttpPost("crearDivisas")]
     public async Task<IActionResult> CrearDivisas()
     {
@@ -133,15 +191,15 @@ public class EstadisticasController : ControllerBase
             await _estadisticasRepositorio.CrearDivisaAsync(nuevaDivisa);
         }
 
-            return Ok("Divisa creada correctamente");
-        }
+        return Ok("Divisa creada correctamente");
+    }
 
-        [HttpGet("getDivisa/{nombre}")]
-        public async Task<IActionResult> GetDivisaByName(string nombre)
-        {
-            var divisaNombre = await _estadisticasRepositorio.GetDivisaByNameAsync(nombre);
-            return Ok(_mapper.Map<List<Divisa>>(divisaNombre));
-        }
+    [HttpGet("getDivisa/{nombre}")]
+    public async Task<IActionResult> GetDivisaByName(string nombre)
+    {
+        var divisaNombre = await _estadisticasRepositorio.GetDivisaByNameAsync(nombre);
+        return Ok(_mapper.Map<List<Divisa>>(divisaNombre));
+    }
 
     [HttpGet("getDivisas")]
     public async Task<IActionResult> GetDivisas()
@@ -150,58 +208,7 @@ public class EstadisticasController : ControllerBase
         return Ok(_mapper.Map<List<Divisa>>(divisas));
     }
 
-    [HttpGet("outliers")]
-    public async Task<IActionResult> ObtenerTransaccionesOutliers()
-    {
-        var transaccionesOutliers = await _contextoBBDD.Transacciones
-            .Include(t => t.ClienteOrigen)
-            .Include(t => t.ClienteDestino)
-            .Where(t => t.IsOutlier == true)
-            .ToListAsync();
-
-        return Ok(transaccionesOutliers);
-    }
-
-    [HttpGet("ultimas-transacciones/{clienteId}")]
-    public async Task<IActionResult> ObtenerUltimasTransacciones(int clienteId)
-    {
-        var transaccionesMayores = await _contextoBBDD.Transacciones
-            .Include(t => t.ClienteOrigen)
-            .Include(t => t.ClienteDestino)
-            .Where(t => t.ClienteOrigenId == clienteId)
-            .OrderByDescending(t => t.ImporteEnviado)
-            .Take(5)
-            .ToListAsync();
-
-        return Ok(transaccionesMayores);
-    }
-
-    [HttpGet("outliers-vistos")]
-    public async Task<IActionResult> ObtenerOutliersVistos()
-    {
-        var outliersVistos = await _contextoBBDD.Transacciones
-            .Include(t => t.ClienteOrigen)
-            .Include(t => t.ClienteDestino)
-            .Where(t => t.IsOutlierVisto == true)
-            .ToListAsync();
-
-        return Ok(outliersVistos);
-    }
-
-    [HttpPut("resolucionOutlier/{idTransaccion}")]
-    public async Task<IActionResult> EliminarOutlier([FromRoute] int idTransaccion)
-    {
-        var resultado = await _estadisticasRepositorio.EliminarOutlierAsync(idTransaccion);
-
-        if (!resultado)
-        {
-            return NotFound("Transacción no encontrada o no es un outlier.");
-        }
-
-        return Ok("El outlier se eliminó con éxito.");
-    }
-
-    // Conversiones
+    // CONVERSIONES
     [HttpPost("crearConversion")]
     public async Task<IActionResult> CrearConversion()
     {
@@ -235,7 +242,7 @@ public class EstadisticasController : ControllerBase
         return Ok(_mapper.Map<Conversion>(conversion));
     }
 
-    // Paises
+    // PAISES
     [HttpGet("getPaises")]
     public async Task<IActionResult> GetPaises()
     {
