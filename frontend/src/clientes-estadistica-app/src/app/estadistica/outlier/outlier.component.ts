@@ -18,20 +18,21 @@ export class OutlierComponent implements OnInit, OnDestroy {
   outliers: ITransaccion[] = [];
   subscription: Subscription = new Subscription();
 
-  constructor(private transaccionService: TransaccionService) {}
+  constructor(
+    private transaccionService: TransaccionService,
+    private signalrService: SignalrService
+  ) {}
 
   ngOnInit() {
     this.cargarOutliers();
     this.setUpSignalRListeners();
-
   }
 
-  setUpSignalRListeners(){
+  setUpSignalRListeners() {
     this.signalrService.startConnection();
     this.signalrService.addOutlierListener(() => {
       this.cargarOutliers();
     });
-
   }
 
   cargarOutliers() {
