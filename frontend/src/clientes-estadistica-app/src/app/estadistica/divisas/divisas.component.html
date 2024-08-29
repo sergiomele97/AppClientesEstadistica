@@ -1,3 +1,4 @@
+
 <div class="dropdown-container">
   <label for="currency-select">Seleccione la divisa:</label>
   <select id="currency-select" (change)="onCurrencyChange($event)">
@@ -112,11 +113,11 @@
   </select>
 </div>
 
-<div id="chart" class="flex-grow w-full max-w-4xl">
+<div *ngIf="chartOptions" id="chart" class="flex-grow w-full max-w-4xl">
   <apx-chart
-    [series]="chartOptions.series" 
+    [series]="chartOptions.series"
     [chart]="chartOptions.chart"
-    [xaxis]="chartOptions.xaxis" 
+    [xaxis]="chartOptions.xaxis"
     [dataLabels]="chartOptions.dataLabels"
     [grid]="chartOptions.grid"
     [stroke]="chartOptions.stroke"
@@ -127,6 +128,4 @@
     class="w-full h-96"
   ></apx-chart>
 </div>
-
-
 

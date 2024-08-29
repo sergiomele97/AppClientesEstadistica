@@ -76,17 +76,17 @@ namespace BackendEstadistica.Servicios
             await _contextoBBDD.SaveChangesAsync();
         }
 
-    public async Task <List<Divisa>> GetDivisaByNameAsync(string nombre)
-    {
-        if (string.IsNullOrEmpty(nombre))
+        public async Task <List<Divisa>> GetDivisaByNameAsync(string nombre)
         {
-            return new List<Divisa>();
-        }
+            if (string.IsNullOrEmpty(nombre))
+            {
+                return new List<Divisa>();
+            }
 
-        return _contextoBBDD.Divisa
-            .Where(d => d.Nombre == nombre)
-            .ToList();
-    }
+            return _contextoBBDD.Divisa
+                .Where(d => d.Nombre == nombre)
+                .ToList();
+        }
 
 
         public async Task<List<Divisa>> GetDivisasAsync()
