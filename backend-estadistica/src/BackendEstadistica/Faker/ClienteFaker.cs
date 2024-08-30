@@ -11,7 +11,7 @@ public class ClienteFaker : Faker<ClienteDto>
             .RuleFor(c => c.Telefono, f => f.Phone.PhoneNumber("##########"))
             .RuleFor(c => c.Edad, f => f.Random.Int(18, 80))
             .RuleFor(c => c.Sexo, f => f.PickRandom(new[] { "Masculino", "Femenino" }))
-            .RuleFor(c => c.Trabajo, f => f.Name.JobTitle())
+            .RuleFor(c => c.Trabajo, f => f.PickRandom(new[] { "Agricultura y ganadería", "Comercio y ventas", "Servicios de alimentos y hospitalidad", "Manufactura", "Construcción", "Transporte y logística", "Educación", "Salud y servicios sociales", "Tecnología de la información", "Servicios financieros y seguros" }))
             .RuleFor(c => c.PaisId, f => f.PickRandom(paises).PaisId); // Selecciona un PaisId existente    }
     }
 }
