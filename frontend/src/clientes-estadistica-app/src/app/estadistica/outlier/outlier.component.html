@@ -1,20 +1,4 @@
 <div *ngIf="!loading">
-  <div
-    *ngIf="successMessage"
-    class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-300"
-    role="alert"
-  >
-    <span class="text-lg">{{ successMessage }}</span>
-  </div>
-
-  <div
-    *ngIf="errorMessage"
-    class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-300"
-    role="alert"
-  >
-    <span class="text-lg">{{ errorMessage }}</span>
-  </div>
-
   <div *ngIf="!vacio; else noOutliers">
     <div
       *ngFor="let outlier of outliers.slice().reverse(); let i = index"

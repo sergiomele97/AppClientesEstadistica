@@ -6,6 +6,3 @@ export const environment = {
     apiPrediccion: 'http://localhost:8000/predict',
     apiNotification: 'https://localhost:7144/notificationHub'
   };
-  
-
-  

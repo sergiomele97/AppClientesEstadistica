@@ -1,0 +1,48 @@
+/* Animations */
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+/* Styles for the alert container */
+.alert-container {
+  position: fixed;
+  bottom: 5%; /* Adjust as needed */
+  right: 5%; /* Adjust as needed */
+  z-index: 9999;
+  width: 300px; /* Adjust as needed */
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Styles for showing the alert */
+.alert-container.show {
+  opacity: 1;
+  transform: translateY(0);
+  animation: slide-in 0.5s ease-out;
+}
+
+/* Styles for hiding the alert */
+.alert-container.hide {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slide-out 0.5s ease-in;
+}

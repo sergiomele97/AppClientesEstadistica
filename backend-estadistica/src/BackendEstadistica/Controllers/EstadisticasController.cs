@@ -199,15 +199,29 @@ namespace BackendEstadistica.Controllers
     [HttpPut("resolucionOutlier/{idTransaccion}")]
     public async Task<IActionResult> EliminarOutlier([FromRoute] int idTransaccion)
     {
-        var resultado = await _estadisticasRepositorio.EliminarOutlierAsync(idTransaccion);
 
-        if (!resultado)
-        {
-            return NotFound("Transacción no encontrada o no es un outlier.");
+            // Eliminar el outlier usando el repositorio
+            var resultado = await _estadisticasRepositorio.EliminarOutlierAsync(idTransaccion);
+
+            if (!resultado)
+            {
+                return BadRequest("No se pudo eliminar el outlier.");
+            }
+
+            // Enviar notificación a través de SignalR
+            await _hubContext.Clients.All.SendAsync("OutlierRemoved", new
+            {
+                Message = "Outlier eliminado",
+                IDCliente = idTransaccion
+            });
+
+            // Responder con un mensaje de éxito
+            return Ok(new
+            {
+                Message = "El outlier se eliminó con éxito.",
+                IDCliente = idTransaccion
+            });
         }
-
-        return Ok("El outlier se eliminó con éxito.");
-    }
 
     [HttpGet("ultimas-transacciones/{clienteId}")]
     public async Task<IActionResult> ObtenerUltimasTransacciones(int clienteId)
