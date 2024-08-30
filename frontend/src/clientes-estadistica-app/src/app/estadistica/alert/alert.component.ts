@@ -21,12 +21,10 @@ export class AlertComponent implements OnInit {
     this.signalrService.addOutlierListener((data: any) => {
       if (data.type === 'detected') {
         this.detectado = true;
-        this.eliminado = false;
         this.showAlert();
         this.hideMessagesAfterDelay();
       } else if (data.type === 'removed') {
         this.eliminado = true;
-        this.detectado = false;
         this.showAlert();
         this.hideMessagesAfterDelay();
       }
