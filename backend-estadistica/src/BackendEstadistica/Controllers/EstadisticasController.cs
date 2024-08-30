@@ -108,6 +108,27 @@ namespace BackendEstadistica.Controllers
             return Ok("Transacción creada correctamente");
         }
 
+    [HttpGet("getTransacciones")]
+    public async Task<IActionResult> GetTransacciones()
+    {
+        var transacciones = await _estadisticasRepositorio.GetTransaccionesAsync();
+        return Ok(_mapper.Map<List<Transaccion>>(transacciones));
+    }
+
+    [HttpGet("getTransacciones/{id}")]
+    public async Task<IActionResult> GetTransaccionesById(int id)
+    {
+        var transaccion = await _estadisticasRepositorio.GetTransaccionByIdAsync(id);
+
+        if (transaccion == null)
+        {
+            return NotFound("Transacción no encontrada.");
+        }
+
+        return Ok(_mapper.Map<Transaccion>(transaccion));
+    }
+
+        // OUTLIERS
         [HttpPost("crearOutlier")]
         public async Task<IActionResult> CrearOutliersAsync()
         {
@@ -147,29 +168,7 @@ namespace BackendEstadistica.Controllers
             return Ok("Transacción creada correctamente");
         }
 
-
-    [HttpGet("getTransacciones")]
-    public async Task<IActionResult> GetTransacciones()
-    {
-        var transacciones = await _estadisticasRepositorio.GetTransaccionesAsync();
-        return Ok(_mapper.Map<List<Transaccion>>(transacciones));
-    }
-
-    [HttpGet("getTransacciones/{id}")]
-    public async Task<IActionResult> GetTransaccionesById(int id)
-    {
-        var transaccion = await _estadisticasRepositorio.GetTransaccionByIdAsync(id);
-
-        if (transaccion == null)
-        {
-            return NotFound("Transacción no encontrada.");
-        }
-
-        return Ok(_mapper.Map<Transaccion>(transaccion));
-    }
-
-    // OUTLIERS
-    [HttpGet("getOutliers")]
+        [HttpGet("getOutliers")]
     public async Task<IActionResult> ObtenerTransaccionesOutliers()
     {
         var transaccionesOutliers = await _contextoBBDD.Transacciones
