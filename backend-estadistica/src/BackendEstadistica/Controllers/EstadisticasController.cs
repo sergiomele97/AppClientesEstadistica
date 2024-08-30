@@ -326,22 +326,8 @@ namespace BackendEstadistica.Controllers
             return Ok(_mapper.Map<Pais>(pais));
         }
 
-        [HttpGet("clientesconbalance")]
-        public async Task<ActionResult<IEnumerable<ClienteConBalanceViewModel>>> GetClientesConBalance()
-        {
-            try
-            {
-                var clientes = await _contextoBBDD.ClientesConBalance.ToListAsync();
-                return Ok(clientes);
-            }
-            catch (Exception ex)
-            {
-                // Registrar el error
-                Console.WriteLine($"Error: {ex.Message}");
-                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
-                return StatusCode(500, "Error interno del servidor. Por favor, inténtelo de nuevo más tarde.");
-            }
-        }
+     
+
 
     }
 }

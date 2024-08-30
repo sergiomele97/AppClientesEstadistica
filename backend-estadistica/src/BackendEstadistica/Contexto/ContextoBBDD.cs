@@ -29,7 +29,9 @@ public class ContextoBBDD : IdentityDbContext<ApplicationUser>
 
     public DbSet<Divisa> Divisa { get; set; } // 6ª Tabla
 
-    public DbSet<ClienteConBalanceViewModel> ClientesConBalance { get; set; } //Vista de clientes con mas datos
+    public DbSet<ClienteConBalance> ClientesConBalance { get; set; }
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder); // Necesario para Identity
@@ -56,7 +58,11 @@ public class ContextoBBDD : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<Divisa>()
             .Property(d => d.DivisaId)
             .ValueGeneratedOnAdd(); ;
-            
+
+        modelBuilder.Entity<ClienteConBalance>()
+           .HasNoKey() // Indica que esta entidad no tiene clave primaria, ya que es una vista.
+           .ToView("ClientesConBalance");
+
         // Cargar los datos de países desde el archivo JSON
         var paises = LoadPaisesJson("./data/listaPaises.json");
 

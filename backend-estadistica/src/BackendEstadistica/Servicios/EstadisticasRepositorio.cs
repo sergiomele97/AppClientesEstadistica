@@ -246,4 +246,5 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
                 .Include(p => p.Clientes)
                 .FirstOrDefaultAsync(p => p.PaisId == id);
         }
-    }
+   
+}

@@ -1,9 +1,7 @@
 // src/app/components/clusters/clusters.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ICliente } from 'src/app/interfaces/cliente';
 import { ClienteConBalance } from 'src/app/models/cliente-con-balance.model';
-import { ITransaccion } from 'src/app/interfaces/transaccion';
 import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
 import { ClustersDataService } from 'src/app/servicios/clusters-data.service';
 import { HttpClient } from '@angular/common/http';
@@ -22,8 +20,7 @@ export class ClustersComponent implements OnInit, OnDestroy {
     private clienteService: ClienteEstService
   ) {}
 
-  // Nueva variable para controlar la visibilidad del loader
-  public isLoading = false;
+  public isLoading = false;  // Nueva variable para controlar la visibilidad del loader
 
   private apiUrl = environment.apiClusters;   
   private datos: any[] = [];
@@ -37,6 +34,8 @@ export class ClustersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     console.log("Iniciando ngOnInit");
+
+    // Llamar al servicio para obtener los datos de ClienteConBalance
     this.clienteService.getClientesConBalance().subscribe(
       (data) => {
         console.log("Datos recibidos: ", data);
@@ -85,7 +84,6 @@ export class ClustersComponent implements OnInit, OnDestroy {
   }
 
   async onSelectionCluster(event: Event) {
-
     this.isLoading = true; // Mostrar el loader al iniciar la solicitud
 
     const selectElement = event.target as HTMLSelectElement;
