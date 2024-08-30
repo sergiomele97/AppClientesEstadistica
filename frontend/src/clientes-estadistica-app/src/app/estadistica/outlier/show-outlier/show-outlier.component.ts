@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { ICliente } from 'src/app/interfaces/cliente';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
 import { FormaterFechaPipe } from 'src/app/pipes/formaterFecha.pipe';
+import { SignalrService } from 'src/app/servicios/signalr.service';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
 
 export type ChartOptions = {
@@ -48,7 +49,8 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
   constructor(
     private transaccionService: TransaccionService,
     private route: ActivatedRoute,
-    private formaterFechaPipe: FormaterFechaPipe
+    private formaterFechaPipe: FormaterFechaPipe,
+    private signalrService: SignalrService,
   ) {}
 
   ngOnInit(): void {
@@ -73,6 +75,8 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
         next: (response) => {
           this.successMessage = 'Outlier resuelto correctamente.';
           this.errorMessage = null;
+          this.signalrService.startConnection(); // Ensure SignalR connection
+          this.signalrService.updateOutliersCount(); // Update outliers count
           this.actualizarTransacciones();
           this.hideMessagesAfterDelay();
         },

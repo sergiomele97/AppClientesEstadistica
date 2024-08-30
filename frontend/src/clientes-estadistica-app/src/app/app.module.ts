@@ -33,6 +33,9 @@ import { RegisterComponent } from './register/register.component';
 import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-outlier.component';
 import { UsuarioService } from './servicios/usuario.service';
 import { CustomCurrencyPipe } from './pipes/customCurrency.pipe';
+import { HeaderComponent } from './estadistica/header/header.component';
+import { SidebarComponent } from './estadistica/sidebar/sidebar.component';
+import { AlertComponent } from './estadistica/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +60,10 @@ import { CustomCurrencyPipe } from './pipes/customCurrency.pipe';
     FormaterFechaPipe,
     RegisterComponent,
     LogsOutlierComponent,
-    CustomCurrencyPipe
+    CustomCurrencyPipe,
+    HeaderComponent,
+    SidebarComponent,
+    AlertComponent
   ],
 
   imports: [
