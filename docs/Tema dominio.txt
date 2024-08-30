@@ -1,0 +1,7 @@
+Enlace actual: https://salmon-hill-0d0baa503.5.azurestaticapps.net/
+
+Alternativa 1: Github pages permite hostear páginas web staticas gratuitamente, podemos redireccionar o tratar de colgarlo ahi permanentemente.
+(Ahora mismo solo redirecciona): https://sergiomele97.github.io/ChachiData/
+
+Alternativa 2: Enlace acortado de bit.ly: bit.ly/chachidata 
+(Actualmente esta bloqueado, he apelado al bloqueo y estoy esperando). Viene con QR.
