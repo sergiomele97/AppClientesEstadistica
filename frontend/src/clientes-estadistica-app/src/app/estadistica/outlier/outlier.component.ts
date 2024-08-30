@@ -16,7 +16,7 @@ export class OutlierComponent implements OnInit, OnDestroy {
   errorMessage: string;
 
   outliers: ITransaccion[] = [];
-  subscription: Subscription = new Subscription();
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private transaccionService: TransaccionService,
@@ -28,11 +28,14 @@ export class OutlierComponent implements OnInit, OnDestroy {
     this.setUpSignalRListeners();
   }
 
-  setUpSignalRListeners() {
+  private setUpSignalRListeners() {
     this.signalrService.startConnection();
-    this.signalrService.addOutlierListener(() => {
-      this.cargarOutliers();
-    });
+
+    this.subscription.add(
+      this.signalrService.outliers$.subscribe(() => {
+        this.cargarOutliers();
+      })
+    );
   }
 
   cargarOutliers() {
@@ -57,6 +60,8 @@ export class OutlierComponent implements OnInit, OnDestroy {
         next: (response) => {
           this.successMessage = response;
           this.errorMessage = null;
+          this.signalrService.startConnection(); // Ensure SignalR connection
+          this.signalrService.updateOutliersCount(); // Update outliers count
           this.cargarOutliers();
           this.hideMessagesAfterDelay();
         },

@@ -55,8 +55,8 @@ const routes: Routes = [
       { path: 'divisas', component: DivisasComponent },
     ],
   },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: '**', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/estadistica', pathMatch: 'full' },
+  { path: '**', redirectTo: '/estadistica', pathMatch: 'full' },
 ];
 
 @NgModule({

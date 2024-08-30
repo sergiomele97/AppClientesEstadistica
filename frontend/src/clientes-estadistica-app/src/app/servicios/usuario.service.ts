@@ -5,11 +5,9 @@ import { IUsuario } from '../interfaces/usuario';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsuarioService {
-
-
   constructor(private http: HttpClient) {}
 
   // URL base para las solicitudes a la API
@@ -29,6 +27,6 @@ export class UsuarioService {
   // Método para iniciar sesión
   login(email: string, password: string): Observable<any> {
     // El método POST envía las credenciales al backend para autenticar al usuario
-    return this.http.post<any>(`${this.apiUrl}/login`, {email, password});
+    return this.http.post<any>(`${this.apiUrl}/login`, { email, password });
   }
 }
