@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { SignalrService } from 'src/app/servicios/signalr.service';
+import { TransaccionService } from 'src/app/servicios/transaccion.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,36 +10,33 @@ import { SignalrService } from 'src/app/servicios/signalr.service';
 export class SidebarComponent implements OnInit, OnDestroy {
   isSubmenuOpen = false;
   outliers: number = 0;
-  private subscription: Subscription = new Subscription();
 
-  constructor(private signalrService: SignalrService) {}
+  constructor(
+    private signalrService: SignalrService,
+    private transaccionService: TransaccionService
+  ) {}
 
   ngOnInit() {
-    console.log('SidebarComponent initialized');
+    this.setupSignalRListeners();
+    this.actualizarOutliers();
+  }
 
-    // Initial outliers count
-    this.subscription.add(
-      this.signalrService.getOutliers().subscribe((outliers) => {
-        console.log('Initial outliers count:', outliers.length);
-        this.outliers = outliers.length;
-      })
-    );
+  setupSignalRListeners() {
+    this.signalrService.startConnection();
+    this.signalrService.addOutlierListener(() => {
+      this.actualizarOutliers();
+    });
+  }
 
-    // Subscribe to updates
-    this.subscription.add(
-      this.signalrService.outliers$.subscribe((count) => {
-        console.log('Outliers count updated:', count);
-        this.outliers = count;
-      })
-    );
+  actualizarOutliers() {
+    this.transaccionService.obtenerOutlier().subscribe((datos) => {
+      this.outliers = datos.length;
+    });
   }
 
   toggleSubmenu() {
     this.isSubmenuOpen = !this.isSubmenuOpen;
   }
 
-  ngOnDestroy() {
-    console.log('SidebarComponent destroyed');
-    this.subscription.unsubscribe(); // Limpiar suscripciones al destruir el componente
-  }
+  ngOnDestroy() {}
 }
