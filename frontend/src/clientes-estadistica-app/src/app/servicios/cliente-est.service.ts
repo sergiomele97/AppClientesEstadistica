@@ -13,6 +13,7 @@ export class ClienteEstService {
   constructor(private http: HttpClient) {}
 
   private readonly url_estadistica = environment.apiEstadisticas;
+  private readonly url_balance = environment.apiBalance;
 
   getClientes(): Observable<ICliente[]> {
     return this.http.get<ICliente[]>(`${this.url_estadistica}/getclientes`);
@@ -23,8 +24,6 @@ export class ClienteEstService {
   }
 
   getClientesConBalance(): Observable<ClienteConBalance[]> {
-    console.log("Llamando al endpoint:", `${this.url_estadistica}/clientesconbalance`);
-    return this.http.get<ClienteConBalance[]>(`${this.url_estadistica}/clientesconbalance`);
+    return this.http.get<ClienteConBalance[]>(this.url_balance);
   }
-  
 }

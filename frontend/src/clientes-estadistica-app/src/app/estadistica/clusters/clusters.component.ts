@@ -34,14 +34,17 @@ export class ClustersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     console.log("Iniciando ngOnInit");
-
+  
     // Llamar al servicio para obtener los datos de ClienteConBalance
     this.clienteService.getClientesConBalance().subscribe(
       (data) => {
         console.log("Datos recibidos: ", data);
-        this.clientesBalance = data;
-        console.log("Balance datos: ", this.clientesBalance);
-        this.procesarDatosClientes();
+        if (data.length === 0) {
+          console.warn("El array recibido está vacío.");
+        } else {
+          this.clientesBalance = data;
+          this.procesarDatosClientes();
+        }
       },
       (error) => {
         console.error('Error al obtener los datos de clientes', error);
