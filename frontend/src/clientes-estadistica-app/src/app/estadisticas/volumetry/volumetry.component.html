@@ -1,19 +1,17 @@
 <div class="container mx-auto w-full">
   <!-- Loader que se muestra mientras se cargan los datos -->
-  <!-- AGREGADO: pantalla de carga -->
   <div *ngIf="isLoading" class="flex items-center justify-center">
     <div class="loader justify-center"></div>
   </div>
   <div *ngIf="!isLoading" class="dropdown-container">
     <select id="data-type" (change)="onSelectionChange($event)">
       <option value="" selected disabled>Seleccionar categoría</option>
-      <option value="conversiones">Conversiones</option>
       <option value="transacciones">Transacciones</option>
+      <option value="conversiones">Conversiones</option>
     </select>
   </div>
-  
 
-  <!--The content below is only a placeholder and can be replaced.-->
+  <!-- El contenido a continuación es solo un marcador de posición y se puede reemplazar -->
   <div id="chart">
     <apx-chart
       [series]="chartOptions.series"
@@ -25,5 +23,4 @@
       [title]="chartOptions.title"
     ></apx-chart>
   </div>
-
 </div>
