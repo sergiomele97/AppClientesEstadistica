@@ -1,7 +1,9 @@
-
-<!-- ALERTA -->
-<div *ngIf="detectado" class="absolute bottom-5 end-8">
-  <div class="text-red-700 bg-red-100 rounded-xl shadow-lg" role="alert">
+<div class="alert-container">
+  <div
+    *ngIf="detectado"
+    class="text-red-700 bg-red-100 rounded-xl shadow-lg"
+    role="alert"
+  >
     <div class="flex p-5">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -18,6 +20,30 @@
         />
       </svg>
       <h3 class="text-xl font-semibold">Outlier Detectado</h3>
+    </div>
+  </div>
+
+  <div
+    *ngIf="eliminado"
+    class="text-green-700 bg-green-100 rounded-xl shadow-lg"
+    role="alert"
+  >
+    <div class="flex p-5">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="size-7 mt-1 mr-2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M5.25 12l5.5 5.5L19.25 7.5"
+        />
+      </svg>
+      <h3 class="text-xl font-semibold">Outlier Eliminado</h3>
     </div>
   </div>
 </div>
