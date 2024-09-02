@@ -36,6 +36,7 @@ import { CustomCurrencyPipe } from './pipes/customCurrency.pipe';
 import { HeaderComponent } from './estadistica/header/header.component';
 import { SidebarComponent } from './estadistica/sidebar/sidebar.component';
 import { AlertComponent } from './estadistica/alert/alert.component';
+import { BienvenidaComponent } from './estadistica/bienvenida/bienvenida.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { AlertComponent } from './estadistica/alert/alert.component';
     CustomCurrencyPipe,
     HeaderComponent,
     SidebarComponent,
-    AlertComponent
+    AlertComponent,
+    BienvenidaComponent
   ],
 
   imports: [

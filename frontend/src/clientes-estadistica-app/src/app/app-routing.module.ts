@@ -19,6 +19,7 @@ import { RegisterComponent } from './register/register.component';
 import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-outlier.component';
 import { ClustersComponent } from './estadistica/clusters/clusters.component';
 import { AuthGuard } from './guards/auth.guard';
+import { BienvenidaComponent } from './estadistica/bienvenida/bienvenida.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -28,6 +29,7 @@ const routes: Routes = [
     component: EstadisticaComponent,
     canActivate: [AuthGuard],
     children: [
+      { path: '', component: BienvenidaComponent },
       { path: 'outliers', component: OutlierComponent },
       { path: 'outliers/:id', component: ShowOutlierComponent },
       { path: 'outliers-logs', component: LogsOutlierComponent },
