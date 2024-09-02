@@ -75,8 +75,6 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
         next: (response) => {
           this.successMessage = 'Outlier resuelto correctamente.';
           this.errorMessage = null;
-          this.signalrService.startConnection(); // Ensure SignalR connection
-          this.signalrService.updateOutliersCount(); // Update outliers count
           this.actualizarTransacciones();
           this.hideMessagesAfterDelay();
         },

@@ -28,30 +28,19 @@ export class OutlierComponent implements OnInit, OnDestroy {
     this.setUpSignalRListeners();
   }
 
-  private setUpSignalRListeners() {
+  setUpSignalRListeners() {
     this.signalrService.startConnection();
-
-    this.subscription.add(
-      this.signalrService.outliers$.subscribe(() => {
-        this.cargarOutliers();
-      })
-    );
+    this.signalrService.addOutlierListener(() => {
+      this.cargarOutliers();
+    });
   }
 
   cargarOutliers() {
-    this.subscription.add(
-      this.transaccionService.obtenerOutlier().subscribe({
-        next: (outlier) => {
-          this.outliers = outlier;
-          this.vacio = this.outliers.length === 0;
-          this.loading = false;
-        },
-        error: (err) => {
-          console.error('Error al cargar outliers:', err);
-          this.loading = false;
-        },
-      })
-    );
+    this.transaccionService.obtenerOutlier().subscribe((datos) => {
+      this.outliers = datos;
+      this.vacio = this.outliers.length === 0;
+      this.loading = false;
+    });
   }
 
   borrarOutlier(idTransaccion: number) {
@@ -60,27 +49,16 @@ export class OutlierComponent implements OnInit, OnDestroy {
         next: (response) => {
           this.successMessage = response;
           this.errorMessage = null;
-          this.signalrService.startConnection(); // Ensure SignalR connection
-          this.signalrService.updateOutliersCount(); // Update outliers count
           this.cargarOutliers();
-          this.hideMessagesAfterDelay();
         },
         error: (err) => {
           this.errorMessage =
             'Error al resolver el outlier. Por favor, intentelo de nuevo.';
           this.successMessage = null;
-          this.hideMessagesAfterDelay();
           console.error('Error: ', err);
         },
       })
     );
-  }
-
-  hideMessagesAfterDelay() {
-    setTimeout(() => {
-      this.successMessage = null;
-      this.errorMessage = null;
-    }, 3000);
   }
 
   ngOnDestroy() {
