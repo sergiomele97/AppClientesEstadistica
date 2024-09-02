@@ -1,0 +1,463 @@
+Listado de rutas de carpetas para el volumen Windows
+El n£mero de serie del volumen es E0F5-C1D6
+C:.
+|   .gitignore
+|   azure-pipelines.yml
+|   estructura.txt
+|   README.md
+|   
++---.github
+|   \---workflows
+|           azure-static-web-apps-salmon-hill-0d0baa503.yml
+|           produccion_backend-estadistica.yml
+|           produccion_datapython.yml
+|           
++---backend-estadistica
+|   |   Documentaci¢n del proyecto.md
+|   |   requirements.txt
+|   |   
+|   \---src
+|       |   BackendEstadistica.sln
+|       |   
+|       +---BackendEstadistica
+|       |   |   appsettings.Development.json
+|       |   |   appsettings.json
+|       |   |   appsettings.Production.json
+|       |   |   BackendEstadistica - Backup.csproj
+|       |   |   BackendEstadistica.csproj
+|       |   |   BackendEstadistica.csproj.user
+|       |   |   BackendEstadistica.http
+|       |   |   GlobalUsings.cs
+|       |   |   Program.cs
+|       |   |   
+|       |   +---.config
+|       |   |       dotnet-tools.json
+|       |   |       
+|       |      
+|       |   +---Contexto
+|       |   |       ContextoBBDD.cs
+|       |   |       
+|       |   +---Controllers
+|       |   |       EstadisticasController.cs
+|       |   |       PeticionClientesController.cs
+|       |   |       UsuariosController.cs
+|       |   |       
+|       |   +---data
+|       |   |       listaPaises.json
+|       |   |       
+|       |   +---Entidades
+|       |   |       Cliente.cs
+|       |   |       Conversion.cs
+|       |   |       Divisa.cs
+|       |   |       Pais.cs
+|       |   |       Transaccion.cs
+|       |   |       Usuario.cs
+|       |   |       
+|       |   +---Faker
+|       |   |       ClienteFaker.cs
+|       |   |       ConversionFaker.cs
+|       |   |       DivisaFaker.cs
+|       |   |       OutliersFaker.cs
+|       |   |       PaisFaker.cs
+|       |   |       TransaccionFaker.cs
+|       |   |       
+|       |   +---HttpApiClient
+|       |   |       ClientesRepositorioMemoria.cs
+|       |   |       HttpApiClient.cs
+|       |   |       
+|       |   +---Logs
+|       |   |       logClientes20240819.txt
+|       |   |       logClientes20240820.txt
+|       |   |       logClientes20240821.txt
+|       |   |       logClientes20240822.txt
+|       |   |       logClientes20240823.txt
+|       |   |       logClientes20240826.txt
+|       |   |       logClientes20240827.txt
+|       |   |       logClientes20240828.txt
+|       |   |       logClientes20240829.txt
+|       |   |       logClientes20240830.txt
+|       |   |       logClientes20240902.txt
+|       |   |       
+|       |   +---Mappings
+|       |   |       MappingProfile.cs
+|       |   |       
+|       |   +---Migrations
+|       |   |       20240831145804_Inicial.cs
+|       |   |       20240831145804_Inicial.Designer.cs
+|       |   |       ContextoBBDDModelSnapshot.cs
+|       |   |       
+|       |   +---Models
+|       |   |       ApplicationUser.cs
+|       |   |       ClienteDto.cs
+|       |   |       ConversionDto.cs
+|       |   |       DivisaDto.cs
+|       |   |       LoginViewModel.cs
+|       |   |       PaisDto.cs
+|       |   |       RegisterViewModel.cs
+|       |   |       TransaccionDto.cs
+|       |   |       UsuarioDto.cs
+|       |   |       
+|       |   +---obj
+|       |   |   |   BackendEstadistica.csproj.nuget.dgspec.json
+|       |   |   |   BackendEstadistica.csproj.nuget.g.props
+|       |   |   |   BackendEstadistica.csproj.nuget.g.targets
+|       |   |   |   project.assets.json
+|       |   |   |   project.nuget.cache
+|       |   |   |   
+|       |   |
+|       |   |                   
+|       |   +---Perfiles
+|       |   |       Cliente.cs
+|       |   |       Conversion.cs
+|       |   |       Divisa.cs
+|       |   |       Pais.cs
+|       |   |       Transaccion.cs
+|       |   |       Usuario.cs
+|       |   |       
+|       |   +---Properties
+|       |   |       launchSettings.json
+|       |   |       
+|       |   +---Servicios
+|       |   |       BackgroundDataGenerator.cs
+|       |   |       EstadisticasRepositorio.cs
+|       |   |       IEstadisticasRepositorio.cs
+|       |   |       ITokenService.cs
+|       |   |       IUsuarioRepositorio.cs
+|       |   |       TokenService.cs
+|       |   |       UsuarioRepositorio.cs
+|       |   |       
+|       |   +---SignalR
+|       |   |       NotificationHub.cs
+|       |   |       
+|       |   \---Utilidades
+|       |           Extensiones.cs
+|       |           
+|       \---TestEstadistica
+|           |   ElModeloDeEstadisticaDeberia.cs
+|           |   Estadistica.Test.csproj
+|           |   
+|           
+|           \---obj
+|               |   Estadistica.Test.csproj.nuget.dgspec.json
+|               |   Estadistica.Test.csproj.nuget.g.props
+|               |   Estadistica.Test.csproj.nuget.g.targets
+|               |   project.assets.json
+|               |   project.nuget.cache
+|               |   TestEstadistica.csproj.nuget.dgspec.json
+|               |   TestEstadistica.csproj.nuget.g.props
+|               |   TestEstadistica.csproj.nuget.g.targets
+|               |   
+|               \---Debug
+|                   \---net8.0
+|                       |   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+|                       |   Estadist.9DC5BDD9.Up2Date
+|                       |   Estadistica.Test.AssemblyInfo.cs
+|                       |   Estadistica.Test.AssemblyInfoInputs.cache
+|                       |   Estadistica.Test.assets.cache
+|                       |   Estadistica.Test.csproj.AssemblyReference.cache
+|                       |   Estadistica.Test.csproj.BuildWithSkipAnalyzers
+|                       |   Estadistica.Test.csproj.CoreCompileInputs.cache
+|                       |   Estadistica.Test.csproj.FileListAbsolute.txt
+|                       |   Estadistica.Test.dll
+|                       |   Estadistica.Test.GeneratedMSBuildEditorConfig.editorconfig
+|                       |   Estadistica.Test.genruntimeconfig.cache
+|                       |   Estadistica.Test.GlobalUsings.g.cs
+|                       |   Estadistica.Test.pdb
+|                       |   Estadistica.Test.sourcelink.json
+|                       |   TestEstadistica.AssemblyInfo.cs
+|                       |   TestEstadistica.AssemblyInfoInputs.cache
+|                       |   TestEstadistica.assets.cache
+|                       |   TestEstadistica.csproj.AssemblyReference.cache
+|                       |   TestEstadistica.GeneratedMSBuildEditorConfig.editorconfig
+|                       |   TestEstadistica.GlobalUsings.g.cs
+|                       |   
+|                       +---ref
+|                       |       Estadistica.Test.dll
+|                       |       
+|                       \---refint
+|                               Estadistica.Test.dll
+|                               
++---data-analitics
+|   |   gunicorn.conf.py
+|   |   main.py
+|   |   pyvenv.cfg
+|   |   requirements.txt
+|   |   startup.txt
+|   |   
+|   \---Documentacion ARIMA
+|           clustering.txt
+|           ETS-ARIMA.txt
+|           Historial de comandos despliegue python.txt
+|           python.txt
+|           
++---docs
+|       Como configurar las variables de entorno (HOSTEO AZURE).docx
+|       C¢mo pasar a producci¢n.txt
+|       Dise¤o.txt
+|       Horas proyecto estadistica.xlsx
+|       Pendiente.txt
+|       Tema dominio.txt
+|       
++---frontend
+|   |   package-lock.json
+|   |   requirements.txt
+|   |   
+|   \---src
+|       |   package-lock.json
+|       |   
+|       +---.vscode
+|       |       launch.json
+|       |       
+|       \---clientes-estadistica-app
+|           |   .editorconfig
+|           |   .gitignore
+|           |   angular.json
+|           |   package-lock.json
+|           |   package.json
+|           |   README.md
+|           |   staticwebapp.config.json
+|           |   tailwind.config.js
+|           |   tsconfig.app.json
+|           |   tsconfig.json
+|           |   tsconfig.spec.json
+|           |   
+|           
+|           |           |           
+|           |           on|           |                   
+|           +---.vs
+|           |   |   slnx.sqlite
+|           |   |   VSWorkspaceState.json
+|           |   |   
+|           |   \---clientes-estadistica-app
+|           |       +---FileContentIndex
+|           |       |       05c9dcc0-9017-4de8-863d-df310a23d787.vsidx
+|           |       |       
+|           |       \---v17
+|           |               DocumentLayout.json
+|           |               
+|           +---.vscode
+|           |       extensions.json
+|           |       launch.json
+|           |       tasks.json
+|           |       
+|           +---dist
+|           |   \---clientes-estadistica-app
+|           |           3rdpartylicenses.txt
+|           |           favicon.ico
+|           |           index.html
+|           |           main.23e9c12cbbb8bd7b.js
+|           |           polyfills.c93eca9853bd2d0d.js
+|           |           runtime.15725d69250f91ae.js
+|           |           styles.00c5d6d248f50737.css
+|           |           
+|           \---src
+|               |   favicon.ico
+|               |   index.html
+|               |   main.ts
+|               |   styles.css
+|               |   
+|               +---.vscode
+|               |       launch.json
+|               |       
+|               +---app
+|               |   |   app-routing.module.ts
+|               |   |   app.component.css
+|               |   |   app.component.html
+|               |   |   app.component.spec.ts
+|               |   |   app.component.ts
+|               |   |   app.module.ts
+|               |   |   
+|               |   +---clases
+|               |   |       cliente.ts
+|               |   |       usuario.ts
+|               |   |       
+|               |   +---estadistica
+|               |   |   |   estadistica.component.css
+|               |   |   |   estadistica.component.html
+|               |   |   |   estadistica.component.spec.ts
+|               |   |   |   estadistica.component.ts
+|               |   |   |   
+|               |   |   +---alert
+|               |   |   |       alert.component.css
+|               |   |   |       alert.component.html
+|               |   |   |       alert.component.spec.ts
+|               |   |   |       alert.component.ts
+|               |   |   |       
+|               |   |   +---clientes
+|               |   |   |       clientes.component.css
+|               |   |   |       clientes.component.html
+|               |   |   |       clientes.component.ts
+|               |   |   |       clientes.module.ts
+|               |   |   |       
+|               |   |   +---clusters
+|               |   |   |   |   clusters.component.css
+|               |   |   |   |   clusters.component.html
+|               |   |   |   |   clusters.component.ts
+|               |   |   |   |   clusters.module.ts
+|               |   |   |   |   
+|               |   |   |   +---clusters-graph
+|               |   |   |   |       clusters-graph.component.css
+|               |   |   |   |       clusters-graph.component.html
+|               |   |   |   |       clusters-graph.component.spec.ts
+|               |   |   |   |       clusters-graph.component.ts
+|               |   |   |   |       
+|               |   |   |   \---clusters-table
+|               |   |   |           clusters-table.component.css
+|               |   |   |           clusters-table.component.html
+|               |   |   |           clusters-table.component.spec.ts
+|               |   |   |           clusters-table.component.ts
+|               |   |   |           
+|               |   |   +---divisas
+|               |   |   |       divisas.component.css
+|               |   |   |       divisas.component.html
+|               |   |   |       divisas.component.spec.ts
+|               |   |   |       divisas.component.ts
+|               |   |   |       
+|               |   |   +---graficas
+|               |   |   |       Graficas.component.css
+|               |   |   |       Graficas.component.html
+|               |   |   |       Graficas.component.spec.ts
+|               |   |   |       Graficas.component.ts
+|               |   |   |       
+|               |   |   +---header
+|               |   |   |       header.component.css
+|               |   |   |       header.component.html
+|               |   |   |       header.component.spec.ts
+|               |   |   |       header.component.ts
+|               |   |   |       
+|               |   |   +---outlier
+|               |   |   |   |   outlier.component.css
+|               |   |   |   |   outlier.component.html
+|               |   |   |   |   outlier.component.spec.ts
+|               |   |   |   |   outlier.component.ts
+|               |   |   |   |   
+|               |   |   |   +---logs-outlier
+|               |   |   |   |       logs-outlier.component.css
+|               |   |   |   |       logs-outlier.component.html
+|               |   |   |   |       logs-outlier.component.spec.ts
+|               |   |   |   |       logs-outlier.component.ts
+|               |   |   |   |       
+|               |   |   |   \---show-outlier
+|               |   |   |           show-outlier.component.css
+|               |   |   |           show-outlier.component.html
+|               |   |   |           show-outlier.component.spec.ts
+|               |   |   |           show-outlier.component.ts
+|               |   |   |           
+|               |   |   +---sidebar
+|               |   |   |       sidebar.component.css
+|               |   |   |       sidebar.component.html
+|               |   |   |       sidebar.component.spec.ts
+|               |   |   |       sidebar.component.ts
+|               |   |   |       
+|               |   |   \---table
+|               |   |           table.component.css
+|               |   |           table.component.html
+|               |   |           table.component.ts
+|               |   |           table.module.ts
+|               |   |           
+|               |   +---estadisticas
+|               |   |   |   estadisticas.component.css
+|               |   |   |   estadisticas.component.html
+|               |   |   |   estadisticas.component.ts
+|               |   |   |   estadisticas.module.ts
+|               |   |   |   
+|               |   |   +---graph
+|               |   |   |       graph.component.css
+|               |   |   |       graph.component.html
+|               |   |   |       graph.component.ts
+|               |   |   |       graph.module.ts
+|               |   |   |       
+|               |   |   +---map
+|               |   |   |       data.ts
+|               |   |   |       map.component.css
+|               |   |   |       map.component.html
+|               |   |   |       map.component.ts
+|               |   |   |       map.module.ts
+|               |   |   |       
+|               |   |   +---spaghetti
+|               |   |   |       spaghetti.component.css
+|               |   |   |       spaghetti.component.html
+|               |   |   |       spaghetti.component.ts
+|               |   |   |       spaghetti.module.ts
+|               |   |   |       
+|               |   |   \---volumetry
+|               |   |           volumetry.component.css
+|               |   |           volumetry.component.html
+|               |   |           volumetry.component.ts
+|               |   |           volumetry.module.ts
+|               |   |           
+|               |   +---guards
+|               |   |       auth.guard.spec.ts
+|               |   |       auth.guard.ts
+|               |   |       
+|               |   +---interfaces
+|               |   |       cliente.ts
+|               |   |       conversion.ts
+|               |   |       divisa.ts
+|               |   |       envios.ts
+|               |   |       pais.ts
+|               |   |       transaccion.ts
+|               |   |       usuario.ts
+|               |   |       
+|               |   +---login
+|               |   |       login.component.css
+|               |   |       login.component.html
+|               |   |       login.component.spec.ts
+|               |   |       login.component.ts
+|               |   |       
+|               |   +---pipes
+|               |   |       customCurrency.pipe.spec.ts
+|               |   |       customCurrency.pipe.ts
+|               |   |       formatearDecimal.pipe.spec.ts
+|               |   |       formatearDecimal.pipe.ts
+|               |   |       formaterFecha.pipe.spec.ts
+|               |   |       formaterFecha.pipe.ts
+|               |   |       
+|               |   +---register
+|               |   |   |   register.component.css
+|               |   |   |   register.component.html
+|               |   |   |   register.component.spec.ts
+|               |   |   |   register.component.ts
+|               |   |   |   
+|               |   |   \---assets
+|               |   \---servicios
+|               |           auth.service.spec.ts
+|               |           auth.service.ts
+|               |           cliente-est.service.spec.ts
+|               |           cliente-est.service.ts
+|               |           clusters-data.service.spec.ts
+|               |           clusters-data.service.ts
+|               |           conversion.service.spec.ts
+|               |           conversion.service.ts
+|               |           divisa-data.service.spec.ts
+|               |           divisa.service.ts
+|               |           envios.service.spec.ts
+|               |           envios.service.ts
+|               |           graficas.service.spec.ts
+|               |           graficas.service.ts
+|               |           pais.service.spec.ts
+|               |           pais.service.ts
+|               |           pruebaConexion.service.spec.ts
+|               |           pruebaConexion.service.ts
+|               |           signalr.service.spec.ts
+|               |           signalr.service.ts
+|               |           transaccion.service.spec.ts
+|               |           transaccion.service.ts
+|               |           usuario.service.spec.ts
+|               |           usuario.service.ts
+|               |           
+|               +---assets
+|               |       .gitkeep
+|               |       fondo-registro.jpg
+|               |       fondo.jpg
+|               |       fondo2.jpg
+|               |       fondo3.jpg
+|               |       Logo-Dispara-tu-Dinero.png
+|               |       
+|               \---environments
+|                       environment.prod.ts
+|                       environment.ts
+|                       
+\---postman
+        Estadistica.postman_estadistica.json
+        
