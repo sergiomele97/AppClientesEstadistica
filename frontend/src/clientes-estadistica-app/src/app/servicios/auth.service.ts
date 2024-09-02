@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
@@ -15,34 +15,28 @@ export class AuthService {
   >(null);
   public user$: Observable<string | null> = this.userSubject.asObservable();
 
-  // URL base para las solicitudes a la API
-  private readonly apiUrl = environment.apiUsuarios; // Asegúrate de que el environment esté configurado correctamente
+  private readonly apiUrl = environment.apiUsuarios;
 
   constructor(private http: HttpClient, private router: Router) {
-    // Cargar el usuario desde localStorage si existe
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
       this.userSubject.next(storedUser);
     }
   }
 
-  // Método para registrar un nuevo usuario
   register(usuario: IUsuario): Observable<any> {
-    return this.http
-      .post<any>(`${this.apiUrl}/register`, usuario) // Asume que la ruta es /register y que el backend acepta un objeto IUsuario
-      .pipe(
-        tap((response) => {
-          // Puedes manejar respuestas o configuraciones adicionales aquí si es necesario
-        }),
-        catchError((error) => {
-          console.error('Error during registration', error);
-          return of(null); // Manejar el error y retornar un observable
-        })
-      );
+    return this.http.post<any>(`${this.apiUrl}/register`, usuario).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error during registration', error);
+        return throwError(error); // Propagar el error
+      })
+    );
   }
 
-  // Método para iniciar sesión con el correo electrónico
-  login(email: string, password: string): Observable<any> {
+  login(
+    email: string,
+    password: string
+  ): Observable<{ token: string; username: string }> {
     return this.http
       .post<{ token: string; username: string }>(`${this.apiUrl}/login`, {
         email,
@@ -51,40 +45,34 @@ export class AuthService {
       .pipe(
         tap((response) => {
           if (response.token) {
-            // Guardar el nombre de usuario en localStorage
             localStorage.setItem('currentUser', response.username);
-            this.userSubject.next(response.username); // Actualizar el BehaviorSubject con el nombre de usuario
-            this.router.navigate(['/estadistica']); // Redirige a la página principal o al destino deseado
+            localStorage.setItem('token', response.token);
+            this.userSubject.next(response.username);
+            this.router.navigate(['/estadistica']);
           }
         }),
-        catchError((error) => {
+        catchError((error: HttpErrorResponse) => {
           console.error('Error during login', error);
-          return of(null); // Manejar el error y retornar un observable
+          return throwError(error); // Propagar el error
         })
       );
   }
 
-// Método para cerrar sesión
-logout(): void {
-  localStorage.removeItem('currentUser'); // Elimina el nombre de usuario del localStorage
-  localStorage.removeItem('token'); // Elimina el token del localStorage
-  this.userSubject.next(null); // Actualiza el BehaviorSubject
-  this.router.navigate(['/login']); // Redirige al usuario a la página de inicio de sesión
-}
+  logout(): void {
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('token');
+    this.userSubject.next(null);
+    this.router.navigate(['/login']);
+  }
 
-
-  // Verifica si el usuario está autenticado
   isAuthenticated(): boolean {
-    // Comprueba si hay un token en el localStorage
     return !!localStorage.getItem('token');
   }
 
-  // Método para establecer el nombre de usuario en el BehaviorSubject
   setUser(username: string | null): void {
     this.userSubject.next(username);
   }
 
-  // Método para obtener el nombre de usuario actual
   getCurrentUser(): string | null {
     return this.userSubject.value;
   }
