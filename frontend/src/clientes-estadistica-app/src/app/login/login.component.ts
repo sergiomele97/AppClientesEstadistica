@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
 
   email: string = ''; // Email del usuario
   password: string = ''; // Contraseña del usuario
+  rememberMe: boolean = false; // Estado del checkbox "Recuérdame"
 
   constructor(
     private authService: AuthService, // Servicio de autenticación
@@ -26,7 +27,7 @@ export class LoginComponent implements OnInit {
   // Maneja el envío del formulario de inicio de sesión
   onSubmit() {
     this.authService
-      .login(this.email, this.password)
+      .login(this.email, this.password, this.rememberMe) // Pasar el estado de rememberMe
       .pipe(
         catchError((error) => {
           // Define mensajes de error basados en el código de estado
