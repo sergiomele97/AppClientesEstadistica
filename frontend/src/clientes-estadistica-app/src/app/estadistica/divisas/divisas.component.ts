@@ -1,9 +1,10 @@
-import { Component, ViewChild, OnInit } from "@angular/core";
+import { Component, ViewChild, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { ChartComponent, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexDataLabels, ApexTitleSubtitle, ApexStroke, ApexGrid, ApexFill, ApexMarkers, ApexYAxis } from "ng-apexcharts";
 import { DivisaService } from 'src/app/servicios/divisa.service';
 import { IDivisa } from 'src/app/interfaces/divisa';
 import { environment } from 'src/environments/environment';
+import { Subscription } from 'rxjs';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -23,17 +24,19 @@ export type ChartOptions = {
   templateUrl: './divisas.component.html',
   styleUrls: ['./divisas.component.css']
 })
-export class DivisasComponent implements OnInit {
+export class DivisasComponent implements OnInit, OnDestroy {
   @ViewChild("chart") chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
-
-  // Nueva variable para controlar la visibilidad del loader
-  public isLoading = false;
-
-  private apiUrl = environment.apiPrediccion;   
+  public isLoading = false; // Nueva variable para controlar la visibilidad del loader
+  private apiUrl = environment.apiPrediccion;
   private divisasData: IDivisa[] = []; // Datos de divisas obtenidos del backend
-  
-  constructor(private http: HttpClient, private divisaService: DivisaService) { }
+  private subscriptions: Subscription = new Subscription(); // Para gestionar las suscripciones y evitar problemas de múltiples cargas
+
+  constructor(
+    private http: HttpClient,
+    private divisaService: DivisaService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     // Inicialmente, no se realiza ninguna solicitud hasta que se seleccione una divisa
@@ -44,21 +47,29 @@ export class DivisasComponent implements OnInit {
 
     this.isLoading = true; // Mostrar el loader al iniciar la solicitud
 
-    this.divisaService.getDivisasData(divisa).subscribe({
-      next: (data) => {
-        this.divisasData = data;
-        this.updateChart(); // Actualizar el gráfico después de recibir los datos
-      },
-      error: (err) => {
-        console.error('Error al obtener datos de divisas:', err.status, err.message, err);
-      },
-      complete: () => {
-        this.isLoading = false; // Ocultar el loader cuando se completa la solicitud
-      }
-    });
+    // Cancelar cualquier suscripción anterior antes de iniciar una nueva
+    this.subscriptions.add(
+      this.divisaService.getDivisasData(divisa).subscribe({
+        next: (data) => {
+          this.divisasData = data;
+          this.updateChart(); // Actualizar el gráfico después de recibir los datos
+        },
+        error: (err) => {
+          console.error('Error al obtener datos de divisas:', err.status, err.message, err);
+          this.isLoading = false; // Ocultar el loader en caso de error
+        },
+        complete: () => {
+          // Ocultar el loader después de un breve retraso para dar tiempo al gráfico a actualizarse
+          setTimeout(() => {
+            this.isLoading = false;
+          }, 1000);
+        }
+      })
+    );
   }
- 
+
   updateChart() {
+    console.log("Se ejecute")
     if (this.divisasData.length === 0) {
       console.error('No data available:', this.divisasData);
       return;
@@ -66,27 +77,33 @@ export class DivisasComponent implements OnInit {
 
     // Ordenar por fecha y tomar los últimos 10 registros
     const recentData = this.divisasData.slice(-10);
-    
+
     if (recentData.length === 0) {
       console.error('No data available:', this.divisasData);
       return;
     }
 
-    const recentDates = recentData.map(d => {
-      const fecha = new Date(d.fecha);
-      return !isNaN(fecha.getTime()) ? fecha.toISOString().split('T')[0] : null;
-    }).filter(date => date !== null);
-    
-    const recentValues = recentData.map(d => d.valor);
+    const recentDates = recentData
+      .map((d) => {
+        const fecha = new Date(d.fecha);
+        return !isNaN(fecha.getTime()) ? fecha.toISOString().split('T')[0] : null;
+      })
+      .filter((date) => date !== null);
+
+    const recentValues = recentData.map((d) => d.valor);
     console.log(recentDates);
     console.log(recentValues);
 
-    this.http.post(this.apiUrl, { data: recentValues })
-      .subscribe((response: any) => {
+    // Asegurarse de que esta petición solo se realice una vez
+    this.http.post(this.apiUrl, { data: recentValues }).subscribe(
+      (response: any) => {
         console.log('Received data:', response);
-        const predictions = response.Prediction || [];
-        const predictionData = predictions.length ? predictions : new Array(10).fill(0);
+        const predictions = response.Prediction || []; // Intenta obtener las predicciones de la respuesta
+        
+        // **Aquí se establecen datos predeterminados si las predicciones no están disponibles**
+        const predictionData = predictions.length ? predictions : new Array(10).fill(0); // Si no hay predicciones, usa un array de 10 ceros como datos predeterminados.
 
+        // Crear fechas de predicción basadas en las fechas recientes
         const predictionDates = recentDates.map((date, index) => {
           const nextDate = new Date(date);
           nextDate.setDate(nextDate.getDate() + index + 1);
@@ -160,9 +177,14 @@ export class DivisasComponent implements OnInit {
             }
           }
         };
-      }, (error) => {
+
+        this.cdr.detectChanges(); // Asegurar que Angular detecte los cambios
+      },
+      (error) => {
         console.error('Error fetching data:', error);
-      });
+        this.isLoading = false; // Ocultar el loader en caso de error
+      }
+    );
   }
 
   onCurrencyChange(event: Event) {
@@ -170,5 +192,10 @@ export class DivisasComponent implements OnInit {
     const selectedCurrency = selectElement.value;
     console.log('Se ha seleccionado en el Front:', selectedCurrency);
     this.obtenerDatosDivisas(selectedCurrency);
+  }
+
+  ngOnDestroy(): void {
+    // Cancelar todas las suscripciones cuando se destruya el componente
+    this.subscriptions.unsubscribe();
   }
 }
