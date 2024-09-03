@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{60476A09-697D-42AE-B2E6-EBE575AF7A8B}"
 	ProjectSection(SolutionItems) = preProject
 		dbo.ClientesConBalance.sql = dbo.ClientesConBalance.sql
+		dbo.GetFilteredTransacciones.sql = dbo.GetFilteredTransacciones.sql
 	EndProjectSection
 EndProject
 Global

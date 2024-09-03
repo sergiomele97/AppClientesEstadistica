@@ -71,7 +71,8 @@ public class Program
 
         // Registra el servicio para la generaci�n de tokens.
         builder.Services.AddScoped<ITokenService, TokenService>();
-
+        // Registra el servicio TransaccionService.
+        builder.Services.AddScoped<TransaccionService>();
         // Configuraci�n de CORS para permitir solicitudes desde or�genes espec�ficos.
         builder.Services.AddCors(options =>
         {

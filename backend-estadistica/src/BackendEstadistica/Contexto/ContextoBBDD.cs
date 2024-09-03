@@ -29,8 +29,9 @@ public class ContextoBBDD : IdentityDbContext<ApplicationUser>
 
     public DbSet<Divisa> Divisa { get; set; } // 6ª Tabla
 
-    public DbSet<ClienteConBalance> ClientesConBalance { get; set; }
+    public DbSet<ClienteConBalance> ClientesConBalance { get; set; }//vista
 
+    public DbSet<TransaccionProceso> TransaccionesProcesos { get; set; }//proceso de almacenamiento
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
