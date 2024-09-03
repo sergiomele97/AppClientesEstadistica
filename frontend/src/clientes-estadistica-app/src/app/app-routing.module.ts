@@ -41,22 +41,6 @@ const routes: Routes = [
       { path: 'clusters', component: ClustersComponent },
     ],
   },
-
-  {
-    path: 'estadisticas',
-    component: EstadisticasComponent,
-    children: [
-      { path: 'volumetry', component: VolumetryComponent },
-      { path: 'clusters', component: ClustersComponent },
-      { path: 'map', component: MapComponent },
-      { path: 'graph', component: GraphComponent },
-      { path: 'spaghetti', component: SpaghettiComponent },
-      { path: 'clientes', component: ClientesComponent },
-      { path: 'clientes/:id', component: ClientesComponent },
-      { path: 'table', component: TableComponent },
-      { path: 'divisas', component: DivisasComponent },
-    ],
-  },
   { path: '', redirectTo: '/estadistica', pathMatch: 'full' },
   { path: '**', redirectTo: '/estadistica', pathMatch: 'full' },
 ];
