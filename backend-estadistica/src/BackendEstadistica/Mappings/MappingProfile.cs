@@ -36,5 +36,8 @@ public class MappingProfile : Profile
 
         CreateMap<DivisaDto, Divisa>();
         CreateMap<Divisa, DivisaDto>();
+
+
+
     }
 }

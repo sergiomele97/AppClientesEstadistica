@@ -1,7 +1,7 @@
+// src/app/components/clusters/clusters.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ICliente } from 'src/app/interfaces/cliente';
-import { ITransaccion } from 'src/app/interfaces/transaccion';
+import { ClienteConBalance } from 'src/app/models/cliente-con-balance.model';
 import { ClienteService } from 'src/app/servicios/cliente.service';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
 import { ClustersDataService } from 'src/app/servicios/clusters-data.service';
@@ -21,106 +21,79 @@ export class ClustersComponent implements OnInit, OnDestroy {
     private transaccionService: TransaccionService
   ) {}
 
-  // Nueva variable para controlar la visibilidad del loader
-  public isLoading = false;
+  public isLoading = false;  // Nueva variable para controlar la visibilidad del loader
 
   private apiUrl = environment.apiClusters;
   private datos: any[] = [];
   public daviesBouldinIndex: number | null = null;
-  cliente: ICliente | undefined;
-  clientes: ICliente[] = [];
-  transacciones: ITransaccion[] = [];
   subscription!: Subscription;
   routeSubscription!: Subscription;
+  clientesBalance: ClienteConBalance[] = [];
+  tableData: any[] = [];
+  filteredTableData: any[] = [];
+  filterText: string = '';
 
   ngOnInit(): void {
-    // Obtener la lista de clientes
-    this.subscription = this.clienteService.getClientes().subscribe({
-      next: (clientes) => {
-        this.clientes = clientes;
-
-        // Obtener las transacciones de todos los clientes
-        this.subscription = this.transaccionService
-          .getTransacciones()
-          .subscribe({
-            next: (transacciones) => {
-              this.transacciones = transacciones;
-
-              // Procesar los datos de los clientes junto con sus balances calculados
-              this.procesarDatosClientes();
-            },
-            error: (err) => {
-              console.error('Error al obtener las transacciones:', err);
-            },
-          });
+    console.log("Iniciando ngOnInit");
+  
+    // Llamar al servicio para obtener los datos de ClienteConBalance
+    this.clienteService.getClientesConBalance().subscribe(
+      (data) => {
+        console.log("Datos recibidos: ", data);
+        if (data.length === 0) {
+          console.warn("El array recibido está vacío.");
+        } else {
+          this.clientesBalance = data;
+          this.procesarDatosClientes();
+        }
       },
-      error: (err) => {
-        console.error('Error al obtener la lista de clientes:', err);
-      },
-    });
+      (error) => {
+        console.error('Error al obtener los datos de clientes', error);
+      }
+    );
   }
 
   private procesarDatosClientes(): void {
     // Recorrer todos los clientes y extraer los datos necesarios junto con el balance calculado
-    this.datos = this.clientes.map((cliente) => {
-      const edad = cliente.edad;
-      const sexo = cliente.sexo === 'Masculino' ? 0 : 1; // Codificar sexo: 0 para mujeres, 1 para hombres
-      const balance = this.calcularBalance(cliente.clienteId);
-      const nGastos = this.numeroGastos(cliente.clienteId);
-      const nIngresos = this.numeroIngresos(cliente.clienteId);
-
-      // Imprimir los dos primeros valores (edad y sexo) en la consola
-      //console.log([edad, sexo]);
-
-      return [edad, balance, sexo, nGastos, nIngresos];
+    this.datos = this.clientesBalance.map(cliente => {
+      const sexo = cliente.sexo === 'Masculino' ? 0 : 1;
+      return [cliente.clienteId, cliente.edad, sexo, cliente.pais, cliente.balance, cliente.numeroGastos, cliente.numeroIngresos];
     });
+    console.log("Datos procesados para enviar al backend:", this.datos);
   }
 
-  private calcularBalance(clienteId: number): number {
-    const ingresos = this.transacciones
-      .filter((transaccion) => transaccion.clienteDestinoId === clienteId)
-      .reduce(
-        (total, transaccion) => total + (transaccion.importeRecibido || 0),
-        0
-      );
-    const gastos = this.transacciones
-      .filter((transaccion) => transaccion.clienteOrigenId === clienteId)
-      .reduce(
-        (total, transaccion) => total + (transaccion.importeEnviado || 0),
-        0
-      );
-    return ingresos - gastos;
-  }
-
-  private numeroGastos(clienteId: number): number {
-    const gastos = this.transacciones
-      .filter((transaccion) => transaccion.clienteOrigenId === clienteId)
-      .reduce((total) => total + 1, 0);
-    return gastos;
-  }
-  private numeroIngresos(clienteId: number): number {
-    const ingresos = this.transacciones
-      .filter((transaccion) => transaccion.clienteDestinoId === clienteId)
-      .reduce((total) => total + 1, 0);
-    return ingresos;
-  }
-
-  private async enviarDatosBackend(
-    datos: any[],
-    nCluster: number
-  ): Promise<void> {
+  private async enviarDatosBackend(datos: any[], nCluster: number): Promise<void> {
     try {
-      const response = await this.http
-        .post<any>(this.apiUrl, { data: datos, nCluster: nCluster })
-        .toPromise();
+      console.log("Enviando datos al backend Python:", datos, "Número de clusters:", nCluster);
+      const datos_cluster = datos.map(individuo => [individuo[1],individuo[2], individuo[4],individuo[5],individuo[6]]); 
+      //console.log("Datos cluster:", datos_cluster);
+      const response = await this.http.post<any>(this.apiUrl, { data: datos_cluster, nCluster: nCluster }).toPromise();
+      console.log("Respuesta del backend Python:", response);
+
       const etiqueta = response.etiqueta || [];
       this.daviesBouldinIndex = response.db || 0;
       this.dataService.setLabel(etiqueta);
 
-      const datosReducidos = datos.map((individuo) => individuo.slice(0, 2)); // solo se muestran dos variables
-      this.dataService.setSelectedDataCluster(datosReducidos); //mandamos los datos cortados a la global para visualizar en cluster
-      this.dataService.setSelectedDataTable(datos); //mandamos los datos completos a la global para visualizar en la tabla
+      const datosReducidos = datos.map(individuo => [individuo[1], individuo[4]]); // solo se muestran dos variables
+      this.dataService.setSelectedDataCluster(datosReducidos); // mandamos los datos cortados a la global para visualizar en cluster
+      datos = datos.map(individuo => [
+        individuo[0], // clienteId
+        individuo[1], // edad
+        individuo[2] === 0 ? "Masculino" : "Femenino", // sexo
+        individuo[3], // pais
+        individuo[4], // balance
+        individuo[5], // numeroGastos
+        individuo[6]  // numeroIngresos
+      ]);
+      this.dataService.setSelectedDataTable(datos); // mandamos los datos completos a la global para visualizar en la tabla
+
+      // Combinar los datos con las etiquetas
+      this.tableData = datos.map((dato, index) => [...dato, etiqueta[index]]);
+      this.filteredTableData = this.tableData;
+      console.log("Datos combinados con etiquetas:", this.tableData);
+
     } catch (error) {
+      console.error("Error al enviar datos al backend Python:", error);
       throw new Error('Error al enviar datos al python');
     }
   }
@@ -132,11 +105,19 @@ export class ClustersComponent implements OnInit, OnDestroy {
     const numerosSelect = selectElement.value;
     const nCluster = parseInt(numerosSelect, 10);
     this.dataService.setSelectednCluster(nCluster);
-
+    console.log(this.datos)
     // Llamar a enviarDatosBackend con los datos procesados y el número de clusters
     await this.enviarDatosBackend(this.datos, nCluster);
 
     this.isLoading = false; // Ocultar loader al acabar
+  }
+
+  onFilterChange(): void {
+    this.filteredTableData = this.tableData.filter(row => row[5].toString().includes(this.filterText));
+  }
+
+  sortData(columnIndex: number): void {
+    this.filteredTableData.sort((a, b) => a[columnIndex] > b[columnIndex] ? 1 : -1);
   }
 
   ngOnDestroy(): void {

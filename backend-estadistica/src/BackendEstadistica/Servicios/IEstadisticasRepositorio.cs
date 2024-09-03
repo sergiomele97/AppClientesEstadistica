@@ -29,4 +29,5 @@ public interface IEstadisticasRepositorio
     Task<List<Pais>> GetPaisesAsync();
     Task<Pais> GetPaisByIdAsync(int id);
     Task CrearPaisAsync(Pais pais);
+  
 }
