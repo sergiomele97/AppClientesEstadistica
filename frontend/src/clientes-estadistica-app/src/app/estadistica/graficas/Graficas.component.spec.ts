@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { GraficasComponent } from './Graficas.component';
+import { GraficasComponent } from './graficas.component';
 
 describe('graficasComponent', () => {
   let component: GraficasComponent;

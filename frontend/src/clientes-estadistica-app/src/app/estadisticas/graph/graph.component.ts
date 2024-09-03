@@ -12,7 +12,7 @@ import {
 } from 'ng-apexcharts';
 import { Subscription } from 'rxjs';
 import { ICliente } from 'src/app/interfaces/cliente';
-import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
+import { ClienteService } from 'src/app/servicios/cliente.service';
 import { GraficasService } from 'src/app/servicios/graficas.service';
 
 export type ChartOptions = {
@@ -54,7 +54,7 @@ export class GraphComponent implements OnInit, OnDestroy {
 
   constructor(
     private graficasService: GraficasService,
-    private clienteService: ClienteEstService
+    private clienteService: ClienteService
   ) {
     this.updateChart();
   }

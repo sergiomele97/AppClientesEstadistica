@@ -1,29 +1,31 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
+// Authentication Components
 import { LoginComponent } from './login/login.component';
-import { SpaghettiComponent } from './estadisticas/spaghetti/spaghetti.component';
-import { GraphComponent } from './estadisticas/graph/graph.component';
-import { MapComponent } from './estadisticas/map/map.component';
+import { RegisterComponent } from './register/register.component';
 
-import { VolumetryComponent } from './estadisticas/volumetry/volumetry.component';
-import { TableComponent } from './estadistica/table/table.component';
-import { EstadisticasComponent } from './estadisticas/estadisticas.component';
-
+// Estadísticas Components
+import { EstadisticaComponent } from './estadistica/estadistica.component';
+import { BienvenidaComponent } from './estadistica/bienvenida/bienvenida.component';
 import { ClientesComponent } from './estadistica/clientes/clientes.component';
 import { DivisasComponent } from './estadistica/divisas/divisas.component';
-import { EstadisticaComponent } from './estadistica/estadistica.component';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';
 import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
-import { GraficasComponent } from './estadistica/graficas/Graficas.component';
-import { RegisterComponent } from './register/register.component';
 import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-outlier.component';
+import { GraficasComponent } from './estadistica/graficas/graficas.component';
+import { TableComponent } from './estadistica/table/table.component';
 import { ClustersComponent } from './estadistica/clusters/clusters.component';
+
+// Guards
 import { AuthGuard } from './guards/auth.guard';
-import { BienvenidaComponent } from './estadistica/bienvenida/bienvenida.component';
 
 const routes: Routes = [
+  // Authentication Routes
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegisterComponent },
+
+  // Estadística Routes (Protected by AuthGuard)
   {
     path: 'estadistica',
     component: EstadisticaComponent,
@@ -41,7 +43,11 @@ const routes: Routes = [
       { path: 'clusters', component: ClustersComponent },
     ],
   },
+
+  // Default Route
   { path: '', redirectTo: '/estadistica', pathMatch: 'full' },
+
+  // Fallback Route
   { path: '**', redirectTo: '/estadistica', pathMatch: 'full' },
 ];
 

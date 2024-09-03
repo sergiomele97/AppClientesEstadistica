@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import Highcharts from 'highcharts/highmaps';
 import worldMap from '@highcharts/map-collection/custom/world.geo.json';
-import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
+import { ClienteService } from 'src/app/servicios/cliente.service';
 import { ICliente } from 'src/app/interfaces/cliente';
 import { Subscription } from 'rxjs';
 
@@ -18,7 +18,7 @@ export class MapComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
   private chart: Highcharts.Chart;
 
-  constructor(private clienteService: ClienteEstService) {}
+  constructor(private clienteService: ClienteService) {}
 
   ngOnInit(): void {
     // Suscripción al servicio para obtener clientes

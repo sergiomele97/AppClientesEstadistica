@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ICliente } from 'src/app/interfaces/cliente';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
-import { ClienteEstService } from 'src/app/servicios/cliente-est.service';
+import { ClienteService } from 'src/app/servicios/cliente.service';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
 import { ClustersDataService } from 'src/app/servicios/clusters-data.service';
 import { HttpClient } from '@angular/common/http';
@@ -14,18 +14,17 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./clusters.component.css'],
 })
 export class ClustersComponent implements OnInit, OnDestroy {
-
   constructor(
-    private dataService: ClustersDataService, 
+    private dataService: ClustersDataService,
     private http: HttpClient,
-    private clienteService: ClienteEstService,
+    private clienteService: ClienteService,
     private transaccionService: TransaccionService
   ) {}
 
   // Nueva variable para controlar la visibilidad del loader
   public isLoading = false;
 
-  private apiUrl = environment.apiClusters;   
+  private apiUrl = environment.apiClusters;
   private datos: any[] = [];
   public daviesBouldinIndex: number | null = null;
   cliente: ICliente | undefined;
@@ -41,17 +40,19 @@ export class ClustersComponent implements OnInit, OnDestroy {
         this.clientes = clientes;
 
         // Obtener las transacciones de todos los clientes
-        this.subscription = this.transaccionService.getTransacciones().subscribe({
-          next: (transacciones) => {
-            this.transacciones = transacciones;
+        this.subscription = this.transaccionService
+          .getTransacciones()
+          .subscribe({
+            next: (transacciones) => {
+              this.transacciones = transacciones;
 
-            // Procesar los datos de los clientes junto con sus balances calculados
-            this.procesarDatosClientes();
-          },
-          error: (err) => {
-            console.error('Error al obtener las transacciones:', err);
-          }
-        });
+              // Procesar los datos de los clientes junto con sus balances calculados
+              this.procesarDatosClientes();
+            },
+            error: (err) => {
+              console.error('Error al obtener las transacciones:', err);
+            },
+          });
       },
       error: (err) => {
         console.error('Error al obtener la lista de clientes:', err);
@@ -61,63 +62,70 @@ export class ClustersComponent implements OnInit, OnDestroy {
 
   private procesarDatosClientes(): void {
     // Recorrer todos los clientes y extraer los datos necesarios junto con el balance calculado
-    this.datos = this.clientes.map(cliente => {
+    this.datos = this.clientes.map((cliente) => {
       const edad = cliente.edad;
-      const sexo = cliente.sexo === 'Masculino' ? 0 : 1;  // Codificar sexo: 0 para mujeres, 1 para hombres
+      const sexo = cliente.sexo === 'Masculino' ? 0 : 1; // Codificar sexo: 0 para mujeres, 1 para hombres
       const balance = this.calcularBalance(cliente.clienteId);
       const nGastos = this.numeroGastos(cliente.clienteId);
       const nIngresos = this.numeroIngresos(cliente.clienteId);
-      
+
       // Imprimir los dos primeros valores (edad y sexo) en la consola
       //console.log([edad, sexo]);
 
-      return [edad, balance, sexo , nGastos, nIngresos];
+      return [edad, balance, sexo, nGastos, nIngresos];
     });
   }
 
   private calcularBalance(clienteId: number): number {
     const ingresos = this.transacciones
-      .filter(transaccion => transaccion.clienteDestinoId === clienteId)
-      .reduce((total, transaccion) => total + (transaccion.importeRecibido || 0), 0);
+      .filter((transaccion) => transaccion.clienteDestinoId === clienteId)
+      .reduce(
+        (total, transaccion) => total + (transaccion.importeRecibido || 0),
+        0
+      );
     const gastos = this.transacciones
-      .filter(transaccion => transaccion.clienteOrigenId === clienteId)
-      .reduce((total, transaccion) => total + (transaccion.importeEnviado || 0), 0);
+      .filter((transaccion) => transaccion.clienteOrigenId === clienteId)
+      .reduce(
+        (total, transaccion) => total + (transaccion.importeEnviado || 0),
+        0
+      );
     return ingresos - gastos;
   }
 
   private numeroGastos(clienteId: number): number {
     const gastos = this.transacciones
-      .filter(transaccion => transaccion.clienteOrigenId === clienteId)
+      .filter((transaccion) => transaccion.clienteOrigenId === clienteId)
       .reduce((total) => total + 1, 0);
     return gastos;
   }
   private numeroIngresos(clienteId: number): number {
     const ingresos = this.transacciones
-    .filter(transaccion => transaccion.clienteDestinoId === clienteId)
-    .reduce((total) => total + 1, 0);
+      .filter((transaccion) => transaccion.clienteDestinoId === clienteId)
+      .reduce((total) => total + 1, 0);
     return ingresos;
   }
 
-  
-  private async enviarDatosBackend(datos: any[], nCluster: number): Promise<void> {
+  private async enviarDatosBackend(
+    datos: any[],
+    nCluster: number
+  ): Promise<void> {
     try {
-      const response = await this.http.post<any>(this.apiUrl, { data: datos, nCluster: nCluster }).toPromise();
+      const response = await this.http
+        .post<any>(this.apiUrl, { data: datos, nCluster: nCluster })
+        .toPromise();
       const etiqueta = response.etiqueta || [];
-      this.daviesBouldinIndex= response.db || 0;
+      this.daviesBouldinIndex = response.db || 0;
       this.dataService.setLabel(etiqueta);
-      
-      const datosReducidos = datos.map(individuo => individuo.slice(0, 2)); // solo se muestran dos variables
-      this.dataService.setSelectedDataCluster(datosReducidos);//mandamos los datos cortados a la global para visualizar en cluster
-      this.dataService.setSelectedDataTable(datos);//mandamos los datos completos a la global para visualizar en la tabla
 
+      const datosReducidos = datos.map((individuo) => individuo.slice(0, 2)); // solo se muestran dos variables
+      this.dataService.setSelectedDataCluster(datosReducidos); //mandamos los datos cortados a la global para visualizar en cluster
+      this.dataService.setSelectedDataTable(datos); //mandamos los datos completos a la global para visualizar en la tabla
     } catch (error) {
-    
       throw new Error('Error al enviar datos al python');
     }
   }
 
   async onSelectionCluster(event: Event) {
-
     this.isLoading = true; // Mostrar el loader al iniciar la solicitud
 
     const selectElement = event.target as HTMLSelectElement;

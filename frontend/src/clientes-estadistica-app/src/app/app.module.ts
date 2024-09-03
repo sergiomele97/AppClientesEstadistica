@@ -6,10 +6,15 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { HighchartsChartModule } from 'highcharts-angular';
 
+// Routing Module
 import { AppRoutingModule } from './app-routing.module';
+
+// Root Component
 import { AppComponent } from './app.component';
 
+// Feature Components
 import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 import { VolumetryComponent } from './estadisticas/volumetry/volumetry.component';
 import { ClustersComponent } from './estadistica/clusters/clusters.component';
 import { GraphComponent } from './estadisticas/graph/graph.component';
@@ -19,30 +24,35 @@ import { TableComponent } from './estadistica/table/table.component';
 import { ClustersGraphComponent } from './estadistica/clusters/clusters-graph/clusters-graph.component';
 import { ClustersTableComponent } from './estadistica/clusters/clusters-table/clusters-table.component';
 import { EstadisticaComponent } from './estadistica/estadistica.component';
-import { EstadisticasComponent } from './estadisticas/estadisticas.component';
 import { ClientesComponent } from './estadistica/clientes/clientes.component';
 import { DivisasComponent } from './estadistica/divisas/divisas.component';
-import { ClustersDataService } from './servicios/clusters-data.service';
-import { PruebaConexionService } from './servicios/pruebaConexion.service';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';
 import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
-import { GraficasComponent } from './estadistica/graficas/Graficas.component';
-import { DatePipe } from '@angular/common';
-import { FormaterFechaPipe } from './pipes/formaterFecha.pipe';
-import { RegisterComponent } from './register/register.component';
+import { GraficasComponent } from './estadistica/graficas/graficas.component';
 import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-outlier.component';
-import { UsuarioService } from './servicios/usuario.service';
-import { CustomCurrencyPipe } from './pipes/customCurrency.pipe';
 import { HeaderComponent } from './estadistica/header/header.component';
 import { SidebarComponent } from './estadistica/sidebar/sidebar.component';
 import { AlertComponent } from './estadistica/alert/alert.component';
 import { BienvenidaComponent } from './estadistica/bienvenida/bienvenida.component';
 
+// Services
+import { UsuarioService } from './servicios/usuario.service';
+import { ClustersDataService } from './servicios/clusters-data.service';
+import { PruebaConexionService } from './servicios/pruebaConexion.service';
+
+// Pipes
+import { DatePipe } from '@angular/common';
+import { CustomCurrencyPipe } from './pipes/customCurrency.pipe';
+import { FormaterFechaPipe } from './pipes/formaterFecha.pipe';
+
 @NgModule({
   declarations: [
+    // Root Component
     AppComponent,
+
+    // Feature Components
     LoginComponent,
-    EstadisticasComponent,
+    RegisterComponent,
     ClientesComponent,
     VolumetryComponent,
     ClustersComponent,
@@ -53,40 +63,53 @@ import { BienvenidaComponent } from './estadistica/bienvenida/bienvenida.compone
     SpaghettiComponent,
     TableComponent,
     EstadisticaComponent,
-    ClientesComponent,
     DivisasComponent,
     OutlierComponent,
     ShowOutlierComponent,
     GraficasComponent,
-    FormaterFechaPipe,
-    RegisterComponent,
     LogsOutlierComponent,
-    CustomCurrencyPipe,
     HeaderComponent,
     SidebarComponent,
     AlertComponent,
-    BienvenidaComponent
+    BienvenidaComponent,
+
+    // Pipes
+    FormaterFechaPipe,
+    CustomCurrencyPipe,
   ],
 
   imports: [
+    // Core Angular Modules
     BrowserModule,
-    AppRoutingModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+
+    // Third-Party Modules
+    NgxPaginationModule,
     NgApexchartsModule,
     HighchartsChartModule,
-    NgxPaginationModule,
-    BrowserModule,
+
+    // Routing Module
+    AppRoutingModule,
   ],
+
   providers: [
+    // Services
     UsuarioService,
     PruebaConexionService,
     ClustersDataService,
-    DatePipe,FormaterFechaPipe,
+
+    // Pipes
+    DatePipe,
+    FormaterFechaPipe,
     CustomCurrencyPipe,
   ],
+
+  // Root Component
   bootstrap: [AppComponent],
+
+  // Allow custom elements
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}

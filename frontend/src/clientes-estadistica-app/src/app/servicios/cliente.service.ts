@@ -6,10 +6,9 @@ import { Observable } from 'rxjs';
 import { ICliente } from '../interfaces/cliente';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class ClienteEstService {
-
+export class ClienteService {
   constructor(private http: HttpClient) {}
 
   private readonly url_estadistica = environment.apiEstadisticas;
@@ -19,7 +18,8 @@ export class ClienteEstService {
   }
 
   getCliente(clienteId: number): Observable<ICliente> {
-    return this.http.get<ICliente>(`${this.url_estadistica}/getcliente/${clienteId}`)
+    return this.http.get<ICliente>(
+      `${this.url_estadistica}/getcliente/${clienteId}`
+    );
   }
-
 }
