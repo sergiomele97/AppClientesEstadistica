@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../servicios/auth.service';
-import { Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
+import { Router } from '@angular/router'; // Servicio para navegación
+import { catchError } from 'rxjs/operators'; // Operador para manejar errores
+import { throwError } from 'rxjs'; // Función para propagar errores
+import { AuthService } from '../servicios/auth.service'; // Servicio para autenticación
 
 @Component({
   selector: 'app-login',
@@ -9,70 +10,49 @@ import { catchError, throwError } from 'rxjs';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-  errorMessage: string; // Variable para almacenar el mensaje de error
-  isErrorVisible = false; // Bandera para controlar la visibilidad del mensaje de error
+  errorMessage: string = ''; // Mensaje de error a mostrar
+  isErrorVisible = false; // Controla la visibilidad del mensaje de error
 
-  email: string = ''; // Variable para almacenar el email del usuario
-  password: string = ''; // Variable para almacenar la contraseña del usuario
+  email: string = ''; // Email del usuario
+  password: string = ''; // Contraseña del usuario
+  rememberMe: boolean = false; // Estado del checkbox "Recuérdame"
 
   constructor(
-    private authService: AuthService, // Cambiado a AuthService para manejar autenticación
-    private route: Router // Router para redirigir al usuario después del login
+    private authService: AuthService, // Servicio de autenticación
+    private route: Router // Servicio de navegación
   ) {}
 
-  ngOnInit() {
-    // Aquí puedes inicializar cualquier cosa si es necesario al cargar el componente
-  }
+  ngOnInit() {}
 
-  // Método para autenticar al usuario
+  // Maneja el envío del formulario de inicio de sesión
   onSubmit() {
-    // Llama al método login del AuthService con el email y la contraseña
     this.authService
-      .login(this.email, this.password)
+      .login(this.email, this.password, this.rememberMe) // Pasar el estado de rememberMe
       .pipe(
         catchError((error) => {
-          // Manejo de errores
-          if (error.status === 401) {
-            // Si el error es 401, significa que las credenciales son incorrectas
-            this.showError('Credenciales incorrectas');
-          } else {
-            // Otros errores
-            this.showError(
-              'Ocurrió un error al intentar autenticarse. Por favor, intente de nuevo.'
-            );
-          }
-          // Propaga el error para manejo adicional si es necesario
-          return throwError(error);
+          // Define mensajes de error basados en el código de estado
+          const message =
+            error.status === 401
+              ? 'Credenciales incorrectas. Verifique su email y contraseña.'
+              : error.status === 400
+              ? 'Solicitud incorrecta. Verifique los datos proporcionados.'
+              : 'Ocurrió un error al intentar autenticarse. Intente de nuevo.';
+
+          this.showError(message); // Muestra el mensaje de error
+          return throwError(error); // Propaga el error
         })
       )
-      .subscribe((response) => {
-        // Si la autenticación es exitosa
-        if (response && response.token) {
-          // Guarda el token en el localStorage para uso futuro (ej. autenticación de solicitudes)
-          localStorage.setItem('token', response.token);
-
-          // Guarda el nombre de usuario en el localStorage
-          localStorage.setItem('currentUser', response.username);
-
-          // Actualiza el BehaviorSubject del AuthService con el nombre de usuario
-          this.authService.setUser(response.username);
-
-          // Redirige al usuario a la página de estadísticas
-          this.route.navigate(['/estadistica']);
-        }
-      });
+      .subscribe(); // Se suscribe al observable
   }
 
-  // Método para mostrar el mensaje de error
+  // Muestra un mensaje de error en la interfaz
   showError(message: string) {
-    // Asigna el mensaje de error y hace visible el mensaje
     this.errorMessage = message;
     this.isErrorVisible = true;
-    // Oculta el mensaje después de 3 segundos
-    setTimeout(() => (this.isErrorVisible = false), 3000);
+    setTimeout(() => (this.isErrorVisible = false), 3000); // Oculta el mensaje después de 3 segundos
   }
 
-  // Método para redirigir a la página de registro
+  // Navega a la página de registro
   navigateToRegistro() {
     this.route.navigate(['/registro']);
   }

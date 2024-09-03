@@ -33,12 +33,12 @@ export type ChartOptions = {
 export class VolumetryComponent implements OnInit, OnDestroy {
   @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
-  public dataType: string = ''; // Cambiar valor inicial a 'transacciones'
+  public dataType: string = '';
   public isLoading: boolean = true; // AGREGADO: Estado de carga
 
   transacciones: ITransaccion[] = [];
   conversiones: IConversion[] = [];
-  subscription: Subscription;
+  subscription: Subscription = new Subscription();
 
   constructor(
     private transaccionesService: TransaccionService,
@@ -46,22 +46,30 @@ export class VolumetryComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Mostrar el loader al iniciar
-    this.isLoading = true;
+    // Leer el valor predeterminado del dropdown en el HTML y guardarlo en dataType
+    const selectElement = document.getElementById(
+      'data-type'
+    ) as HTMLSelectElement;
+    if (selectElement) {
+      this.dataType = selectElement.value; // Leer valor del select o establecer predeterminado
+    }
 
-    // Obtener lista de transacciones y conversiones
-    this.subscription = this.transaccionesService.getTransacciones().subscribe({
-      next: (transacciones) => {
-        this.transacciones = transacciones;
-        this.updateChart(); // Actualizar gráfico con datos predeterminados
-        this.isLoading = false; // Ocultar loader después de cargar los datos
-      },
-      error: (err) => {
-        console.error('Error al obtener la lista de transacciones', err);
-        this.isLoading = false; // Ocultar loader si hay un error
-      },
-    });
+    // Obtener lista de transacciones
+    this.subscription.add(
+      this.transaccionesService.getTransacciones().subscribe({
+        next: (transacciones) => {
+          this.transacciones = transacciones;
+          this.updateChart(); // Actualizar gráfico con datos predeterminados
+          this.isLoading = false; // Ocultar loader después de cargar los datos
+        },
+        error: (err) => {
+          console.error('Error al obtener la lista de transacciones', err);
+          this.isLoading = false; // Ocultar loader si hay un error
+        },
+      })
+    );
 
+    // Obtener lista de conversiones
     this.subscription.add(
       this.conversionesService.getConversiones().subscribe({
         next: (conversiones) => {
