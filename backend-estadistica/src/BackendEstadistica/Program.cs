@@ -85,7 +85,7 @@ public class Program
 
             options.AddPolicy("AllowAzureHost",
                 builder => builder
-                    .WithOrigins("https://salmon-hill-0d0baa503.5.azurestaticapps.net")  // Permite solicitudes desde el host de Azure.
+                    .WithOrigins("https://wonderful-meadow-07530fe03.5.azurestaticapps.net")  // Permite solicitudes desde el host de Azure.
                     .AllowAnyHeader()  // Permite cualquier encabezado.
                     .AllowAnyMethod()  // Permite cualquier m�todo HTTP.
                     .AllowCredentials());  // Permite el uso de credenciales.
