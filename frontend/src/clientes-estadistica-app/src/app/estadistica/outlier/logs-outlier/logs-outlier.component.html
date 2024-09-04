@@ -1,44 +1,56 @@
-<div class="bg-white">
-  <table class="min-w-full bg-white border border-gray-200">
-    <thead>
-      <tr>
-        <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">
-          Id Transacción
-        </th>
-        <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">
-          Cliente Origen
-        </th>
-        <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">
-          Cliente Destino
-        </th>
-        <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">
-          Importe Enviado
-        </th>
-        <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">Fecha</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let outlier of outliers" class="border-b">
-        <td class="px-6 py-4 text-md">{{ outlier.transaccionId }}</td>
-        <td class="px-6 py-4 text-md">
-          <a
-            [routerLink]="['/estadistica/clientes/', outlier.clienteDestinoId]"
-          >
-            {{ outlier.clienteDestino.nombre }}
-          </a>
-        </td>
-        <td class="px-6 py-4 text-md">
-          <a
-            [routerLink]="['/estadistica/clientes/', outlier.clienteDestinoId]"
-          >
-            {{ outlier.clienteDestino.nombre }}
-          </a>
-        </td>
-        <td class="px-6 py-4 text-md">
-          {{ outlier.importeEnviado | customCurrency : outlier.clienteDestino?.pais?.divisa }}
-        </td>
-        <td class="px-6 py-4 text-md">{{ outlier.fecha | formaterFecha }}</td>
-      </tr>
-    </tbody>
-  </table>
+<div *ngIf="!loading">
+  <div *ngIf="!vacio; else noOutliers">
+    <div class="bg-white">
+      <table class="min-w-full bg-white border border-gray-200">
+        <thead>
+          <tr>
+            <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">
+              Id Transacción
+            </th>
+            <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">
+              Cliente Origen
+            </th>
+            <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">
+              Cliente Destino
+            </th>
+            <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">
+              Importe Enviado
+            </th>
+            <th class="px-6 py-3 border-b-2 text-left text-lg font-bold">Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let outlier of outliers" class="border-b">
+            <td class="px-6 py-4 text-md">{{ outlier.transaccionId }}</td>
+            <td class="px-6 py-4 text-md">
+              <a
+                [routerLink]="['/estadistica/clientes/', outlier.clienteDestinoId]"
+              >
+                {{ outlier.clienteDestino.nombre }}
+              </a>
+            </td>
+            <td class="px-6 py-4 text-md">
+              <a
+                [routerLink]="['/estadistica/clientes/', outlier.clienteDestinoId]"
+              >
+                {{ outlier.clienteDestino.nombre }}
+              </a>
+            </td>
+            <td class="px-6 py-4 text-md">
+              {{ outlier.importeEnviado | customCurrency : outlier.clienteDestino?.pais?.divisa }}
+            </td>
+            <td class="px-6 py-4 text-md">{{ outlier.fecha | formaterFecha }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>    
+  </div>
 </div>
+
+<ng-template #noOutliers>
+  <div class="flex justify-center items-center w-full mt-80">
+    <h1 class="text-5xl font-bold text-green-500">
+      No hay outliers validados
+    </h1>
+  </div>
+</ng-template>
