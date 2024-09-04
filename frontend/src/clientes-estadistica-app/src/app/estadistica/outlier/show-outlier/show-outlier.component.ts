@@ -50,7 +50,7 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
     private transaccionService: TransaccionService,
     private route: ActivatedRoute,
     private formaterFechaPipe: FormaterFechaPipe,
-    private signalrService: SignalrService,
+    private signalrService: SignalrService
   ) {}
 
   ngOnInit(): void {
@@ -206,12 +206,6 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
         },
         axisTicks: {
           show: false,
-        },
-        labels: {
-          show: false,
-          formatter: function (val) {
-            return val + '€';
-          },
         },
       },
       title: {
