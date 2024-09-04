@@ -3,9 +3,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { GraficasComponent } from './graficas.component';
+import { GraficasComponent } from './Graficas.component';
 
-describe('graficasComponent', () => {
+describe('GraficasComponent', () => {
   let component: GraficasComponent;
   let fixture: ComponentFixture<GraficasComponent>;
 
