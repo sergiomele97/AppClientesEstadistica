@@ -7,8 +7,8 @@ import { SignalrService } from 'src/app/servicios/signalr.service';
   styleUrls: ['./alert.component.css'],
 })
 export class AlertComponent implements OnInit {
-  detectado: boolean = false;
-  eliminado: boolean = false;
+  detectado: boolean = false; // Estado de detección
+  eliminado: boolean = false; // Estado de eliminación
 
   constructor(private signalrService: SignalrService) {}
 
@@ -16,43 +16,43 @@ export class AlertComponent implements OnInit {
     this.setupSignalRListeners();
   }
 
+  // Configura los listeners de SignalR para manejar alertas
   setupSignalRListeners() {
-    this.signalrService.startConnection();
+    this.signalrService.startConnection(); // Inicia la conexión SignalR
     this.signalrService.addOutlierListener((data: any) => {
-      if (data.type === 'detected') {
-        this.detectado = true;
-        this.showAlert();
-        this.hideMessagesAfterDelay();
-      } else if (data.type === 'removed') {
-        this.eliminado = true;
-        this.showAlert();
-        this.hideMessagesAfterDelay();
-      }
+      // Actualiza estado y muestra alerta según el tipo de dato
+      this.detectado = data.type === 'detected';
+      this.eliminado = data.type === 'removed';
+      this.showAlert();
+      this.hideMessagesAfterDelay();
     });
   }
 
+  // Muestra el contenedor de alerta
   showAlert() {
     const alertElement = document.querySelector(
       '.alert-container'
     ) as HTMLElement;
     if (alertElement) {
       alertElement.classList.add('show');
-      alertElement.classList.remove('hide'); // Optional: Ensure 'hide' class is removed
+      alertElement.classList.remove('hide');
     }
   }
 
+  // Oculta el contenedor de alerta después de un retraso
   hideMessagesAfterDelay() {
     setTimeout(() => {
       const alertElement = document.querySelector(
         '.alert-container'
       ) as HTMLElement;
       if (alertElement) {
-        alertElement.classList.add('hide'); // Apply hide animation
-        alertElement.classList.remove('show'); // Ensure 'show' class is removed
+        alertElement.classList.add('hide');
+        alertElement.classList.remove('show');
       }
-    }, 4200);
+    }, 4200); // Tiempo de retraso
+
+    // Reinicia los estados después de ocultar
     setTimeout(() => {
-      // Reset both flags after the alert has been hidden
       this.detectado = false;
       this.eliminado = false;
     }, 5000);

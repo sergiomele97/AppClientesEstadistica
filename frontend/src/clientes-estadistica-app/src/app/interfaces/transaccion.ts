@@ -5,7 +5,7 @@ export interface ITransaccion {
   importeRecibido: number;
   importeEnviado: number;
   fecha?: Date;
-  isOutlier: boolean;
+  isOutlier?: boolean;
   clienteOrigenId: number;
   clienteDestinoId: number;
 

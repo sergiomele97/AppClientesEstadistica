@@ -1,3 +1,4 @@
+<!-- src/app/components/clusters/clusters.component.html -->
 <div class="table-container">
   <input
     type="text"
@@ -7,16 +8,18 @@
     class="mb-4 px-4 py-2 border border-gray-300 rounded"
   />
 
-  <div class="relative overflow-x-auto" *ngIf="tableData && tableData.length > 0">
+  <div class="relative overflow-x-auto" *ngIf="filteredTableData && filteredTableData.length > 0">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
-          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(0)">Edad</th>
-          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(1)">Balance</th>
+          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(0)">ID Cliente</th>
+          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(1)">Edad</th>
           <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(2)">Sexo</th>
-          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(3)">Número de Gastos</th>
-          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(4)">Número de Ingresos</th>
-          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(5)">Etiqueta</th>
+          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(3)">País</th>
+          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(4)">Balance</th>
+          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(5)">Número de Gastos</th>
+          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(6)">Número de Ingresos</th>
+          <th scope="col" class="px-6 py-3 cursor-pointer" (click)="sortData(7)">Etiqueta</th>
         </tr>
       </thead>
       <tbody>
@@ -27,6 +30,8 @@
           <td class="px-6 py-3">{{ row[3] }}</td>
           <td class="px-6 py-3">{{ row[4] }}</td>
           <td class="px-6 py-3">{{ row[5] }}</td>
+          <td class="px-6 py-3">{{ row[6] }}</td>
+          <td class="px-6 py-3">{{ row[7] }}</td>
         </tr>
       </tbody>
     </table>

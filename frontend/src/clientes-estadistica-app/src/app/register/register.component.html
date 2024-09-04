@@ -7,8 +7,9 @@
     >
       <span
         class="text-transparent bg-clip-text bg-gradient-to-r to-emerald-600 from-sky-400"
-        >ChachiData</span
       >
+        ChachiData
+      </span>
     </h1>
 
     <div
@@ -26,6 +27,8 @@
           (ngSubmit)="onSubmit()"
           class="form space-y-4 md:space-y-6"
         >
+          <!-- Campos del formulario -->
+          <!-- Campo Email -->
           <div>
             <label
               for="email"
@@ -39,10 +42,8 @@
               formControlName="email"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="name@company.com"
-              required=""
+              required
             />
-
-            <!-- Mensajes en rojo -->
             <div
               *ngIf="
                 registerForm.get('email').invalid &&
@@ -57,139 +58,243 @@
                 El email no es válido.
               </div>
             </div>
-
-            <div>
-              <label
-                for="password"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Contraseña</label
-              >
-              <input
-                type="password"
-                name="password"
-                id="password"
-                formControlName="password"
-                placeholder="••••••••"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required=""
-              />
-              <div
-                *ngIf="
-                  registerForm.get('password').invalid &&
-                  registerForm.get('password').touched
-                "
-                class="text-red-500"
-              >
-                <div *ngIf="registerForm.get('password').hasError('required')">
-                  La contraseña es requerida.
-                </div>
-                <div *ngIf="registerForm.get('password').hasError('minlength')">
-                  La contraseña debe tener al menos 6 caracteres.
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <label
-                for="confirmpassword"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Confirmar Contraseña</label
-              >
-              <input
-                type="password"
-                name="confirmpassword"
-                id="confirmpassword"
-                formControlName="confirmpassword"
-                placeholder="••••••••"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required=""
-              />
-              <div
-                *ngIf="
-                  registerForm.get('confirmpassword').invalid &&
-                  registerForm.get('confirmpassword').touched
-                "
-                class="text-red-500"
-              >
-                <div
-                  *ngIf="
-                    registerForm.get('confirmpassword').hasError('required')
-                  "
-                >
-                  Debes confirmar la contraseña.
-                </div>
-                <div
-                  *ngIf="
-                    registerForm
-                      .get('confirmpassword')
-                      .hasError('passwordMismatch')
-                  "
-                >
-                  Las contraseñas no coinciden.
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <label
-                for="phone"
-                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >Número de Teléfono</label
-              >
-              <input
-                type="phone"
-                name="phone"
-                id="phone"
-                formControlName="phone"
-                placeholder="+34 638 112 233"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                required=""
-              />
-            </div>
-
-            <div class="flex items-start mt-3">
-              <div class="flex items-center h-5">
-                <input
-                  id="terms"
-                  aria-describedby="terms"
-                  type="checkbox"
-                  class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                  required=""
-                />
-              </div>
-
-              <div class="ml-3 text-sm">
-                <label
-                  for="terms"
-                  class="font-light text-gray-500 dark:text-gray-300"
-                  >I accept the
-                  <a
-                    class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                    href="#"
-                    >Terms and Conditions</a
-                  ></label
-                >
-              </div>
-            </div>
-            <button
-              type="submit"
-              class="w-full text-white mt-3 mb-3 bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-            >
-              Create an account
-            </button>
-            <p
-              class="cursor-pointer text-sm font-light text-gray-500 dark:text-gray-400"
-            >
-              Already have an account?
-              <a
-                (click)="navigateToLogin()"
-                class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                >Login here</a
-              >
-            </p>
           </div>
+
+          <!-- Campo Contraseña -->
+          <div>
+            <label
+              for="password"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Contraseña</label
+            >
+            <input
+              type="password"
+              name="password"
+              id="password"
+              formControlName="password"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="••••••••"
+              required
+            />
+            <div
+              *ngIf="
+                registerForm.get('password').invalid &&
+                registerForm.get('password').touched
+              "
+              class="text-red-500"
+            >
+              <div *ngIf="registerForm.get('password').hasError('required')">
+                La contraseña es requerida.
+              </div>
+              <div *ngIf="registerForm.get('password').hasError('minlength')">
+                La contraseña debe tener al menos 6 caracteres.
+              </div>
+            </div>
+          </div>
+
+          <!-- Campo Confirmar Contraseña -->
+          <div>
+            <label
+              for="confirmpassword"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Confirmar Contraseña</label
+            >
+            <input
+              type="password"
+              name="confirmpassword"
+              id="confirmpassword"
+              formControlName="confirmpassword"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="••••••••"
+              required
+            />
+            <div
+              *ngIf="
+                registerForm.get('confirmpassword').invalid &&
+                registerForm.get('confirmpassword').touched
+              "
+              class="text-red-500"
+            >
+              <div
+                *ngIf="registerForm.get('confirmpassword').hasError('required')"
+              >
+                Debes confirmar la contraseña.
+              </div>
+              <div
+                *ngIf="
+                  registerForm
+                    .get('confirmpassword')
+                    .hasError('passwordMismatch')
+                "
+              >
+                Las contraseñas no coinciden.
+              </div>
+            </div>
+          </div>
+
+          <!-- Campo Teléfono -->
+          <div>
+            <label
+              for="phone"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >Número de Teléfono</label
+            >
+            <input
+              type="text"
+              name="phone"
+              id="phone"
+              formControlName="phone"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="+34 638 112 233"
+              required
+            />
+            <div
+              *ngIf="
+                registerForm.get('phone').invalid &&
+                registerForm.get('phone').touched
+              "
+              class="text-red-500"
+            >
+              <div *ngIf="registerForm.get('phone').hasError('required')">
+                El número de teléfono es requerido.
+              </div>
+            </div>
+          </div>
+
+          <!-- Checkbox Términos y Condiciones -->
+          <div class="flex items-start mt-3">
+            <div class="flex items-center h-5">
+              <input
+                id="terms"
+                type="checkbox"
+                formControlName="terms"
+                aria-describedby="terms"
+                class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                required
+              />
+            </div>
+            <div class="ml-3 text-sm">
+              <label
+                for="terms"
+                class="font-light text-gray-500 dark:text-gray-300"
+              >
+                Acepto los
+                <a
+                  (click)="openModal()"
+                  class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  >Términos y Condiciones</a
+                >
+              </label>
+            </div>
+          </div>
+
+          <!-- Mensaje de error Términos y Condiciones -->
+          <div
+            *ngIf="
+              registerForm.get('terms').invalid &&
+              registerForm.get('terms').touched
+            "
+            class="text-red-500"
+          >
+            <div *ngIf="registerForm.get('terms').hasError('required')">
+              Debes aceptar los términos y condiciones.
+            </div>
+          </div>
+
+          <!-- Botón de Enviar -->
+          <button
+            type="submit"
+            class="w-full text-white mt-3 mb-3 bg-blue-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+          >
+            Crear una cuenta
+          </button>
+
+          <!-- Enlace para Iniciar Sesión -->
+          <p
+            class="cursor-pointer text-sm font-light text-gray-500 dark:text-gray-400"
+          >
+            ¿Ya tienes una cuenta?
+            <a
+              (click)="navigateToLogin()"
+              class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+            >
+              Inicia sesión aquí
+            </a>
+          </p>
         </form>
       </div>
+    </div>
+  </div>
+  <!-- Modal de Términos y Condiciones -->
+  <div
+    *ngIf="isModalOpen"
+    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center px-4"
+  >
+    <div class="bg-white p-6 rounded-lg w-full max-w-3xl mx-auto">
+      <h2 class="text-xl font-bold mb-4">Términos y Condiciones</h2>
+      <p class="mb-4">
+        Bienvenido a ChachiData. Al utilizar nuestros servicios, usted acepta
+        cumplir con los siguientes términos y condiciones. Por favor, lea estos
+        términos detenidamente antes de utilizar nuestra plataforma.
+      </p>
+      <ol class="list-decimal ml-6 mb-4 space-y-2">
+        <li>
+          <strong>Uso del Servicio:</strong> ChachiData proporciona una
+          plataforma para observar y estudiar las estadísticas de uso de
+          diversos programas para la realización de transacciones, conversiones
+          y gestión de clientes y usuarios. Usted se compromete a utilizar
+          nuestros servicios únicamente para fines legales y de acuerdo con las
+          políticas establecidas.
+        </li>
+        <li>
+          <strong>Registro de Usuario:</strong> Para acceder a ciertas funciones
+          de la plataforma, es posible que deba crear una cuenta y proporcionar
+          información personal. Usted es responsable de mantener la
+          confidencialidad de su cuenta y contraseña, y acepta notificar
+          inmediatamente cualquier uso no autorizado de su cuenta.
+        </li>
+        <li>
+          <strong>Propiedad Intelectual:</strong> Todo el contenido disponible
+          en ChachiData, incluyendo, entre otros, textos, gráficos, logotipos e
+          imágenes, es propiedad de ChachiData o sus licenciantes y está
+          protegido por las leyes de propiedad intelectual. No se permite la
+          reproducción, distribución o uso no autorizado del contenido sin
+          permiso previo.
+        </li>
+        <li>
+          <strong>Limitación de Responsabilidad:</strong> ChachiData no será
+          responsable de ningún daño directo, indirecto, incidental o
+          consecuente que resulte del uso o la incapacidad de uso de nuestros
+          servicios.
+        </li>
+        <li>
+          <strong>Modificaciones:</strong> Nos reservamos el derecho de
+          modificar estos términos y condiciones en cualquier momento. Las
+          modificaciones serán efectivas inmediatamente después de su
+          publicación en nuestro sitio web. Su uso continuado de los servicios
+          después de cualquier modificación constituye su aceptación de los
+          nuevos términos.
+        </li>
+        <li>
+          <strong>Ley Aplicable:</strong> Estos términos y condiciones se
+          regirán e interpretarán de acuerdo con las leyes del España, sin dar
+          efecto a sus conflictos de disposiciones legales.
+        </li>
+      </ol>
+      <p class="mb-4">
+        Al hacer clic en "Aceptar" o al utilizar nuestros servicios, usted
+        acepta estos términos y condiciones y se compromete a entregarnos su
+        alma. Si tiene alguna pregunta sobre estos términos, puede ponerse en
+        contacto con nosotros.
+      </p>
+      <p class="font-bold">Gracias por utilizar ChachiData.</p>
+
+      <button
+        (click)="closeModal()"
+        class="mt-4 bg-blue-600 text-white px-4 py-2 rounded w-full sm:w-auto"
+      >
+        Cerrar
+      </button>
     </div>
   </div>
 </section>

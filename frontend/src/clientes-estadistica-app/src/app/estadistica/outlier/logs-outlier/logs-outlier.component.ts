@@ -10,6 +10,8 @@ import { TransaccionService } from 'src/app/servicios/transaccion.service';
 export class LogsOutlierComponent implements OnInit{
 
   outliers: ITransaccion[];
+  vacio: boolean = false;
+  loading: boolean = true;
 
   constructor(private transaccionService: TransaccionService) {}
   
@@ -18,7 +20,9 @@ export class LogsOutlierComponent implements OnInit{
 
     this.transaccionService.outliersVistos().subscribe( datos => {
       this.outliers = datos;
-    })
+      this.vacio = this.outliers.length === 0;
+      this.loading = false;
+    });
 
   }
 

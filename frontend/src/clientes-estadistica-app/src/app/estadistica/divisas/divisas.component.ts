@@ -98,18 +98,17 @@ export class DivisasComponent implements OnInit, OnDestroy {
     this.http.post(this.apiUrl, { data: recentValues }).subscribe(
       (response: any) => {
         console.log('Received data:', response);
-        const predictions = response.Prediction || []; // Intenta obtener las predicciones de la respuesta
-        
-        // **Aquí se establecen datos predeterminados si las predicciones no están disponibles**
-        const predictionData = predictions.length ? predictions : new Array(10).fill(0); // Si no hay predicciones, usa un array de 10 ceros como datos predeterminados.
+        const predictions = response.Prediction || [];
+        const interValConf = response.ConfidenceInterval || [];
+        const predictionData = predictions.length ? predictions : new Array(10).fill(0);
 
-        // Crear fechas de predicción basadas en las fechas recientes
-        const predictionDates = recentDates.map((date, index) => {
-          const nextDate = new Date(date);
-          nextDate.setDate(nextDate.getDate() + index + 1);
-          return nextDate.toISOString().split('T')[0];
-        });
-
+        const lastDate = new Date(recentDates[recentDates.length - 1]);
+        const predictionDates = predictionData.map((_, index) => {
+        const nextDate = new Date(lastDate);
+        nextDate.setDate(nextDate.getDate() + index + 1);
+        return nextDate.toISOString().split('T')[0];
+      });
+        console.log(predictionDates)
         this.chartOptions = {
           series: [
             {
@@ -121,6 +120,16 @@ export class DivisasComponent implements OnInit, OnDestroy {
               name: 'Predictions',
               data: predictionData.map((value, index) => [predictionDates[index], value]),
               color: '#FF0000',
+            },
+            {
+              name: 'Confidence Interval Lower Bound',
+              data: interValConf.map((interval, index) => [predictionDates[index], interval[0]]),
+              color: '#87CEEB'
+            },
+            {
+              name: 'Confidence Interval Upper Bound',
+              data: interValConf.map((interval, index) => [predictionDates[index], interval[1]]),
+              color: '#FF6347'
             }
           ],
           chart: {
@@ -165,8 +174,8 @@ export class DivisasComponent implements OnInit, OnDestroy {
             }
           },
           yaxis: {
-            min: Math.min(...recentValues.concat(predictionData)) - 10,
-            max: Math.max(...recentValues.concat(predictionData)) + 10,
+            min: Math.min(...recentValues.concat(predictionData)) - 30,
+            max: Math.max(...recentValues.concat(predictionData)) + 30,
             title: {
               text: 'Valor'
             },

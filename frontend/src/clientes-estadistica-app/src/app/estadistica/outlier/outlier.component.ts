@@ -10,13 +10,13 @@ import { TransaccionService } from 'src/app/servicios/transaccion.service';
   styleUrls: ['./outlier.component.css'],
 })
 export class OutlierComponent implements OnInit, OnDestroy {
-  vacio: boolean = false;
-  loading: boolean = true;
-  successMessage: string;
-  errorMessage: string;
+  vacio: boolean = false; // Indica si no hay outliers
+  loading: boolean = true; // Muestra si los datos están cargando
+  successMessage: string; // Mensaje de éxito
+  errorMessage: string; // Mensaje de error
 
-  outliers: ITransaccion[] = [];
-  private subscription: Subscription = new Subscription();
+  outliers: ITransaccion[] = []; // Lista de outliers
+  private subscription: Subscription = new Subscription(); // Maneja suscripciones
 
   constructor(
     private transaccionService: TransaccionService,
@@ -24,43 +24,46 @@ export class OutlierComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.cargarOutliers();
-    this.setUpSignalRListeners();
+    this.cargarOutliers(); // Cargar outliers al iniciar
+    this.setUpSignalRListeners(); // Configurar SignalR
   }
 
   setUpSignalRListeners() {
-    this.signalrService.startConnection();
+    this.signalrService.startConnection(); // Iniciar conexión
     this.signalrService.addOutlierListener(() => {
-      this.cargarOutliers();
+      this.cargarOutliers(); // Recargar datos cuando se recibe una notificación
     });
   }
 
+  // Obtener y mostrar outliers
   cargarOutliers() {
     this.transaccionService.obtenerOutlier().subscribe((datos) => {
       this.outliers = datos;
-      this.vacio = this.outliers.length === 0;
-      this.loading = false;
+      this.vacio = this.outliers.length === 0; // Verificar si la lista está vacía
+      this.loading = false; // Detener carga
     });
   }
 
+  // Eliminar un outlier
   borrarOutlier(idTransaccion: number) {
     this.subscription.add(
       this.transaccionService.borrarOutlier(idTransaccion).subscribe({
         next: (response) => {
-          this.successMessage = response;
-          this.errorMessage = null;
-          this.cargarOutliers();
+          this.successMessage = response; // Mensaje de éxito
+          this.errorMessage = null; // Limpiar mensaje de error
+          this.cargarOutliers(); // Recargar lista de outliers
         },
         error: (err) => {
           this.errorMessage =
-            'Error al resolver el outlier. Por favor, intentelo de nuevo.';
-          this.successMessage = null;
-          console.error('Error: ', err);
+            'Error al resolver el outlier. Por favor, intente de nuevo.'; // Mensaje de error
+          this.successMessage = null; // Limpiar mensaje de éxito
+          console.error('Error: ', err); // Registrar error
         },
       })
     );
   }
 
+  // Cancelar suscripciones al destruir el componente
   ngOnDestroy() {
     this.subscription.unsubscribe();
   }

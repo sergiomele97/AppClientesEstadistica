@@ -1,69 +1,114 @@
-<div class="container mx-auto">
-    
-    <div class="grid grid-cols-2">
-        <div>
-            <div class="mt-20">
-                <h1 class="text-7xl font-bold tracking-wider">Bienvenido a ChachiData</h1>
-            </div>
-            <div class="mt-10">
-                <h1 class="text-gray-500 text-2xl font-light">¡Transforma tus datos en decisiones! Analiza clientes,
-                     transacciones y conversiones en un solo lugar para maximizar tu éxito.
-                      Conviértete en el maestro de tus estadísticas.</h1>
-            </div>
-            <div class="mt-10">
-                <a class="text-xl font-semibold flex justify-center bg-black text-white rounded-xl py-2.5 w-44 ml-60" href="estadistica/graficas">Empezar<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 ml-2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-                  </svg>
-                   </a>
-            </div>
-        </div>
-        <div class="ml-32">
-            <img class="rounded-3xl" src="\assets\imagen-bienvenida.png">
-        </div>
+<div class="container mx-auto px-4">
+  <!-- Sección de Bienvenida -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-8">
+    <div>
+      <div class="mt-20 text-center lg:text-left">
+        <h1 class="text-4xl lg:text-7xl font-bold tracking-wider">
+          Bienvenido a ChachiData
+        </h1>
+      </div>
+      <div class="mt-10 text-center lg:text-left">
+        <p class="text-gray-500 text-lg lg:text-2xl font-light">
+          ¡Transforma tus datos en decisiones! Analiza clientes, transacciones y
+          conversiones en un solo lugar para maximizar tu éxito. Conviértete en
+          el maestro de tus estadísticas.
+        </p>
+      </div>
+      <div class="mt-10 flex justify-center lg:justify-start">
+        <a
+          class="text-lg lg:text-xl font-semibold bg-black text-white rounded-xl py-2.5 px-8 flex items-center"
+          href="estadistica/graficas"
+        >
+          Empezar
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6 ml-2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
+            />
+          </svg>
+        </a>
+      </div>
+    </div>
+    <div class="mt-10 lg:mt-0 flex justify-center lg:justify-end">
+      <img
+        class="rounded-3xl max-w-full h-auto"
+        src="/assets/imagen-bienvenida.png"
+        alt="Imagen de bienvenida"
+      />
+    </div>
+  </div>
+
+  <!-- Sección de Información -->
+  <div class="mt-20 text-center">
+    <div class="mb-16">
+      <h1 class="text-3xl lg:text-5xl font-bold">
+        Toda la información que necesitas en una sola web
+      </h1>
+      <p class="text-lg lg:text-xl text-gray-600 mt-5">
+        ChachiData te ofrece estadísticas sobre clientes, transacciones y
+        conversiones de manera rápida e intuitiva.
+      </p>
     </div>
 
-   <div class="mt-60">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mx-auto w-full lg:w-2/3"
+    >
+      <div class="p-4 bg-white shadow-lg rounded-lg">
+        <h1 class="text-xl font-semibold mb-4">Gráficas Poderosas</h1>
+        <p>
+          Visualiza tus datos como nunca antes. Crea gráficos interactivos y
+          personalizables que te permiten explorar cada detalle de tus
+          estadísticas.
+        </p>
+      </div>
 
-        <div class="mb-20">
-            <h1 class="text-5xl font-bold">Toda la información que necesitas en una sola web</h1>
-            <p class="text-xl text-gray-600 mt-5">ChachiData te ofrece estadísticas sobre clientes, transacciones y conversiones de manera rápida e intuitiva.</p>
-        </div>
+      <div class="p-4 bg-white shadow-lg rounded-lg">
+        <h1 class="text-xl font-semibold mb-4">Análisis de Clientes</h1>
+        <p>
+          Comprende el comportamiento de tus clientes a fondo. Segmenta, analiza
+          y optimiza para maximizar el valor de cada interacción.
+        </p>
+      </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center w-2/3 ml-48">
-            
-            <div class="p-4 bg-white shadow-lg rounded-lg">
-            <h1 class="text-xl font-semibold mb-4">Gráficas Poderosas</h1>
-            <p>Visualiza tus datos como nunca antes. Crea gráficos interactivos y personalizables que te permiten explorar cada detalle de tus estadísticas.</p>
-            </div>
-        
-            <div class="p-4 bg-white shadow-lg rounded-lg">
-            <h1 class="text-xl font-semibold mb-4">Análisis de Clientes</h1>
-            <p>Comprende el comportamiento de tus clientes a fondo. Segmenta, analiza y optimiza para maximizar el valor de cada interacción.</p>
-            </div>
-        
-            <div class="p-4 bg-white shadow-lg rounded-lg">
-            <h1 class="text-xl font-semibold mb-4">Transacciones en Tiempo Real</h1>
-            <p>Monitorea y analiza cada transacción al instante, asegurándote de que nada se escape de tu control.</p>
-            </div>
-        
-            <div class="p-4 bg-white shadow-lg rounded-lg">
-            <h1 class="text-xl font-semibold mb-4">Divisas y Conversión</h1>
-            <p>Gestiona múltiples divisas y realiza análisis de conversión para entender el impacto global de tus ventas.</p>
-            </div>
-        
-            <div class="p-4 bg-white shadow-lg rounded-lg">
-            <h1 class="text-xl font-semibold mb-4">Clustering Avanzado</h1>
-            <p>Agrupa tus datos automáticamente para descubrir patrones ocultos y nuevas oportunidades de negocio.</p>
-            </div>
-        
-            <div class="p-4 bg-white shadow-lg rounded-lg">
-            <h1 class="text-xl font-semibold mb-4">Detección de Outliers</h1>
-            <p>Identifica y analiza outliers para mejorar la precisión de tus decisiones y evitar sorpresas desagradables.</p>
-            </div>
+      <div class="p-4 bg-white shadow-lg rounded-lg">
+        <h1 class="text-xl font-semibold mb-4">Transacciones en Tiempo Real</h1>
+        <p>
+          Monitorea y analiza cada transacción al instante, asegurándote de que
+          nada se escape de tu control.
+        </p>
+      </div>
 
-        </div>
+      <div class="p-4 bg-white shadow-lg rounded-lg">
+        <h1 class="text-xl font-semibold mb-4">Divisas y Conversión</h1>
+        <p>
+          Gestiona múltiples divisas y realiza análisis de conversión para
+          entender el impacto global de tus ventas.
+        </p>
+      </div>
 
-   </div>
-      
+      <div class="p-4 bg-white shadow-lg rounded-lg">
+        <h1 class="text-xl font-semibold mb-4">Clustering Avanzado</h1>
+        <p>
+          Agrupa tus datos automáticamente para descubrir patrones ocultos y
+          nuevas oportunidades de negocio.
+        </p>
+      </div>
 
+      <div class="p-4 bg-white shadow-lg rounded-lg">
+        <h1 class="text-xl font-semibold mb-4">Detección de Outliers</h1>
+        <p>
+          Identifica y analiza outliers para mejorar la precisión de tus
+          decisiones y evitar sorpresas desagradables.
+        </p>
+      </div>
+    </div>
+  </div>
 </div>

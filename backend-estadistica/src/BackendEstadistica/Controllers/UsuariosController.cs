@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.SignalR;
 namespace BackendEstadistica.Controllers;
 
 [Route("api/usuarios")]
-[ApiController]
+
+
 public class UsuariosController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -143,4 +144,6 @@ public class UsuariosController : ControllerBase
 
         return Ok("El usuario se borró correctamente");
     }
+
+
 }

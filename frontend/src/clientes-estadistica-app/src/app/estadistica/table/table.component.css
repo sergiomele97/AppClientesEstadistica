@@ -1,3 +1,4 @@
+/* Estilos para el contenedor del tooltip */
 .tooltip-container {
   position: absolute;
   background-color: #4a5568; /* Color de fondo del tooltip (gris oscuro) */
@@ -14,7 +15,7 @@
 }
 
 .tooltip-container::after {
-  content: ''; /* Pseudo-elemento para crear una flecha en el tooltip */
+  content: ""; /* Pseudo-elemento para crear una flecha en el tooltip */
   position: absolute;
   border-width: 6px;
   border-style: solid;
