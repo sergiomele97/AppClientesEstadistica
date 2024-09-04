@@ -24,24 +24,27 @@ jobs:
 
       - name: Create and start virtual environment
         run: |
+          cd data-analitics
           python -m venv venv
           source venv/bin/activate
       
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          cd data-analitics
+          pip install -r requirements.txt
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: |
+          cd data-analitics
+          zip -r release.zip . -x "*.git/*" -x "__pycache__/*" -x "venv/*"
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: |
-            release.zip
-            !venv/
+          path: data-analitics/release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -49,6 +52,8 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
     
     steps:
       - name: Download artifact from build job
