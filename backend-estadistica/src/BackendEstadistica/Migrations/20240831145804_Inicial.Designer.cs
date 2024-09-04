@@ -12,13 +12,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendEstadistica.Migrations
 {
     [DbContext(typeof(ContextoBBDD))]
-<<<<<<<< HEAD:backend-estadistica/src/BackendEstadistica/Migrations/20240831145804_Inicial.Designer.cs
+
     [Migration("20240831145804_Inicial")]
     partial class Inicial
-========
-    [Migration("20240828111453_Vistas")]
-    partial class Vistas
->>>>>>>> data-analitics:backend-estadistica/src/BackendEstadistica/Migrations/20240828111453_Vistas.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
