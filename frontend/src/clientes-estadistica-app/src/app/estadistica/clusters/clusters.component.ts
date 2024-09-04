@@ -3,7 +3,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ClienteConBalance } from 'src/app/models/cliente-con-balance.model';
 import { ClienteService } from 'src/app/servicios/cliente.service';
-import { TransaccionService } from 'src/app/servicios/transaccion.service';
 import { ClustersDataService } from 'src/app/servicios/clusters-data.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
@@ -18,7 +17,6 @@ export class ClustersComponent implements OnInit, OnDestroy {
     private dataService: ClustersDataService,
     private http: HttpClient,
     private clienteService: ClienteService,
-    private transaccionService: TransaccionService
   ) {}
 
   public isLoading = false;  // Nueva variable para controlar la visibilidad del loader
