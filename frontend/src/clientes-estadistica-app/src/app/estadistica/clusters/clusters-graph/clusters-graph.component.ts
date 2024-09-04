@@ -109,6 +109,11 @@ export class ClustersGraphComponent implements OnInit {
       },
       yaxis: {
         tickAmount: 7,
+        labels: {
+          formatter: function (val) {
+            return val.toFixed(2);
+          },
+        },
       },
       colors: colors // Aplicar los colores a las series
     };

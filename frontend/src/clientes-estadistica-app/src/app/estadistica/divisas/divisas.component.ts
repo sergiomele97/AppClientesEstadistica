@@ -83,7 +83,7 @@ export class DivisasComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const recentDates = recentData
+    var recentDates = recentData
       .map((d) => {
         const fecha = new Date(d.fecha);
         return !isNaN(fecha.getTime()) ? fecha.toISOString().split('T')[0] : null;
@@ -91,6 +91,7 @@ export class DivisasComponent implements OnInit, OnDestroy {
       .filter((date) => date !== null);
 
     const recentValues = recentData.map((d) => d.valor);
+    recentDates = ['2024-08-26', '2024-08-27', '2024-08-28', '2024-08-29', '2024-08-30', '2024-08-31', '2024-09-1', '2024-09-2', '2024-09-3', '2024-09-4'];
     console.log(recentDates);
     console.log(recentValues);
 
