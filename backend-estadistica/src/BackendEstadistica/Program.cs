@@ -89,6 +89,12 @@ public class Program
                     .AllowAnyHeader()  // Permite cualquier encabezado.
                     .AllowAnyMethod()  // Permite cualquier mï¿½todo HTTP.
                     .AllowCredentials());  // Permite el uso de credenciales.
+            options.AddPolicy("AllowTrans",
+                builder => builder
+                    .WithOrigins("http://localhost:4200", "http://172.30.137.232") // Permite solicitudes desde localhost y la IP 172.30.137.232
+                    .AllowAnyHeader()  // Permite cualquier encabezado.
+                    .AllowAnyMethod()  // Permite cualquier método HTTP.
+                    .AllowCredentials());  // Permite el uso de credenciales.
         });
 
         // Configura el explorador de endpoints y Swagger para la documentaciï¿½n de la API.
