@@ -115,7 +115,7 @@ public class Program
         {
             app.UseSwagger();  // Habilita Swagger en desarrollo.
             app.UseSwaggerUI();  // Habilita la interfaz de usuario de Swagger.
-            app.UseCors("AllowLocalhost");  // Usa la pol�tica de CORS para localhost.
+            app.UseCors("AllowTrans");  // Usa la pol�tica de CORS para localhost.
         }
         else
         {
