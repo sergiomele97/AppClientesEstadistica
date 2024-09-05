@@ -47,8 +47,7 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
   constructor(
     private transaccionService: TransaccionService,
     private route: ActivatedRoute,
-    private formaterFechaPipe: FormaterFechaPipe,
-    private signalrService: SignalrService
+    private formaterFechaPipe: FormaterFechaPipe
   ) {}
 
   ngOnInit(): void {
