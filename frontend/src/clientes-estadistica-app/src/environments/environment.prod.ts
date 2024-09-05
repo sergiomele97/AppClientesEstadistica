@@ -7,6 +7,7 @@ export const environment = {
 
     // Backend python
     apiClusters: 'https://chachidatos-hcegapfwcua8cgg3.spaincentral-01.azurewebsites.net/cluster',
+    apiBalance: 'https://chachidatos-hcegapfwcua8cgg3.spaincentral-01.azurewebsites.net/api/ClientesConBalance',
     apiPrediccion: 'https://chachidatos-hcegapfwcua8cgg3.spaincentral-01.azurewebsites.net/predict',
     apiProcedure: 'https://chachidatos-hcegapfwcua8cgg3.spaincentral-01.azurewebsites.net/api/TransaccionesProceso',
 

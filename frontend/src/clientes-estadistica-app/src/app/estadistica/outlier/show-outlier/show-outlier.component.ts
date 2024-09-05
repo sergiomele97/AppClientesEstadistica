@@ -14,7 +14,6 @@ import {
 import { Subscription } from 'rxjs';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
 import { FormaterFechaPipe } from 'src/app/pipes/formaterFecha.pipe';
-import { SignalrService } from 'src/app/servicios/signalr.service';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
 
 export type ChartOptions = {
