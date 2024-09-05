@@ -97,6 +97,7 @@ public class Program
             {
                 builder.AllowAnyOrigin()
                 .AllowAnyMethod()
+                .AllowCredentials()
                 .AllowAnyHeader();
             });
         });
