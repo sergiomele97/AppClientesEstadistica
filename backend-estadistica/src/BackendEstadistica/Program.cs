@@ -74,21 +74,31 @@ public class Program
         // Registra el servicio TransaccionService.
         builder.Services.AddScoped<TransaccionService>();
         // Configuraci�n de CORS para permitir solicitudes desde or�genes espec�ficos.
+        //builder.Services.AddCors(options =>
+        //{
+        //    options.AddPolicy("AllowLocalhost",
+        //        builder => builder
+        //            .WithOrigins("http://localhost:4200")  // Permite solicitudes desde localhost:4200.
+        //            .AllowAnyHeader()  // Permite cualquier encabezado.
+        //            .AllowAnyMethod()  // Permite cualquier m�todo HTTP.
+        //            .AllowCredentials());  // Permite el uso de credenciales.
+
+        //    options.AddPolicy("AllowAzureHost",
+        //        builder => builder
+        //            .WithOrigins("https://wonderful-meadow-07530fe03.5.azurestaticapps.net")  // Permite solicitudes desde el host de Azure.
+        //            .AllowAnyHeader()  // Permite cualquier encabezado.
+        //            .AllowAnyMethod()  // Permite cualquier m�todo HTTP.
+        //            .AllowCredentials());  // Permite el uso de credenciales.
+        //});
         builder.Services.AddCors(options =>
         {
-            options.AddPolicy("AllowLocalhost",
-                builder => builder
-                    .WithOrigins("http://localhost:4200")  // Permite solicitudes desde localhost:4200.
-                    .AllowAnyHeader()  // Permite cualquier encabezado.
-                    .AllowAnyMethod()  // Permite cualquier m�todo HTTP.
-                    .AllowCredentials());  // Permite el uso de credenciales.
-
-            options.AddPolicy("AllowAzureHost",
-                builder => builder
-                    .WithOrigins("https://wonderful-meadow-07530fe03.5.azurestaticapps.net")  // Permite solicitudes desde el host de Azure.
-                    .AllowAnyHeader()  // Permite cualquier encabezado.
-                    .AllowAnyMethod()  // Permite cualquier m�todo HTTP.
-                    .AllowCredentials());  // Permite el uso de credenciales.
+            options.AddPolicy("AllowAllOrigins",
+            builder =>
+            {
+                builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+            });
         });
 
         // Configura el explorador de endpoints y Swagger para la documentaci�n de la API.
