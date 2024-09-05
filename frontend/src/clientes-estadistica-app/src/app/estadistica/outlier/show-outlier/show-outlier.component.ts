@@ -12,10 +12,8 @@ import {
   ApexFill,
 } from 'ng-apexcharts';
 import { Subscription } from 'rxjs';
-import { ICliente } from 'src/app/interfaces/cliente';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
 import { FormaterFechaPipe } from 'src/app/pipes/formaterFecha.pipe';
-import { SignalrService } from 'src/app/servicios/signalr.service';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
 
 export type ChartOptions = {
@@ -39,7 +37,6 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
   @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
 
-  cliente: ICliente;
   transacciones: ITransaccion[];
   idTransaccion: number;
   successMessage: string;
@@ -49,8 +46,7 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
   constructor(
     private transaccionService: TransaccionService,
     private route: ActivatedRoute,
-    private formaterFechaPipe: FormaterFechaPipe,
-    private signalrService: SignalrService
+    private formaterFechaPipe: FormaterFechaPipe
   ) {}
 
   ngOnInit(): void {

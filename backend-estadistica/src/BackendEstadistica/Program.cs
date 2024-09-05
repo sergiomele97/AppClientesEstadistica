@@ -89,6 +89,12 @@ public class Program
                     .AllowAnyHeader()  // Permite cualquier encabezado.
                     .AllowAnyMethod()  // Permite cualquier mï¿½todo HTTP.
                     .AllowCredentials());  // Permite el uso de credenciales.
+            options.AddPolicy("AllowTrans",
+                builder => builder
+                    .WithOrigins("http://localhost:4200", "http://172.30.137.232") // Permite solicitudes desde localhost y la IP 172.30.137.232
+                    .AllowAnyHeader()  // Permite cualquier encabezado.
+                    .AllowAnyMethod()  // Permite cualquier método HTTP.
+                    .AllowCredentials());  // Permite el uso de credenciales.
         });
 
         // Configura el explorador de endpoints y Swagger para la documentaciï¿½n de la API.
@@ -109,7 +115,7 @@ public class Program
         {
             app.UseSwagger();  // Habilita Swagger en desarrollo.
             app.UseSwaggerUI();  // Habilita la interfaz de usuario de Swagger.
-            app.UseCors("AllowLocalhost");  // Usa la polï¿½tica de CORS para localhost.
+            app.UseCors("AllowTrans");  // Usa la polï¿½tica de CORS para localhost.
         }
         else
         {
