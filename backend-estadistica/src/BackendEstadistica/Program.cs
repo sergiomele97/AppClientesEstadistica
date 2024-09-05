@@ -120,11 +120,14 @@ public class Program
         {
             app.UseSwagger();  // Habilita Swagger en desarrollo.
             app.UseSwaggerUI();  // Habilita la interfaz de usuario de Swagger.
-            app.UseCors("AllowLocalhost");  // Usa la pol�tica de CORS para localhost.
+            //app.UseCors("AllowLocalhost");  // Usa la pol�tica de CORS para localhost.
+            app.UseCors("AllowAllOrigins");
         }
         else
         {
-            app.UseCors("AllowAzureHost");  // Usa la pol�tica de CORS para el host de Azure.
+            //app.UseCors("AllowAzureHost");  // Usa la pol�tica de CORS para el host de Azure.
+
+            app.UseCors("AllowAllOrigins");
         }
 
         // Configura el middleware de redirecci�n HTTPS, autenticaci�n y autorizaci�n.
