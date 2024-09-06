@@ -1,5 +1,2 @@
 - Si no se consigue enviar info, guardar cosas pendientes en una tabla.
-- Pasar parametros a controlador
-- Implementar roles
-- Modificar migraciones
 - Hacer la aplicacion responsive
