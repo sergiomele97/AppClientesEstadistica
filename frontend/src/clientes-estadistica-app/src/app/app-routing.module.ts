@@ -13,7 +13,7 @@ import { DivisasComponent } from './estadistica/divisas/divisas.component';
 import { OutlierComponent } from './estadistica/outlier/outlier.component';
 import { ShowOutlierComponent } from './estadistica/outlier/show-outlier/show-outlier.component';
 import { LogsOutlierComponent } from './estadistica/outlier/logs-outlier/logs-outlier.component';
-import { GraficasComponent } from './estadistica/graficas/graficas.component';
+import { GraficasComponent } from './estadistica/graficas/Graficas.component';
 import { TableComponent } from './estadistica/table/table.component';
 import { ClustersComponent } from './estadistica/clusters/clusters.component';
 

@@ -6,5 +6,5 @@ export const environment = {
     apiPrediccion: 'http://localhost:8000/predict',
     apiBalance: 'https://localhost:7144/api/ClientesConBalance',
     apiNotification: 'https://localhost:7144/notificationHub',
-    apiProcedure: 'https://localhost:7144/api/TransaccionesProceso',
+    apiProcedure: 'https://localhost:7144/api/TransaccionesProceso'
   };
