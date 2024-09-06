@@ -1,5 +1,3 @@
-using BackendEstadistica.SignalR;
-
 namespace BackendEstadistica;
 
 public class Program

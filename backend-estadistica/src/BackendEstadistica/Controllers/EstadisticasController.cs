@@ -1,33 +1,25 @@
-using BackendEstadistica.SignalR;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+namespace BackendEstadistica.Controllers;
 
-namespace BackendEstadistica.Controllers
+[Route("api/estadisticas")]
+[ApiController]
+public class EstadisticasController : ControllerBase
 {
-    [Route("api/estadisticas")]
-    [ApiController]
-    public class EstadisticasController : ControllerBase
-    {
-        private readonly ContextoBBDD _contextoBBDD;
-        private readonly IEstadisticasRepositorio _estadisticasRepositorio;
-        private readonly IMapper _mapper;
-        private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly ContextoBBDD _contextoBBDD;
+    private readonly IEstadisticasRepositorio _estadisticasRepositorio;
+    private readonly IMapper _mapper;
+    private readonly IHubContext<NotificationHub> _hubContext;
 
-        public EstadisticasController(
-            ContextoBBDD contextoBBDD,
-            IEstadisticasRepositorio estadisticasRepositorio,
-            IMapper mapper,
-            IHubContext<NotificationHub> hubContext)
-        {
-            _contextoBBDD = contextoBBDD;
-            _estadisticasRepositorio = estadisticasRepositorio;
-            _mapper = mapper;
-            _hubContext = hubContext;
-        }
+    public EstadisticasController(
+        ContextoBBDD contextoBBDD,
+        IEstadisticasRepositorio estadisticasRepositorio,
+        IMapper mapper,
+        IHubContext<NotificationHub> hubContext)
+    {
+        _contextoBBDD = contextoBBDD;
+        _estadisticasRepositorio = estadisticasRepositorio;
+        _mapper = mapper;
+        _hubContext = hubContext;
+    }
 
     // CLIENTES
     [HttpPost("crearCliente")]
@@ -82,31 +74,31 @@ namespace BackendEstadistica.Controllers
             .Include(t => t.ClienteOrigen)
             .FirstOrDefaultAsync(t => t.TransaccionId == nuevaTransaccion.TransaccionId);
 
-            if(transaccion == null)
-            {
-                return BadRequest();
-            }
-
-            //if (transaccion != null && transaccion.IsOutlier == true)
-            //{
-
-            //    await _hubContext.Clients.All.SendAsync("OutlierDetected", new
-            //    {
-            //        Message = "Outlier detectado",
-            //        Cliente = transaccion.ClienteOrigen.Nombre,
-            //        ImporteEnviado = transaccion.ImporteEnviado
-            //    });
-
-            //    return Ok(new
-            //    {
-            //        Message = "Outlier detectado",
-            //        Cliente = transaccion.ClienteOrigen.Nombre,
-            //        ImporteEnviado = transaccion.ImporteEnviado
-            //    });
-            //}
-
-            return Ok("Transacción creada correctamente");
+        if (transaccion == null)
+        {
+            return BadRequest();
         }
+
+        //if (transaccion != null && transaccion.IsOutlier == true)
+        //{
+
+        //    await _hubContext.Clients.All.SendAsync("OutlierDetected", new
+        //    {
+        //        Message = "Outlier detectado",
+        //        Cliente = transaccion.ClienteOrigen.Nombre,
+        //        ImporteEnviado = transaccion.ImporteEnviado
+        //    });
+
+        //    return Ok(new
+        //    {
+        //        Message = "Outlier detectado",
+        //        Cliente = transaccion.ClienteOrigen.Nombre,
+        //        ImporteEnviado = transaccion.ImporteEnviado
+        //    });
+        //}
+
+        return Ok("Transacción creada correctamente");
+    }
 
     [HttpGet("getTransacciones")]
     public async Task<IActionResult> GetTransacciones()
@@ -128,47 +120,47 @@ namespace BackendEstadistica.Controllers
         return Ok(_mapper.Map<Transaccion>(transaccion));
     }
 
-        // OUTLIERS
-        [HttpPost("crearOutlier")]
-        public async Task<IActionResult> CrearOutliersAsync()
+    // OUTLIERS
+    [HttpPost("crearOutlier")]
+    public async Task<IActionResult> CrearOutliersAsync()
+    {
+        var clienteOrigen = await _estadisticasRepositorio.GetRandomClientAsync();
+        var clienteDestino = await _estadisticasRepositorio.GetRandomClientAsync();
+
+        var outliersFaker = new OutliersFaker(clienteOrigen, clienteDestino);
+        var transaccionDto = outliersFaker.Generate();
+
+        var nuevaTransaccion = _mapper.Map<Transaccion>(transaccionDto);
+        await _estadisticasRepositorio.CrearTransaccionAsync(nuevaTransaccion);
+
+        await _estadisticasRepositorio.DetectarOutliersAsync();
+
+        var transaccion = await _contextoBBDD.Transacciones
+            .Include(t => t.ClienteOrigen)
+            .FirstOrDefaultAsync(t => t.TransaccionId == nuevaTransaccion.TransaccionId);
+
+        if (transaccion != null && transaccion.IsOutlier == true)
         {
-            var clienteOrigen = await _estadisticasRepositorio.GetRandomClientAsync();
-            var clienteDestino = await _estadisticasRepositorio.GetRandomClientAsync();
 
-            var outliersFaker = new OutliersFaker(clienteOrigen, clienteDestino);
-            var transaccionDto = outliersFaker.Generate();
-
-            var nuevaTransaccion = _mapper.Map<Transaccion>(transaccionDto);
-            await _estadisticasRepositorio.CrearTransaccionAsync(nuevaTransaccion);
-
-            await _estadisticasRepositorio.DetectarOutliersAsync();
-
-            var transaccion = await _contextoBBDD.Transacciones
-                .Include(t => t.ClienteOrigen)
-                .FirstOrDefaultAsync(t => t.TransaccionId == nuevaTransaccion.TransaccionId);
-
-            if (transaccion != null && transaccion.IsOutlier == true)
+            await _hubContext.Clients.All.SendAsync("OutlierDetected", new
             {
+                Message = "Outlier detectado",
+                Cliente = transaccion.ClienteOrigen.Nombre,
+                ImporteEnviado = transaccion.ImporteEnviado
+            });
 
-                await _hubContext.Clients.All.SendAsync("OutlierDetected", new
-                {
-                    Message = "Outlier detectado",
-                    Cliente = transaccion.ClienteOrigen.Nombre,
-                    ImporteEnviado = transaccion.ImporteEnviado
-                });
-
-                return Ok(new
-                {
-                    Message = "Outlier detectado",
-                    Cliente = transaccion.ClienteOrigen.Nombre,
-                    ImporteEnviado = transaccion.ImporteEnviado
-                });
-            }
-
-            return Ok("Transacción creada correctamente");
+            return Ok(new
+            {
+                Message = "Outlier detectado",
+                Cliente = transaccion.ClienteOrigen.Nombre,
+                ImporteEnviado = transaccion.ImporteEnviado
+            });
         }
 
-        [HttpGet("getOutliers")]
+        return Ok("Transacción creada correctamente");
+    }
+
+    [HttpGet("getOutliers")]
     public async Task<IActionResult> ObtenerTransaccionesOutliers()
     {
         var transaccionesOutliers = await _contextoBBDD.Transacciones
@@ -200,28 +192,28 @@ namespace BackendEstadistica.Controllers
     public async Task<IActionResult> EliminarOutlier([FromRoute] int idTransaccion)
     {
 
-            // Eliminar el outlier usando el repositorio
-            var resultado = await _estadisticasRepositorio.EliminarOutlierAsync(idTransaccion);
+        // Eliminar el outlier usando el repositorio
+        var resultado = await _estadisticasRepositorio.EliminarOutlierAsync(idTransaccion);
 
-            if (!resultado)
-            {
-                return BadRequest("No se pudo eliminar el outlier.");
-            }
-
-            // Enviar notificación a través de SignalR
-            await _hubContext.Clients.All.SendAsync("OutlierRemoved", new
-            {
-                Message = "Outlier eliminado",
-                IDCliente = idTransaccion
-            });
-
-            // Responder con un mensaje de éxito
-            return Ok(new
-            {
-                Message = "El outlier se eliminó con éxito.",
-                IDCliente = idTransaccion
-            });
+        if (!resultado)
+        {
+            return BadRequest("No se pudo eliminar el outlier.");
         }
+
+        // Enviar notificación a través de SignalR
+        await _hubContext.Clients.All.SendAsync("OutlierRemoved", new
+        {
+            Message = "Outlier eliminado",
+            IDCliente = idTransaccion
+        });
+
+        // Responder con un mensaje de éxito
+        return Ok(new
+        {
+            Message = "El outlier se eliminó con éxito.",
+            IDCliente = idTransaccion
+        });
+    }
 
     [HttpGet("ultimas-transacciones/{clienteId}")]
     public async Task<IActionResult> ObtenerUltimasTransacciones(int clienteId)
@@ -245,17 +237,17 @@ namespace BackendEstadistica.Controllers
     {
         // Lista de nombres de divisas
         var divisas = new List<string>
-        {
-            "AFN", "ALL", "EUR", "AOA", "XCD", "SAR", "DZD", "ARS", "AMD", "AUD", "AZN", "BSD", "BHD",
-            "BDT", "BBD", "BZD", "XOF", "BYN", "MMK", "BOB", "BAM", "BWP", "BRL", "BND", "BGN", "BIF",
-            "INR", "CVE", "KHR", "XAF", "CAD", "QAR", "CLP", "CNY", "COP", "KMF", "KPW", "KRW", "CRC",
-            "HRK", "CUP", "CZK", "DKK", "EGP", "USD", "AED", "ERN", "GBP", "SZL", "GTQ", "GNF", "GYD",
-            "HTG", "HNL", "HUF", "IDR", "IRR", "IQD", "ISK", "JMD", "JPY", "JOD", "KZT", "KES", "KGS",
-            "KWD", "LAK", "LVL", "LBP", "LRD", "LYD", "CHF", "MGA", "MYR", "MWK", "MVR", "MDL", "MNT",
-            "MAD", "MUR", "MRU", "MXN", "NAD", "NPR", "NIO", "NGN", "NOK", "NZD", "OMR", "PKR", "PAB",
-            "PGK", "PYG", "PEN", "PLN", "RON", "RUB", "RSD", "SCR", "SLL", "SGD", "SYP", "SOS", "LKR",
-            "SDG", "SEK", "STN", "RWF"
-        };
+    {
+        "AFN", "ALL", "EUR", "AOA", "XCD", "SAR", "DZD", "ARS", "AMD", "AUD", "AZN", "BSD", "BHD",
+        "BDT", "BBD", "BZD", "XOF", "BYN", "MMK", "BOB", "BAM", "BWP", "BRL", "BND", "BGN", "BIF",
+        "INR", "CVE", "KHR", "XAF", "CAD", "QAR", "CLP", "CNY", "COP", "KMF", "KPW", "KRW", "CRC",
+        "HRK", "CUP", "CZK", "DKK", "EGP", "USD", "AED", "ERN", "GBP", "SZL", "GTQ", "GNF", "GYD",
+        "HTG", "HNL", "HUF", "IDR", "IRR", "IQD", "ISK", "JMD", "JPY", "JOD", "KZT", "KES", "KGS",
+        "KWD", "LAK", "LVL", "LBP", "LRD", "LYD", "CHF", "MGA", "MYR", "MWK", "MVR", "MDL", "MNT",
+        "MAD", "MUR", "MRU", "MXN", "NAD", "NPR", "NIO", "NGN", "NOK", "NZD", "OMR", "PKR", "PAB",
+        "PGK", "PYG", "PEN", "PLN", "RON", "RUB", "RSD", "SCR", "SLL", "SGD", "SYP", "SOS", "LKR",
+        "SDG", "SEK", "STN", "RWF"
+    };
 
         var fecha = DateTime.Now;
 
@@ -335,12 +327,6 @@ namespace BackendEstadistica.Controllers
         {
             return NotFound("País no encontrado.");
         }
-
-            return Ok(_mapper.Map<Pais>(pais));
-        }
-
-     
-
-
+        return Ok(_mapper.Map<Pais>(pais));
     }
 }
