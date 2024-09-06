@@ -18,6 +18,7 @@ public class Program
         // Agrega los servicios necesarios para los controladores de API.
         builder.Services.AddControllers();
 
+        // Añade Signal R
         builder.Services.AddSignalR();
 
         // Configura AutoMapper con el perfil de mapeo definido.
