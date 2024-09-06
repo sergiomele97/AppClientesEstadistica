@@ -31,6 +31,3 @@ Este proyecto es una aplicación backend para gestionar estadísticas. Está org
 
 ## Contribuciones
 Las contribuciones son bienvenidas. Por favor, abre un issue o un pull request para sugerencias y mejoras.
-
-## Licencia
-Este proyecto está licenciado bajo la [MIT License](LICENSE).
