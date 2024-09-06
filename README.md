@@ -1,5 +1,7 @@
 # Proyecto ChachiData
 
+[Ver video en YouTube](https://www.youtube.com/watch?v=6MnIbU1c0lo)
+
 # Resumen del Proyecto
 
 Este proyecto ofrece una solución integral combinando análisis estadístico avanzado y clustering con un backend robusto y un frontend interactivo. Utiliza una arquitectura moderna basada en microservicios, integrando tecnologías como Python y .NET, con un frontend desarrollado en Angular. La integración continua y el despliegue automático se gestionan a través de GitHub Actions, y todo el sistema está desplegado en Azure. La metodología ágil Scrum, gestionada con Azure DevOps, permite una entrega continua de valor y una rápida adaptación a los cambios.
@@ -147,8 +149,6 @@ La estructura de routing del frontend organiza la navegación en módulos espec�
     Al finalizar el uso de la aplicación, la sesión permanecerá activa si así se seleccionó. Alternativamente, se puede cerrar la sesión desde el perfil del usuario.
     
     ![cerrarSesion.PNG](https://prod-files-secure.s3.us-west-2.amazonaws.com/14508b69-9364-45cc-a340-7ad8815068c0/12c4e2a1-66ab-4d46-a9bb-e36e080f93ba/cerrarSesion.png)
-    
 
-## Video del proyecto en funcionamiento
-
-[ChachiData Canción Regguetton ‐ Hecho con Clipchamp (1).mp4](https://prod-files-secure.s3.us-west-2.amazonaws.com/14508b69-9364-45cc-a340-7ad8815068c0/5e02d710-2563-481c-896f-fce3653b1643/ChachiData_Cancin_Regguetton__Hecho_con_Clipchamp_(1).mp4)
+# Instalación
+Para instalar y ejecutar cualquiera de estos proyectos, sigue las instrucciones de la "documentación del proyecto.md" ubicada en el directorio de cada proyecto.
