@@ -39,19 +39,22 @@ public class SignalRService
 
                         if (transaccionJson["TipoAcceso"]?.ToString() == "Transaccion")
                         {
-                            string clienteOrigenId = transaccionJson["ClienteOrigenId"]?.ToString() ?? string.Empty;
-                            string clienteDestinoId = transaccionJson["ClienteDestinoId"]?.ToString() ?? string.Empty;
-                            int paisOrigen = transaccionJson["PaisOrigen"]?.ToObject<int>() ?? 0;
-                            int paisDestino = transaccionJson["PaisDestino"]?.ToObject<int>() ?? 0;
-                            double valorOrigen = transaccionJson["ValorOrigen"]?.ToObject<double>() ?? 0;
-                            double valorDestino = transaccionJson["ValorDestino"]?.ToObject<double>() ?? 0;
-                            DateTime timestamp = transaccionJson["Timestamp"]?.ToObject<DateTime>() ?? DateTime.UtcNow;
+                            // Código para manejar transacciones
+                        }
+                        else if (transaccionJson["TipoAcceso"]?.ToString() == "Registro")
+                        {
+                            string nombre = transaccionJson["Nombre"]?.ToString() ?? string.Empty;
+                            string apellido = transaccionJson["Apellido"]?.ToString() ?? string.Empty;
+                            DateTime fechaNacimiento = transaccionJson["FechaNacimiento"]?.ToObject<DateTime>() ?? DateTime.UtcNow;
+                            string empleo = transaccionJson["Empleo"]?.ToString() ?? string.Empty;
+                            int paisId = transaccionJson["PaisId"]?.ToObject<int>() ?? 0;
+                            string email = transaccionJson["Email"]?.ToString() ?? string.Empty;
 
-                            await GuardarTransaccionAsync(clienteOrigenId, clienteDestinoId, paisOrigen, paisDestino, valorOrigen, valorDestino, timestamp);
+                            await RegistrarClienteAsync(nombre, apellido, fechaNacimiento, empleo, paisId, email);
                         }
                         else
                         {
-                            Console.WriteLine("Mensaje recibido no es de tipo 'Transaccion'.");
+                            Console.WriteLine("Mensaje recibido no es de tipo 'Transaccion' ni 'Registro'.");
                         }
                     }
                     catch (JsonException jsonEx)
@@ -145,6 +148,39 @@ public class SignalRService
             throw;
         }
     }
+
+    private async Task RegistrarClienteAsync(string nombre, string apellido, DateTime fechaNacimiento, string empleo, int paisId, string email)
+    {
+        try
+        {
+            // Calcular la edad a partir de la fecha de nacimiento
+            int edad = DateTime.Now.Year - fechaNacimiento.Year;
+            if (fechaNacimiento > DateTime.Now.AddYears(-edad)) edad--;
+
+            // Crear una nueva instancia de Cliente
+            var nuevoCliente = new Cliente
+            {
+                Nombre = $"{nombre} {apellido}", // Combinar nombre y apellido si es necesario
+                Correo = email,
+                Telefono = string.Empty, // Deberías definir cómo manejar el teléfono (si aplica)
+                Edad = edad,
+                Sexo = string.Empty, // Deberías definir cómo manejar el sexo (si aplica)
+                Trabajo = empleo,
+                PaisId = paisId
+            };
+
+            // Registrar el cliente usando el repositorio
+            await _estadisticasRepositorio.CrearClienteAsync(nuevoCliente);
+
+            Console.WriteLine($"Cliente registrado: {nuevoCliente.Nombre}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al registrar el cliente: {ex.Message}");
+            throw;
+        }
+    }
+
 
     public async Task StopListeningAsync()
     {
