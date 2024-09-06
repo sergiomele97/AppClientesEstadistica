@@ -175,8 +175,8 @@ export class DivisasComponent implements OnInit, OnDestroy {
             }
           },
           yaxis: {
-            min: Math.min(...recentValues.concat(predictionData)) - 30,
-            max: Math.max(...recentValues.concat(predictionData)) + 30,
+            min: Math.min(...recentValues.concat(predictionData)) - 1,
+            max: Math.max(...recentValues.concat(predictionData)) + 1,
             title: {
               text: 'Valor'
             },
