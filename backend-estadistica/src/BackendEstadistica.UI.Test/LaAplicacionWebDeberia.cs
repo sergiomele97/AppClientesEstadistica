@@ -1,31 +1,42 @@
-using OpenQA.Selenium;
+
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
+using OpenQA.Selenium;
 
-namespace BackendEstadistica.UI.Test
+namespace BackendEstadistica.UI.Test;
+
+public class LaAplicacionWebDeberia
 {
-    public class LaAplicacionWebDeberia
+
+    private readonly IWebDriver _driver;
+
+    public LaAplicacionWebDeberia()
     {
-        private readonly IWebDriver _driver;
+        // Inicializar ChromeDriver
+        _driver = new ChromeDriver();
+    }
 
-        public LaAplicacionWebDeberia()
+    [Fact]
+    public void MostrarBienvenida()
+    {
+        try
         {
-            _driver = new ChromeDriver();
-        }
-
-        [Fact]
-        public void MostrarBienvenida()
-        {
+            // Navegar a la URL de la aplicación web
             _driver.Navigate().GoToUrl("https://localhost:4200/");
 
             // Esperar hasta 15 segundos para que el título de la página sea el esperado
             WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(15));
-            wait.Until(driver => driver.Title == "ClientesEstadisticaApp");
+            wait.Until(driver => driver.Title == "ChachiData");
 
             // Verificar que el título es el esperado
-            Assert.Equal("ClientesEstadisticaApp", _driver.Title);
-
+            Assert.Equal("ChachiData", _driver.Title);
+        }
+        finally
+        {
+            // Cerrar el navegador después de la prueba
             _driver.Quit();
         }
+
     }
+
 }
