@@ -16,8 +16,8 @@ import { GraficasService } from 'src/app/servicios/graficas.service';
 
 @Component({
   selector: 'app-graficas',
-  templateUrl: './graficas.component.html',
-  styleUrls: ['./graficas.component.css'],
+  templateUrl: './Graficas.component.html',
+  styleUrls: ['./Graficas.component.css'],
 })
 export class GraficasComponent implements OnInit, OnDestroy {
   // Subscription for handling when a graph is closed

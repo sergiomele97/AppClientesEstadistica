@@ -123,12 +123,12 @@ export class DivisasComponent implements OnInit, OnDestroy {
               color: '#FF0000',
             },
             {
-              name: 'Confidence Interval Lower Bound',
+              name: 'CI Lower Bound',
               data: interValConf.map((interval, index) => [predictionDates[index], interval[0]]),
               color: '#87CEEB'
             },
             {
-              name: 'Confidence Interval Upper Bound',
+              name: 'CI Upper Bound',
               data: interValConf.map((interval, index) => [predictionDates[index], interval[1]]),
               color: '#FF6347'
             }
@@ -154,16 +154,8 @@ export class DivisasComponent implements OnInit, OnDestroy {
             }
           },
           fill: {
-            type: 'gradient',
-            gradient: {
-              shade: 'dark',
-              gradientToColors: ['#FDD835'],
-              shadeIntensity: 1,
-              type: 'horizontal',
-              opacityFrom: 1,
-              opacityTo: 1,
-              stops: [0, 100]
-            }
+            type: 'solid', // Cambiar a 'solid' para eliminar el gradiente
+            colors: ['#0000FF'] // Color azul sólido
           },
           markers: {
             size: 4,
@@ -178,7 +170,7 @@ export class DivisasComponent implements OnInit, OnDestroy {
             min: Math.min(...recentValues.concat(predictionData)) - 1.5,
             max: Math.max(...recentValues.concat(predictionData)) + 1.5,
             title: {
-              text: 'Valor'
+              text: 'Valor relativo a USD'
             },
             labels: {
               formatter: function (value) {
