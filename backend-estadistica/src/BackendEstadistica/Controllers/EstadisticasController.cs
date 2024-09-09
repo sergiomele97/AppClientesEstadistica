@@ -1,10 +1,5 @@
 using BackendEstadistica.SignalR;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace BackendEstadistica.Controllers
 {
@@ -16,17 +11,19 @@ namespace BackendEstadistica.Controllers
         private readonly IEstadisticasRepositorio _estadisticasRepositorio;
         private readonly IMapper _mapper;
         private readonly IHubContext<NotificationHub> _hubContext;
-
+        private readonly DivisaRepositorio _divisaRepositorio;
         public EstadisticasController(
             ContextoBBDD contextoBBDD,
             IEstadisticasRepositorio estadisticasRepositorio,
             IMapper mapper,
+            DivisaRepositorio divisaRepositorio,
             IHubContext<NotificationHub> hubContext)
         {
             _contextoBBDD = contextoBBDD;
             _estadisticasRepositorio = estadisticasRepositorio;
             _mapper = mapper;
             _hubContext = hubContext;
+            _divisaRepositorio = divisaRepositorio;
         }
 
     // CLIENTES
@@ -242,35 +239,20 @@ namespace BackendEstadistica.Controllers
     // DIVISAS
     [HttpPost("crearDivisas")]
     public async Task<IActionResult> CrearDivisas()
-    {
-        // Lista de nombres de divisas
-        var divisas = new List<string>
         {
-            "AFN", "ALL", "EUR", "AOA", "XCD", "SAR", "DZD", "ARS", "AMD", "AUD", "AZN", "BSD", "BHD",
-            "BDT", "BBD", "BZD", "XOF", "BYN", "MMK", "BOB", "BAM", "BWP", "BRL", "BND", "BGN", "BIF",
-            "INR", "CVE", "KHR", "XAF", "CAD", "QAR", "CLP", "CNY", "COP", "KMF", "KPW", "KRW", "CRC",
-            "HRK", "CUP", "CZK", "DKK", "EGP", "USD", "AED", "ERN", "GBP", "SZL", "GTQ", "GNF", "GYD",
-            "HTG", "HNL", "HUF", "IDR", "IRR", "IQD", "ISK", "JMD", "JPY", "JOD", "KZT", "KES", "KGS",
-            "KWD", "LAK", "LVL", "LBP", "LRD", "LYD", "CHF", "MGA", "MYR", "MWK", "MVR", "MDL", "MNT",
-            "MAD", "MUR", "MRU", "MXN", "NAD", "NPR", "NIO", "NGN", "NOK", "NZD", "OMR", "PKR", "PAB",
-            "PGK", "PYG", "PEN", "PLN", "RON", "RUB", "RSD", "SCR", "SLL", "SGD", "SYP", "SOS", "LKR",
-            "SDG", "SEK", "STN", "RWF"
-        };
-
-        var fecha = DateTime.Now;
-
-        foreach (var divisa in divisas)
-        {
-            var divisaFaker = new DivisaFaker(divisa, fecha);
-            var divisaDto = divisaFaker.Generate();
-            var nuevaDivisa = _mapper.Map<Divisa>(divisaDto);
-            await _estadisticasRepositorio.CrearDivisaAsync(nuevaDivisa);
+            try
+            {
+                await  _divisaRepositorio.PoblarMonedas();
+               
+                return Ok("Divisas creadas correctamente");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error al crear divisas: {ex.Message}");
+            }
         }
 
-        return Ok("Divisa creada correctamente");
-    }
-
-    [HttpGet("getDivisa/{nombre}")]
+        [HttpGet("getDivisa/{nombre}")]
     public async Task<IActionResult> GetDivisaByName(string nombre)
     {
         var divisaNombre = await _estadisticasRepositorio.GetDivisaByNameAsync(nombre);

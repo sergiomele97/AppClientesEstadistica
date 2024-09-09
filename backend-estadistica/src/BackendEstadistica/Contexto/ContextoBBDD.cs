@@ -66,16 +66,24 @@ public class ContextoBBDD : IdentityDbContext<ApplicationUser>
 
         // Cargar los datos de países desde el archivo JSON
         var paises = LoadPaisesJson("./data/listaPaises.json");
+        var divisas = LoadListDivisasJson("./data/expdata.json");
 
         modelBuilder.Entity<Pais>().HasData(paises);
+        modelBuilder.Entity<Divisa>().HasData(divisas);
     }
 
     // Método para cargar los países desde un archivo JSON
     private List<Pais> LoadPaisesJson(string filePath)
     {
         var jsonString = File.ReadAllText(filePath);
-        var paises = JsonSerializer.Deserialize<List<Pais>>(jsonString);
+        var paises = System.Text.Json.JsonSerializer.Deserialize<List<Pais>>(jsonString);
         return paises;
     }
-
+    // Método para cargar los países desde un archivo JSON
+    private List<Divisa> LoadListDivisasJson(string filePath)
+    {
+        var jsonString = File.ReadAllText(filePath);
+        var divisas = System.Text.Json.JsonSerializer.Deserialize<List<Divisa>>(jsonString);
+        return divisas;
+    }
 }

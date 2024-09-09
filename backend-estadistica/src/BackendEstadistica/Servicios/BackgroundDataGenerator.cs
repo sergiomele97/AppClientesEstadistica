@@ -32,6 +32,7 @@
                     {
                         var estadisticasRepositorio = scope.ServiceProvider.GetRequiredService<IEstadisticasRepositorio>();
                         var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+                        var divisaRepositorio = scope.ServiceProvider.GetRequiredService<DivisaRepositorio>(); // Agregar esta línea
 
                         // Obtener los países para inicializar ClienteFaker
                         var paises = await estadisticasRepositorio.GetPaisesAsync();
@@ -94,29 +95,8 @@
                         // 5. Lógica para crear divisa
                         for (int i = 0; i < volumenDivisas; i++)
                         {
-                            // Lista de nombres de divisas
-                            var divisas = new List<string>
-                            {
-                                "AFN", "ALL", "EUR", "AOA", "XCD", "SAR", "DZD", "ARS", "AMD", "AUD", "AZN", "BSD", "BHD",
-                                "BDT", "BBD", "BZD", "XOF", "BYN", "MMK", "BOB", "BAM", "BWP", "BRL", "BND", "BGN", "BIF",
-                                "INR", "CVE", "KHR", "XAF", "CAD", "QAR", "CLP", "CNY", "COP", "KMF", "KPW", "KRW", "CRC",
-                                "HRK", "CUP", "CZK", "DKK", "EGP", "USD", "AED", "ERN", "GBP", "SZL", "GTQ", "GNF", "GYD",
-                                "HTG", "HNL", "HUF", "IDR", "IRR", "IQD", "ISK", "JMD", "JPY", "JOD", "KZT", "KES", "KGS",
-                                "KWD", "LAK", "LVL", "LBP", "LRD", "LYD", "CHF", "MGA", "MYR", "MWK", "MVR", "MDL", "MNT",
-                                "MAD", "MUR", "MRU", "MXN", "NAD", "NPR", "NIO", "NGN", "NOK", "NZD", "OMR", "PKR", "PAB",
-                                "PGK", "PYG", "PEN", "PLN", "RON", "RUB", "RSD", "SCR", "SLL", "SGD", "SYP", "SOS", "LKR",
-                                "SDG", "SEK", "STN", "RWF"
-                            };
-
-                            var fecha = DateTime.Now;
-
-                            foreach (var divisa in divisas)
-                            {
-                                var divisaFaker = new DivisaFaker(divisa, fecha);
-                                var divisaDto = divisaFaker.Generate();
-                                var nuevaDivisa = mapper.Map<Divisa>(divisaDto);
-                                await estadisticasRepositorio.CrearDivisaAsync(nuevaDivisa);
-                            }
+                            await divisaRepositorio.PoblarMonedas(); // Llamada a PoblarMonedas
+                            _logger.LogInformation("Divisas creadas correctamente");
                         }
                     }
 
@@ -129,5 +109,6 @@
                 }
             }
         }
+
     }
 }

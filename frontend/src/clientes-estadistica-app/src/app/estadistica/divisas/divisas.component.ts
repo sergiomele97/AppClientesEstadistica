@@ -91,7 +91,7 @@ export class DivisasComponent implements OnInit, OnDestroy {
       .filter((date) => date !== null);
 
     const recentValues = recentData.map((d) => d.valor);
-    recentDates = ['2024-08-26', '2024-08-27', '2024-08-28', '2024-08-29', '2024-08-30', '2024-08-31', '2024-09-1', '2024-09-2', '2024-09-3', '2024-09-4'];
+   // recentDates = ['2024-08-26', '2024-08-27', '2024-08-28', '2024-08-29', '2024-08-30', '2024-08-31', '2024-09-1', '2024-09-2', '2024-09-3', '2024-09-4'];
     console.log(recentDates);
     console.log(recentValues);
 
@@ -175,8 +175,8 @@ export class DivisasComponent implements OnInit, OnDestroy {
             }
           },
           yaxis: {
-            min: Math.min(...recentValues.concat(predictionData)) - 30,
-            max: Math.max(...recentValues.concat(predictionData)) + 30,
+            min: Math.min(...recentValues.concat(predictionData)) - 1.5,
+            max: Math.max(...recentValues.concat(predictionData)) + 1.5,
             title: {
               text: 'Valor'
             },

@@ -1,5 +1,7 @@
 ﻿
 
+
+
 namespace BackendEstadistica.Entidades;
 
 public class Pais
@@ -11,6 +13,6 @@ public class Pais
     public string? Iso3 { get; set; }
 
     //Relaciones
-    [JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore] 
     public ICollection<Cliente> Clientes { get; set; } = new List<Cliente>();
 }

@@ -18,15 +18,18 @@ public class Program
         // Agrega los servicios necesarios para los controladores de API.
         builder.Services.AddControllers();
 
+
+
         builder.Services.AddSignalR();
 
         // Configura AutoMapper con el perfil de mapeo definido.
         builder.Services.AddAutoMapper(typeof(MappingProfile));
 
+        builder.Services.AddHttpClient<DivisaRepositorio>();
         // Configura Entity Framework Core para usar SQL Server.
         builder.Services.AddDbContext<ContextoBBDD>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+        builder.Services.AddScoped<DivisaRepositorio>();
         // Configura Serilog para logging.
         Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Information()  // Nivel m�nimo de logging.
