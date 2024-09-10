@@ -130,7 +130,10 @@
     [fill]="chartOptions.fill"
     class="w-full h-96"
   ></apx-chart>
- 
+  <!-- Mostrar el valor actual debajo del gráfico -->
+  <div *ngIf="valorActual && divisaSeleccionada" class="mt-4 text-center">
+    <p class="text-lg font-semibold">1 USD = {{ valorActual | number:'1.4-4' }} {{ divisaSeleccionada }}</p>
+  </div>
 </div>
 
 
