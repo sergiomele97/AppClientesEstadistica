@@ -5,7 +5,6 @@ global using BackendEstadistica.Entidades;
 global using BackendEstadistica.Faker;
 global using BackendEstadistica.Mappings;
 global using BackendEstadistica.Models;
-global using BackendEstadistica.Repositorios;
 global using BackendEstadistica.Servicios;
 global using BackendEstadistica.SignalR;
 global using BackendEstadistica.Utilidades;

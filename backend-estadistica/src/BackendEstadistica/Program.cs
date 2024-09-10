@@ -1,21 +1,28 @@
 namespace BackendEstadistica;
-
+/// <summary>
+/// La clase principal que configura y ejecuta la aplicación web.
+/// </summary>
 public class Program
 {
-    public static void Main(string[] args)
+    /// <summary>
+    /// El punto de entrada principal para la aplicación.
+    /// </summary>
+    /// <param name="args">Argumentos de la línea de comandos pasados a la aplicación.</param>
+    public static async Task Main(string[] args)
     {
-        // Crea un builder para configurar la aplicaciï¿½n web.
+        // Crea un builder para configurar la aplicación web.
         var builder = WebApplication.CreateBuilder(args);
 
-        // Configuraciï¿½n de servicios para la aplicaciï¿½n.
+        // Configuración de servicios para la aplicación.
 
-        // Registro de repositorios con alcance de solicitud (Scoped).
+        // Registra los repositorios con un alcance de solicitud.
         builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
         builder.Services.AddScoped<IEstadisticasRepositorio, EstadisticasRepositorio>();
 
         // Agrega los servicios necesarios para los controladores de API.
         builder.Services.AddControllers();
 
+        // Configura SignalR para el soporte de WebSockets.
         builder.Services.AddSignalR();
 
         // Configura AutoMapper con el perfil de mapeo definido.
@@ -27,100 +34,111 @@ public class Program
 
         // Configura Serilog para logging.
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Information()  // Nivel mï¿½nimo de logging.
-            .Filter.ByExcluding(logEvent => logEvent.Level == Serilog.Events.LogEventLevel.Debug)  // Excluye logs de nivel Debug.
-            .WriteTo.Console()  // Escribe logs en la consola.
-            .WriteTo.File("Logs/logClientes.txt", rollingInterval: RollingInterval.Day)  // Escribe logs en un archivo con un intervalo de rotaciï¿½n diario.
+            .MinimumLevel.Information()
+            .Filter.ByExcluding(logEvent => logEvent.Level == Serilog.Events.LogEventLevel.Debug)
+            .WriteTo.Console()
+            .WriteTo.File("Logs/logClientes.txt", rollingInterval: RollingInterval.Day)
             .CreateLogger();
 
-        builder.Host.UseSerilog();  // Usa Serilog como el proveedor de logging.
+        builder.Host.UseSerilog();  // Configura Serilog como el proveedor de logging.
 
-        // Configura Identity para la autenticaciï¿½n de usuarios.
+        // Configura Identity para la autenticación de usuarios.
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         {
-            options.User.RequireUniqueEmail = true;  // Requiere que los correos electrï¿½nicos sean ï¿½nicos.
+            options.User.RequireUniqueEmail = true;
         })
-        .AddEntityFrameworkStores<ContextoBBDD>()  // Usa EF Core para el almacenamiento de usuarios.
-        .AddDefaultTokenProviders();  // Agrega proveedores de tokens por defecto.
+        .AddEntityFrameworkStores<ContextoBBDD>()
+        .AddDefaultTokenProviders();
 
-        // Configuraciï¿½n del esquema de autenticaciï¿½n JWT.
-        var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);  // Clave secreta para la firma de tokens.
+        // Configura la autenticación JWT.
+        var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
         builder.Services.AddAuthentication(x =>
         {
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;  // Define el esquema de autenticaciï¿½n.
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;  // Define el esquema de desafï¿½o.
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
         .AddJwtBearer(x =>
         {
-            x.RequireHttpsMetadata = false;  // Permite el uso de HTTP en desarrollo.
-            x.SaveToken = true;  // Guarda el token en el contexto de la solicitud.
+            x.RequireHttpsMetadata = false;
+            x.SaveToken = true;
             x.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuerSigningKey = true,  // Valida la clave de firma del emisor.
-                IssuerSigningKey = new SymmetricSecurityKey(key),  // Clave de firma simï¿½trica.
-                ValidateIssuer = true,  // Valida el emisor del token.
-                ValidIssuer = builder.Configuration["Jwt:Issuer"],  // Emisor vï¿½lido del token.
-                ValidateAudience = true,  // Valida el pï¿½blico del token.
-                ValidAudience = builder.Configuration["Jwt:Audience"],  // Pï¿½blico vï¿½lido del token.
-                ValidateLifetime = true,  // Valida la vida ï¿½til del token.
-                ClockSkew = TimeSpan.Zero  // Configura el desfase del reloj a cero.
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = true,
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidateAudience = true,
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
             };
         });
 
-        // Registra el servicio para la generaciï¿½n de tokens.
+        // Registra los servicios para la generación de tokens y otros servicios.
         builder.Services.AddScoped<ITokenService, TokenService>();
-        // Registra el servicio TransaccionService.
         builder.Services.AddScoped<TransaccionService>();
-        // Configuraciï¿½n de CORS para permitir solicitudes desde orï¿½genes especï¿½ficos.
+
+        // Registra el servicio SignalRService
+        builder.Services.AddScoped<SignalRService>(provider =>
+        {
+            var contextoBBDD = provider.GetRequiredService<ContextoBBDD>();
+            var hubContext = provider.GetRequiredService<IHubContext<NotificationHub>>();
+            var estadisticasRepositorio = provider.GetRequiredService<IEstadisticasRepositorio>();
+            return new SignalRService(contextoBBDD, hubContext, estadisticasRepositorio);
+        });
+
+        // Configura CORS para permitir solicitudes desde orígenes específicos.
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowLocalhost",
                 builder => builder
                     .WithOrigins("http://localhost:4200")  // Permite solicitudes desde localhost:4200.
-                    .AllowAnyHeader()  // Permite cualquier encabezado.
-                    .AllowAnyMethod()  // Permite cualquier mï¿½todo HTTP.
-                    .AllowCredentials());  // Permite el uso de credenciales.
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials());
 
             options.AddPolicy("AllowAzureHost",
                 builder => builder
-                    .WithOrigins("https://wonderful-meadow-07530fe03.5.azurestaticapps.net")  // Permite solicitudes desde el host de Azure.
-                    .AllowAnyHeader()  // Permite cualquier encabezado.
-                    .AllowAnyMethod()  // Permite cualquier mï¿½todo HTTP.
-                    .AllowCredentials());  // Permite el uso de credenciales.
+                    .WithOrigins("https://wonderful-meadow-07530fe03.5.azurestaticapps.net", "https://cleancashcourierapi-fdg9f7d4chb4gshy.spaincentral-01.azurewebsites.net")  // Permite solicitudes desde el host de Azure.
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials());
+
             options.AddPolicy("AllowTrans",
                 builder => builder
-                    .WithOrigins("http://localhost:4200", "http://172.30.137.232") // Permite solicitudes desde localhost y la IP 172.30.137.232
-                    .AllowAnyHeader()  // Permite cualquier encabezado.
-                    .AllowAnyMethod()  // Permite cualquier método HTTP.
-                    .AllowCredentials());  // Permite el uso de credenciales.
+                    .WithOrigins("http://localhost:4200", "http://172.30.137.232", "https://cleancashcourierapi-fdg9f7d4chb4gshy.spaincentral-01.azurewebsites.net")  // Permite solicitudes desde localhost y la IP 172.30.137.232.
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials());
         });
 
-        // Configura el explorador de endpoints y Swagger para la documentaciï¿½n de la API.
+        // Configura el explorador de endpoints y Swagger para la documentación de la API.
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
-        // Registra un servicio en segundo plano para la generaciï¿½n de datos.
+        // Registra un servicio en segundo plano para la generación de datos.
         builder.Services.AddHostedService<BackgroundDataGenerator>();
 
-        // Construye la aplicaciï¿½n.
+        // Construye la aplicación.
         var app = builder.Build();
 
         // Aplica las migraciones de base de datos.
         ApplyMigrations(app);
 
-        // Configuraciï¿½n del middleware segï¿½n el entorno.
+
+        // Configura el middleware según el entorno.
         if (app.Environment.IsDevelopment())
         {
-            app.UseSwagger();  // Habilita Swagger en desarrollo.
-            app.UseSwaggerUI();  // Habilita la interfaz de usuario de Swagger.
-            app.UseCors("AllowTrans");  // Usa la polï¿½tica de CORS para localhost.
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.UseCors("AllowTrans");
         }
         else
         {
-            app.UseCors("AllowAzureHost");  // Usa la polï¿½tica de CORS para el host de Azure.
+            app.UseCors("AllowAzureHost");
         }
 
-        // Configura el middleware de redirecciï¿½n HTTPS, autenticaciï¿½n y autorizaciï¿½n.
+        // Configura el middleware de redirección HTTPS, autenticación y autorización.
         app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();
@@ -128,16 +146,30 @@ public class Program
         // Mapea los controladores para manejar las solicitudes HTTP.
         app.MapControllers();
 
-
-        // Configurar el endpoint de SignalR para NotificationHub
+        // Configura el endpoint de SignalR para NotificationHub.
         app.MapHub<NotificationHub>("/notificationHub");
 
+        // Iniciar el servicio de SignalR
+        using (var scope = app.Services.CreateScope())
+        {
+            var signalRService = scope.ServiceProvider.GetRequiredService<SignalRService>();
+            await signalRService.StartListeningAsync();
 
-        // Ejecuta la aplicaciï¿½n.
+            // Detener el servicio de SignalR al detener la aplicación
+            app.Lifetime.ApplicationStopping.Register(async () =>
+            {
+                await signalRService.StopListeningAsync();
+            });
+        }
+
+        // Ejecuta la aplicación.
         app.Run();
     }
 
-    // Mï¿½todo para aplicar las migraciones de base de datos.
+    /// <summary>
+    /// Aplica las migraciones de base de datos y crea roles iniciales.
+    /// </summary>
+    /// <param name="app">La instancia de la aplicación web.</param>
     private static void ApplyMigrations(WebApplication app)
     {
         using (var scope = app.Services.CreateScope())
@@ -149,23 +181,29 @@ public class Program
                 var context = services.GetRequiredService<ContextoBBDD>();
                 context.Database.Migrate();
 
-                // Crear roles al iniciar la aplicación
+                // Crea roles y un usuario admin por defecto al iniciar la aplicación.
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                 var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                 CreateRoles(roleManager, userManager).Wait();
             }
             catch (Exception ex)
             {
-                // Registra cualquier error que ocurra durante la aplicaciï¿½n de migraciones.
+                // Registra cualquier error que ocurra durante la aplicación de migraciones.
                 var logger = services.GetRequiredService<ILogger<Program>>();
                 logger.LogError(ex, "An error occurred while migrating the database.");
             }
         }
     }
 
+    /// <summary>
+    /// Crea roles iniciales y un usuario admin por defecto si no existen.
+    /// </summary>
+    /// <param name="roleManager">El administrador de roles de Identity.</param>
+    /// <param name="userManager">El administrador de usuarios de Identity.</param>
+    /// <returns>Una tarea que representa la operación asíncrona.</returns>
     private static async Task CreateRoles(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
     {
-        // Definir roles
+        // Definir roles.
         string[] roleNames = { "Admin", "User", "Manager" };
         IdentityResult roleResult;
 
@@ -178,7 +216,7 @@ public class Program
             }
         }
 
-        // Crear un usuario Admin por defecto si no existe
+        // Crear un usuario Admin por defecto si no existe.
         var user = await userManager.FindByEmailAsync("admin@example.com");
         if (user == null)
         {
@@ -194,5 +232,4 @@ public class Program
             }
         }
     }
-
 }

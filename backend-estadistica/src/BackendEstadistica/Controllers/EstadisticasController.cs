@@ -1,5 +1,8 @@
 namespace BackendEstadistica.Controllers;
 
+/// <summary>
+/// Controlador para gestionar las operaciones relacionadas con estadísticas, clientes, transacciones, outliers, divisas y conversiones.
+/// </summary>
 [Route("api/estadisticas")]
 [ApiController]
 public class EstadisticasController : ControllerBase
@@ -9,6 +12,13 @@ public class EstadisticasController : ControllerBase
     private readonly IMapper _mapper;
     private readonly IHubContext<NotificationHub> _hubContext;
 
+    /// <summary>
+    /// Inicializa una nueva instancia del controlador <see cref="EstadisticasController"/>.
+    /// </summary>
+    /// <param name="contextoBBDD">El contexto de la base de datos.</param>
+    /// <param name="estadisticasRepositorio">El repositorio para operaciones de estadísticas.</param>
+    /// <param name="mapper">El servicio de mapeo de objetos.</param>
+    /// <param name="hubContext">El contexto del hub de SignalR para notificaciones.</param>
     public EstadisticasController(
         ContextoBBDD contextoBBDD,
         IEstadisticasRepositorio estadisticasRepositorio,
@@ -21,7 +31,12 @@ public class EstadisticasController : ControllerBase
         _hubContext = hubContext;
     }
 
-    // CLIENTES
+    #region CLIENTES
+
+    /// <summary>
+    /// Crea un nuevo cliente con datos generados automáticamente.
+    /// </summary>
+    /// <returns>Una respuesta HTTP indicando el éxito de la operación.</returns>
     [HttpPost("crearCliente")]
     public async Task<IActionResult> CrearCliente()
     {
@@ -35,6 +50,10 @@ public class EstadisticasController : ControllerBase
         return Ok("Cliente creado correctamente");
     }
 
+    /// <summary>
+    /// Obtiene todos los clientes existentes.
+    /// </summary>
+    /// <returns>Una respuesta HTTP con la lista de clientes.</returns>
     [HttpGet("getClientes")]
     public async Task<IActionResult> GetClientes()
     {
@@ -42,6 +61,11 @@ public class EstadisticasController : ControllerBase
         return Ok(_mapper.Map<List<Cliente>>(clientes));
     }
 
+    /// <summary>
+    /// Obtiene un cliente por su ID.
+    /// </summary>
+    /// <param name="id">El ID del cliente a buscar.</param>
+    /// <returns>Una respuesta HTTP con el cliente encontrado o un mensaje de no encontrado.</returns>
     [HttpGet("getCliente/{id}")]
     public async Task<IActionResult> GetClienteById(int id)
     {
@@ -55,7 +79,14 @@ public class EstadisticasController : ControllerBase
         return Ok(_mapper.Map<Cliente>(cliente));
     }
 
-    // TRANSACCIONES
+    #endregion
+
+    #region TRANSACCIONES
+
+    /// <summary>
+    /// Crea una nueva transacción con datos generados automáticamente y notifica si se detecta un outlier.
+    /// </summary>
+    /// <returns>Una respuesta HTTP indicando el éxito de la operación o la detección de un outlier.</returns>
     [HttpPost("crearTransaccion")]
     public async Task<IActionResult> CrearTransaccion()
     {
@@ -68,8 +99,6 @@ public class EstadisticasController : ControllerBase
         var nuevaTransaccion = _mapper.Map<Transaccion>(transaccionDto);
         await _estadisticasRepositorio.CrearTransaccionAsync(nuevaTransaccion);
 
-        //await _estadisticasRepositorio.DetectarOutliersAsync();
-
         var transaccion = await _contextoBBDD.Transacciones
             .Include(t => t.ClienteOrigen)
             .FirstOrDefaultAsync(t => t.TransaccionId == nuevaTransaccion.TransaccionId);
@@ -79,27 +108,30 @@ public class EstadisticasController : ControllerBase
             return BadRequest();
         }
 
-        //if (transaccion != null && transaccion.IsOutlier == true)
-        //{
+        if (transaccion != null && transaccion.IsOutlier == true)
+        {
+            await _hubContext.Clients.All.SendAsync("OutlierDetected", new
+            {
+                Message = "Outlier detectado",
+                Cliente = transaccion.ClienteOrigen.Nombre,
+                ImporteEnviado = transaccion.ImporteEnviado
+            });
 
-        //    await _hubContext.Clients.All.SendAsync("OutlierDetected", new
-        //    {
-        //        Message = "Outlier detectado",
-        //        Cliente = transaccion.ClienteOrigen.Nombre,
-        //        ImporteEnviado = transaccion.ImporteEnviado
-        //    });
-
-        //    return Ok(new
-        //    {
-        //        Message = "Outlier detectado",
-        //        Cliente = transaccion.ClienteOrigen.Nombre,
-        //        ImporteEnviado = transaccion.ImporteEnviado
-        //    });
-        //}
+            return Ok(new
+            {
+                Message = "Outlier detectado",
+                Cliente = transaccion.ClienteOrigen.Nombre,
+                ImporteEnviado = transaccion.ImporteEnviado
+            });
+        }
 
         return Ok("Transacción creada correctamente");
     }
 
+    /// <summary>
+    /// Obtiene todas las transacciones existentes.
+    /// </summary>
+    /// <returns>Una respuesta HTTP con la lista de transacciones.</returns>
     [HttpGet("getTransacciones")]
     public async Task<IActionResult> GetTransacciones()
     {
@@ -107,6 +139,11 @@ public class EstadisticasController : ControllerBase
         return Ok(_mapper.Map<List<Transaccion>>(transacciones));
     }
 
+    /// <summary>
+    /// Obtiene una transacción por su ID.
+    /// </summary>
+    /// <param name="id">El ID de la transacción a buscar.</param>
+    /// <returns>Una respuesta HTTP con la transacción encontrada o un mensaje de no encontrada.</returns>
     [HttpGet("getTransacciones/{id}")]
     public async Task<IActionResult> GetTransaccionesById(int id)
     {
@@ -120,7 +157,14 @@ public class EstadisticasController : ControllerBase
         return Ok(_mapper.Map<Transaccion>(transaccion));
     }
 
-    // OUTLIERS
+    #endregion
+
+    #region OUTLIERS
+
+    /// <summary>
+    /// Crea una transacción con datos generados automáticamente y detecta si es un outlier.
+    /// </summary>
+    /// <returns>Una respuesta HTTP indicando el éxito de la operación o la detección de un outlier.</returns>
     [HttpPost("crearOutlier")]
     public async Task<IActionResult> CrearOutliersAsync()
     {
@@ -141,7 +185,6 @@ public class EstadisticasController : ControllerBase
 
         if (transaccion != null && transaccion.IsOutlier == true)
         {
-
             await _hubContext.Clients.All.SendAsync("OutlierDetected", new
             {
                 Message = "Outlier detectado",
@@ -160,6 +203,10 @@ public class EstadisticasController : ControllerBase
         return Ok("Transacción creada correctamente");
     }
 
+    /// <summary>
+    /// Obtiene todas las transacciones que se han marcado como outliers.
+    /// </summary>
+    /// <returns>Una respuesta HTTP con la lista de transacciones outliers.</returns>
     [HttpGet("getOutliers")]
     public async Task<IActionResult> ObtenerTransaccionesOutliers()
     {
@@ -174,6 +221,10 @@ public class EstadisticasController : ControllerBase
         return Ok(transaccionesOutliers);
     }
 
+    /// <summary>
+    /// Obtiene todas las transacciones que han sido vistas y marcadas como outliers.
+    /// </summary>
+    /// <returns>Una respuesta HTTP con la lista de outliers vistos.</returns>
     [HttpGet("outliers-vistos")]
     public async Task<IActionResult> ObtenerOutliersVistos()
     {
@@ -188,10 +239,14 @@ public class EstadisticasController : ControllerBase
         return Ok(outliersVistos);
     }
 
+    /// <summary>
+    /// Elimina un outlier por ID y notifica la eliminación a través de SignalR.
+    /// </summary>
+    /// <param name="idTransaccion">El ID de la transacción a eliminar.</param>
+    /// <returns>Una respuesta HTTP indicando el éxito de la operación.</returns>
     [HttpPut("resolucionOutlier/{idTransaccion}")]
     public async Task<IActionResult> EliminarOutlier([FromRoute] int idTransaccion)
     {
-
         // Eliminar el outlier usando el repositorio
         var resultado = await _estadisticasRepositorio.EliminarOutlierAsync(idTransaccion);
 
@@ -215,6 +270,11 @@ public class EstadisticasController : ControllerBase
         });
     }
 
+    /// <summary>
+    /// Obtiene las últimas cinco transacciones de un cliente ordenadas por importe enviado de mayor a menor.
+    /// </summary>
+    /// <param name="clienteId">El ID del cliente cuyas transacciones se desean obtener.</param>
+    /// <returns>Una respuesta HTTP con la lista de las últimas transacciones del cliente.</returns>
     [HttpGet("ultimas-transacciones/{clienteId}")]
     public async Task<IActionResult> ObtenerUltimasTransacciones(int clienteId)
     {
@@ -231,23 +291,30 @@ public class EstadisticasController : ControllerBase
         return Ok(transaccionesMayores);
     }
 
-    // DIVISAS
+    #endregion
+
+    #region DIVISAS
+
+    /// <summary>
+    /// Crea nuevas divisas con datos generados automáticamente.
+    /// </summary>
+    /// <returns>Una respuesta HTTP indicando el éxito de la operación.</returns>
     [HttpPost("crearDivisas")]
     public async Task<IActionResult> CrearDivisas()
     {
         // Lista de nombres de divisas
         var divisas = new List<string>
-    {
-        "AFN", "ALL", "EUR", "AOA", "XCD", "SAR", "DZD", "ARS", "AMD", "AUD", "AZN", "BSD", "BHD",
-        "BDT", "BBD", "BZD", "XOF", "BYN", "MMK", "BOB", "BAM", "BWP", "BRL", "BND", "BGN", "BIF",
-        "INR", "CVE", "KHR", "XAF", "CAD", "QAR", "CLP", "CNY", "COP", "KMF", "KPW", "KRW", "CRC",
-        "HRK", "CUP", "CZK", "DKK", "EGP", "USD", "AED", "ERN", "GBP", "SZL", "GTQ", "GNF", "GYD",
-        "HTG", "HNL", "HUF", "IDR", "IRR", "IQD", "ISK", "JMD", "JPY", "JOD", "KZT", "KES", "KGS",
-        "KWD", "LAK", "LVL", "LBP", "LRD", "LYD", "CHF", "MGA", "MYR", "MWK", "MVR", "MDL", "MNT",
-        "MAD", "MUR", "MRU", "MXN", "NAD", "NPR", "NIO", "NGN", "NOK", "NZD", "OMR", "PKR", "PAB",
-        "PGK", "PYG", "PEN", "PLN", "RON", "RUB", "RSD", "SCR", "SLL", "SGD", "SYP", "SOS", "LKR",
-        "SDG", "SEK", "STN", "RWF"
-    };
+        {
+            "AFN", "ALL", "EUR", "AOA", "XCD", "SAR", "DZD", "ARS", "AMD", "AUD", "AZN", "BSD", "BHD",
+            "BDT", "BBD", "BZD", "XOF", "BYN", "MMK", "BOB", "BAM", "BWP", "BRL", "BND", "BGN", "BIF",
+            "INR", "CVE", "KHR", "XAF", "CAD", "QAR", "CLP", "CNY", "COP", "KMF", "KPW", "KRW", "CRC",
+            "HRK", "CUP", "CZK", "DKK", "EGP", "USD", "AED", "ERN", "GBP", "SZL", "GTQ", "GNF", "GYD",
+            "HTG", "HNL", "HUF", "IDR", "IRR", "IQD", "ISK", "JMD", "JPY", "JOD", "KZT", "KES", "KGS",
+            "KWD", "LAK", "LVL", "LBP", "LRD", "LYD", "CHF", "MGA", "MYR", "MWK", "MVR", "MDL", "MNT",
+            "MAD", "MUR", "MRU", "MXN", "NAD", "NPR", "NIO", "NGN", "NOK", "NZD", "OMR", "PKR", "PAB",
+            "PGK", "PYG", "PEN", "PLN", "RON", "RUB", "RSD", "SCR", "SLL", "SGD", "SYP", "SOS", "LKR",
+            "SDG", "SEK", "STN", "RWF"
+        };
 
         var fecha = DateTime.Now;
 
@@ -262,6 +329,11 @@ public class EstadisticasController : ControllerBase
         return Ok("Divisa creada correctamente");
     }
 
+    /// <summary>
+    /// Obtiene una divisa por su nombre.
+    /// </summary>
+    /// <param name="nombre">El nombre de la divisa a buscar.</param>
+    /// <returns>Una respuesta HTTP con la divisa encontrada.</returns>
     [HttpGet("getDivisa/{nombre}")]
     public async Task<IActionResult> GetDivisaByName(string nombre)
     {
@@ -269,6 +341,10 @@ public class EstadisticasController : ControllerBase
         return Ok(_mapper.Map<List<Divisa>>(divisaNombre));
     }
 
+    /// <summary>
+    /// Obtiene todas las divisas existentes.
+    /// </summary>
+    /// <returns>Una respuesta HTTP con la lista de divisas.</returns>
     [HttpGet("getDivisas")]
     public async Task<IActionResult> GetDivisas()
     {
@@ -276,7 +352,14 @@ public class EstadisticasController : ControllerBase
         return Ok(_mapper.Map<List<Divisa>>(divisas));
     }
 
-    // CONVERSIONES
+    #endregion
+
+    #region CONVERSIONES
+
+    /// <summary>
+    /// Crea una nueva conversión con datos generados automáticamente.
+    /// </summary>
+    /// <returns>Una respuesta HTTP indicando el éxito de la operación.</returns>
     [HttpPost("crearConversion")]
     public async Task<IActionResult> CrearConversion()
     {
@@ -290,6 +373,10 @@ public class EstadisticasController : ControllerBase
         return Ok("Conversión creada correctamente");
     }
 
+    /// <summary>
+    /// Obtiene todas las conversiones existentes.
+    /// </summary>
+    /// <returns>Una respuesta HTTP con la lista de conversiones.</returns>
     [HttpGet("getConversiones")]
     public async Task<IActionResult> GetConversiones()
     {
@@ -297,6 +384,11 @@ public class EstadisticasController : ControllerBase
         return Ok(_mapper.Map<List<Conversion>>(conversiones));
     }
 
+    /// <summary>
+    /// Obtiene una conversión por su ID.
+    /// </summary>
+    /// <param name="id">El ID de la conversión a buscar.</param>
+    /// <returns>Una respuesta HTTP con la conversión encontrada o un mensaje de no encontrada.</returns>
     [HttpGet("getConversion/{id}")]
     public async Task<IActionResult> GetConversionById(int id)
     {
@@ -310,7 +402,14 @@ public class EstadisticasController : ControllerBase
         return Ok(_mapper.Map<Conversion>(conversion));
     }
 
-    // PAISES
+    #endregion
+
+    #region PAISES
+
+    /// <summary>
+    /// Obtiene todos los países existentes.
+    /// </summary>
+    /// <returns>Una respuesta HTTP con la lista de países.</returns>
     [HttpGet("getPaises")]
     public async Task<IActionResult> GetPaises()
     {
@@ -318,6 +417,11 @@ public class EstadisticasController : ControllerBase
         return Ok(_mapper.Map<List<Pais>>(paises));
     }
 
+    /// <summary>
+    /// Obtiene un país por su ID.
+    /// </summary>
+    /// <param name="id">El ID del país a buscar.</param>
+    /// <returns>Una respuesta HTTP con el país encontrado o un mensaje de no encontrado.</returns>
     [HttpGet("getPaises/{id}")]
     public async Task<IActionResult> GetPaisById(int id)
     {
@@ -329,4 +433,6 @@ public class EstadisticasController : ControllerBase
         }
         return Ok(_mapper.Map<Pais>(pais));
     }
+
+    #endregion
 }

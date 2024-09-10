@@ -1,11 +1,9 @@
-﻿using BackendEstadistica.SignalR;
-using Microsoft.AspNetCore.SignalR;
+﻿namespace BackendEstadistica.Controllers;
 
-namespace BackendEstadistica.Controllers;
-
+/// <summary>
+/// Controlador para la gestión de usuarios.
+/// </summary>
 [Route("api/usuarios")]
-
-
 public class UsuariosController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -15,15 +13,22 @@ public class UsuariosController : ControllerBase
     private readonly IMapper _mapper;
     private readonly ILogger<UsuariosController> _logger;
 
+    /// <summary>
+    /// Constructor del controlador de usuarios.
+    /// </summary>
+    /// <param name="usuarioRepositorio">Repositorio de usuarios.</param>
+    /// <param name="mapper">Servicio de mapeo.</param>
+    /// <param name="logger">Servicio de registro.</param>
+    /// <param name="userManager">Servicio de gestión de usuarios.</param>
+    /// <param name="signInManager">Servicio de gestión de inicio de sesión.</param>
+    /// <param name="tokenService">Servicio de generación de tokens.</param>
     public UsuariosController(
         IUsuarioRepositorio usuarioRepositorio,
         IMapper mapper,
         ILogger<UsuariosController> logger,
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
-        ITokenService tokenService
-       
-    )
+        ITokenService tokenService)
     {
         _usuarioRepositorio = usuarioRepositorio;
         _mapper = mapper;
@@ -33,6 +38,11 @@ public class UsuariosController : ControllerBase
         _tokenService = tokenService;
     }
 
+    /// <summary>
+    /// Registra un nuevo usuario en el sistema.
+    /// </summary>
+    /// <param name="model">Modelo de vista para el registro de usuario.</param>
+    /// <returns>Resultado de la operación de registro.</returns>
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
     {
@@ -63,6 +73,11 @@ public class UsuariosController : ControllerBase
         return Ok(new { Token = token });
     }
 
+    /// <summary>
+    /// Inicia sesión con un usuario existente.
+    /// </summary>
+    /// <param name="model">Modelo de vista para el inicio de sesión.</param>
+    /// <returns>Resultado del inicio de sesión con el token JWT si es exitoso.</returns>
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginViewModel model)
     {
@@ -73,30 +88,30 @@ public class UsuariosController : ControllerBase
             return Unauthorized();
         }
 
-            // Ahora que hemos encontrado al usuario, usamos su UserName (en lugar del email) para intentar iniciar sesión.
-            // Esto es importante porque 'PasswordSignInAsync' generalmente espera un UserName.
-            var result = await _signInManager.PasswordSignInAsync(
-                user.UserName,  // Usamos el UserName del usuario que acabamos de encontrar.
-                model.Password, // La contraseña proporcionada en el modelo.
-                model.RememberMe, // Si se debe recordar al usuario en futuras sesiones.
-                lockoutOnFailure: false); // No bloquear al usuario en caso de múltiples intentos fallidos.
+        var result = await _signInManager.PasswordSignInAsync(
+            user.UserName,
+            model.Password,
+            model.RememberMe,
+            lockoutOnFailure: false);
 
-            // Si el resultado es exitoso, significa que el inicio de sesión fue correcto.
-            if (result.Succeeded)
+        if (result.Succeeded)
+        {
+            var token = _tokenService.GenerateJwtToken(user);
+
+            return Ok(new
             {
-                // Generamos un token JWT para el usuario autenticado.
-                var token = _tokenService.GenerateJwtToken(user);
-
-                // Devolvemos una respuesta HTTP 200 OK con el token JWT y el UserName.
-                return Ok(new {
-                    Token = token,
-                    Username = user.UserName
-                });
-            }
+                Token = token,
+                Username = user.UserName
+            });
+        }
 
         return Unauthorized();
     }
 
+    /// <summary>
+    /// Obtiene la lista de todos los usuarios del sistema.
+    /// </summary>
+    /// <returns>Lista de usuarios.</returns>
     [HttpGet("getUsers")]
     public async Task<IActionResult> GetUsuarios()
     {
@@ -104,6 +119,11 @@ public class UsuariosController : ControllerBase
         return Ok(users);
     }
 
+    /// <summary>
+    /// Obtiene un usuario por su identificador.
+    /// </summary>
+    /// <param name="id">Identificador del usuario.</param>
+    /// <returns>Detalles del usuario.</returns>
     [HttpGet("{id}")]
     public async Task<IActionResult> GetUsuarioById(int id)
     {
@@ -117,6 +137,11 @@ public class UsuariosController : ControllerBase
         return Ok(_mapper.Map<Usuario>(usuarioId));
     }
 
+    /// <summary>
+    /// Crea un usuario ficticio para pruebas.
+    /// </summary>
+    /// <param name="usuarioDto">Datos del usuario a crear.</param>
+    /// <returns>Resultado de la operación de creación.</returns>
     [HttpPost("fake")]
     public async Task<IActionResult> GuardarUsuario([FromBody] UsuarioDto usuarioDto)
     {
@@ -132,6 +157,11 @@ public class UsuariosController : ControllerBase
         return CreatedAtAction(nameof(GetUsuarioById), new { id = usuario.Id }, _mapper.Map<UsuarioDto>(usuario));
     }
 
+    /// <summary>
+    /// Elimina un usuario por su identificador.
+    /// </summary>
+    /// <param name="id">Identificador del usuario a eliminar.</param>
+    /// <returns>Resultado de la operación de eliminación.</returns>
     [HttpDelete("borrarUsuario/{id}")]
     public async Task<IActionResult> DeleteUsuario(int id)
     {
@@ -144,6 +174,4 @@ public class UsuariosController : ControllerBase
 
         return Ok("El usuario se borró correctamente");
     }
-
-
 }
