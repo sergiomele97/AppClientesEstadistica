@@ -1,4 +1,6 @@
-﻿namespace BackendEstadistica.Entidades;
+﻿using JsonIgnoreAttribute = System.Text.Json.Serialization.JsonIgnoreAttribute;
+
+namespace BackendEstadistica.Entidades;
 
 /// <summary>
 /// Representa un cliente en el sistema.

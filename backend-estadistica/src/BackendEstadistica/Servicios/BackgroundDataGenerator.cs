@@ -83,6 +83,7 @@ public class BackgroundDataGenerator : BackgroundService
                 {
                     var estadisticasRepositorio = scope.ServiceProvider.GetRequiredService<IEstadisticasRepositorio>();
                     var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+                    var divisaRepositorio = scope.ServiceProvider.GetRequiredService<DivisaRepositorio>(); // Agregar esta línea
 
                     // Obtener los países para inicializar ClienteFaker
                     var paises = await estadisticasRepositorio.GetPaisesAsync();
@@ -132,21 +133,20 @@ public class BackgroundDataGenerator : BackgroundService
                         await estadisticasRepositorio.DetectarOutliersAsync();
                     }
 
-                        // 5. Lógica para crear divisa
-                        for (int i = 0; i < volumenDivisas; i++)
-                        {
-                            await divisaRepositorio.PoblarMonedas(); // Llamada a PoblarMonedas
-                            _logger.LogInformation("Divisas creadas correctamente");
-                        }
+                    // 5. Lógica para crear divisa
+                    for (int i = 0; i < _volumenDivisas; i++)
+                    {
+                        await divisaRepositorio.PoblarMonedas(); // Llamada a PoblarMonedas
+                        _logger.LogInformation("Divisas creadas correctamente");
                     }
+                }
 
-                    // Esperar antes de la siguiente ejecución
-                    await Task.Delay(TimeSpan.FromMinutes(frecuenciaMinutos), stoppingToken);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Error al crear datos en segundo plano");
-                }
+                // Esperar antes de la siguiente ejecución
+                await Task.Delay(TimeSpan.FromMinutes(_frecuenciaMinutos), stoppingToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al crear datos en segundo plano");
             }
         }
     }

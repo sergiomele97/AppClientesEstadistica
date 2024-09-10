@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 ﻿namespace BackendEstadistica.Entidades;
 

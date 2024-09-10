@@ -1,3 +1,5 @@
+using JsonIgnoreAttribute = Newtonsoft.Json.JsonIgnoreAttribute;
+
 namespace BackendEstadistica.Entidades;
 
 /// <summary>

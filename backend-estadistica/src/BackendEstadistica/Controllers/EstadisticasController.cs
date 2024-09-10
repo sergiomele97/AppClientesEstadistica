@@ -11,6 +11,7 @@ public class EstadisticasController : ControllerBase
     private readonly IEstadisticasRepositorio _estadisticasRepositorio;
     private readonly IMapper _mapper;
     private readonly IHubContext<NotificationHub> _hubContext;
+    private readonly DivisaRepositorio _divisaRepositorio;
 
     /// <summary>
     /// Inicializa una nueva instancia del controlador <see cref="EstadisticasController"/>.
@@ -23,6 +24,7 @@ public class EstadisticasController : ControllerBase
         ContextoBBDD contextoBBDD,
         IEstadisticasRepositorio estadisticasRepositorio,
         IMapper mapper,
+        DivisaRepositorio divisaRepositorio,
         IHubContext<NotificationHub> hubContext)
     {
         _contextoBBDD = contextoBBDD;

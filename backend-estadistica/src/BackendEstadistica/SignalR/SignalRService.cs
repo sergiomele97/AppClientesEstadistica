@@ -78,7 +78,7 @@
                                 Console.WriteLine("Mensaje recibido no es de tipo 'Transaccion' ni 'Registro'.");
                             }
                         }
-                        catch (JsonException jsonEx)
+                        catch (System.Text.Json.JsonException jsonEx)
                         {
                             Console.WriteLine($"Error al procesar el mensaje: {jsonEx.Message}");
                         }
@@ -106,7 +106,7 @@
 
                             await GuardarTransaccionAsync(clienteOrigenId, clienteDestinoId, paisOrigen, paisDestino, valorOrigen, valorDestino, fecha);
                         }
-                        catch (JsonException jsonEx)
+                        catch (System.Text.Json.JsonException jsonEx)
                         {
                             Console.WriteLine($"Error al procesar el mensaje de nueva transacción: {jsonEx.Message}");
                         }
@@ -127,7 +127,7 @@
 
                             await RegistrarClienteAsync(nombre, apellido, fechaNacimiento, empleo, paisId, email);
                         }
-                        catch (JsonException jsonEx)
+                        catch (System.Text.Json.JsonException jsonEx)
                         {
                             Console.WriteLine($"Error al procesar el mensaje de nuevo registro: {jsonEx.Message}");
                         }
