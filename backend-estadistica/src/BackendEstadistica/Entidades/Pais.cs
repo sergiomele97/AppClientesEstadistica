@@ -1,4 +1,4 @@
-using JsonIgnoreAttribute = Newtonsoft.Json.JsonIgnoreAttribute;
+using JsonIgnoreAttribute = System.Text.Json.Serialization.JsonIgnoreAttribute;
 
 namespace BackendEstadistica.Entidades;
 
