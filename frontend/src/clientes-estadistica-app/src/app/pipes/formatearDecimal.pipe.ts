@@ -1,11 +1,19 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+/**
+ * Pipe para formatear valores numéricos a dos decimales.
+ * @pipe
+ */
 @Pipe({
-  name: 'formatearDecimal'
+  name: 'formatearDecimal',
 })
 export class FormatearDecimalPipe implements PipeTransform {
-
-  
+  /**
+   * Transforma un valor numérico en un número con dos decimales.
+   * Si el valor es `null` o `undefined`, devuelve `0`.
+   * @param {number | null} value - El valor numérico a formatear.
+   * @returns {number} - El valor formateado con dos decimales.
+   */
   transform(value: number | null): number {
     if (value === null || value === undefined) {
       return 0;

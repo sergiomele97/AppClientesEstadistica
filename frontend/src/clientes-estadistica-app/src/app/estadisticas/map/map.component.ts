@@ -20,8 +20,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
   constructor(private clienteService: ClienteService) {}
 
+  /**
+   * Inicializa el componente y carga los datos de clientes para mostrar en el gráfico.
+   */
   ngOnInit(): void {
-    // Suscripción al servicio para obtener clientes
     this.subscription = this.clienteService.getClientes().subscribe(
       (clientes: ICliente[]) => {
         const clientesPorPais: { [key: string]: number } = {};
@@ -42,7 +44,7 @@ export class MapComponent implements OnInit, OnDestroy {
         this.initializeChartOptions();
         this.isLoading = false;
 
-        // Crear el gráfico después de un breve retraso
+        // Crear el gráfico después de un breve retraso para asegurar que el contenedor esté listo
         setTimeout(() => {
           this.chart = Highcharts.mapChart('container', this.chartOptions);
         }, 0);
@@ -54,16 +56,29 @@ export class MapComponent implements OnInit, OnDestroy {
     );
   }
 
-  // Configurar opciones del gráfico
+  /**
+   * Configura las opciones del gráfico para la distribución de clientes por país.
+   */
   initializeChartOptions() {
     this.chartOptions = {
-      chart: { borderWidth: 1, map: worldMap },
-      title: { text: 'Distribución de Clientes por País' },
-      subtitle: { text: 'Número de clientes por país mostrado en burbujas' },
-      legend: { enabled: false },
+      chart: {
+        borderWidth: 1,
+        map: worldMap,
+      },
+      title: {
+        text: 'Distribución de Clientes por País',
+      },
+      subtitle: {
+        text: 'Número de clientes por país mostrado en burbujas',
+      },
+      legend: {
+        enabled: false,
+      },
       mapNavigation: {
         enabled: true,
-        buttonOptions: { verticalAlign: 'bottom' },
+        buttonOptions: {
+          verticalAlign: 'bottom',
+        },
       },
       series: [
         {
@@ -88,8 +103,13 @@ export class MapComponent implements OnInit, OnDestroy {
     };
   }
 
+  /**
+   * Limpia los recursos utilizados por el componente.
+   */
   ngOnDestroy(): void {
     this.subscription.unsubscribe(); // Cancelar suscripción
-    this.chart.destroy(); // Destruir gráfico al salir
+    if (this.chart) {
+      this.chart.destroy(); // Destruir gráfico al salir
+    }
   }
 }

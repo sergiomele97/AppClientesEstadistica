@@ -26,6 +26,10 @@ export type ChartOptions = {
   grid: ApexGrid;
 };
 
+/**
+ * Componente para mostrar gráficos basados en datos de clientes.
+ * Permite visualizar datos agrupados por edad, sexo o trabajo.
+ */
 @Component({
   selector: 'app-graph',
   templateUrl: './graph.component.html',
@@ -36,7 +40,7 @@ export class GraphComponent implements OnInit, OnDestroy {
   visible: boolean = true;
   public chartOptions: Partial<ChartOptions>;
   public dataType: string = 'sexo'; // Valor por defecto
-  isLoading: boolean = true; // AGREGADO: variable de estado para controlar el loader
+  isLoading: boolean = true; // Estado para controlar el loader
 
   // Definición de categorías para cada tipo de agrupación
   private readonly ageCategories = [
@@ -59,25 +63,30 @@ export class GraphComponent implements OnInit, OnDestroy {
     this.updateChart();
   }
 
+  /**
+   * Inicializa el componente, obtiene los datos de clientes y actualiza el gráfico.
+   */
   ngOnInit(): void {
-    // Iniciar el estado de carga
-    this.isLoading = true; // AGREGADO: Mostrar loader al iniciar la carga
+    this.isLoading = true;
 
-    // Obtener los clientes
     this.subscription = this.clienteService.getClientes().subscribe({
       next: (clientes) => {
         this.clientes = clientes;
-        this.updateChart(); // Actualizar el gráfico después de obtener los datos
-        this.isLoading = false; // AGREGADO: Ocultar loader después de cargar los datos
+        this.updateChart();
+        this.isLoading = false;
       },
       error: (err) => {
         console.error('Error al obtener los clientes: ', err);
-        this.isLoading = false; // AGREGADO: Ocultar loader si hay un error
+        this.isLoading = false;
       },
     });
   }
 
-  // Función para clasificar las edades en tramos
+  /**
+   * Clasifica una edad en tramos definidos.
+   * @param edad - La edad a clasificar.
+   * @returns El tramo de edad correspondiente.
+   */
   private clasificarEdad(edad: number): string {
     if (edad < 18) return 'Menor';
     if (edad < 30) return 'Joven';
@@ -86,6 +95,10 @@ export class GraphComponent implements OnInit, OnDestroy {
     return 'Jubilado';
   }
 
+  /**
+   * Agrupa los datos de clientes según el tipo de dato seleccionado.
+   * @returns Un objeto con las categorías y series de datos.
+   */
   private agruparDatos(): { categories: string[]; series: number[] } {
     let categories: string[] = [];
     let series: number[] = [];
@@ -133,6 +146,9 @@ export class GraphComponent implements OnInit, OnDestroy {
     return { categories, series };
   }
 
+  /**
+   * Actualiza el gráfico con los datos agrupados según el tipo de dato seleccionado.
+   */
   updateChart() {
     const { categories, series } = this.agruparDatos();
 
@@ -169,7 +185,7 @@ export class GraphComponent implements OnInit, OnDestroy {
       },
       grid: {
         row: {
-          colors: ['#f3f3f3', 'transparent'], // Toma un array que se repetirá en columnas
+          colors: ['#f3f3f3', 'transparent'],
           opacity: 0.5,
         },
       },
@@ -187,18 +203,26 @@ export class GraphComponent implements OnInit, OnDestroy {
     };
   }
 
+  /**
+   * Maneja el cambio en la selección del tipo de dato para el gráfico.
+   * @param event - El evento de cambio de selección.
+   */
   onSelectionChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     this.dataType = selectElement.value;
     this.updateChart();
   }
 
+  /**
+   * Cancela la suscripción cuando el componente se destruye.
+   */
   ngOnDestroy(): void {
-    // Cancelar la suscripción cuando el componente se destruya
     this.subscription.unsubscribe();
   }
 
-  // Cerrado grafica
+  /**
+   * Oculta el componente de gráfico.
+   */
   close(): void {
     this.graficasService.triggerScript(); // Comunicar a graficas
     this.visible = false;

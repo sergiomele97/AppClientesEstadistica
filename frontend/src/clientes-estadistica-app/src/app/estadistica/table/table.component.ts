@@ -3,47 +3,64 @@ import { Subscription } from 'rxjs';
 import { ITransaccionVita } from 'src/app/interfaces/transaccionVista'; // Interfaz para el objeto Transacción
 import { TransaccionServiceProcedure } from 'src/app/servicios/transaccion-procedure.service'; // Servicio actualizado
 
+/**
+ * Componente para mostrar y gestionar una tabla de transacciones.
+ * Permite filtrar, ordenar y mostrar detalles de transacciones.
+ */
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
 })
 export class TableComponent implements OnInit, OnDestroy {
-  subscription!: Subscription;
-  transaccionesFilter: ITransaccionVita[] = [];
-  currentPage: number = 1;
+  private subscription!: Subscription;
+  transaccionesFilter: ITransaccionVita[] = []; // Lista de transacciones filtradas
+  currentPage: number = 1; // Página actual
 
-  _filterTransaccion: string = '';
-  startDate: string = '';
-  endDate: string = '';
+  _filterTransaccion: string = ''; // Filtro de transacciones
+  startDate: string = ''; // Fecha de inicio para el filtro
+  endDate: string = ''; // Fecha de fin para el filtro
 
   hoveredCliente: {
     nombre: string;
     clienteId: number;
     telefono: string;
     correo: string;
-  } | null = null;
+  } | null = null; // Información del cliente en el tooltip
 
-  tooltipPosition: { top: string; left: string } = { top: '0px', left: '0px' };
-  private tooltipTimeoutId: any;
+  tooltipPosition: { top: string; left: string } = { top: '0px', left: '0px' }; // Posición del tooltip
+  private tooltipTimeoutId: any; // ID para el temporizador del tooltip
 
-  columnOrder: string = 'transaccionId';
-  directionOrder: boolean = true;
+  columnOrder: string = 'transaccionId'; // Columna por la que se ordena
+  directionOrder: boolean = true; // Dirección del orden (ascendente o descendente)
 
+  /**
+   * Crea una instancia del componente `TableComponent`.
+   * @param transaccionesServiceProcedure - Servicio para gestionar transacciones
+   */
   constructor(
-    private transaccionesServiceProcedure: TransaccionServiceProcedure // Utilizar el nuevo servicio
+    private transaccionesServiceProcedure: TransaccionServiceProcedure
   ) {}
 
+  /**
+   * Inicializa el componente cargando las transacciones filtradas.
+   */
   ngOnInit(): void {
-    this.fetchFilteredTransacciones(); // Inicializar con datos filtrados
+    this.fetchFilteredTransacciones();
   }
 
+  /**
+   * Limpia los recursos utilizados por el componente al destruirlo.
+   */
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
   }
 
+  /**
+   * Obtiene las transacciones filtradas y actualiza la lista.
+   */
   fetchFilteredTransacciones(): void {
     this.subscription = this.transaccionesServiceProcedure
       .getFilteredTransacciones(
@@ -57,10 +74,17 @@ export class TableComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * Actualiza la lista de transacciones cuando el filtro cambia.
+   */
   onFilterChange(): void {
     this.fetchFilteredTransacciones();
   }
 
+  /**
+   * Ordena las transacciones por la columna especificada.
+   * @param column - Nombre de la columna por la que ordenar
+   */
   order(column: string): void {
     if (this.columnOrder === column) {
       this.directionOrder = !this.directionOrder;
@@ -101,39 +125,36 @@ export class TableComponent implements OnInit, OnDestroy {
           return 0;
       }
 
-      let comparacion = 0;
-      if (valorA > valorB) {
-        comparacion = 1;
-      } else if (valorA < valorB) {
-        comparacion = -1;
-      }
-
+      const comparacion = valorA > valorB ? 1 : valorA < valorB ? -1 : 0;
       return this.directionOrder ? comparacion : -comparacion;
     });
   }
 
+  /**
+   * Muestra el tooltip con la información del cliente.
+   * @param transaccion - Transacción para obtener la información del cliente
+   * @param event - Evento del mouse para calcular la posición del tooltip
+   * @param esOrigen - Indica si el cliente es el origen o destino
+   */
   showTooltip(
     transaccion: ITransaccionVita,
     event: MouseEvent,
     esOrigen: boolean
   ): void {
-    if (esOrigen) {
-      this.hoveredCliente = {
-        nombre: transaccion.clienteOrigenNombre,
-        clienteId: transaccion.clienteOrigenId,
-        telefono: transaccion.clienteOrigenTelefono,
-        correo: transaccion.clienteOrigenCorreo,
-      };
-    } else {
-      this.hoveredCliente = {
-        nombre: transaccion.clienteDestinoNombre,
-        clienteId: transaccion.clienteDestinoId,
-        telefono: transaccion.clienteDestinoTelefono,
-        correo: transaccion.clienteDestinoCorreo,
-      };
-    }
+    this.hoveredCliente = esOrigen
+      ? {
+          nombre: transaccion.clienteOrigenNombre,
+          clienteId: transaccion.clienteOrigenId,
+          telefono: transaccion.clienteOrigenTelefono,
+          correo: transaccion.clienteOrigenCorreo,
+        }
+      : {
+          nombre: transaccion.clienteDestinoNombre,
+          clienteId: transaccion.clienteDestinoId,
+          telefono: transaccion.clienteDestinoTelefono,
+          correo: transaccion.clienteDestinoCorreo,
+        };
 
-    // Calcula la posición del tooltip en función de la posición del mouse
     const mouseX = event.clientX;
     const mouseY = event.clientY;
 
@@ -154,13 +175,15 @@ export class TableComponent implements OnInit, OnDestroy {
       tooltipY = mouseY - tooltipHeight - 15;
     }
 
-    // Actualiza la posición del tooltip
     this.tooltipPosition = {
       top: `${tooltipY}px`,
       left: `${tooltipX}px`,
     };
   }
 
+  /**
+   * Oculta el tooltip después de un breve retraso.
+   */
   hideTooltip(): void {
     if (this.tooltipTimeoutId) {
       clearTimeout(this.tooltipTimeoutId);
