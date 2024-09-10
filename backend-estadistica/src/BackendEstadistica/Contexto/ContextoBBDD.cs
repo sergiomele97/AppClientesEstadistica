@@ -1,38 +1,66 @@
 ﻿namespace BackendEstadistica.Contexto;
 
-/* En .NET Entity Framework, el contexto de la base de datos (DbContext) 
- * actúa como una puerta de enlace entre la aplicación y la base de datos.
- * Define las colecciones de entidades (DbSet) que representan las tablas de la base de datos.
- */
-
+/// <summary>
+/// Contexto de la base de datos que actúa como una puerta de enlace entre la aplicación y la base de datos.
+/// Define las colecciones de entidades que representan las tablas y vistas de la base de datos.
+/// Hereda de <see cref="IdentityDbContext{ApplicationUser}"/> para incluir la funcionalidad de Identity.
+/// </summary>
 public class ContextoBBDD : IdentityDbContext<ApplicationUser>
 {
-
-    // Constructor de la clase:
-    // Se pasan opciones al constructor de la clase base DbContext.
+    /// <summary>
+    /// Inicializa una nueva instancia de la clase <see cref="ContextoBBDD"/>.
+    /// </summary>
+    /// <param name="options">Opciones de configuración para el contexto de la base de datos.</param>
     public ContextoBBDD(DbContextOptions<ContextoBBDD> options)
-    : base(options)
+        : base(options)
     {
-
     }
 
-    // DEFINIR LAS TABLAS AQUÍ:
-    public DbSet<Usuario> Usuario { get; set; } // 1º Tabla
+    /// <summary>
+    /// Representa la tabla de usuarios en la base de datos.
+    /// </summary>
+    public DbSet<Usuario> Usuario { get; set; }
 
-    public DbSet<Cliente> Clientes { get; set; } // 2ª Tabla
+    /// <summary>
+    /// Representa la tabla de clientes en la base de datos.
+    /// </summary>
+    public DbSet<Cliente> Clientes { get; set; }
 
-    public DbSet<Pais> Paises { get; set; } // 3ª Tabla
+    /// <summary>
+    /// Representa la tabla de países en la base de datos.
+    /// </summary>
+    public DbSet<Pais> Paises { get; set; }
 
-    public DbSet<Transaccion> Transacciones { get; set; } // 4ª Tabla
+    /// <summary>
+    /// Representa la tabla de transacciones en la base de datos.
+    /// </summary>
+    public DbSet<Transaccion> Transacciones { get; set; }
 
-    public DbSet<Conversion> Conversion { get; set; } // 5ª Tabla
+    /// <summary>
+    /// Representa la tabla de conversiones en la base de datos.
+    /// </summary>
+    public DbSet<Conversion> Conversion { get; set; }
 
-    public DbSet<Divisa> Divisa { get; set; } // 6ª Tabla
+    /// <summary>
+    /// Representa la tabla de divisas en la base de datos.
+    /// </summary>
+    public DbSet<Divisa> Divisa { get; set; }
 
-    public DbSet<ClienteConBalance> ClientesConBalance { get; set; }//vista
+    /// <summary>
+    /// Representa una vista de clientes con balance en la base de datos.
+    /// </summary>
+    public DbSet<ClienteConBalance> ClientesConBalance { get; set; }
 
-    public DbSet<TransaccionProceso> TransaccionesProcesos { get; set; }//proceso de almacenamiento
+    /// <summary>
+    /// Representa una tabla de procesos de transacciones en la base de datos.
+    /// </summary>
+    public DbSet<TransaccionProceso> TransaccionesProcesos { get; set; }
 
+    /// <summary>
+    /// Configura el modelo de la base de datos utilizando el <see cref="ModelBuilder"/>.
+    /// Configura las relaciones entre las entidades y la carga inicial de datos.
+    /// </summary>
+    /// <param name="modelBuilder">El <see cref="ModelBuilder"/> utilizado para configurar el modelo.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder); // Necesario para Identity
@@ -58,11 +86,11 @@ public class ContextoBBDD : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<Divisa>()
             .Property(d => d.DivisaId)
-            .ValueGeneratedOnAdd(); ;
+            .ValueGeneratedOnAdd();
 
         modelBuilder.Entity<ClienteConBalance>()
-           .HasNoKey() // Indica que esta entidad no tiene clave primaria, ya que es una vista.
-           .ToView("ClientesConBalance");
+            .HasNoKey() // Indica que esta entidad no tiene clave primaria, ya que es una vista.
+            .ToView("ClientesConBalance");
 
         // Cargar los datos de países desde el archivo JSON
         var paises = LoadPaisesJson("./data/listaPaises.json");
@@ -72,7 +100,11 @@ public class ContextoBBDD : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<Divisa>().HasData(divisas);
     }
 
-    // Método para cargar los países desde un archivo JSON
+    /// <summary>
+    /// Carga los países desde un archivo JSON.
+    /// </summary>
+    /// <param name="filePath">La ruta del archivo JSON que contiene los datos de los países.</param>
+    /// <returns>Una lista de objetos <see cref="Pais"/> cargados desde el archivo JSON.</returns>
     private List<Pais> LoadPaisesJson(string filePath)
     {
         var jsonString = File.ReadAllText(filePath);

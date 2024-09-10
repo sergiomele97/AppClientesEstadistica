@@ -1,26 +1,28 @@
-using BackendEstadistica.SignalR;
-
 namespace BackendEstadistica;
-
+/// <summary>
+/// La clase principal que configura y ejecuta la aplicaci�n web.
+/// </summary>
 public class Program
 {
-    public static void Main(string[] args)
+    /// <summary>
+    /// El punto de entrada principal para la aplicaci�n.
+    /// </summary>
+    /// <param name="args">Argumentos de la l�nea de comandos pasados a la aplicaci�n.</param>
+    public static async Task Main(string[] args)
     {
         // Crea un builder para configurar la aplicaci�n web.
         var builder = WebApplication.CreateBuilder(args);
 
         // Configuraci�n de servicios para la aplicaci�n.
 
-        // Registro de repositorios con alcance de solicitud (Scoped).
+        // Registra los repositorios con un alcance de solicitud.
         builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
         builder.Services.AddScoped<IEstadisticasRepositorio, EstadisticasRepositorio>();
 
         // Agrega los servicios necesarios para los controladores de API.
         builder.Services.AddControllers();
 
-
-
-        // A�ade Signal R
+        // Configura SignalR para el soporte de WebSockets.
         builder.Services.AddSignalR();
 
         // Configura AutoMapper con el perfil de mapeo definido.
@@ -33,72 +35,82 @@ public class Program
         builder.Services.AddScoped<DivisaRepositorio>();
         // Configura Serilog para logging.
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Information()  // Nivel m�nimo de logging.
-            .Filter.ByExcluding(logEvent => logEvent.Level == Serilog.Events.LogEventLevel.Debug)  // Excluye logs de nivel Debug.
-            .WriteTo.Console()  // Escribe logs en la consola.
-            .WriteTo.File("Logs/logClientes.txt", rollingInterval: RollingInterval.Day)  // Escribe logs en un archivo con un intervalo de rotaci�n diario.
+            .MinimumLevel.Information()
+            .Filter.ByExcluding(logEvent => logEvent.Level == Serilog.Events.LogEventLevel.Debug)
+            .WriteTo.Console()
+            .WriteTo.File("Logs/logClientes.txt", rollingInterval: RollingInterval.Day)
             .CreateLogger();
 
-        builder.Host.UseSerilog();  // Usa Serilog como el proveedor de logging.
+        builder.Host.UseSerilog();  // Configura Serilog como el proveedor de logging.
 
         // Configura Identity para la autenticaci�n de usuarios.
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         {
-            options.User.RequireUniqueEmail = true;  // Requiere que los correos electr�nicos sean �nicos.
+            options.User.RequireUniqueEmail = true;
         })
-        .AddEntityFrameworkStores<ContextoBBDD>()  // Usa EF Core para el almacenamiento de usuarios.
-        .AddDefaultTokenProviders();  // Agrega proveedores de tokens por defecto.
+        .AddEntityFrameworkStores<ContextoBBDD>()
+        .AddDefaultTokenProviders();
 
-        // Configuraci�n del esquema de autenticaci�n JWT.
-        var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);  // Clave secreta para la firma de tokens.
+        // Configura la autenticaci�n JWT.
+        var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
         builder.Services.AddAuthentication(x =>
         {
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;  // Define el esquema de autenticaci�n.
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;  // Define el esquema de desaf�o.
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
         .AddJwtBearer(x =>
         {
-            x.RequireHttpsMetadata = false;  // Permite el uso de HTTP en desarrollo.
-            x.SaveToken = true;  // Guarda el token en el contexto de la solicitud.
+            x.RequireHttpsMetadata = false;
+            x.SaveToken = true;
             x.TokenValidationParameters = new TokenValidationParameters
             {
-                ValidateIssuerSigningKey = true,  // Valida la clave de firma del emisor.
-                IssuerSigningKey = new SymmetricSecurityKey(key),  // Clave de firma sim�trica.
-                ValidateIssuer = true,  // Valida el emisor del token.
-                ValidIssuer = builder.Configuration["Jwt:Issuer"],  // Emisor v�lido del token.
-                ValidateAudience = true,  // Valida el p�blico del token.
-                ValidAudience = builder.Configuration["Jwt:Audience"],  // P�blico v�lido del token.
-                ValidateLifetime = true,  // Valida la vida �til del token.
-                ClockSkew = TimeSpan.Zero  // Configura el desfase del reloj a cero.
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = true,
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidateAudience = true,
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
             };
         });
 
-        // Registra el servicio para la generaci�n de tokens.
+        // Registra los servicios para la generaci�n de tokens y otros servicios.
         builder.Services.AddScoped<ITokenService, TokenService>();
-        // Registra el servicio TransaccionService.
         builder.Services.AddScoped<TransaccionService>();
-        // Configuraci�n de CORS para permitir solicitudes desde or�genes espec�ficos.
+
+        // Registra el servicio SignalRService
+        builder.Services.AddScoped<SignalRService>(provider =>
+        {
+            var contextoBBDD = provider.GetRequiredService<ContextoBBDD>();
+            var hubContext = provider.GetRequiredService<IHubContext<NotificationHub>>();
+            var estadisticasRepositorio = provider.GetRequiredService<IEstadisticasRepositorio>();
+            return new SignalRService(contextoBBDD, hubContext, estadisticasRepositorio);
+        });
+
+        // Configura CORS para permitir solicitudes desde or�genes espec�ficos.
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowLocalhost",
                 builder => builder
                     .WithOrigins("http://localhost:4200")  // Permite solicitudes desde localhost:4200.
-                    .AllowAnyHeader()  // Permite cualquier encabezado.
-                    .AllowAnyMethod()  // Permite cualquier m�todo HTTP.
-                    .AllowCredentials());  // Permite el uso de credenciales.
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials());
 
             options.AddPolicy("AllowAzureHost",
                 builder => builder
-                    .WithOrigins("https://wonderful-meadow-07530fe03.5.azurestaticapps.net")  // Permite solicitudes desde el host de Azure.
-                    .AllowAnyHeader()  // Permite cualquier encabezado.
-                    .AllowAnyMethod()  // Permite cualquier m�todo HTTP.
-                    .AllowCredentials());  // Permite el uso de credenciales.
+                    .WithOrigins("https://wonderful-meadow-07530fe03.5.azurestaticapps.net", "https://cleancashcourierapi-fdg9f7d4chb4gshy.spaincentral-01.azurewebsites.net")  // Permite solicitudes desde el host de Azure.
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials());
+
             options.AddPolicy("AllowTrans",
                 builder => builder
-                    .WithOrigins("http://localhost:4200", "http://172.30.137.232") // Permite solicitudes desde localhost y la IP 172.30.137.232
-                    .AllowAnyHeader()  // Permite cualquier encabezado.
-                    .AllowAnyMethod()  // Permite cualquier m�todo HTTP.
-                    .AllowCredentials());  // Permite el uso de credenciales.
+                    .WithOrigins("http://localhost:4200", "http://172.30.137.232", "https://cleancashcourierapi-fdg9f7d4chb4gshy.spaincentral-01.azurewebsites.net")  // Permite solicitudes desde localhost y la IP 172.30.137.232.
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials());
         });
 
         // Configura el explorador de endpoints y Swagger para la documentaci�n de la API.
@@ -114,16 +126,17 @@ public class Program
         // Aplica las migraciones de base de datos.
         ApplyMigrations(app);
 
-        // Configuraci�n del middleware seg�n el entorno.
+
+        // Configura el middleware seg�n el entorno.
         if (app.Environment.IsDevelopment())
         {
-            app.UseSwagger();  // Habilita Swagger en desarrollo.
-            app.UseSwaggerUI();  // Habilita la interfaz de usuario de Swagger.
-            app.UseCors("AllowTrans");  // Usa la pol�tica de CORS para localhost.
+            app.UseSwagger();
+            app.UseSwaggerUI();
+            app.UseCors("AllowTrans");
         }
         else
         {
-            app.UseCors("AllowAzureHost");  // Usa la pol�tica de CORS para el host de Azure.
+            app.UseCors("AllowAzureHost");
         }
 
         // Configura el middleware de redirecci�n HTTPS, autenticaci�n y autorizaci�n.
@@ -134,16 +147,30 @@ public class Program
         // Mapea los controladores para manejar las solicitudes HTTP.
         app.MapControllers();
 
-
-        // Configurar el endpoint de SignalR para NotificationHub
+        // Configura el endpoint de SignalR para NotificationHub.
         app.MapHub<NotificationHub>("/notificationHub");
 
+        // Iniciar el servicio de SignalR
+        using (var scope = app.Services.CreateScope())
+        {
+            var signalRService = scope.ServiceProvider.GetRequiredService<SignalRService>();
+            await signalRService.StartListeningAsync();
+
+            // Detener el servicio de SignalR al detener la aplicaci�n
+            app.Lifetime.ApplicationStopping.Register(async () =>
+            {
+                await signalRService.StopListeningAsync();
+            });
+        }
 
         // Ejecuta la aplicaci�n.
         app.Run();
     }
 
-    // M�todo para aplicar las migraciones de base de datos.
+    /// <summary>
+    /// Aplica las migraciones de base de datos y crea roles iniciales.
+    /// </summary>
+    /// <param name="app">La instancia de la aplicaci�n web.</param>
     private static void ApplyMigrations(WebApplication app)
     {
         using (var scope = app.Services.CreateScope())
@@ -155,7 +182,7 @@ public class Program
                 var context = services.GetRequiredService<ContextoBBDD>();
                 context.Database.Migrate();
 
-                // Crear roles al iniciar la aplicaci�n
+                // Crea roles y un usuario admin por defecto al iniciar la aplicaci�n.
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                 var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                 CreateRoles(roleManager, userManager).Wait();
@@ -169,9 +196,15 @@ public class Program
         }
     }
 
+    /// <summary>
+    /// Crea roles iniciales y un usuario admin por defecto si no existen.
+    /// </summary>
+    /// <param name="roleManager">El administrador de roles de Identity.</param>
+    /// <param name="userManager">El administrador de usuarios de Identity.</param>
+    /// <returns>Una tarea que representa la operaci�n as�ncrona.</returns>
     private static async Task CreateRoles(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
     {
-        // Definir roles
+        // Definir roles.
         string[] roleNames = { "Admin", "User", "Manager" };
         IdentityResult roleResult;
 
@@ -184,7 +217,7 @@ public class Program
             }
         }
 
-        // Crear un usuario Admin por defecto si no existe
+        // Crear un usuario Admin por defecto si no existe.
         var user = await userManager.FindByEmailAsync("admin@example.com");
         if (user == null)
         {
@@ -200,5 +233,4 @@ public class Program
             }
         }
     }
-
 }
