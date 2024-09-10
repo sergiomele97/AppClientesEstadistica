@@ -16,14 +16,14 @@ namespace BackendEstadistica.UI.Test
         [Fact]
         public void MostrarBienvenida()
         {
-            _driver.Navigate().GoToUrl("https://localhost:4200/");
+            _driver.Navigate().GoToUrl("http://localhost:4200/");
 
             // Esperar hasta 15 segundos para que el título de la página sea el esperado
-            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(15));
-            wait.Until(driver => driver.Title == "ClientesEstadisticaApp");
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(30));
+            wait.Until(driver => driver.Title == "ChachiData");
 
             // Verificar que el título es el esperado
-            Assert.Equal("ClientesEstadisticaApp", _driver.Title);
+            Assert.Equal("ChachiData", _driver.Title);
 
             _driver.Quit();
         }

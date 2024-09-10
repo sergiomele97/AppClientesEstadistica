@@ -31,6 +31,8 @@ export class DivisasComponent implements OnInit, OnDestroy {
   private apiUrl = environment.apiPrediccion;
   private divisasData: IDivisa[] = []; // Datos de divisas obtenidos del backend
   private subscriptions: Subscription = new Subscription(); // Para gestionar las suscripciones y evitar problemas de múltiples cargas
+  public valorActual: number = 0; // Nueva variable para almacenar el valor actual de la divisa
+  public divisaSeleccionada: string = ''; // Para almacenar la divisa seleccionada
 
   constructor(
     private http: HttpClient,
@@ -44,7 +46,7 @@ export class DivisasComponent implements OnInit, OnDestroy {
 
   obtenerDatosDivisas(divisa: string) {
     console.log("Divisa ", divisa);
-
+    this.divisaSeleccionada = divisa;
     this.isLoading = true; // Mostrar el loader al iniciar la solicitud
 
     // Cancelar cualquier suscripción anterior antes de iniciar una nueva
@@ -90,7 +92,11 @@ export class DivisasComponent implements OnInit, OnDestroy {
       })
       .filter((date) => date !== null);
 
+      
     const recentValues = recentData.map((d) => d.valor);
+    // Obtener el valor más reciente (último valor de recentValues)
+    this.valorActual = recentValues[recentValues.length - 1];
+
    // recentDates = ['2024-08-26', '2024-08-27', '2024-08-28', '2024-08-29', '2024-08-30', '2024-08-31', '2024-09-1', '2024-09-2', '2024-09-3', '2024-09-4'];
     console.log(recentDates);
     console.log(recentValues);
@@ -109,6 +115,19 @@ export class DivisasComponent implements OnInit, OnDestroy {
         nextDate.setDate(nextDate.getDate() + index + 1);
         return nextDate.toISOString().split('T')[0];
       });
+      // Extraer los límites inferiores y superiores de interValConf
+      const lowerBounds = interValConf.map(interval => interval[0]); // Limites inferiores
+      const upperBounds = interValConf.map(interval => interval[1]); // Limites superiores
+
+      // Calcular el mínimo y máximo incluyendo todos los datos
+      const minimo = Math.min(...recentValues, ...predictionData, ...lowerBounds, ...upperBounds);
+      const maximo = Math.max(...recentValues, ...predictionData, ...lowerBounds, ...upperBounds);
+
+      // Añadir un margen adicional del 5% al rango del eje Y para evitar cortes
+      const margen = (maximo - minimo) * 0.05;
+
+      console.log(minimo, maximo, margen);
+
         console.log(predictionDates)
         this.chartOptions = {
           series: [
@@ -124,12 +143,12 @@ export class DivisasComponent implements OnInit, OnDestroy {
             },
             {
               name: 'CI Lower Bound',
-              data: interValConf.map((interval, index) => [predictionDates[index], interval[0]]),
+              data: lowerBounds.map((value, index) => [predictionDates[index], value]),
               color: '#87CEEB'
             },
             {
               name: 'CI Upper Bound',
-              data: interValConf.map((interval, index) => [predictionDates[index], interval[1]]),
+              data: upperBounds.map((value, index) => [predictionDates[index], value]),
               color: '#FF6347'
             }
           ],
@@ -167,8 +186,8 @@ export class DivisasComponent implements OnInit, OnDestroy {
             }
           },
           yaxis: {
-            min: Math.min(...recentValues.concat(predictionData)) - 1.5,
-            max: Math.max(...recentValues.concat(predictionData)) + 1.5,
+            min: minimo - margen,
+            max: maximo + margen,
             title: {
               text: 'Valor relativo a USD'
             },
