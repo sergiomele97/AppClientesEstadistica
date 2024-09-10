@@ -19,7 +19,7 @@ namespace BackendEstadistica.UI.Test
             _driver.Navigate().GoToUrl("https://localhost:4200/");
 
             // Esperar hasta 15 segundos para que el título de la página sea el esperado
-            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(15));
+            WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(5));
             wait.Until(driver => driver.Title == "ClientesEstadisticaApp");
 
             // Verificar que el título es el esperado
