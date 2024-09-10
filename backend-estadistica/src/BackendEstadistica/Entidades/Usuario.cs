@@ -1,46 +1,31 @@
-﻿using Microsoft.AspNetCore.Identity;
-using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
+﻿namespace BackendEstadistica.Entidades;
 
-namespace BackendEstadistica.Entidades;
-
-public class Usuario : IValidatableObject
-
-
+/// <summary>
+/// Representa un usuario en el sistema.
+/// </summary>
+public class Usuario
 {
-
-
     [Key]
     public int Id { get; set; }
-    [Required]
-    public string? Correo { get ; set; }
-    [Required]
+
+    /// <summary>
+    /// Correo electrónico del usuario. No puede ser nulo y debe tener un formato válido.
+    /// </summary>
+    [Required(ErrorMessage = "El correo es obligatorio.")]
+    [EmailAddress(ErrorMessage = "El correo no tiene un formato válido.")]
+    public string? Correo { get; set; }
+
+    /// <summary>
+    /// Contraseña del usuario. No puede ser nula y debe tener al menos 6 caracteres.
+    /// </summary>
+    [Required(ErrorMessage = "La contraseña es obligatoria.")]
+    [MinLength(6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres.")]
     public string? Contraseña { get; set; }
-    [Required]
+
+    /// <summary>
+    /// Número de teléfono del usuario. No puede ser nulo y debe tener un formato válido.
+    /// </summary>
+    [Required(ErrorMessage = "El teléfono es obligatorio.")]
+    [Phone(ErrorMessage = "El teléfono no tiene un formato válido.")]
     public string? Telefono { get; set; }
-
-    // Poner dentro del validador
-    public bool EsCorreoValido()
-    {
-        return !string.IsNullOrEmpty(Correo) && Correo.Contains("@"); // devuelve True si no es vacio y tiene @
-    }
-
-    public bool EsContraseñaValida()
-    {
-        return !string.IsNullOrEmpty(Contraseña) && Contraseña.Length >= 6;  // devuelve True si no es vacio y tiene + 6 caracteres
-    }
-
-    public IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> Validate(ValidationContext validationContext)
-    {
-        if (EsCorreoValido() == false)
-        {
-            yield return new ValidationResult("Email no válido");
-        }
-
-        if (EsContraseñaValida() == false)
-        {
-            yield return new ValidationResult("Contraseña no válida");
-        }
-    }
-
-    
 }

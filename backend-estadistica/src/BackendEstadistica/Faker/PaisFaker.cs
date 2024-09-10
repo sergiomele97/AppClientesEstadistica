@@ -1,8 +1,13 @@
 ﻿namespace BackendEstadistica.Faker;
 
-// Faker para País
+/// <summary>
+/// Faker para generar datos ficticios de países.
+/// </summary>
 public class PaisFaker : Faker<PaisDto>
 {
+    /// <summary>
+    /// Inicializa una nueva instancia de la clase <see cref="PaisFaker"/>.
+    /// </summary>
     public PaisFaker()
     {
         RuleFor(p => p.Iso3, f => f.Address.CountryCode(Bogus.DataSets.Iso3166Format.Alpha3))
