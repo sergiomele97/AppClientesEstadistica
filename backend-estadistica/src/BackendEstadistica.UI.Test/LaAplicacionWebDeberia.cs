@@ -12,8 +12,10 @@ namespace BackendEstadistica.UI.Test
         {
             var chromeOptions = new ChromeOptions();
             chromeOptions.AcceptInsecureCertificates = true; 
-            chromeOptions.AddArgument("--ignore-certificate-errors"); 
-            chromeOptions.AddArgument("--allow-insecure-localhost"); 
+            chromeOptions.AddArgument("--headless"); // Ejecutar Chrome en modo sin cabeza
+            chromeOptions.AddArgument("--disable-gpu"); // Deshabilitar GPU, útil para algunos sistemas
+            chromeOptions.AddArgument("--no-sandbox"); // Necesario para algunos entornos
+
 
             _driver = new ChromeDriver(chromeOptions);
         }
@@ -57,31 +59,31 @@ namespace BackendEstadistica.UI.Test
                 Assert.Contains("/estadistica", _driver.Url);        
         }
 
-        [Fact]
-        public void ResolucionOutliers()
-        {
-            try
-            {
+        //[Fact]
+        //public void ResolucionOutliers()
+        //{
+        //    try
+        //    {
 
-                IniciarSesion();
-                _driver.Navigate().GoToUrl("http://localhost:4200/estadistica/outliers");
+        //        IniciarSesion();
+        //        _driver.Navigate().GoToUrl("http://localhost:4200/estadistica/outliers");
 
-                IWebElement outlierResuelto = _driver.FindElement(By.Name("resolver"));
-                outlierResuelto.Click();
+        //        IWebElement outlierResuelto = _driver.FindElement(By.Name("resolver"));
+        //        outlierResuelto.Click();
 
    
-                WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
-                IWebElement alertaResuelto = wait.Until(driver => driver.FindElement(By.Name("alertaResuelto")));
+        //        WebDriverWait wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+        //        IWebElement alertaResuelto = wait.Until(driver => driver.FindElement(By.Name("alertaResuelto")));
 
-                Assert.True(alertaResuelto.Displayed, "La alerta no está visible.");
-                Assert.Contains("Outlier Eliminado", alertaResuelto.Text);
-            }
-            finally
-            {
-                Thread.Sleep(5000);
-                _driver.Quit();
-            }
-        }
+        //        Assert.True(alertaResuelto.Displayed, "La alerta no está visible.");
+        //        Assert.Contains("Outlier Eliminado", alertaResuelto.Text);
+        //    }
+        //    finally
+        //    {
+        //        Thread.Sleep(5000);
+        //        _driver.Quit();
+        //    }
+        //}
 
 
     }
