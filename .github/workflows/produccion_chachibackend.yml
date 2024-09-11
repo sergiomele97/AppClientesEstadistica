@@ -25,7 +25,8 @@ jobs:
         run: dotnet build backend-estadistica/src/BackendEstadistica/BackendEstadistica.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish backend-estadistica/src/BackendEstadistica/BackendEstadistica.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        # Cambiado para añadir comillas alrededor del path de salida para evitar que MSBuild divida la ruta en argumentos separados
+        run: dotnet publish backend-estadistica/src/BackendEstadistica/BackendEstadistica.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Run tests
         run: dotnet test backend-estadistica/src/BackendEstadistica.sln --no-build --configuration Release
