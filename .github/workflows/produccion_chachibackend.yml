@@ -18,6 +18,12 @@ jobs:
         with:
           dotnet-version: '8.x'
 
+      - name: Force UTF-8 encoding
+        run: |
+          git config --global core.autocrlf input
+          git config --global i18n.commitEncoding utf-8
+          git config --global i18n.logOutputEncoding utf-8
+
       - name: Restore NuGet packages
         run: dotnet restore backend-estadistica/src/BackendEstadistica.sln
 
@@ -44,6 +50,12 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
+
+      - name: Force UTF-8 encoding
+        run: |
+          git config --global core.autocrlf input
+          git config --global i18n.commitEncoding utf-8
+          git config --global i18n.logOutputEncoding utf-8
 
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
