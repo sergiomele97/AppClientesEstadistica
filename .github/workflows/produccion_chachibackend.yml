@@ -30,7 +30,7 @@ jobs:
         with:
           name: app-artifact
           path: |
-            backend-estadistica/src/BackendEstadistica/BackendEstadistica.sln
+            backend-estadistica/src/BackendEstadistica.sln
             backend-estadistica/src/BackendEstadistica/**/*.csproj
             backend-estadistica/src/BackendEstadistica/obj/
             backend-estadistica/src/BackendEstadistica/bin/
