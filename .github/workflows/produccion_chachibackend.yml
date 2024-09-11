@@ -1,4 +1,3 @@
-# YAML modificado para corregir las rutas en Windows.
 name: Build, Test, and Deploy ASP.Net Core app to Azure Web App - ChachiBackend
 
 on:
@@ -41,10 +40,19 @@ jobs:
         with:
           name: .net-app
 
-      # Diagnóstico: Listar archivos descargados para confirmar rutas #GPT: Paso de diagnóstico
-      - name: List files in working directory
+      - name: List files in working directory # GPT: Diagnóstico para verificar la estructura
         run: dir /s
         shell: cmd
+
+      - name: Move solution file if necessary # GPT: Mueve el archivo .sln a la ubicación correcta si no está en la raíz
+        run: |
+          if (Test-Path -Path "backend-estadistica\src\BackendEstadistica.sln") {
+            echo "Solution file found in expected location."
+          } else {
+            echo "Solution file not found, adjusting location."
+            Move-Item -Path "*.sln" -Destination "backend-estadistica\src\"
+          }
+        shell: pwsh
 
       - name: Install NuGet # GPT: Instalamos NuGet
         uses: NuGet/setup-nuget@v1
