@@ -1,3 +1,4 @@
+# YAML modificado para corregir las rutas en Windows.
 name: Build, Test, and Deploy ASP.Net Core app to Azure Web App - ChachiBackend
 
 on:
@@ -40,34 +41,26 @@ jobs:
         with:
           name: .net-app
 
-      - name: List files in working directory # GPT: Diagnóstico para verificar la estructura
+      # Diagnóstico: Listar archivos descargados para confirmar rutas
+      - name: List files in working directory
         run: dir /s
         shell: cmd
 
-      - name: Move solution file if necessary # GPT: Mueve el archivo .sln a la ubicación correcta si no está en la raíz
-        run: |
-          if (Test-Path -Path "backend-estadistica\src\BackendEstadistica.sln") {
-            echo "Solution file found in expected location."
-          } else {
-            echo "Solution file not found, adjusting location."
-            Move-Item -Path "*.sln" -Destination "backend-estadistica\src\"
-          }
-        shell: pwsh
-
-      - name: Install NuGet # GPT: Instalamos NuGet
+      - name: Install NuGet
         uses: NuGet/setup-nuget@v1
 
-      - name: Restore NuGet packages # GPT: Restauramos paquetes usando la ruta corregida
+      - name: Restore NuGet packages
         run: nuget restore backend-estadistica\src\BackendEstadistica.sln
         shell: cmd
 
-      - name: Build Test Project # GPT: Compilamos el proyecto de pruebas
+      - name: Build Solution
         run: msbuild backend-estadistica\src\BackendEstadistica.sln /p:Configuration=Release
         shell: cmd
 
-      - name: Run Tests # GPT: Ejecutamos las pruebas
-        run: vstest.console.exe **\*test.dll --parallel
+      - name: Run Tests
+        run: vstest.console.exe backend-estadistica\TestEstadistica\bin\Release\net8.0\TestEstadistica.dll --parallel
         shell: cmd
+
 
   deploy:
     runs-on: ubuntu-latest
