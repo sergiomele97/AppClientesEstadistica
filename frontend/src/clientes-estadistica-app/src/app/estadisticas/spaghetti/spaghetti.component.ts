@@ -26,8 +26,8 @@ export type ChartOptions = {
   stroke: ApexStroke;
   title: ApexTitleSubtitle;
   legend: ApexLegend;
-  colors?: string[]; // Añadir esta línea para incluir colores
-  tooltip?: any; // Agregar propiedad tooltip
+  colors?: string[];
+  tooltip?: any;
 };
 
 @Component({
@@ -38,29 +38,35 @@ export type ChartOptions = {
 export class SpaghettiComponent implements OnInit, OnDestroy {
   @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
-  subscription: Subscription;
+  private subscription: Subscription;
   transacciones: ITransaccion[] = [];
-  isLoading: boolean = true; // AGREGADO: variable de estado para el loader
+  isLoading: boolean = true;
 
   constructor(private transaccionesService: TransaccionService) {}
 
+  /**
+   * Inicializa el componente, carga las transacciones y actualiza el gráfico.
+   */
   ngOnInit(): void {
-    this.isLoading = true; // AGREGADO: Mostrar loader al iniciar la carga
+    this.isLoading = true; // Mostrar loader al iniciar la carga
 
     this.subscription = this.transaccionesService.getTransacciones().subscribe({
       next: (transacciones) => {
         this.updateChart(transacciones);
-        this.isLoading = false; // AGREGADO: Ocultar loader después de cargar los datos
+        this.isLoading = false; // Ocultar loader después de cargar los datos
       },
       error: (err) => {
         console.error('Error al obtener la lista de transacciones', err);
-        this.isLoading = false; // AGREGADO: Ocultar loader si hay un error
+        this.isLoading = false; // Ocultar loader si hay un error
       },
     });
   }
 
-  updateChart(transacciones) {
-    // Agrupar transacciones por cliente y mes
+  /**
+   * Actualiza el gráfico con los datos de transacciones.
+   * @param transacciones Lista de transacciones a mostrar en el gráfico.
+   */
+  updateChart(transacciones: ITransaccion[]) {
     const transaccionesPorMes = this.agruparTransaccionesPorMes(transacciones);
 
     // Calcular la media de transacciones por mes
@@ -85,24 +91,20 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
       });
     });
 
-    // Dividir cada valor entre el número de clientes para obtener la media
     mediaPorMes.forEach((total, index) => {
       mediaPorMes[index] = total / totalClientes;
     });
 
-    // Preparar los datos para el gráfico
     const seriesData = Object.keys(transaccionesPorMes).map((clienteId) => ({
       name: `Cliente ${clienteId}`,
       data: meses.map((mes) => transaccionesPorMes[clienteId][mes] || 0),
     }));
 
-    // Agregar la serie para la media de transacciones
     seriesData.push({
       name: 'Media de Transacciones',
       data: mediaPorMes,
     });
 
-    // Configurar las opciones del gráfico
     this.chartOptions = {
       series: seriesData,
       chart: {
@@ -112,12 +114,12 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
           enabled: false, // Desactivar animaciones para una carga más rápida
         },
       },
-      colors: [...Array(seriesData.length - 1).fill('#008FFB'), '#FF4560'], // Colores para las series (media en un color diferente)
+      colors: [...Array(seriesData.length - 1).fill('#008FFB'), '#FF4560'], // Colores para las series
       stroke: {
         curve: 'smooth',
         width: seriesData.map((_, index) =>
           index === seriesData.length - 1 ? 5 : 1
-        ), // Configura el ancho de las líneas: más gruesa para la última serie (media)
+        ), // Ancho de las líneas
       },
       xaxis: {
         categories: meses,
@@ -130,7 +132,7 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
           text: 'Número de Transacciones',
         },
         labels: {
-          formatter: (value: number) => Math.floor(value).toString(), // Redondea los valores a enteros y los convierte a string
+          formatter: (value: number) => Math.floor(value).toString(), // Redondear valores
         },
       },
       dataLabels: {
@@ -146,10 +148,9 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
         show: false, // Ocultar leyenda
       },
       tooltip: {
-        enabled: true, // Habilitar tooltips
+        enabled: true,
         shared: false,
         custom: ({ series, seriesIndex, dataPointIndex, w }) => {
-          // Obtener el valor de la serie de la media (última serie en el array)
           const mediaSeriesIndex = series.length - 1;
           const mediaValue = series[mediaSeriesIndex][dataPointIndex];
 
@@ -164,21 +165,29 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
       },
       grid: {
         row: {
-          colors: ['#f3f3f3', 'transparent'], // Alterna los colores de las filas
+          colors: ['#f3f3f3', 'transparent'], // Alternar colores de filas
           opacity: 0.5,
         },
       },
     };
   }
 
-  // Función para obtener el mes y año a partir de una fecha
+  /**
+   * Obtiene el mes y año a partir de una fecha.
+   * @param fecha Fecha de la transacción.
+   * @returns Mes y año en formato MM-YYYY.
+   */
   private obtenerMesYAnio(fecha: Date): string {
-    const mes = fecha.getMonth() + 1; // Los meses en JavaScript van de 0 a 11
+    const mes = fecha.getMonth() + 1;
     const anio = fecha.getFullYear();
-    return `${mes < 10 ? '0' : ''}${mes}-${anio}`; // Formato MM-YYYY
+    return `${mes < 10 ? '0' : ''}${mes}-${anio}`;
   }
 
-  // Función para agrupar las transacciones por cliente y mes
+  /**
+   * Agrupa las transacciones por cliente y mes.
+   * @param transacciones Lista de transacciones.
+   * @returns Un objeto que mapea ID de cliente a un objeto que mapea mes a número de transacciones.
+   */
   private agruparTransaccionesPorMes(
     transacciones: ITransaccion[]
   ): Record<string, Record<string, number>> {
@@ -206,6 +215,9 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
     return transaccionesPorClienteYMes;
   }
 
+  /**
+   * Limpia los recursos utilizados por el componente.
+   */
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();

@@ -1,6 +1,26 @@
-import { Component, ViewChild, OnInit, OnDestroy, ChangeDetectorRef } from "@angular/core";
+// src/app/components/divisas/divisas.component.ts
+
+import {
+  Component,
+  ViewChild,
+  OnInit,
+  OnDestroy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ChartComponent, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexDataLabels, ApexTitleSubtitle, ApexStroke, ApexGrid, ApexFill, ApexMarkers, ApexYAxis } from "ng-apexcharts";
+import {
+  ChartComponent,
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexXAxis,
+  ApexDataLabels,
+  ApexTitleSubtitle,
+  ApexStroke,
+  ApexGrid,
+  ApexFill,
+  ApexMarkers,
+  ApexYAxis,
+} from 'ng-apexcharts';
 import { DivisaService } from 'src/app/servicios/divisa.service';
 import { IDivisa } from 'src/app/interfaces/divisa';
 import { environment } from 'src/environments/environment';
@@ -19,21 +39,30 @@ export type ChartOptions = {
   title: ApexTitleSubtitle;
 };
 
+/**
+ * Componente para mostrar un gráfico de evolución del valor de una divisa.
+ */
 @Component({
   selector: 'app-divisas',
   templateUrl: './divisas.component.html',
-  styleUrls: ['./divisas.component.css']
+  styleUrls: ['./divisas.component.css'],
 })
 export class DivisasComponent implements OnInit, OnDestroy {
-  @ViewChild("chart") chart: ChartComponent;
+  @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
-  public isLoading = false; // Nueva variable para controlar la visibilidad del loader
-  private apiUrl = environment.apiPrediccion;
+  public isLoading = false; // Controla la visibilidad del loader
+  private apiUrl = environment.apiPrediccion; // URL para la predicción de divisas
   private divisasData: IDivisa[] = []; // Datos de divisas obtenidos del backend
-  private subscriptions: Subscription = new Subscription(); // Para gestionar las suscripciones y evitar problemas de múltiples cargas
-  public valorActual: number = 0; // Nueva variable para almacenar el valor actual de la divisa
-  public divisaSeleccionada: string = ''; // Para almacenar la divisa seleccionada
+  private subscriptions: Subscription = new Subscription(); // Gestión de suscripciones
+  public valorActual: number = 0; // Valor actual de la divisa
+  public divisaSeleccionada: string = ''; // Divisa seleccionada
 
+  /**
+   * Constructor del componente.
+   * @param http Cliente HTTP para solicitudes.
+   * @param divisaService Servicio para obtener datos de divisas.
+   * @param cdr Referencia para la detección de cambios.
+   */
   constructor(
     private http: HttpClient,
     private divisaService: DivisaService,
@@ -44,34 +73,43 @@ export class DivisasComponent implements OnInit, OnDestroy {
     // Inicialmente, no se realiza ninguna solicitud hasta que se seleccione una divisa
   }
 
+  /**
+   * Obtiene los datos de divisas para una divisa seleccionada.
+   * @param divisa Divisa seleccionada.
+   */
   obtenerDatosDivisas(divisa: string) {
-    console.log("Divisa ", divisa);
     this.divisaSeleccionada = divisa;
-    this.isLoading = true; // Mostrar el loader al iniciar la solicitud
+    this.isLoading = true;
 
-    // Cancelar cualquier suscripción anterior antes de iniciar una nueva
+    // Cancelar cualquier suscripción anterior
     this.subscriptions.add(
       this.divisaService.getDivisasData(divisa).subscribe({
         next: (data) => {
           this.divisasData = data;
-          this.updateChart(); // Actualizar el gráfico después de recibir los datos
+          this.updateChart(); // Actualizar el gráfico con los datos obtenidos
         },
         error: (err) => {
-          console.error('Error al obtener datos de divisas:', err.status, err.message, err);
-          this.isLoading = false; // Ocultar el loader en caso de error
+          console.error(
+            'Error al obtener datos de divisas:',
+            err.status,
+            err.message,
+            err
+          );
+          this.isLoading = false;
         },
         complete: () => {
-          // Ocultar el loader después de un breve retraso para dar tiempo al gráfico a actualizarse
           setTimeout(() => {
             this.isLoading = false;
           }, 1000);
-        }
+        },
       })
     );
   }
 
+  /**
+   * Actualiza el gráfico con los datos recientes y las predicciones.
+   */
   updateChart() {
-    console.log("Se ejecute")
     if (this.divisasData.length === 0) {
       console.error('No data available:', this.divisasData);
       return;
@@ -79,86 +117,92 @@ export class DivisasComponent implements OnInit, OnDestroy {
 
     // Ordenar por fecha y tomar los últimos 10 registros
     const recentData = this.divisasData.slice(-10);
-
-    if (recentData.length === 0) {
-      console.error('No data available:', this.divisasData);
-      return;
-    }
-
-    var recentDates = recentData
+    const recentDates = recentData
       .map((d) => {
         const fecha = new Date(d.fecha);
-        return !isNaN(fecha.getTime()) ? fecha.toISOString().split('T')[0] : null;
+        return !isNaN(fecha.getTime())
+          ? fecha.toISOString().split('T')[0]
+          : null;
       })
       .filter((date) => date !== null);
 
-      
     const recentValues = recentData.map((d) => d.valor);
-    // Obtener el valor más reciente (último valor de recentValues)
     this.valorActual = recentValues[recentValues.length - 1];
 
-   // recentDates = ['2024-08-26', '2024-08-27', '2024-08-28', '2024-08-29', '2024-08-30', '2024-08-31', '2024-09-1', '2024-09-2', '2024-09-3', '2024-09-4'];
-    console.log(recentDates);
-    console.log(recentValues);
-
-    // Asegurarse de que esta petición solo se realice una vez
     this.http.post(this.apiUrl, { data: recentValues }).subscribe(
       (response: any) => {
-        console.log('Received data:', response);
         const predictions = response.Prediction || [];
         const interValConf = response.ConfidenceInterval || [];
-        const predictionData = predictions.length ? predictions : new Array(10).fill(0);
+        const predictionData = predictions.length
+          ? predictions
+          : new Array(10).fill(0);
 
         const lastDate = new Date(recentDates[recentDates.length - 1]);
         const predictionDates = predictionData.map((_, index) => {
-        const nextDate = new Date(lastDate);
-        nextDate.setDate(nextDate.getDate() + index + 1);
-        return nextDate.toISOString().split('T')[0];
-      });
-      // Extraer los límites inferiores y superiores de interValConf
-      const lowerBounds = interValConf.map(interval => interval[0]); // Limites inferiores
-      const upperBounds = interValConf.map(interval => interval[1]); // Limites superiores
+          const nextDate = new Date(lastDate);
+          nextDate.setDate(nextDate.getDate() + index + 1);
+          return nextDate.toISOString().split('T')[0];
+        });
 
-      // Calcular el mínimo y máximo incluyendo todos los datos
-      const minimo = Math.min(...recentValues, ...predictionData, ...lowerBounds, ...upperBounds);
-      const maximo = Math.max(...recentValues, ...predictionData, ...lowerBounds, ...upperBounds);
+        const lowerBounds = interValConf.map((interval) => interval[0]);
+        const upperBounds = interValConf.map((interval) => interval[1]);
 
-      // Añadir un margen adicional del 5% al rango del eje Y para evitar cortes
-      const margen = (maximo - minimo) * 0.05;
+        const minimo = Math.min(
+          ...recentValues,
+          ...predictionData,
+          ...lowerBounds,
+          ...upperBounds
+        );
+        const maximo = Math.max(
+          ...recentValues,
+          ...predictionData,
+          ...lowerBounds,
+          ...upperBounds
+        );
+        const margen = (maximo - minimo) * 0.05;
 
-      console.log(minimo, maximo, margen);
-
-        console.log(predictionDates)
         this.chartOptions = {
           series: [
             {
               name: 'Historical Data',
-              data: recentValues.map((value, index) => [recentDates[index], value]),
+              data: recentValues.map((value, index) => [
+                recentDates[index],
+                value,
+              ]),
               color: '#0000FF',
             },
             {
               name: 'Predictions',
-              data: predictionData.map((value, index) => [predictionDates[index], value]),
+              data: predictionData.map((value, index) => [
+                predictionDates[index],
+                value,
+              ]),
               color: '#FF0000',
             },
             {
               name: 'CI Lower Bound',
-              data: lowerBounds.map((value, index) => [predictionDates[index], value]),
-              color: '#87CEEB'
+              data: lowerBounds.map((value, index) => [
+                predictionDates[index],
+                value,
+              ]),
+              color: '#87CEEB',
             },
             {
               name: 'CI Upper Bound',
-              data: upperBounds.map((value, index) => [predictionDates[index], value]),
-              color: '#FF6347'
-            }
+              data: upperBounds.map((value, index) => [
+                predictionDates[index],
+                value,
+              ]),
+              color: '#FF6347',
+            },
           ],
           chart: {
             height: 350,
-            type: 'line'
+            type: 'line',
           },
           stroke: {
             width: [3, 3],
-            curve: 'smooth'
+            curve: 'smooth',
           },
           xaxis: {
             type: 'datetime',
@@ -169,12 +213,12 @@ export class DivisasComponent implements OnInit, OnDestroy {
             align: 'left',
             style: {
               fontSize: '16px',
-              color: '#666'
-            }
+              color: '#666',
+            },
           },
           fill: {
-            type: 'solid', // Cambiar a 'solid' para eliminar el gradiente
-            colors: ['#0000FF'] // Color azul sólido
+            type: 'solid',
+            colors: ['#0000FF'],
           },
           markers: {
             size: 4,
@@ -182,41 +226,42 @@ export class DivisasComponent implements OnInit, OnDestroy {
             strokeColors: '#fff',
             strokeWidth: 2,
             hover: {
-              size: 7
-            }
+              size: 7,
+            },
           },
           yaxis: {
             min: minimo - margen,
             max: maximo + margen,
             title: {
-              text: 'Valor relativo a USD'
+              text: 'Valor relativo a USD',
             },
             labels: {
-              formatter: function (value) {
-                return value.toFixed(4);
-              }
-            }
-          }
+              formatter: (value) => value.toFixed(4),
+            },
+          },
         };
 
-        this.cdr.detectChanges(); // Asegurar que Angular detecte los cambios
+        this.cdr.detectChanges(); // Forzar la detección de cambios
       },
       (error) => {
         console.error('Error fetching data:', error);
-        this.isLoading = false; // Ocultar el loader en caso de error
+        this.isLoading = false;
       }
     );
   }
 
+  /**
+   * Maneja el cambio de divisa en el selector.
+   * @param event Evento del cambio en el selector.
+   */
   onCurrencyChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const selectedCurrency = selectElement.value;
-    console.log('Se ha seleccionado en el Front:', selectedCurrency);
     this.obtenerDatosDivisas(selectedCurrency);
   }
 
   ngOnDestroy(): void {
-    // Cancelar todas las suscripciones cuando se destruya el componente
+    // Cancelar todas las suscripciones al destruir el componente
     this.subscriptions.unsubscribe();
   }
 }

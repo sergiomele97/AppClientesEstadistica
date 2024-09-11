@@ -33,18 +33,21 @@ export type ChartOptions = {
 export class VolumetryComponent implements OnInit, OnDestroy {
   @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
-  public dataType: string = '';
-  public isLoading: boolean = true; // AGREGADO: Estado de carga
+  public dataType: string = ''; // Tipo de dato a visualizar ('transacciones' o 'conversiones')
+  public isLoading: boolean = true; // Estado de carga
 
   transacciones: ITransaccion[] = [];
   conversiones: IConversion[] = [];
-  subscription: Subscription = new Subscription();
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private transaccionesService: TransaccionService,
     private conversionesService: ConversionService
   ) {}
 
+  /**
+   * Inicializa el componente, carga las transacciones y conversiones, y configura el gráfico.
+   */
   ngOnInit(): void {
     // Leer el valor predeterminado del dropdown en el HTML y guardarlo en dataType
     const selectElement = document.getElementById(
@@ -85,6 +88,9 @@ export class VolumetryComponent implements OnInit, OnDestroy {
     );
   }
 
+  /**
+   * Actualiza el gráfico con los datos de transacciones o conversiones según el valor de dataType.
+   */
   updateChart() {
     let data = [];
 
@@ -170,6 +176,10 @@ export class VolumetryComponent implements OnInit, OnDestroy {
     };
   }
 
+  /**
+   * Maneja el cambio en la selección del dropdown.
+   * @param event Evento de cambio en el dropdown.
+   */
   onSelectionChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     console.log('Selected Option:', selectElement.value);
@@ -177,9 +187,10 @@ export class VolumetryComponent implements OnInit, OnDestroy {
     this.updateChart();
   }
 
+  /**
+   * Limpia los recursos utilizados por el componente.
+   */
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscription.unsubscribe();
   }
 }

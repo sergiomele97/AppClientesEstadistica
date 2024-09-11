@@ -1,3 +1,5 @@
+// src/app/components/graficas/Graficas.component.ts
+
 import {
   Component,
   ComponentFactoryResolver,
@@ -14,42 +16,61 @@ import { SpaghettiComponent } from 'src/app/estadisticas/spaghetti/spaghetti.com
 import { VolumetryComponent } from 'src/app/estadisticas/volumetry/volumetry.component';
 import { GraficasService } from 'src/app/servicios/graficas.service';
 
+/**
+ * Componente para la gestión y visualización de gráficos dinámicos.
+ */
 @Component({
   selector: 'app-graficas',
   templateUrl: './Graficas.component.html',
   styleUrls: ['./Graficas.component.css'],
 })
 export class GraficasComponent implements OnInit, OnDestroy {
-  // Subscription for handling when a graph is closed
-  private subscription: Subscription;
+  private subscription: Subscription; // Suscripción para manejar el cierre de gráficos
 
+  /**
+   * Constructor del componente.
+   * @param graficasServicio Servicio para gestionar gráficos.
+   * @param componentFactoryResolver Resolvedor de fábricas de componentes.
+   */
   constructor(
     private graficasServicio: GraficasService,
     private componentFactoryResolver: ComponentFactoryResolver
   ) {}
 
   ngOnInit() {
+    // Suscribirse al observable que maneja el cierre de gráficos
     this.subscription = this.graficasServicio.triggerScript$.subscribe(() => {
       this.onGraphClose();
     });
   }
 
-  // ViewChild for dynamic component container
+  /**
+   * ViewChild para el contenedor de componentes dinámicos.
+   */
   @ViewChild('contenedor1', { read: ViewContainerRef })
   container!: ViewContainerRef;
 
-  // Method called when a graph is closed
+  /**
+   * Método llamado cuando se cierra un gráfico.
+   */
   onGraphClose() {
     console.log('Hola');
   }
 
-  // Check if a component is visible
+  /**
+   * Verifica si un componente es visible.
+   * @param viewRef Referencia a la vista del componente.
+   * @returns `true` si el componente es visible, `false` en caso contrario.
+   */
   isComponentVisible(viewRef: any): boolean {
     const element = viewRef.rootNodes[0] as HTMLElement;
     return element && window.getComputedStyle(element).display !== 'none';
   }
 
-  // Add a component to the container
+  /**
+   * Agrega un componente al contenedor.
+   * @param componentName Nombre del componente a agregar.
+   */
   addComponent(componentName: string) {
     if (this.container) {
       let componentRef: ComponentRef<any>;
@@ -84,7 +105,7 @@ export class GraficasComponent implements OnInit, OnDestroy {
           return;
       }
 
-      // Add close button to the component
+      // Agregar un botón de cierre al componente
       const closeButton = document.createElement('button');
       closeButton.innerText = 'X';
       closeButton.className =
@@ -94,19 +115,24 @@ export class GraficasComponent implements OnInit, OnDestroy {
       );
 
       const element = componentRef.location.nativeElement;
-      element.style.position = 'relative'; // Ensure close button is positioned correctly
+      element.style.position = 'relative'; // Asegurarse de que el botón de cierre esté posicionado correctamente
       element.appendChild(closeButton);
     }
   }
 
-  // Close a component
+  /**
+   * Cierra un componente y lo destruye.
+   * @param componentRef Referencia al componente a cerrar.
+   */
   closeComponent(componentRef: ComponentRef<any>) {
     componentRef.destroy();
   }
 
-  // Dropdown toggle
-  isDropdownOpen = false;
+  public isDropdownOpen = false; // Controla la visibilidad del dropdown
 
+  /**
+   * Alterna la visibilidad del dropdown.
+   */
   toggleDropdown() {
     const svg = document.getElementById('miSVG') as unknown as SVGElement;
     if (svg) {
@@ -116,9 +142,8 @@ export class GraficasComponent implements OnInit, OnDestroy {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  // Cleanup on component destruction
   ngOnDestroy() {
-    // Unsubscribe from any active subscriptions
+    // Cancelar todas las suscripciones al destruir el componente
     if (this.subscription) {
       this.subscription.unsubscribe();
     }

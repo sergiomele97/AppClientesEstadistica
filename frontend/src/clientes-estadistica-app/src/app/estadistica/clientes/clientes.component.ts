@@ -17,6 +17,9 @@ import { ClienteService } from 'src/app/servicios/cliente.service';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
 import { CustomCurrencyPipe } from 'src/app/pipes/customCurrency.pipe';
 
+/**
+ * Configuración del gráfico ApexCharts.
+ */
 export type ChartOptions = {
   series: ApexAxisChartSeries;
   chart: ApexChart;
@@ -33,10 +36,13 @@ export type ChartOptions = {
   styleUrls: ['./clientes.component.css'],
 })
 export class ClientesComponent implements OnInit, OnDestroy {
-  @ViewChild('chart') chart: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
+  @ViewChild('chart') chart: ChartComponent; // Gráfico
+  public chartOptions: Partial<ChartOptions>; // Opciones del gráfico
   isLoading: boolean = true; // Estado de carga
 
+  /**
+   * Constructor del componente.
+   */
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -45,25 +51,28 @@ export class ClientesComponent implements OnInit, OnDestroy {
     private currencyPipe: CustomCurrencyPipe
   ) {}
 
-  cliente: ICliente | undefined;
-  clientes: ICliente[] = [];
-  transacciones: ITransaccion[] = [];
-  subscription!: Subscription;
-  routeSubscription!: Subscription;
-  balance: number = 0;
+  cliente: ICliente | undefined; // Cliente actual
+  clientes: ICliente[] = []; // Lista de clientes
+  transacciones: ITransaccion[] = []; // Transacciones del cliente
+  subscription!: Subscription; // Suscripciones
+  routeSubscription!: Subscription; // Suscripción a la ruta
+  balance: number = 0; // Balance del cliente
 
+  /**
+   * Inicializa el componente y carga datos.
+   */
   ngOnInit(): void {
-    this.isLoading = true; // Mostrar loader
+    this.isLoading = true; // Mostrar carga
 
     // Obtener clientes
     this.subscription = this.clienteService.getClientes().subscribe({
       next: (clientes) => {
         this.clientes = clientes;
-        this.isLoading = false; // Ocultar loader
+        this.isLoading = false; // Ocultar carga
       },
       error: (err) => {
         console.error('Error al obtener clientes:', err);
-        this.isLoading = false; // Ocultar loader en caso de error
+        this.isLoading = false;
       },
     });
 
@@ -71,15 +80,18 @@ export class ClientesComponent implements OnInit, OnDestroy {
     const clienteId = Number(this.route.snapshot.paramMap.get('id'));
     this.loadCliente(clienteId);
 
-    // Suscribirse a cambios en la ruta
+    // Escuchar cambios en la ruta
     this.routeSubscription = this.route.paramMap.subscribe((params) => {
       const clienteId = Number(params.get('id'));
       this.loadCliente(clienteId);
     });
   }
 
+  /**
+   * Carga los datos del cliente y sus transacciones.
+   * @param clienteId - ID del cliente.
+   */
   loadCliente(clienteId: number): void {
-    // Obtener cliente por ID
     this.subscription = this.clienteService.getCliente(clienteId).subscribe({
       next: (cliente) => {
         this.cliente = cliente;
@@ -111,12 +123,22 @@ export class ClientesComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Maneja la selección de cliente.
+   * @param event - Evento de selección.
+   */
   onSelectCliente(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
     const clienteId = Number(selectElement.value);
     this.router.navigate(['/estadistica/clientes', clienteId]);
   }
 
+  /**
+   * Calcula el balance del cliente.
+   * @param transacciones - Lista de transacciones.
+   * @param clienteId - ID del cliente.
+   * @returns El balance calculado.
+   */
   private calcularBalance(
     transacciones: ITransaccion[],
     clienteId: number
@@ -130,10 +152,13 @@ export class ClientesComponent implements OnInit, OnDestroy {
     return ingresos - gastos;
   }
 
+  /**
+   * Actualiza el gráfico con las transacciones del cliente.
+   * @param transacciones - Lista de transacciones.
+   */
   private actualizarGrafico(transacciones: ITransaccion[]): void {
     if (!transacciones.length) return;
 
-    // Agrupar transacciones por mes
     const agruparPorMes = (
       transacciones: ITransaccion[],
       esIngreso: boolean
@@ -163,7 +188,6 @@ export class ClientesComponent implements OnInit, OnDestroy {
       false
     );
 
-    // Obtener meses únicos y ordenarlos
     const meses = Array.from(
       new Set([...Object.keys(ingresosPorMes), ...Object.keys(perdidasPorMes)])
     ).sort((a, b) => {
@@ -175,7 +199,6 @@ export class ClientesComponent implements OnInit, OnDestroy {
       );
     });
 
-    // Crear datos para el gráfico
     const dataIngresos = meses.map((mes) => ingresosPorMes[mes] || 0);
     const dataPerdidas = meses.map((mes) => perdidasPorMes[mes] || 0);
 
@@ -196,13 +219,11 @@ export class ClientesComponent implements OnInit, OnDestroy {
       },
       xaxis: {
         categories: meses,
-        position: 'bottom',
-        labels: { offsetY: 0, rotate: -45, style: { fontSize: '12px' } },
+        labels: { rotate: -45, style: { fontSize: '12px' } },
         title: { text: 'Mes y Año' },
       },
       yaxis: {
         labels: {
-          show: true,
           formatter: (val) =>
             this.currencyPipe.transform(
               val,
@@ -218,8 +239,10 @@ export class ClientesComponent implements OnInit, OnDestroy {
     };
   }
 
+  /**
+   * Limpia las suscripciones al destruir el componente.
+   */
   ngOnDestroy(): void {
-    // Cancelar suscripciones
     this.subscription.unsubscribe();
     this.routeSubscription.unsubscribe();
   }

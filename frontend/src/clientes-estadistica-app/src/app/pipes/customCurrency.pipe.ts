@@ -1,11 +1,18 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+/**
+ * Pipe para formatear valores monetarios con el símbolo de la divisa correspondiente.
+ * @pipe
+ */
 @Pipe({
   name: 'customCurrency'
 })
 export class CustomCurrencyPipe implements PipeTransform {
 
-  // Mapeo completo de códigos de moneda a símbolos
+  /**
+   * Mapeo completo de códigos de moneda a símbolos.
+   * @type {{ [key: string]: string }}
+   */
   private currencySymbols: { [key: string]: string } = {
     'AED': 'د.إ',
     'AFN': 'Af',
@@ -165,6 +172,12 @@ export class CustomCurrencyPipe implements PipeTransform {
     'ZWL': '$'
   };
 
+  /**
+   * Transforma un valor numérico en una cadena de texto formateada con el símbolo de la divisa.
+   * @param {number} value - El valor numérico a formatear.
+   * @param {string} [currencyCode=''] - El código de la divisa para obtener el símbolo (opcional).
+   * @returns {string} - El valor formateado como una cadena de texto con el símbolo de la divisa.
+   */
   transform(value: number, currencyCode: string = ''): string {
     if (value == null) return '';
 
