@@ -39,8 +39,10 @@ jobs:
     needs: build
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
 
       - name: Install NuGet
         uses: NuGet/setup-nuget@v1
@@ -50,13 +52,12 @@ jobs:
         shell: cmd
 
       - name: Build Solution
-        run: msbuild backend-estadistica\src\BackendEstadistica.sln /p:Configuration=Release
+        run: dotnet build backend-estadistica\src\BackendEstadistica.sln -c Release
         shell: cmd
 
       - name: Run Tests
-        run: vstest.console.exe backend-estadistica\TestEstadistica\bin\Release\net8.0\TestEstadistica.dll --parallel
+        run: dotnet test backend-estadistica\TestEstadistica\Estadistica.Test.csproj --configuration Release --no-build --logger trx
         shell: cmd
-
 
   deploy:
     runs-on: ubuntu-latest
