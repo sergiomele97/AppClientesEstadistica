@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, switchMap, forkJoin, of } from 'rxjs';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -54,8 +54,7 @@ export class ClientesComponent implements OnInit, OnDestroy {
   cliente: ICliente | undefined; // Cliente actual
   clientes: ICliente[] = []; // Lista de clientes
   transacciones: ITransaccion[] = []; // Transacciones del cliente
-  subscription!: Subscription; // Suscripciones
-  routeSubscription!: Subscription; // Suscripción a la ruta
+  private subscriptions: Subscription = new Subscription(); // Agrupación de suscripciones
   balance: number = 0; // Balance del cliente
 
   /**
@@ -65,62 +64,52 @@ export class ClientesComponent implements OnInit, OnDestroy {
     this.isLoading = true; // Mostrar carga
 
     // Obtener clientes
-    this.subscription = this.clienteService.getClientes().subscribe({
-      next: (clientes) => {
-        this.clientes = clientes;
-        this.isLoading = false; // Ocultar carga
-      },
-      error: (err) => {
-        console.error('Error al obtener clientes:', err);
-        this.isLoading = false;
-      },
-    });
-
-    // Obtener cliente y transacciones
-    const clienteId = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadCliente(clienteId);
+    this.subscriptions.add(
+      this.clienteService.getClientes().subscribe({
+        next: (clientes) => {
+          this.clientes = clientes;
+          this.isLoading = false; // Ocultar carga
+        },
+        error: (err) => {
+          console.error('Error al obtener clientes:', err);
+          this.isLoading = false;
+        },
+      })
+    );
 
     // Escuchar cambios en la ruta
-    this.routeSubscription = this.route.paramMap.subscribe((params) => {
-      const clienteId = Number(params.get('id'));
-      this.loadCliente(clienteId);
-    });
-  }
-
-  /**
-   * Carga los datos del cliente y sus transacciones.
-   * @param clienteId - ID del cliente.
-   */
-  loadCliente(clienteId: number): void {
-    this.subscription = this.clienteService.getCliente(clienteId).subscribe({
-      next: (cliente) => {
-        this.cliente = cliente;
-
-        // Obtener transacciones del cliente
-        this.subscription = this.transaccionService
-          .getTransacciones()
-          .subscribe({
-            next: (transacciones) => {
-              this.transacciones = transacciones.filter(
-                (t) =>
-                  t.clienteOrigenId === clienteId ||
-                  t.clienteDestinoId === clienteId
-              );
-              this.balance = this.calcularBalance(
-                this.transacciones,
-                clienteId
-              );
-              this.actualizarGrafico(this.transacciones);
-            },
-            error: (err) => {
-              console.error('Error al obtener transacciones:', err);
-            },
-          });
-      },
-      error: (err) => {
-        console.error('Error al obtener cliente:', err);
-      },
-    });
+    this.subscriptions.add(
+      this.route.paramMap
+        .pipe(
+          switchMap((params) => {
+            const clienteId = Number(params.get('id'));
+            return forkJoin({
+              cliente: this.clienteService.getCliente(clienteId),
+              transacciones: this.transaccionService.getTransacciones(),
+            });
+          })
+        )
+        .subscribe({
+          next: ({ cliente, transacciones }) => {
+            this.cliente = cliente;
+            this.transacciones = transacciones.filter(
+              (t) =>
+                t.clienteOrigenId === this.cliente?.clienteId ||
+                t.clienteDestinoId === this.cliente?.clienteId
+            );
+            this.balance = this.calcularBalance(
+              this.transacciones,
+              this.cliente?.clienteId || 0
+            );
+            this.actualizarGrafico(this.transacciones);
+            this.isLoading = false;
+          },
+          error: (err) => {
+            console.error('Error al obtener datos:', err);
+            this.isLoading = false;
+          },
+        })
+    );
   }
 
   /**
@@ -243,7 +232,6 @@ export class ClientesComponent implements OnInit, OnDestroy {
    * Limpia las suscripciones al destruir el componente.
    */
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-    this.routeSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 }

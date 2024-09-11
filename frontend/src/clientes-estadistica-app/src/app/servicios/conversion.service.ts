@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { IConversion } from '../interfaces/conversion';
 import { environment } from 'src/environments/environment';
 
@@ -13,10 +14,10 @@ import { environment } from 'src/environments/environment';
 })
 export class ConversionService {
   /**
-   * URL base para las solicitudes relacionadas con estadísticas de conversiones.
+   * URL base para las solicitudes relacionadas con conversiones.
    * @private
    */
-  private readonly url_estadistica = environment.apiEstadisticas;
+  private readonly urlEstadistica = environment.apiEstadisticas;
 
   /**
    * Crea una instancia del servicio de conversiones.
@@ -29,8 +30,22 @@ export class ConversionService {
    * @returns {Observable<IConversion[]>} - Observable que emite una lista de conversiones.
    */
   getConversiones(): Observable<IConversion[]> {
-    return this.http.get<IConversion[]>(
-      `${this.url_estadistica}/getConversiones`
+    return this.http
+      .get<IConversion[]>(`${this.urlEstadistica}/getConversiones`)
+      .pipe(
+        catchError(this.handleError) // Manejo de errores
+      );
+  }
+
+  /**
+   * Maneja errores de las solicitudes HTTP.
+   * @param error - El error de la solicitud HTTP.
+   * @returns {Observable<never>} - Observable que emite un error.
+   */
+  private handleError(error: any): Observable<never> {
+    console.error('Ocurrió un error:', error);
+    return throwError(
+      () => new Error('Error al obtener las conversiones. Inténtelo más tarde.')
     );
   }
 }

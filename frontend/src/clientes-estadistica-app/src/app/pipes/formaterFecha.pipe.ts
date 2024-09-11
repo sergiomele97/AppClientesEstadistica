@@ -20,14 +20,19 @@ export class FormaterFechaPipe implements PipeTransform {
 
   /**
    * Transforma un valor en una cadena de texto formateada como fecha.
-   * Si el valor es `null` o `undefined`, devuelve una cadena vacía.
+   * Si el valor es `null`, `undefined`, o una cadena vacía, devuelve una cadena vacía.
    * @param {Date | string | null} value - El valor que se transformará en fecha.
-   * @returns {string} - La fecha formateada como 'dd/MM/yy'.
+   * @returns {string} - La fecha formateada como 'dd/MM/yy' o una cadena vacía.
    */
   transform(value: Date | string | null): string {
     if (!value) {
-      return '';
+      return ''; // Devuelve una cadena vacía si el valor es null, undefined o vacío
     }
-    return this.datePipe.transform(value, 'dd/MM/yy')!;
+
+    const date = new Date(value);
+    // Verifica si la fecha es válida antes de formatearla
+    return isNaN(date.getTime())
+      ? ''
+      : this.datePipe.transform(date, 'dd/MM/yy') ?? '';
   }
 }

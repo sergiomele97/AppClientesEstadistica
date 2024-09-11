@@ -1,5 +1,3 @@
-// src/app/components/graficas/Graficas.component.ts
-
 import {
   Component,
   ComponentFactoryResolver,
@@ -8,6 +6,7 @@ import {
   OnInit,
   ViewChild,
   ViewContainerRef,
+  Renderer2
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GraphComponent } from 'src/app/estadisticas/graph/graph.component';
@@ -25,16 +24,18 @@ import { GraficasService } from 'src/app/servicios/graficas.service';
   styleUrls: ['./Graficas.component.css'],
 })
 export class GraficasComponent implements OnInit, OnDestroy {
-  private subscription: Subscription; // Suscripción para manejar el cierre de gráficos
+  private subscription!: Subscription; // Suscripción para manejar el cierre de gráficos
 
   /**
    * Constructor del componente.
    * @param graficasServicio Servicio para gestionar gráficos.
    * @param componentFactoryResolver Resolvedor de fábricas de componentes.
+   * @param renderer Renderer para manipulación del DOM.
    */
   constructor(
     private graficasServicio: GraficasService,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private renderer: Renderer2
   ) {}
 
   ngOnInit() {
@@ -62,8 +63,8 @@ export class GraficasComponent implements OnInit, OnDestroy {
    * @param viewRef Referencia a la vista del componente.
    * @returns `true` si el componente es visible, `false` en caso contrario.
    */
-  isComponentVisible(viewRef: any): boolean {
-    const element = viewRef.rootNodes[0] as HTMLElement;
+  isComponentVisible(viewRef: ComponentRef<any>): boolean {
+    const element = viewRef.location.nativeElement as HTMLElement;
     return element && window.getComputedStyle(element).display !== 'none';
   }
 
@@ -106,17 +107,23 @@ export class GraficasComponent implements OnInit, OnDestroy {
       }
 
       // Agregar un botón de cierre al componente
-      const closeButton = document.createElement('button');
-      closeButton.innerText = 'X';
-      closeButton.className =
-        'absolute top-2 right-2 bg-red-500 text-white rounded-full px-3 py-1';
-      closeButton.addEventListener('click', () =>
+      const closeButton = this.renderer.createElement('button');
+      this.renderer.setProperty(closeButton, 'innerText', 'X');
+      this.renderer.addClass(closeButton, 'absolute');
+      this.renderer.addClass(closeButton, 'top-2');
+      this.renderer.addClass(closeButton, 'right-2');
+      this.renderer.addClass(closeButton, 'bg-red-500');
+      this.renderer.addClass(closeButton, 'text-white');
+      this.renderer.addClass(closeButton, 'rounded-full');
+      this.renderer.addClass(closeButton, 'px-3');
+      this.renderer.addClass(closeButton, 'py-1');
+      this.renderer.listen(closeButton, 'click', () =>
         this.closeComponent(componentRef)
       );
 
       const element = componentRef.location.nativeElement;
-      element.style.position = 'relative'; // Asegurarse de que el botón de cierre esté posicionado correctamente
-      element.appendChild(closeButton);
+      this.renderer.setStyle(element, 'position', 'relative'); // Asegurarse de que el botón de cierre esté posicionado correctamente
+      this.renderer.appendChild(element, closeButton);
     }
   }
 
@@ -128,13 +135,13 @@ export class GraficasComponent implements OnInit, OnDestroy {
     componentRef.destroy();
   }
 
-  public isDropdownOpen = false; // Controla la visibilidad del dropdown
+  public isDropdownOpen: boolean = false; // Controla la visibilidad del dropdown
 
   /**
    * Alterna la visibilidad del dropdown.
    */
   toggleDropdown() {
-    const svg = document.getElementById('miSVG') as unknown as SVGElement;
+    const svg = document.getElementById('miSVG') as unknown as SVGElement | null;
     if (svg) {
       svg.style.visibility =
         svg.style.visibility === 'hidden' ? 'visible' : 'hidden';

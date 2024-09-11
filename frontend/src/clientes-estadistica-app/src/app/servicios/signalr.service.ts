@@ -43,7 +43,9 @@ export class SignalrService {
    * Llama al callback proporcionado con un objeto que contiene el tipo de evento y los datos asociados.
    * @param callback - Función que se ejecuta cuando se detecta un evento de outlier.
    */
-  public addOutlierListener(callback: (data: any) => void): void {
+  public addOutlierListener(
+    callback: (event: { type: string; data: any }) => void
+  ): void {
     this.hubConnection.on('OutlierDetected', (data) => {
       callback({ type: 'detected', data });
     });

@@ -40,11 +40,11 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
   @ViewChild('chart') chart: ChartComponent; // Referencia al componente del gráfico
   public chartOptions: Partial<ChartOptions>; // Opciones de configuración del gráfico
 
-  transacciones: ITransaccion[]; // Lista de transacciones a mostrar
+  transacciones: ITransaccion[] = []; // Lista de transacciones a mostrar
   idTransaccion: number; // ID de la transacción actual
-  successMessage: string; // Mensaje de éxito
-  errorMessage: string; // Mensaje de error
-  subscription: Subscription = new Subscription(); // Manejo de suscripciones
+  successMessage: string | null = null; // Mensaje de éxito
+  errorMessage: string | null = null; // Mensaje de error
+  private subscription: Subscription = new Subscription(); // Manejo de suscripciones
 
   /**
    * Crea una instancia del componente `ShowOutlierComponent`.
@@ -63,15 +63,23 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
    */
   ngOnInit(): void {
     const clienteId = Number(this.route.snapshot.paramMap.get('id'));
+    this.loadTransacciones(clienteId); // Cargar transacciones al iniciar
+  }
 
+  /**
+   * Obtiene la lista de transacciones y actualiza el gráfico.
+   * @param clienteId - ID del cliente para obtener las transacciones
+   */
+  private loadTransacciones(clienteId: number): void {
     this.subscription.add(
       this.transaccionService.ultimasTransacciones(clienteId).subscribe({
         next: (transacciones) => {
           this.transacciones = transacciones;
-          this.actualizarGrafico();
+          this.updateChart(); // Actualizar el gráfico con los datos obtenidos
         },
         error: (err) => {
           console.error('Error al obtener las transacciones:', err);
+          this.errorMessage = 'Error al obtener las transacciones.';
         },
       })
     );
@@ -87,8 +95,9 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
         next: (response) => {
           this.successMessage = 'Outlier resuelto correctamente.';
           this.errorMessage = null;
-          this.actualizarTransacciones();
-          this.hideMessagesAfterDelay();
+          const clienteId = Number(this.route.snapshot.paramMap.get('id'));
+          this.loadTransacciones(clienteId); // Recargar transacciones después de eliminar
+          this.hideMessagesAfterDelay(); // Ocultar mensajes después de un breve retraso
         },
         error: (err) => {
           this.errorMessage =
@@ -102,28 +111,9 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Actualiza la lista de transacciones y el gráfico correspondiente.
-   */
-  actualizarTransacciones(): void {
-    const clienteId = Number(this.route.snapshot.paramMap.get('id'));
-
-    this.subscription.add(
-      this.transaccionService.ultimasTransacciones(clienteId).subscribe({
-        next: (transacciones) => {
-          this.transacciones = transacciones;
-          this.actualizarGrafico();
-        },
-        error: (err) => {
-          console.error('Error al actualizar las transacciones:', err);
-        },
-      })
-    );
-  }
-
-  /**
    * Oculta los mensajes de éxito o error después de un breve retraso.
    */
-  hideMessagesAfterDelay(): void {
+  private hideMessagesAfterDelay(): void {
     setTimeout(() => {
       this.successMessage = null;
       this.errorMessage = null;
@@ -133,18 +123,16 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
   /**
    * Actualiza las opciones del gráfico con los datos de las transacciones.
    */
-  actualizarGrafico(): void {
-    if (!this.transacciones || this.transacciones.length === 0) {
+  private updateChart(): void {
+    if (!this.transacciones.length) {
       return;
     }
 
-    // Transforma los datos para el gráfico
     const fechas = this.transacciones.map((t) =>
       this.formaterFechaPipe.transform(t.fecha)
     );
     const importeEnviado = this.transacciones.map((t) => t.importeEnviado);
 
-    // Configura las opciones del gráfico
     this.chartOptions = {
       series: [
         {
@@ -165,7 +153,7 @@ export class ShowOutlierComponent implements OnInit, OnDestroy {
             ranges: this.transacciones.map((t) => ({
               from: t.importeEnviado,
               to: t.importeEnviado,
-              color: t.isOutlier ? '#FF4560' : '#008FFB', // Rojo para outliers, azul para otros
+              color: t.isOutlier ? '#FF4560' : '#008FFB',
             })),
           },
         },

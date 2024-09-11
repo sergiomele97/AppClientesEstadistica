@@ -1,5 +1,3 @@
-// src/app/components/logs-outlier/logs-outlier.component.ts
-
 import { Component, OnInit } from '@angular/core';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
@@ -19,7 +17,7 @@ export class LogsOutlierComponent implements OnInit {
 
   /**
    * Constructor del componente.
-   * @param transaccionService Servicio para manejar las transacciones.
+   * @param transaccionService - Servicio para manejar las transacciones.
    */
   constructor(private transaccionService: TransaccionService) {}
 
@@ -27,13 +25,13 @@ export class LogsOutlierComponent implements OnInit {
    * Inicializa el componente y carga los outliers.
    */
   ngOnInit(): void {
-    this.cargarOutliers(); // Llama al método para cargar los outliers
+    this.loadOutliers(); // Carga los outliers al iniciar
   }
 
   /**
    * Obtiene la lista de outliers desde el servicio y actualiza el estado del componente.
    */
-  cargarOutliers(): void {
+  private loadOutliers(): void {
     this.transaccionService.outliersVistos().subscribe({
       next: (datos) => {
         this.outliers = datos;
@@ -42,7 +40,7 @@ export class LogsOutlierComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al cargar los outliers:', err);
-        // Aquí podrías agregar lógica para mostrar un mensaje de error al usuario
+        // Se podría mostrar un mensaje de error al usuario aquí
         this.loading = false; // Detiene el indicador de carga incluso en caso de error
       },
     });

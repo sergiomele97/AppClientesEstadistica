@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { IDivisa } from '../interfaces/divisa';
 import { environment } from 'src/environments/environment';
 
@@ -16,7 +17,7 @@ export class DivisaService {
    * URL base para las solicitudes relacionadas con estadísticas de divisas.
    * @private
    */
-  private readonly url_estadistica = environment.apiEstadisticas;
+  private readonly urlEstadistica = environment.apiEstadisticas;
 
   /**
    * Crea una instancia del servicio de divisas.
@@ -30,8 +31,25 @@ export class DivisaService {
    * @returns {Observable<IDivisa[]>} - Observable que emite una lista de objetos de divisa.
    */
   getDivisasData(nombre: string): Observable<IDivisa[]> {
-    return this.http.get<IDivisa[]>(
-      `${this.url_estadistica}/getdivisa/${nombre}`
+    return this.http
+      .get<IDivisa[]>(`${this.urlEstadistica}/getdivisa/${nombre}`)
+      .pipe(
+        catchError(this.handleError) // Manejo de errores
+      );
+  }
+
+  /**
+   * Maneja errores de las solicitudes HTTP.
+   * @param error - El error de la solicitud HTTP.
+   * @returns {Observable<never>} - Observable que emite un error.
+   */
+  private handleError(error: any): Observable<never> {
+    console.error('Ocurrió un error:', error);
+    return throwError(
+      () =>
+        new Error(
+          'Error al obtener los datos de la divisa. Inténtelo más tarde.'
+        )
     );
   }
 }

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 
 /**
@@ -80,7 +79,7 @@ export class ClustersDataService {
    * Establece los datos seleccionados de una tabla y los emite a través del observable.
    * @param {any[]} data - Datos seleccionados de la tabla.
    */
-  setSelectedDataTable(data: any[]) {
+  setSelectedDataTable(data: any[]): void {
     this.selectedDataTable.next(data);
   }
 
@@ -88,7 +87,7 @@ export class ClustersDataService {
    * Establece los datos seleccionados de un cluster y los emite a través del observable.
    * @param {any[]} data - Datos seleccionados del cluster.
    */
-  setSelectedDataCluster(data: any[]) {
+  setSelectedDataCluster(data: any[]): void {
     this.selectedDataCluster.next(data);
   }
 
@@ -96,7 +95,7 @@ export class ClustersDataService {
    * Establece un cluster seleccionado y lo emite a través del observable.
    * @param {any} data - Cluster seleccionado.
    */
-  setSelectednCluster(data: any) {
+  setSelectednCluster(data: any): void {
     this.selectedClusterSubject.next(data);
   }
 
@@ -104,7 +103,7 @@ export class ClustersDataService {
    * Establece las etiquetas seleccionadas y las emite a través del observable.
    * @param {any[]} data - Etiquetas seleccionadas.
    */
-  setLabel(data: any[]) {
+  setLabel(data: any[]): void {
     this.selectedLabelSubject.next(data);
   }
 
@@ -112,15 +111,17 @@ export class ClustersDataService {
    * Establece los índices de base de datos seleccionados y los emite a través del observable.
    * @param {any[]} data - Índices de base de datos seleccionados.
    */
-  setIndexDB(data: any[]) {
+  setIndexDB(data: any[]): void {
     this.selectedIndexDB.next(data);
   }
 
   /**
    * Método asíncrono para enviar datos al backend.
    * Este método actualmente no está implementado.
+   * @returns {Promise<void>} - Una promesa que se resuelve cuando la lógica se implementa.
    */
-  async sendDataToBackend() {
+  async sendDataToBackend(): Promise<void> {
     // Implementar lógica para enviar datos al backend aquí.
+    throw new Error('Método no implementado');
   }
 }

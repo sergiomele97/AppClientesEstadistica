@@ -32,8 +32,8 @@ export type ChartOptions = {
 })
 export class VolumetryComponent implements OnInit, OnDestroy {
   @ViewChild('chart') chart: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
-  public dataType: string = ''; // Tipo de dato a visualizar ('transacciones' o 'conversiones')
+  public chartOptions: Partial<ChartOptions> = {};
+  public dataType: string = 'transacciones'; // Tipo de dato a visualizar ('transacciones' o 'conversiones')
   public isLoading: boolean = true; // Estado de carga
 
   transacciones: ITransaccion[] = [];
@@ -49,15 +49,20 @@ export class VolumetryComponent implements OnInit, OnDestroy {
    * Inicializa el componente, carga las transacciones y conversiones, y configura el gráfico.
    */
   ngOnInit(): void {
-    // Leer el valor predeterminado del dropdown en el HTML y guardarlo en dataType
-    const selectElement = document.getElementById(
-      'data-type'
-    ) as HTMLSelectElement;
-    if (selectElement) {
-      this.dataType = selectElement.value; // Leer valor del select o establecer predeterminado
-    }
+    // Leer el valor del dropdown al iniciar
+    this.dataType =
+      (document.getElementById('data-type') as HTMLSelectElement)?.value ||
+      'transacciones';
 
-    // Obtener lista de transacciones
+    // Obtener lista de transacciones y conversiones
+    this.loadTransacciones();
+    this.loadConversiones();
+  }
+
+  /**
+   * Carga las transacciones y actualiza el gráfico.
+   */
+  private loadTransacciones(): void {
     this.subscription.add(
       this.transaccionesService.getTransacciones().subscribe({
         next: (transacciones) => {
@@ -71,8 +76,12 @@ export class VolumetryComponent implements OnInit, OnDestroy {
         },
       })
     );
+  }
 
-    // Obtener lista de conversiones
+  /**
+   * Carga las conversiones y actualiza el gráfico.
+   */
+  private loadConversiones(): void {
     this.subscription.add(
       this.conversionesService.getConversiones().subscribe({
         next: (conversiones) => {
@@ -91,33 +100,25 @@ export class VolumetryComponent implements OnInit, OnDestroy {
   /**
    * Actualiza el gráfico con los datos de transacciones o conversiones según el valor de dataType.
    */
-  updateChart() {
-    let data = [];
+  private updateChart(): void {
+    const data =
+      this.dataType === 'transacciones'
+        ? this.transacciones
+        : this.conversiones;
 
-    if (this.dataType === 'transacciones') {
-      data = this.transacciones;
-    } else if (this.dataType === 'conversiones') {
-      data = this.conversiones;
-    } else {
-      console.warn('Tipo de dato no reconocido:', this.dataType);
+    if (data.length === 0) {
+      console.warn('No hay datos para mostrar.');
       return;
     }
 
     // Agrupar datos por mes y año
     const agruparPorMes = (data: any[]) => {
-      const resultado: Record<string, number> = {};
-      data.forEach((item) => {
+      return data.reduce<Record<string, number>>((acc, item) => {
         const fecha = new Date(item.fecha);
         const mesAnio = `${fecha.getMonth() + 1}-${fecha.getFullYear()}`; // Formato MM-YYYY
-        const cantidad = 1; // Conteo por mes
-
-        if (resultado[mesAnio]) {
-          resultado[mesAnio] += cantidad;
-        } else {
-          resultado[mesAnio] = cantidad;
-        }
-      });
-      return resultado;
+        acc[mesAnio] = (acc[mesAnio] || 0) + 1; // Conteo por mes
+        return acc;
+      }, {});
     };
 
     const datosAgrupados = agruparPorMes(data);
@@ -126,9 +127,10 @@ export class VolumetryComponent implements OnInit, OnDestroy {
     const meses = Object.keys(datosAgrupados).sort((a, b) => {
       const [mesA, anioA] = a.split('-').map(Number);
       const [mesB, anioB] = b.split('-').map(Number);
-      const fechaA = new Date(anioA, mesA - 1);
-      const fechaB = new Date(anioB, mesB - 1);
-      return fechaA.getTime() - fechaB.getTime();
+      return (
+        new Date(anioA, mesA - 1).getTime() -
+        new Date(anioB, mesB - 1).getTime()
+      );
     });
 
     // Obtener conteo por mes en el orden de meses ordenados
@@ -180,9 +182,8 @@ export class VolumetryComponent implements OnInit, OnDestroy {
    * Maneja el cambio en la selección del dropdown.
    * @param event Evento de cambio en el dropdown.
    */
-  onSelectionChange(event: Event) {
+  onSelectionChange(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
-    console.log('Selected Option:', selectElement.value);
     this.dataType = selectElement.value;
     this.updateChart();
   }
@@ -191,6 +192,6 @@ export class VolumetryComponent implements OnInit, OnDestroy {
    * Limpia los recursos utilizados por el componente.
    */
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscription.unsubscribe(); // Cancelar suscripciones
   }
 }

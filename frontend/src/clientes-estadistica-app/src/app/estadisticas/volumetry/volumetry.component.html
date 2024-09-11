@@ -5,7 +5,6 @@
   </div>
   <div *ngIf="!isLoading" class="dropdown-container">
     <select id="data-type" (change)="onSelectionChange($event)">
-      <option value="" selected disabled>Seleccionar categoría</option>
       <option value="transacciones">Transacciones</option>
       <option value="conversiones">Conversiones</option>
     </select>

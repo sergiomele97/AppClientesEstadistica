@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ITransaccionVita } from 'src/app/interfaces/transaccionVista'; // Interfaz para el objeto Transacción
-import { TransaccionServiceProcedure } from 'src/app/servicios/transaccion-procedure.service'; // Servicio actualizado
+import { ITransaccionVita } from 'src/app/interfaces/transaccionVista';
+import { TransaccionServiceProcedure } from 'src/app/servicios/transaccion-procedure.service';
 
 /**
  * Componente para mostrar y gestionar una tabla de transacciones.
@@ -13,7 +13,7 @@ import { TransaccionServiceProcedure } from 'src/app/servicios/transaccion-proce
   styleUrls: ['./table.component.css'],
 })
 export class TableComponent implements OnInit, OnDestroy {
-  private subscription!: Subscription;
+  private subscription: Subscription = new Subscription(); // Manejo de suscripciones
   transaccionesFilter: ITransaccionVita[] = []; // Lista de transacciones filtradas
   currentPage: number = 1; // Página actual
 
@@ -53,25 +53,28 @@ export class TableComponent implements OnInit, OnDestroy {
    * Limpia los recursos utilizados por el componente al destruirlo.
    */
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscription.unsubscribe();
   }
 
   /**
    * Obtiene las transacciones filtradas y actualiza la lista.
    */
   fetchFilteredTransacciones(): void {
-    this.subscription = this.transaccionesServiceProcedure
-      .getFilteredTransacciones(
-        this._filterTransaccion,
-        this.startDate,
-        this.endDate
-      )
-      .subscribe((data) => {
-        this.transaccionesFilter = data;
-        this.order('transaccionId'); // Ordena por defecto después de obtener los datos
-      });
+    this.subscription.add(
+      this.transaccionesServiceProcedure
+        .getFilteredTransacciones(
+          this._filterTransaccion,
+          this.startDate,
+          this.endDate
+        )
+        .subscribe({
+          next: (data) => {
+            this.transaccionesFilter = data;
+            this.order(this.columnOrder); // Ordena por defecto después de obtener los datos
+          },
+          error: (err) => console.error('Error al obtener transacciones:', err),
+        })
+    );
   }
 
   /**
@@ -86,12 +89,9 @@ export class TableComponent implements OnInit, OnDestroy {
    * @param column - Nombre de la columna por la que ordenar
    */
   order(column: string): void {
-    if (this.columnOrder === column) {
-      this.directionOrder = !this.directionOrder;
-    } else {
-      this.columnOrder = column;
-      this.directionOrder = true;
-    }
+    this.directionOrder =
+      this.columnOrder === column ? !this.directionOrder : true;
+    this.columnOrder = column;
 
     this.transaccionesFilter.sort((a, b) => {
       let valorA: any, valorB: any;
@@ -101,13 +101,13 @@ export class TableComponent implements OnInit, OnDestroy {
           valorA = a.transaccionId;
           valorB = b.transaccionId;
           break;
-        case 'clienteOrigenNombre':
-          valorA = a.clienteOrigenNombre;
-          valorB = b.clienteOrigenNombre;
+        case 'clienteOrigenId':
+          valorA = a.clienteOrigenId;
+          valorB = b.clienteOrigenId;
           break;
-        case 'clienteDestinoNombre':
-          valorA = a.clienteDestinoNombre;
-          valorB = b.clienteDestinoNombre;
+        case 'clienteDestinoId':
+          valorA = a.clienteDestinoId;
+          valorB = b.clienteDestinoId;
           break;
         case 'importeEnviado':
           valorA = a.importeEnviado;
@@ -155,9 +155,7 @@ export class TableComponent implements OnInit, OnDestroy {
           correo: transaccion.clienteDestinoCorreo,
         };
 
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
-
+    const { clientX: mouseX, clientY: mouseY } = event;
     const tooltipWidth = 200;
     const tooltipHeight = 100;
 
@@ -188,6 +186,8 @@ export class TableComponent implements OnInit, OnDestroy {
     if (this.tooltipTimeoutId) {
       clearTimeout(this.tooltipTimeoutId);
     }
-    this.hoveredCliente = null;
+    this.tooltipTimeoutId = setTimeout(() => {
+      this.hoveredCliente = null;
+    }, 300);
   }
 }

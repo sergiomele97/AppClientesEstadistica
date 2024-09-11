@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router'; // Servicio para navegación
-import { catchError } from 'rxjs/operators'; // Operador para manejar errores
-import { throwError } from 'rxjs'; // Función para propagar errores
-import { AuthService } from '../servicios/auth.service'; // Servicio para autenticación
+import { Router } from '@angular/router';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { AuthService } from '../servicios/auth.service';
 
 /**
  * Componente para el formulario de inicio de sesión.
@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
    * Controla la visibilidad del mensaje de error.
    * @type {boolean}
    */
-  isErrorVisible = false;
+  isErrorVisible: boolean = false;
 
   /**
    * Email del usuario para el inicio de sesión.
@@ -49,35 +49,51 @@ export class LoginComponent implements OnInit {
    * @param {AuthService} authService - Servicio de autenticación para manejar el inicio de sesión.
    * @param {Router} route - Servicio de navegación para redirigir a otras páginas.
    */
-  constructor(private authService: AuthService, private route: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   /**
    * Método del ciclo de vida del componente. Se llama después de la creación del componente.
    */
-  ngOnInit() {}
+  ngOnInit(): void {}
 
   /**
    * Maneja el envío del formulario de inicio de sesión.
    * Intenta autenticar al usuario utilizando el servicio `AuthService`.
    */
-  onSubmit() {
+  onSubmit(): void {
     this.authService
-      .login(this.email, this.password, this.rememberMe) // Pasar el estado de rememberMe
+      .login(this.email, this.password, this.rememberMe)
       .pipe(
         catchError((error) => {
-          // Define mensajes de error basados en el código de estado
-          const message =
-            error.status === 401
-              ? 'Credenciales incorrectas. Verifique su email y contraseña.'
-              : error.status === 400
-              ? 'Solicitud incorrecta. Verifique los datos proporcionados.'
-              : 'Ocurrió un error al intentar autenticarse. Intente de nuevo.';
-
-          this.showError(message); // Muestra el mensaje de error
-          return throwError(error); // Propaga el error
+          const message = this.getErrorMessage(error.status);
+          this.showError(message);
+          return throwError(error);
         })
       )
-      .subscribe(); // Se suscribe al observable para ejecutar la solicitud
+      .subscribe({
+        next: () => {
+          this.router.navigate(['/dashboard']); // Redirige al dashboard después de iniciar sesión
+        },
+        error: (error) => {
+          console.error('Error en el proceso de inicio de sesión:', error);
+        },
+      });
+  }
+
+  /**
+   * Obtiene un mensaje de error basado en el código de estado HTTP.
+   * @param {number} status - Código de estado HTTP del error.
+   * @returns {string} - Mensaje de error correspondiente.
+   */
+  private getErrorMessage(status: number): string {
+    switch (status) {
+      case 401:
+        return 'Credenciales incorrectas. Verifique su email y contraseña.';
+      case 400:
+        return 'Solicitud incorrecta. Verifique los datos proporcionados.';
+      default:
+        return 'Ocurrió un error al intentar autenticarse. Intente de nuevo.';
+    }
   }
 
   /**
@@ -85,17 +101,17 @@ export class LoginComponent implements OnInit {
    * El mensaje se oculta automáticamente después de 3 segundos.
    * @param {string} message - El mensaje de error a mostrar.
    */
-  showError(message: string) {
+  private showError(message: string): void {
     this.errorMessage = message;
     this.isErrorVisible = true;
-    setTimeout(() => (this.isErrorVisible = false), 3000); // Oculta el mensaje después de 3 segundos
+    setTimeout(() => (this.isErrorVisible = false), 3000);
   }
 
   /**
    * Navega a la página de registro.
    * Este método es llamado cuando el usuario selecciona la opción de registro.
    */
-  navigateToRegistro() {
-    this.route.navigate(['/registro']);
+  navigateToRegistro(): void {
+    this.router.navigate(['/registro']);
   }
 }

@@ -14,16 +14,16 @@ import { environment } from 'src/environments/environment';
 })
 export class TransaccionService {
   /**
-   * Crea una instancia del servicio para manejar transacciones.
-   * @param http - Cliente HTTP para hacer peticiones a la API.
-   */
-  constructor(private http: HttpClient) {}
-
-  /**
    * URL base para las peticiones a la API de estadísticas.
    * @private
    */
   private readonly url_estadistica = environment.apiEstadisticas;
+
+  /**
+   * Crea una instancia del servicio para manejar transacciones.
+   * @param http - Cliente HTTP para hacer peticiones a la API.
+   */
+  constructor(private http: HttpClient) {}
 
   /**
    * Obtiene todas las transacciones.

@@ -1,5 +1,3 @@
-// src/app/components/outlier/outlier.component.ts
-
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ITransaccion } from 'src/app/interfaces/transaccion';
@@ -35,32 +33,34 @@ export class OutlierComponent implements OnInit, OnDestroy {
   ) {}
 
   /**
-   * Inicializa el componente y carga los outliers.
-   * También configura los listeners de SignalR.
+   * Inicializa el componente, carga los outliers y configura los listeners de SignalR.
    */
   ngOnInit() {
-    this.cargarOutliers(); // Cargar outliers al iniciar
-    this.setUpSignalRListeners(); // Configurar SignalR
+    this.loadOutliers(); // Cargar outliers al iniciar
+    this.setupSignalRListeners(); // Configurar SignalR
   }
 
   /**
    * Configura los listeners de SignalR para recibir notificaciones en tiempo real.
    */
-  setUpSignalRListeners() {
+  private setupSignalRListeners() {
     this.signalrService.startConnection(); // Iniciar conexión
     this.signalrService.addOutlierListener(() => {
-      this.cargarOutliers(); // Recargar datos cuando se recibe una notificación
+      this.loadOutliers(); // Recargar datos cuando se recibe una notificación
     });
   }
 
   /**
    * Obtiene la lista de outliers desde el servicio y actualiza el estado del componente.
    */
-  cargarOutliers() {
+  private loadOutliers() {
+    this.loading = true; // Iniciar carga de datos
     this.transaccionService.obtenerOutlier().subscribe({
       next: (datos) => {
         this.outliers = datos;
         this.vacio = this.outliers.length === 0; // Verificar si la lista está vacía
+        this.successMessage = null; // Limpiar mensaje de éxito
+        this.errorMessage = null; // Limpiar mensaje de error
         this.loading = false; // Detener carga
       },
       error: (err) => {
@@ -68,6 +68,7 @@ export class OutlierComponent implements OnInit, OnDestroy {
           'Error al cargar los outliers. Por favor, intente de nuevo.'; // Mensaje de error
         this.successMessage = null; // Limpiar mensaje de éxito
         console.error('Error: ', err); // Registrar error
+        this.loading = false; // Detener carga
       },
     });
   }
@@ -82,7 +83,7 @@ export class OutlierComponent implements OnInit, OnDestroy {
         next: (response) => {
           this.successMessage = response; // Mensaje de éxito
           this.errorMessage = null; // Limpiar mensaje de error
-          this.cargarOutliers(); // Recargar lista de outliers
+          this.loadOutliers(); // Recargar lista de outliers
         },
         error: (err) => {
           this.errorMessage =

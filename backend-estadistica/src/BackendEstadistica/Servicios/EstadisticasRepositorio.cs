@@ -86,9 +86,7 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
         {
             return await _contextoBBDD.Clientes
                 .Include(c => c.Pais)
-                .Include(c => c.Conversiones)
-                .Include(c => c.TransaccionesOrigen)
-                .Include(c => c.TransaccionesDestino)
+                .AsNoTracking()
                 .ToListAsync();
         }
         catch (Exception ex)
@@ -109,9 +107,6 @@ public class EstadisticasRepositorio : IEstadisticasRepositorio
         {
             return await _contextoBBDD.Clientes
                 .Include(c => c.Pais)
-                .Include(c => c.Conversiones)
-                .Include(c => c.TransaccionesOrigen)
-                .Include(c => c.TransaccionesDestino)
                 .FirstOrDefaultAsync(c => c.ClienteId == id);
         }
         catch (Exception ex)
