@@ -9,30 +9,30 @@ on:
 
 jobs:
   build:
-  runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-  steps:
-    - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-    - name: Set up .NET Core
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.x'
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.x'
 
-    - name: Build with dotnet
-      run: dotnet build backend-estadistica/src/BackendEstadistica/BackendEstadistica.csproj --configuration Release
+      - name: Build with dotnet
+        run: dotnet build backend-estadistica/src/BackendEstadistica/BackendEstadistica.csproj --configuration Release
 
-    - name: dotnet publish
-      run: dotnet publish backend-estadistica/src/BackendEstadistica/BackendEstadistica.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: dotnet publish
+        run: dotnet publish backend-estadistica/src/BackendEstadistica/BackendEstadistica.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v4
-      with:
-        name: .net-app
-        path: |
-          backend-estadistica/src/BackendEstadistica/BackendEstadistica.sln
-          backend-estadistica/src/BackendEstadistica/TestEstadistica
-          ${{env.DOTNET_ROOT}}/myapp
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v4
+        with:
+          name: .net-app
+          path: |
+            backend-estadistica/src/BackendEstadistica/BackendEstadistica.sln
+            backend-estadistica/src/BackendEstadistica/TestEstadistica
+            ${{env.DOTNET_ROOT}}/myapp
 
   test:
     runs-on: windows-latest
@@ -56,6 +56,7 @@ jobs:
       - name: Run Tests
         run: vstest.console.exe backend-estadistica\TestEstadistica\bin\Release\net8.0\TestEstadistica.dll --parallel
         shell: cmd
+
 
   deploy:
     runs-on: ubuntu-latest
