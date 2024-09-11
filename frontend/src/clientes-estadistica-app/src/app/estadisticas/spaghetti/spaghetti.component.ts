@@ -7,7 +7,6 @@ import {
   ApexDataLabels,
   ApexYAxis,
   ApexLegend,
-  ApexFill,
   ApexGrid,
   ApexStroke,
   ApexTitleSubtitle,
@@ -37,73 +36,54 @@ export type ChartOptions = {
 })
 export class SpaghettiComponent implements OnInit, OnDestroy {
   @ViewChild('chart') chart: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
-  private subscription: Subscription;
+  public chartOptions: Partial<ChartOptions> = {};
+  private subscription: Subscription = new Subscription();
   transacciones: ITransaccion[] = [];
   isLoading: boolean = true;
 
   constructor(private transaccionesService: TransaccionService) {}
 
-  /**
-   * Inicializa el componente, carga las transacciones y actualiza el gráfico.
-   */
   ngOnInit(): void {
     this.isLoading = true; // Mostrar loader al iniciar la carga
-
-    this.subscription = this.transaccionesService.getTransacciones().subscribe({
-      next: (transacciones) => {
-        this.updateChart(transacciones);
-        this.isLoading = false; // Ocultar loader después de cargar los datos
-      },
-      error: (err) => {
-        console.error('Error al obtener la lista de transacciones', err);
-        this.isLoading = false; // Ocultar loader si hay un error
-      },
-    });
+    this.subscription.add(
+      this.transaccionesService.getTransacciones().subscribe({
+        next: (transacciones) => {
+          this.transacciones = transacciones;
+          this.updateChart();
+          this.isLoading = false; // Ocultar loader después de cargar los datos
+        },
+        error: (err) => {
+          console.error('Error al obtener la lista de transacciones', err);
+          this.isLoading = false; // Ocultar loader si hay un error
+        },
+      })
+    );
   }
 
   /**
    * Actualiza el gráfico con los datos de transacciones.
-   * @param transacciones Lista de transacciones a mostrar en el gráfico.
    */
-  updateChart(transacciones: ITransaccion[]) {
-    const transaccionesPorMes = this.agruparTransaccionesPorMes(transacciones);
+  private updateChart() {
+    const transaccionesPorMes = this.agruparTransaccionesPorMes(
+      this.transacciones
+    );
 
     // Calcular la media de transacciones por mes
-    const totalClientes = Object.keys(transaccionesPorMes).length;
-    const meses = Array.from(
-      new Set(
-        Object.values(transaccionesPorMes).flatMap((clienteData) =>
-          Object.keys(clienteData)
-        )
-      )
-    ).sort((a, b) => {
-      const [mesA, anioA] = a.split('-').map(Number);
-      const [mesB, anioB] = b.split('-').map(Number);
-      return anioA !== anioB ? anioA - anioB : mesA - mesB;
-    });
+    const meses = this.obtenerMesesOrdenados(transaccionesPorMes);
 
-    const mediaPorMes: number[] = new Array(meses.length).fill(0);
+    const mediaPorMes: number[] = meses.map(
+      (mes) =>
+        Object.values(transaccionesPorMes).reduce(
+          (total, clienteData) => total + (clienteData[mes] || 0),
+          0
+        ) / Object.keys(transaccionesPorMes).length
+    );
 
-    Object.values(transaccionesPorMes).forEach((mesData) => {
-      meses.forEach((mes, index) => {
-        mediaPorMes[index] += mesData[mes] || 0;
-      });
-    });
-
-    mediaPorMes.forEach((total, index) => {
-      mediaPorMes[index] = total / totalClientes;
-    });
-
-    const seriesData = Object.keys(transaccionesPorMes).map((clienteId) => ({
-      name: `Cliente ${clienteId}`,
-      data: meses.map((mes) => transaccionesPorMes[clienteId][mes] || 0),
-    }));
-
-    seriesData.push({
-      name: 'Media de Transacciones',
-      data: mediaPorMes,
-    });
+    const seriesData = this.crearSeriesData(
+      transaccionesPorMes,
+      meses,
+      mediaPorMes
+    );
 
     this.chartOptions = {
       series: seriesData,
@@ -173,14 +153,51 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Obtiene el mes y año a partir de una fecha.
-   * @param fecha Fecha de la transacción.
-   * @returns Mes y año en formato MM-YYYY.
+   * Obtiene un array de meses ordenados a partir de las transacciones.
+   * @param transaccionesPorMes - Transacciones agrupadas por mes.
+   * @returns Un array de meses ordenados.
    */
-  private obtenerMesYAnio(fecha: Date): string {
-    const mes = fecha.getMonth() + 1;
-    const anio = fecha.getFullYear();
-    return `${mes < 10 ? '0' : ''}${mes}-${anio}`;
+  private obtenerMesesOrdenados(
+    transaccionesPorMes: Record<string, Record<string, number>>
+  ): string[] {
+    const meses = Array.from(
+      new Set(
+        Object.values(transaccionesPorMes).flatMap((clienteData) =>
+          Object.keys(clienteData)
+        )
+      )
+    ).sort((a, b) => {
+      const [mesA, anioA] = a.split('-').map(Number);
+      const [mesB, anioB] = b.split('-').map(Number);
+      return anioA !== anioB ? anioA - anioB : mesA - mesB;
+    });
+
+    return meses;
+  }
+
+  /**
+   * Crea los datos de series para el gráfico.
+   * @param transaccionesPorMes - Transacciones agrupadas por mes.
+   * @param meses - Array de meses ordenados.
+   * @param mediaPorMes - Array de medias por mes.
+   * @returns Datos de series para el gráfico.
+   */
+  private crearSeriesData(
+    transaccionesPorMes: Record<string, Record<string, number>>,
+    meses: string[],
+    mediaPorMes: number[]
+  ): ApexAxisChartSeries {
+    const seriesData = Object.keys(transaccionesPorMes).map((clienteId) => ({
+      name: `Cliente ${clienteId}`,
+      data: meses.map((mes) => transaccionesPorMes[clienteId][mes] || 0),
+    }));
+
+    seriesData.push({
+      name: 'Media de Transacciones',
+      data: mediaPorMes,
+    });
+
+    return seriesData;
   }
 
   /**
@@ -191,36 +208,35 @@ export class SpaghettiComponent implements OnInit, OnDestroy {
   private agruparTransaccionesPorMes(
     transacciones: ITransaccion[]
   ): Record<string, Record<string, number>> {
-    const transaccionesPorClienteYMes: Record<
-      string,
-      Record<string, number>
-    > = {};
-
-    transacciones.forEach((transaccion) => {
+    return transacciones.reduce((acc, transaccion) => {
       const clienteId = transaccion.clienteOrigenId;
-      const fechaTransaccion = new Date(transaccion.fecha);
-      const mesAnio = this.obtenerMesYAnio(fechaTransaccion);
+      const mesAnio = this.obtenerMesYAnio(new Date(transaccion.fecha));
 
-      if (!transaccionesPorClienteYMes[clienteId]) {
-        transaccionesPorClienteYMes[clienteId] = {};
+      if (!acc[clienteId]) {
+        acc[clienteId] = {};
       }
 
-      if (!transaccionesPorClienteYMes[clienteId][mesAnio]) {
-        transaccionesPorClienteYMes[clienteId][mesAnio] = 0;
+      if (!acc[clienteId][mesAnio]) {
+        acc[clienteId][mesAnio] = 0;
       }
 
-      transaccionesPorClienteYMes[clienteId][mesAnio]++;
-    });
-
-    return transaccionesPorClienteYMes;
+      acc[clienteId][mesAnio]++;
+      return acc;
+    }, {} as Record<string, Record<string, number>>);
   }
 
   /**
-   * Limpia los recursos utilizados por el componente.
+   * Obtiene el mes y año a partir de una fecha.
+   * @param fecha Fecha de la transacción.
+   * @returns Mes y año en formato MM-YYYY.
    */
+  private obtenerMesYAnio(fecha: Date): string {
+    const mes = fecha.getMonth() + 1;
+    const anio = fecha.getFullYear();
+    return `${mes < 10 ? '0' : ''}${mes}-${anio}`;
+  }
+
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscription.unsubscribe(); // Cancelar suscripción
   }
 }

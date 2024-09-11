@@ -13,22 +13,22 @@ import { environment } from 'src/environments/environment';
 })
 export class PaisService {
   /**
+   * URL base para las solicitudes relacionadas con estadísticas de países.
+   * @private
+   */
+  private readonly urlEstadistica = environment.apiEstadisticas;
+
+  /**
    * Crea una instancia del servicio de países.
-   * @param http - Instancia del cliente HTTP para realizar solicitudes.
+   * @param http - Servicio para realizar solicitudes HTTP.
    */
   constructor(private http: HttpClient) {}
 
   /**
-   * URL base para las solicitudes relacionadas con estadísticas.
-   * @private
-   */
-  private readonly url_estadistica = environment.apiEstadisticas;
-
-  /**
    * Obtiene una lista de todos los países desde el backend.
-   * @returns Observable de un array de objetos que implementan la interfaz IPais.
+   * @returns Observable que emite un array de objetos que implementan la interfaz IPais.
    */
   getPaises(): Observable<IPais[]> {
-    return this.http.get<IPais[]>(`${this.url_estadistica}/getPaises`);
+    return this.http.get<IPais[]>(`${this.urlEstadistica}/getPaises`);
   }
 }

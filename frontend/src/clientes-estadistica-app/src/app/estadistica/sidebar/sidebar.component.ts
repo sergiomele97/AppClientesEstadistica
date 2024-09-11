@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SignalrService } from 'src/app/servicios/signalr.service';
 import { TransaccionService } from 'src/app/servicios/transaccion.service';
+import { Subscription } from 'rxjs';
 
 /**
  * Componente para la barra lateral de la aplicación.
@@ -14,6 +15,7 @@ import { TransaccionService } from 'src/app/servicios/transaccion.service';
 export class SidebarComponent implements OnInit, OnDestroy {
   isSubmenuOpen = false; // Estado del submenú
   outliers: number = 0; // Número de outliers
+  private subscription: Subscription = new Subscription(); // Manejo de suscripciones
 
   /**
    * Crea una instancia del componente `SidebarComponent`.
@@ -28,7 +30,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   /**
    * Inicializa el componente configurando SignalR y actualizando la cantidad de outliers.
    */
-  ngOnInit() {
+  ngOnInit(): void {
     this.setupSignalRListeners();
     this.actualizarOutliers();
   }
@@ -37,7 +39,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
    * Configura los escuchadores de eventos de SignalR.
    * Inicia la conexión y agrega un oyente para actualizar la cantidad de outliers.
    */
-  setupSignalRListeners() {
+  setupSignalRListeners(): void {
     this.signalrService.startConnection();
     this.signalrService.addOutlierListener(() => {
       this.actualizarOutliers();
@@ -47,23 +49,32 @@ export class SidebarComponent implements OnInit, OnDestroy {
   /**
    * Actualiza el número de outliers obteniendo los datos del servicio de transacciones.
    */
-  actualizarOutliers() {
-    this.transaccionService.obtenerOutlier().subscribe((datos) => {
-      this.outliers = datos.length;
-    });
+  actualizarOutliers(): void {
+    this.subscription.add(
+      this.transaccionService.obtenerOutlier().subscribe({
+        next: (datos) => {
+          this.outliers = datos.length;
+        },
+        error: (err) => {
+          console.error('Error al obtener outliers:', err);
+          // Aquí podrías agregar lógica para manejar errores
+        },
+      })
+    );
   }
 
   /**
    * Alterna la visibilidad del submenú.
    */
-  toggleSubmenu() {
+  toggleSubmenu(): void {
     this.isSubmenuOpen = !this.isSubmenuOpen;
   }
 
   /**
    * Limpia los recursos utilizados por el componente al destruirlo.
    */
-  ngOnDestroy() {
-    // Implementar la limpieza de recursos si es necesario
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe(); // Limpia las suscripciones
+    // Aquí podrías agregar lógica para detener la conexión de SignalR si es necesario
   }
 }

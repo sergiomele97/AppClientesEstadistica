@@ -9,7 +9,6 @@
   <!-- Ocultar el contenido principal mientras se cargan los datos -->
   <div *ngIf="!isLoading">
     <div class="dropdown-container">
-      <label for="data-type">Seleccione el tipo de dato:</label>
       <select id="data-type" (change)="onSelectionChange($event)">
         <option value="sexo">Sexo</option>
         <option value="edad">Edad</option>

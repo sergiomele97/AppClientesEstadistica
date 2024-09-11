@@ -13,8 +13,8 @@ import { ClienteConBalance } from '../models/cliente-con-balance.model';
   providedIn: 'root',
 })
 export class ClienteService {
-  private readonly url_estadistica = environment.apiEstadisticas;
-  private readonly url_balance = environment.apiBalance;
+  private readonly urlEstadistica = environment.apiEstadisticas;
+  private readonly urlBalance = environment.apiBalance;
 
   /**
    * Crea una instancia del servicio de clientes.
@@ -27,7 +27,7 @@ export class ClienteService {
    * @returns {Observable<ICliente[]>} - Un observable que emite una lista de clientes.
    */
   getClientes(): Observable<ICliente[]> {
-    return this.http.get<ICliente[]>(`${this.url_estadistica}/getclientes`);
+    return this.http.get<ICliente[]>(`${this.urlEstadistica}/getclientes`);
   }
 
   /**
@@ -37,7 +37,7 @@ export class ClienteService {
    */
   getCliente(clienteId: number): Observable<ICliente> {
     return this.http.get<ICliente>(
-      `${this.url_estadistica}/getcliente/${clienteId}`
+      `${this.urlEstadistica}/getcliente/${clienteId}`
     );
   }
 
@@ -46,6 +46,6 @@ export class ClienteService {
    * @returns {Observable<ClienteConBalance[]>} - Un observable que emite una lista de clientes con balance.
    */
   getClientesConBalance(): Observable<ClienteConBalance[]> {
-    return this.http.get<ClienteConBalance[]>(this.url_balance);
+    return this.http.get<ClienteConBalance[]>(this.urlBalance);
   }
 }

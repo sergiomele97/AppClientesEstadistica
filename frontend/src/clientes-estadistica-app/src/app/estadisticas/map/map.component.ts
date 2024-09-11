@@ -15,51 +15,63 @@ export class MapComponent implements OnInit, OnDestroy {
   chartOptions: Highcharts.Options;
   bubbleData: { code3: string; z: number }[] = [];
   isLoading: boolean = true;
-  private subscription: Subscription;
-  private chart: Highcharts.Chart;
+  private subscription: Subscription = new Subscription(); // Asegura la limpieza adecuada
+  private chart: Highcharts.Chart | undefined;
 
   constructor(private clienteService: ClienteService) {}
 
-  /**
-   * Inicializa el componente y carga los datos de clientes para mostrar en el gráfico.
-   */
   ngOnInit(): void {
-    this.subscription = this.clienteService.getClientes().subscribe(
-      (clientes: ICliente[]) => {
-        const clientesPorPais: { [key: string]: number } = {};
+    this.loadClientes();
+  }
 
-        // Contar clientes por país
-        clientes.forEach((cliente) => {
-          clientesPorPais[cliente.pais.iso3] =
-            (clientesPorPais[cliente.pais.iso3] || 0) + 1;
-        });
+  /**
+   * Carga los datos de clientes y configura el gráfico.
+   */
+  private loadClientes(): void {
+    this.subscription.add(
+      this.clienteService.getClientes().subscribe(
+        (clientes: ICliente[]) => {
+          this.processClientes(clientes);
+          this.initializeChartOptions();
+          this.isLoading = false;
 
-        // Preparar datos para el gráfico
-        this.bubbleData = Object.keys(clientesPorPais).map((iso3) => ({
-          code3: iso3,
-          z: clientesPorPais[iso3],
-        }));
-
-        // Inicializar opciones del gráfico
-        this.initializeChartOptions();
-        this.isLoading = false;
-
-        // Crear el gráfico después de un breve retraso para asegurar que el contenedor esté listo
-        setTimeout(() => {
-          this.chart = Highcharts.mapChart('container', this.chartOptions);
-        }, 0);
-      },
-      (error) => {
-        console.error('Error al obtener los clientes:', error);
-        this.isLoading = false;
-      }
+          // Inicializar el gráfico después de la configuración de opciones
+          this.createChart();
+        },
+        (error) => {
+          console.error('Error al obtener los clientes:', error);
+          this.isLoading = false;
+        }
+      )
     );
+  }
+
+  /**
+   * Procesa los datos de clientes para contar y preparar la información para el gráfico.
+   * @param clientes - Datos de clientes obtenidos del servicio.
+   */
+  private processClientes(clientes: ICliente[]): void {
+    const clientesPorPais: { [key: string]: number } = {};
+
+    // Contar clientes por país
+    clientes.forEach((cliente) => {
+      if (cliente.pais && cliente.pais.iso3) {
+        clientesPorPais[cliente.pais.iso3] =
+          (clientesPorPais[cliente.pais.iso3] || 0) + 1;
+      }
+    });
+
+    // Preparar datos para el gráfico
+    this.bubbleData = Object.keys(clientesPorPais).map((iso3) => ({
+      code3: iso3,
+      z: clientesPorPais[iso3],
+    }));
   }
 
   /**
    * Configura las opciones del gráfico para la distribución de clientes por país.
    */
-  initializeChartOptions() {
+  private initializeChartOptions(): void {
     this.chartOptions = {
       chart: {
         borderWidth: 1,
@@ -101,6 +113,15 @@ export class MapComponent implements OnInit, OnDestroy {
         },
       ],
     };
+  }
+
+  /**
+   * Crea el gráfico Highcharts con las opciones configuradas.
+   */
+  private createChart(): void {
+    if (this.chartOptions) {
+      this.chart = Highcharts.mapChart('container', this.chartOptions);
+    }
   }
 
   /**

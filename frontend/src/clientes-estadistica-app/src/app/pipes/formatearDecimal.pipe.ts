@@ -15,9 +15,12 @@ export class FormatearDecimalPipe implements PipeTransform {
    * @returns {number} - El valor formateado con dos decimales.
    */
   transform(value: number | null): number {
-    if (value === null || value === undefined) {
+    if (value == null) {
+      // Verifica si el valor es null o undefined
       return 0;
     }
-    return parseFloat(value.toFixed(2));
+
+    // Verifica si el valor es un número válido y formatea a dos decimales
+    return !isNaN(value) ? parseFloat(value.toFixed(2)) : 0;
   }
 }

@@ -1,5 +1,3 @@
-// src/app/components/header/header.component.ts
-
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Usuario } from 'src/app/clases/usuario';
@@ -17,7 +15,7 @@ import { AuthService } from 'src/app/servicios/auth.service';
 export class HeaderComponent implements OnInit {
   isDropdownOpen: boolean = false; // Estado del menú desplegable
   username: string | null = null; // Nombre de usuario actual
-  usuario: Usuario | undefined; // Información del usuario, si está disponible
+  usuario?: Usuario; // Información del usuario, si está disponible
 
   /**
    * Constructor del componente.
@@ -29,16 +27,22 @@ export class HeaderComponent implements OnInit {
   /**
    * Inicializa el componente y suscribe al observable del usuario.
    */
-  ngOnInit() {
+  ngOnInit(): void {
     this.initializeUser();
   }
 
   /**
    * Suscribe al observable del usuario para obtener el nombre del usuario.
    */
-  initializeUser() {
-    this.authService.user$.subscribe((user) => {
-      this.username = user; // Almacena el nombre del usuario en la propiedad `username`
+  private initializeUser(): void {
+    this.authService.user$.subscribe({
+      next: (user) => {
+        this.username = user; // Almacena el nombre del usuario en la propiedad `username`
+      },
+      error: (err) => {
+        console.error('Error al obtener el usuario:', err);
+        // Aquí podrías manejar el error de forma más elaborada si es necesario
+      },
     });
   }
 
@@ -57,7 +61,12 @@ export class HeaderComponent implements OnInit {
    */
   @HostListener('document:click', ['$event'])
   closeDropdown(event: Event): void {
-    if (this.isDropdownOpen) {
+    // Verifica que el clic no se haya realizado en el menú desplegable o su botón
+    const target = event.target as HTMLElement;
+    if (
+      !target.closest('.dropdown-menu') &&
+      !target.closest('.dropdown-toggle')
+    ) {
       this.isDropdownOpen = false; // Cierra el menú desplegable si está abierto
     }
   }
@@ -65,7 +74,7 @@ export class HeaderComponent implements OnInit {
   /**
    * Cierra la sesión del usuario y navega a la página de login.
    */
-  logout() {
+  logout(): void {
     this.authService.logout(); // Llama al servicio de autenticación para cerrar la sesión
     this.router.navigate(['/login']); // Navega a la página de login
   }

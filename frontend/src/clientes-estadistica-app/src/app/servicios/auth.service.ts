@@ -28,6 +28,13 @@ export class AuthService {
    * @param {Router} router - Servicio para manejar la navegación entre rutas.
    */
   constructor(private http: HttpClient, private router: Router) {
+    this.initializeUser();
+  }
+
+  /**
+   * Inicializa el estado del usuario a partir del almacenamiento local.
+   */
+  private initializeUser(): void {
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
       this.userSubject.next(storedUser);
@@ -40,12 +47,9 @@ export class AuthService {
    * @returns {Observable<any>} - Un observable que emite la respuesta del servidor.
    */
   register(usuario: IUsuario): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/register`, usuario).pipe(
-      catchError((error: HttpErrorResponse) => {
-        console.error('Error during registration', error);
-        return throwError(error); // Propagar el error
-      })
-    );
+    return this.http
+      .post<any>(`${this.apiUrl}/register`, usuario)
+      .pipe(catchError(this.handleError));
   }
 
   /**
@@ -66,23 +70,49 @@ export class AuthService {
         password,
       })
       .pipe(
-        tap((response) => {
-          if (response.token) {
-            // Guarda el token en localStorage o sessionStorage según el estado del checkbox
-            if (rememberMe) {
-              localStorage.setItem('token', response.token);
-            } else {
-              sessionStorage.setItem('token', response.token);
-            }
-            localStorage.setItem('currentUser', response.username);
-            this.userSubject.next(response.username);
-            this.router.navigate(['/estadistica']);
-          }
-        }),
-        catchError((error: HttpErrorResponse) => {
-          return throwError(error); // Propagar el error
-        })
+        tap((response) => this.handleLoginResponse(response, rememberMe)),
+        catchError(this.handleError)
       );
+  }
+
+  /**
+   * Maneja la respuesta del inicio de sesión.
+   * @param { { token: string; username: string } } response - Respuesta del servidor.
+   * @param {boolean} rememberMe - Indica si se debe recordar al usuario.
+   */
+  private handleLoginResponse(
+    response: { token: string; username: string },
+    rememberMe: boolean
+  ): void {
+    if (response.token) {
+      this.storeToken(response.token, rememberMe);
+      localStorage.setItem('currentUser', response.username);
+      this.userSubject.next(response.username);
+      this.router.navigate(['/estadistica']);
+    }
+  }
+
+  /**
+   * Almacena el token en el almacenamiento correspondiente.
+   * @param {string} token - Token de autenticación.
+   * @param {boolean} rememberMe - Indica si se debe recordar al usuario.
+   */
+  private storeToken(token: string, rememberMe: boolean): void {
+    if (rememberMe) {
+      localStorage.setItem('token', token);
+    } else {
+      sessionStorage.setItem('token', token);
+    }
+  }
+
+  /**
+   * Maneja los errores de las solicitudes HTTP.
+   * @param {HttpErrorResponse} error - Error de la solicitud HTTP.
+   * @returns {Observable<never>} - Un observable que emite el error.
+   */
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    console.error('Error en la solicitud', error);
+    return throwError(error);
   }
 
   /**
@@ -102,7 +132,6 @@ export class AuthService {
    * @returns {boolean} - `true` si el token está presente en el almacenamiento local o de sesión, de lo contrario `false`.
    */
   isAuthenticated(): boolean {
-    // Comprueba en ambos almacenamiento local y de sesión
     return !!localStorage.getItem('token') || !!sessionStorage.getItem('token');
   }
 

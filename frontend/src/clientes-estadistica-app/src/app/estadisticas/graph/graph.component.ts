@@ -26,10 +26,6 @@ export type ChartOptions = {
   grid: ApexGrid;
 };
 
-/**
- * Componente para mostrar gráficos basados en datos de clientes.
- * Permite visualizar datos agrupados por edad, sexo o trabajo.
- */
 @Component({
   selector: 'app-graph',
   templateUrl: './graph.component.html',
@@ -54,32 +50,30 @@ export class GraphComponent implements OnInit, OnDestroy {
   private readonly sexCategories = ['Masculino', 'Femenino', 'No especificado'];
 
   clientes: ICliente[] = [];
-  subscription: Subscription;
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private graficasService: GraficasService,
     private clienteService: ClienteService
-  ) {
-    this.updateChart();
-  }
+  ) {}
 
-  /**
-   * Inicializa el componente, obtiene los datos de clientes y actualiza el gráfico.
-   */
   ngOnInit(): void {
     this.isLoading = true;
 
-    this.subscription = this.clienteService.getClientes().subscribe({
-      next: (clientes) => {
-        this.clientes = clientes;
-        this.updateChart();
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Error al obtener los clientes: ', err);
-        this.isLoading = false;
-      },
-    });
+    // Obtener clientes y manejar la suscripción
+    this.subscription.add(
+      this.clienteService.getClientes().subscribe({
+        next: (clientes) => {
+          this.clientes = clientes;
+          this.updateChart();
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('Error al obtener los clientes: ', err);
+          this.isLoading = false;
+        },
+      })
+    );
   }
 
   /**
@@ -103,44 +97,43 @@ export class GraphComponent implements OnInit, OnDestroy {
     let categories: string[] = [];
     let series: number[] = [];
 
+    const resultado: Record<string, number> = {};
+
     if (this.dataType === 'edad') {
       categories = this.ageCategories;
-      const resultado: Record<string, number> = {};
       this.ageCategories.forEach((cat) => (resultado[cat] = 0));
 
       this.clientes.forEach((cliente) => {
         const clave = this.clasificarEdad(cliente.edad || 0);
-        if (resultado.hasOwnProperty(clave)) {
+        if (resultado[clave] !== undefined) {
           resultado[clave] += 1;
         }
       });
 
-      series = categories.map((cat) => resultado[cat]);
+      series = categories.map((cat) => resultado[cat] || 0);
     } else if (this.dataType === 'sexo') {
       categories = this.sexCategories;
-      const resultado: Record<string, number> = {};
       this.sexCategories.forEach((cat) => (resultado[cat] = 0));
 
       this.clientes.forEach((cliente) => {
         const clave = cliente.sexo || 'No especificado';
-        if (resultado.hasOwnProperty(clave)) {
+        if (resultado[clave] !== undefined) {
           resultado[clave] += 1;
         }
       });
 
-      series = categories.map((cat) => resultado[cat]);
+      series = categories.map((cat) => resultado[cat] || 0);
     } else if (this.dataType === 'trabajo') {
-      const resultado: Record<string, number> = {};
       this.clientes.forEach((cliente) => {
         const trabajo = cliente.trabajo || 'No especificado';
-        if (!resultado.hasOwnProperty(trabajo)) {
+        if (!resultado[trabajo]) {
           resultado[trabajo] = 0;
           categories.push(trabajo);
         }
         resultado[trabajo] += 1;
       });
 
-      series = categories.map((cat) => resultado[cat]);
+      series = categories.map((cat) => resultado[cat] || 0);
     }
 
     return { categories, series };
@@ -149,7 +142,7 @@ export class GraphComponent implements OnInit, OnDestroy {
   /**
    * Actualiza el gráfico con los datos agrupados según el tipo de dato seleccionado.
    */
-  updateChart() {
+  private updateChart() {
     const { categories, series } = this.agruparDatos();
 
     this.chartOptions = {
@@ -166,7 +159,7 @@ export class GraphComponent implements OnInit, OnDestroy {
       ],
       chart: {
         height: 350,
-        type: 'bar', // Cambiado a bar para una mejor visualización en categorías
+        type: 'bar',
       },
       dataLabels: {
         enabled: true,
