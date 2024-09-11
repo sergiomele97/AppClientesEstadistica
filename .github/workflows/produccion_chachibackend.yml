@@ -27,14 +27,16 @@ jobs:
       - name: dotnet publish
         run: dotnet publish backend-estadistica/src/BackendEstadistica/BackendEstadistica.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
+      - name: Run tests
+        run: dotnet test backend-estadistica/src/TestEstadistica/Estadistica.Test.csproj --configuration Release
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Run tests
-        run: dotnet test backend-estadistica/src/TestEstadistica/Estadistica.Test.csproj --configuration Release
+
 
   deploy:
     runs-on: windows-latest
