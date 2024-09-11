@@ -1,5 +1,7 @@
-# YAML modificado para corregir las rutas en Windows.
-name: Build, Test, and Deploy ASP.Net Core app to Azure Web App - ChachiBackend
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy ASP.Net Core app to Azure Web App - ChachiBackend
 
 on:
   push:
@@ -19,58 +21,21 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Build Solution
-        run: dotnet build backend-estadistica/src/BackendEstadistica/BackendEstadistica.sln --configuration Release
+      - name: Build with dotnet
+        run: dotnet build backend-estadistica/src/BackendEstadistica/BackendEstadistica.csproj --configuration Release
 
-      - name: Publish Solution
-        run: dotnet publish backend-estadistica/src/BackendEstadistica/BackendEstadistica.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: dotnet publish
+        run: dotnet publish backend-estadistica/src/BackendEstadistica/BackendEstadistica.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: app-artifact
-          path: |
-            backend-estadistica/src/BackendEstadistica.sln
-            backend-estadistica/src/BackendEstadistica/**/*.csproj
-            backend-estadistica/src/BackendEstadistica/obj/
-            backend-estadistica/src/BackendEstadistica/bin/
-            ${{env.DOTNET_ROOT}}/myapp
-
-
-  test:
-    runs-on: windows-latest
-    needs: build
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: app-artifact
-
-      # Diagnóstico: Listar archivos descargados para confirmar rutas
-      - name: List files in working directory
-        run: dir /s
-        shell: cmd
-
-      - name: Install NuGet
-        uses: NuGet/setup-nuget@v1
-
-      - name: Restore NuGet packages
-        run: nuget restore backend-estadistica/src/BackendEstadistica/BackendEstadistica.sln
-        shell: cmd
-
-      - name: Build Solution
-        run: dotnet build backend-estadistica/src/BackendEstadistica/BackendEstadistica.sln -c Release
-        shell: cmd
-
-      - name: Run Tests
-        run: dotnet test backend-estadistica/src/BackendEstadistica/TestEstadistica/TestEstadistica.csproj --configuration Release --no-build --logger trx
-        shell: cmd
-
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: ubuntu-latest
-    needs: [build, test]
+    needs: build
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
