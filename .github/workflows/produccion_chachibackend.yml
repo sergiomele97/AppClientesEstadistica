@@ -19,20 +19,23 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Build with dotnet
-        run: dotnet build backend-estadistica/src/BackendEstadistica/BackendEstadistica.csproj --configuration Release
+      - name: Build Solution
+        run: dotnet build backend-estadistica/src/BackendEstadistica/BackendEstadistica.sln --configuration Release
 
-      - name: dotnet publish
-        run: dotnet publish backend-estadistica/src/BackendEstadistica/BackendEstadistica.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: Publish Solution
+        run: dotnet publish backend-estadistica/src/BackendEstadistica/BackendEstadistica.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: .net-app
+          name: app-artifact
           path: |
             backend-estadistica/src/BackendEstadistica/BackendEstadistica.sln
-            backend-estadistica/src/BackendEstadistica/TestEstadistica
+            backend-estadistica/src/BackendEstadistica/**/*.csproj
+            backend-estadistica/src/BackendEstadistica/obj/
+            backend-estadistica/src/BackendEstadistica/bin/
             ${{env.DOTNET_ROOT}}/myapp
+
 
   test:
     runs-on: windows-latest
@@ -42,7 +45,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
+          name: app-artifact
 
       # Diagnóstico: Listar archivos descargados para confirmar rutas
       - name: List files in working directory
@@ -53,15 +56,15 @@ jobs:
         uses: NuGet/setup-nuget@v1
 
       - name: Restore NuGet packages
-        run: nuget restore backend-estadistica\src\BackendEstadistica\BackendEstadistica.sln
+        run: nuget restore backend-estadistica/src/BackendEstadistica/BackendEstadistica.sln
         shell: cmd
 
       - name: Build Solution
-        run: dotnet build backend-estadistica\src\BackendEstadistica\BackendEstadistica.sln -c Release
+        run: dotnet build backend-estadistica/src/BackendEstadistica/BackendEstadistica.sln -c Release
         shell: cmd
 
       - name: Run Tests
-        run: dotnet test backend-estadistica\TestEstadistica\Estadistica.Test.csproj --configuration Release --no-build --logger trx
+        run: dotnet test backend-estadistica/src/BackendEstadistica/TestEstadistica/TestEstadistica.csproj --configuration Release --no-build --logger trx
         shell: cmd
 
 
