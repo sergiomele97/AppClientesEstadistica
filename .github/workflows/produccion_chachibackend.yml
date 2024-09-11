@@ -36,15 +36,8 @@ jobs:
     needs: build
 
     steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: .net-app
-
-      # Diagnóstico: Listar archivos descargados para confirmar rutas
-      - name: List files in working directory
-        run: dir /s
-        shell: cmd
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Install NuGet
         uses: NuGet/setup-nuget@v1
@@ -60,7 +53,6 @@ jobs:
       - name: Run Tests
         run: vstest.console.exe backend-estadistica\TestEstadistica\bin\Release\net8.0\TestEstadistica.dll --parallel
         shell: cmd
-
 
   deploy:
     runs-on: ubuntu-latest
