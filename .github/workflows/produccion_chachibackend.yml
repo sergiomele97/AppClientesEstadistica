@@ -29,7 +29,7 @@ jobs:
         run: dotnet publish backend-estadistica/src/BackendEstadistica/BackendEstadistica.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Run tests
-        run: dotnet test backend-estadistica/src/BackendEstadistica.sln --no-build --configuration Release
+        run: dotnet test backend-estadistica/src/BackendEstadistica.sln --configuration Release
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
